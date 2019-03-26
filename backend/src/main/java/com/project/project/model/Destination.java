@@ -1,19 +1,37 @@
 package com.project.project.model;
 
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
 public class Destination {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column(name="name", nullable = false)
     private String name;
+
+    @Column(name = "country", nullable = false)
     private String country;
+
+    @Column(name = "airport", unique = true, nullable = false)
     private String airport;
+
+    @Column(name = "zip", unique = true, nullable = false)
     private String zip;
 
     public Destination() {
     }
 
-    public Destination(String name, String country, String airport, String zip) {
-        this.name = name;
-        this.country = country;
-        this.airport = airport;
-        this.zip = zip;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
