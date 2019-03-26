@@ -1,25 +1,53 @@
 package com.project.project.model;
 
-import java.util.List;
 
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+@Entity
 public class Flight {
-    private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Destination startDestination;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Destination finalDestination;
+
+    @Column(name = "departureDate", nullable = false)
     private String departureDate;
+
+    @Column(name = "landingDate", nullable = false)
     private String landingDate;
+
+    @Column(name = "flightTime", nullable = false)
     private String flightTime;
+
+    @Column(name = "distance", nullable = false)
     private double distance;
+
+    @Column(name = "numOfTransfer", nullable = false)
     private int numOfTransfer;
-    private List<Destination> transfers;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "flight_transfers",
+        joinColumns = @JoinColumn(name = "flight_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "destination_id", referencedColumnName = "id")
+    )
+    private Set<Destination> transfers = new HashSet<Destination>();
+
+    @Column(name = "ticketPrice", nullable = false)
     private double ticketPrice;
 
     public Flight() {
     }
 
-    public Flight(String id, Destination startDestination, Destination finalDestination, String departureDate,
-                  String landingDate, String flightTime, double distance, int numOfTransfer,
-                  List<Destination> transfers, double ticketPrice) {
+    public Flight(Long id, Destination startDestination, Destination finalDestination, String departureDate, String landingDate, String flightTime, double distance, int numOfTransfer, Set<Destination> transfers, double ticketPrice) {
         this.id = id;
         this.startDestination = startDestination;
         this.finalDestination = finalDestination;
@@ -32,11 +60,11 @@ public class Flight {
         this.ticketPrice = ticketPrice;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -96,11 +124,11 @@ public class Flight {
         this.numOfTransfer = numOfTransfer;
     }
 
-    public List<Destination> getTransfers() {
+    public Set<Destination> getTransfers() {
         return transfers;
     }
 
-    public void setTransfers(List<Destination> transfers) {
+    public void setTransfers(Set<Destination> transfers) {
         this.transfers = transfers;
     }
 
