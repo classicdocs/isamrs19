@@ -28,7 +28,7 @@
         <b-container>
           <b-row>
             <b-col>
-              <b-form-group label="Select the departure date:" label-for="departure-date">
+              <b-form-group label="Departure date:" label-for="departure-date">
                 <datepicker
                   id="departure-date"
                   v-model="departureDate"
@@ -38,8 +38,25 @@
               </b-form-group>
             </b-col>
             <b-col>
-              <b-form-group label="Select the departure time:" label-for="departure-time">
+              <b-form-group label="Departure time:" label-for="departure-time">
                 <vue-timepicker id="departure-time" v-model="departureTime"></vue-timepicker>
+              </b-form-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <b-form-group label="Landing date:" label-for="landing-date">
+                <datepicker
+                  id="landing-date"
+                  v-model="landingDate"
+                  placeholder="Select Date"
+                  :format="format"
+                ></datepicker>
+              </b-form-group>
+            </b-col>
+            <b-col>
+              <b-form-group label="Landing time:" label-for="landing-time">
+                <vue-timepicker id="landing-time" v-model="landingTime"></vue-timepicker>
               </b-form-group>
             </b-col>
           </b-row>
@@ -113,6 +130,8 @@ export default {
     transferDestination: [],
     departureDate: null,
     departureTime: null,
+    landingDate: null,
+    landingTime: null,
     flightTime: null,
     ticketPrice: null,
     format: "dd-MM-yyyy"
@@ -133,6 +152,8 @@ export default {
       this.transferDestination = [];
       this.departureDate = null;
       this.departureTime = { HH: "HH", mm: "mm" };
+      this.landingDate = null;
+      this.landingTime = { HH: "HH", mm: "mm" };
       this.flightTime = { HH: "HH", mm: "mm" };
       this.ticketPrice = null;
       /* Trick to reset/clear native browser form validation state */
@@ -146,8 +167,20 @@ export default {
 </script>
 
 <style>
+
 div {
   text-align: center;
+}
+.display-time, .vdp-datepicker div input {
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
 }
 </style>
 

@@ -41,7 +41,6 @@ export default {
   methods: {
     closeModal() {
       this.modalShow = false;
-      console.log(this.modalShow);
     }
   }
 };
