@@ -3,7 +3,6 @@ package com.project.project.model;
 
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -33,13 +32,10 @@ public class Flight {
     @Column(name = "numOfTransfer", nullable = false)
     private int numOfTransfer;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "flight_transfers",
-        joinColumns = @JoinColumn(name = "flight_id", referencedColumnName = "id"),
-        inverseJoinColumns = @JoinColumn(name = "destination_id", referencedColumnName = "id")
-    )
-    private Set<Destination> transfers = new HashSet<Destination>();
+    @ElementCollection
+    @CollectionTable(name = "flight_transfers", joinColumns = @JoinColumn(name = "flight_id"))
+    @Column(name = "transfers")
+    private Set<String> transfers = new HashSet<>();
 
     @Column(name = "ticketPrice", nullable = false)
     private double ticketPrice;
@@ -47,7 +43,7 @@ public class Flight {
     public Flight() {
     }
 
-    public Flight(Long id, Destination startDestination, Destination finalDestination, String departureDate, String landingDate, String flightTime, double distance, int numOfTransfer, Set<Destination> transfers, double ticketPrice) {
+    public Flight(Long id, Destination startDestination, Destination finalDestination, String departureDate, String landingDate, String flightTime, double distance, int numOfTransfer, Set<String> transfers, double ticketPrice) {
         this.id = id;
         this.startDestination = startDestination;
         this.finalDestination = finalDestination;
@@ -124,11 +120,11 @@ public class Flight {
         this.numOfTransfer = numOfTransfer;
     }
 
-    public Set<Destination> getTransfers() {
+    public Set<String> getTransfers() {
         return transfers;
     }
 
-    public void setTransfers(Set<Destination> transfers) {
+    public void setTransfers(Set<String> transfers) {
         this.transfers = transfers;
     }
 
