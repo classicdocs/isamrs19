@@ -12,9 +12,11 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 import VueTimepicker from 'vue2-timepicker'
 import Datepicker from 'vuejs-datepicker' 
+import VueNumberInput from '@chenfengyuan/vue-number-input';
 
 Vue.use(VueTimepicker);
 Vue.use(Datepicker);
+Vue.use(VueNumberInput)
 
 new Vue({
   router,
