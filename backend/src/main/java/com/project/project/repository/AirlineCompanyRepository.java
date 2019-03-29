@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface AirlineCompanyRepository extends JpaRepository<AirlineCompany, Long> {
 
     Optional<AirlineCompany> findOneByName(String name);
+
+    Optional<AirlineCompany> findOneById(Long id);
 }

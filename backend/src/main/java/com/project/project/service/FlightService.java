@@ -30,7 +30,7 @@ public class FlightService {
         Destination startDestination = destinationService.findOne(flightDTO.getStartDestination());
         Destination finalDestination = destinationService.findOne(flightDTO.getFinalDestination());
 
-        AirlineCompany airlineCompany = airlineCompanyService.findOne(flightDTO.getAirlineCompany());
+        AirlineCompany airlineCompany = airlineCompanyService.findOneById(Long.parseLong(flightDTO.getAirlineCompany()));
 
         HashSet<String> transfers = new HashSet<String>();
 

@@ -12,7 +12,7 @@ public class AirlineCompanyService {
     @Autowired
     AirlineCompanyRepository airlineCompanyRepository;
 
-    public AirlineCompany findOne(String name) throws AirlineCompanyNotFound {
-        return airlineCompanyRepository.findOneByName(name).orElseThrow(() ->new AirlineCompanyNotFound(name));
+    public AirlineCompany findOneById(Long id) throws AirlineCompanyNotFound {
+        return airlineCompanyRepository.findOneById(id).orElseThrow(() -> new AirlineCompanyNotFound(id));
     }
 }
