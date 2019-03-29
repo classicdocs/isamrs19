@@ -19,7 +19,7 @@ public class Room {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Hotel hotel;
 
-		public Room(){}
+	public Room(){}
 
     public Room(int roomNumber, int numberOfBeds, List<RoomTaken> roomTaken, Hotel hotel){
         this.roomNumber = roomNumber;
@@ -29,34 +29,34 @@ public class Room {
     }
 
 	public int getNumberOfBeds() {
-			return this.numberOfBeds;
+		return this.numberOfBeds;
 	}
 
 	public void setNumberOfBeds(int numberOfBeds) {
-			this.numberOfBeds = numberOfBeds;
+		this.numberOfBeds = numberOfBeds;
 	}
 	
 	public List<RoomTaken> getRoomTaken() {
-			return this.roomTaken;
+		return this.roomTaken;
 	}
 
 	public void setRoomTaken(List<RoomTaken> roomTaken) {
-			this.roomTaken = roomTaken;
+		this.roomTaken = roomTaken;
 	}
 
 	public Hotel getHotel() {
-			return this.hotel;
+		return this.hotel;
 	}
 
 	public void setHotel(Hotel hotel) {
-			this.hotel = hotel;
+		this.hotel = hotel;
 	}
 		
 	public int getRoomNumber() {
-			return this.roomNumber;
+		return this.roomNumber;
 	}
 
 	public void setRoomNumber(int roomNumber) {
-			this.roomNumber = roomNumber;
+		this.roomNumber = roomNumber;
 	}
 }
