@@ -60,10 +60,16 @@ export default {
       msg: "",
     },
   }),
-  beforeMount() {
-    this.id = this.$route.params.id;
+  created() {
+    this.fetchData();
+  },
+  watch: {
+    '$route': 'fetchData'
   },
   methods: {
+    fetchData() {
+      this.id = this.$route.params.id;
+    },
     showSnackbar(obj) {
       this.addFormDialog = false,
       this.snackbar.color = obj.color;

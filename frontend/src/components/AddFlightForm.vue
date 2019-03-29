@@ -231,14 +231,11 @@
 <script>
 
 import Flight from "@/models/Flight";
-import {Datetime} from 'vue-datetime';
-import FlightsContoller from "@/controllers/flights.controller";
+import FlightsController from "@/controllers/flights.controller";
+import DestinationsController from "@/controllers/destinations.controller";
 
 export default {
   name: "AddFlightForm",
-  components: {
-    'date-time': Datetime,
-  },
   data: () => ({
     form: true,
 
@@ -255,22 +252,33 @@ export default {
                  v => /^[0-9]+$/.test(v) || "Ticket price must be a positive number"],
 
     },
+    destinations: [],
     startDestinations: [],
     finalDestinations: [],
     transferDestinations: [],
 
     flight: new Flight(),
   }),
-  beforeMount() {
+  created() {
     this.flight.airlineCompany = this.$route.params.id;
-    this.startDestinations= ['1'],
-    this.finalDestinations= ['2'],
-    this.transferDestinations= ['3']
+
+    // DestinationsController.get()
+    //   .then((response) => {
+    //     this.destinations = response.data;
+    //   })
+    //   .catch((response) => {
+
+    //   })
+
+    this.destinations = ['1','2','3','4','5'];
+    this.startDestinations = this.destinations;
+    this.finalDestinations = this.destinations;
+    this.transferDestinations = this.destinations;
   },
   methods: {
     validate() {
       if(this.$refs.form.validate()) {
-        FlightsContoller.create(this.flight)
+        FlightsController.create(this.flight)
           .then((response) => {
             this.$emit("operation", {msg: "Flight successfully added", color: "success"})
           })
@@ -281,20 +289,12 @@ export default {
     },
     reset() {
       this.$refs.form.reset();
-    }
+    },
   }
 };
 </script>
 
 <style>
 
-.vdatetime {
-  border-bottom: 1px solid;
-  border-color: rgba(0,0,0,.42);
-}
-
-.date-time-label {
-  color: rgba(0,0,0,.42);
-}
 </style>
 

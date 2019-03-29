@@ -1,7 +1,7 @@
-import FlightApiService from "@/api-services/flight.service";
+import FlightsApiService from "@/api-services/flights.service";
 
 export default {
   create(data) {
-    return FlightApiService.create(data);
+    return FlightsApiService.create(data);
   }
 };
