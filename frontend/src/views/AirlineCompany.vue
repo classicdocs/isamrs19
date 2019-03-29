@@ -15,7 +15,7 @@
             v-model="addFormDialog"
             max-width="500px"
           >
-            <add-flight-form
+            <add-flight-form v-if="addFormDialog"
               v-on:operation="showSnackbar($event)"
             ></add-flight-form>
           </v-dialog>
