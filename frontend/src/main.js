@@ -11,7 +11,8 @@ Vue.use(Vuetify);
 
 import 'vuetify/dist/vuetify.min.css'
 
-Axios.defaults.baseURL = Config.getApiUrl();
+// Axios.defaults.baseURL = Config.getApiUrl();
+Axios.defaults.baseURL = 'http://localhost:8088/api';
 Axios.defaults.headers.Accept = 'application/json';
 Axios.defaults.headers['Access-Control-Allow-Origin'] = '*';
 

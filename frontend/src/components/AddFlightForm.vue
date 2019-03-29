@@ -27,14 +27,14 @@
         <v-card-text>
           
           <v-select
-            :items="startDestinations"
+            :items="destinations"
             v-model="flight.startDestination"
             label="Start destination"
             :rules="[v => !!v || 'Start destination is required']"
             required
           ></v-select>
           <v-select
-            :items="finalDestinations"
+            :items="destinations"
             v-model="flight.finalDestination"
             label="Final destination"
             :rules="[v => !!v || 'Final destination is required']"
@@ -223,7 +223,7 @@
               <v-flex xs12>
                 <v-select
                 v-model="flight.transferDestination"
-                :items="transferDestinations"
+                :items="destinations"
                 label="Transfer destinations"
                 multiple
                 chips
@@ -278,33 +278,25 @@ export default {
 
     },
     destinations: [],
-    startDestinations: [],
-    finalDestinations: [],
-    transferDestinations: [],
 
     flight: new Flight(),
   }),
   created() {
     this.flight.airlineCompany = this.$route.params.id;
 
-    // DestinationsController.get()
-    //   .then((response) => {
-    //     this.destinations = response.data;
-    //   })
-    //   .catch((response) => {
+    DestinationsController.get()
+      .then((response) => {
+        response.data.forEach(element => {
+          this.destinations.push(element.name);
+        });
+      })
+      .catch((response) => {
 
-    //   })
-
-    this.destinations = ['1','2','3','4','5'];
-    this.startDestinations = this.destinations;
-    this.finalDestinations = this.destinations;
-    this.transferDestinations = this.destinations;
+      })
   },
   methods: {
     validate() {
-      console.log(this.flight.departureDate);
-      console.log(this.flight.departureTime);
-      // if(this.$refs.form.validate()) {
+      if(this.$refs.form.validate()) {
         if (this.validateDestinations()) {
           FlightsController.create(this.flight)
           .then((response) => {
@@ -316,8 +308,7 @@ export default {
         } else {
           this.$emit("destination-error", {msg: "Start,final and transfer destinations can't be the same!", color: "error"})
         }
-        
-      // }
+      }
     },
     reset() {
       this.$refs.form.reset();
