@@ -5,11 +5,19 @@ import com.project.project.model.Hotel;
 import com.project.project.model.RoomTaken;
 import com.project.project.model.Room;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 public class RoomDTO{
+
+	@PositiveOrZero
     private int roomNumber;
-    private int numberOfBeds;
+    @Positive
+	private int numberOfBeds;
+    @NotNull
     private List<RoomTaken> roomTaken;
+    @NotNull
     private Hotel hotel;
 
     public RoomDTO(){}

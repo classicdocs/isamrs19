@@ -8,6 +8,7 @@ import com.project.project.repository.HotelReprository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class HotelService {
 
@@ -26,4 +27,5 @@ public class HotelService {
         hotelRepository.deleteById(name);
     }
 
+    //public Hotel findOne(String name) {return hotelRepository.findOne(name); }
 }

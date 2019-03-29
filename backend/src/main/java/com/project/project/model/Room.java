@@ -19,6 +19,8 @@ public class Room {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Hotel hotel;
 
+
+
 	public Room(){}
 
     public Room(int roomNumber, int numberOfBeds, List<RoomTaken> roomTaken, Hotel hotel){

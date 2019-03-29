@@ -42,21 +42,25 @@ public class HotelController {
             String name = hotelDTO.getName();
 
             // ako postoji hotel s takvim imenom onda nije dobar request
-            if(hotelService.findOne(name) != null){
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            // FIXME : trebalo bi koristiti findOne, ali nesto nece da se definise u service.
+
+            List<Hotel> listOfHotels = hotelService.findAll();
+
+            for (Hotel htl: listOfHotels) {
+                if(htl.getName().equals(name)){
+                    return new ResponseEntity<>(HttpStatus.IM_USED);
+                }
             }
         }
-        String name = hotelDTO.getName();
-        String address = hotelDTO.getAddress();
-        List<Double> priceList = hotelDTO.getPriceList();
-        List<Room> roomConfiguration = hotelDTO.getRoomConfiguration();
-
-
         Hotel hotel = new Hotel();
 
+        hotel.setRoomConfiguration(hotelDTO.getRoomConfiguration());
+        hotel.setPriceList(hotelDTO.getPriceList());
+        hotel.setName(hotelDTO.getName());
+        hotel.setDescription(hotelDTO.getDescription());
+        hotel.setAddress(hotelDTO.getAddress());
 
-        /*TODO napuni hotel*/
-        hotel = hotelService.save(flight);
+        hotel = hotelService.save(hotel);
 
         return new ResponseEntity<>(new HotelDTO(hotel), HttpStatus.CREATED);
     }

@@ -1,6 +1,5 @@
 package com.project.project.model;
 
-import java.sql.Date;
 
 import javax.persistence.*;
 
@@ -11,10 +10,10 @@ public class RoomTaken {
     private long Id;
 
     @Column(name = "startDate", nullable = false)
-    private Date startDate;
+    private String startDate;
 
     @Column(name = "endDaTe", nullable = false)
-    private Date endDaTe;
+    private String endDaTe;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Room room;
@@ -27,19 +26,19 @@ public class RoomTaken {
 		this.Id = Id;
     }
     
-    public Date getStartDate() {
+    public String getStartDate() {
 		return this.startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(String startDate) {
 		this.startDate = startDate;
     }
     
-    public Date getEndDaTe() {
+    public String getEndDaTe() {
 		return this.endDaTe;
 	}
 
-	public void setEndDaTe(Date endDaTe) {
+	public void setEndDaTe(String endDaTe) {
 		this.endDaTe = endDaTe;
     }
     

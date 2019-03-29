@@ -17,7 +17,7 @@ public class Hotel {
     private String description;
 
     @Column(name = "priceList", nullable = false)
-    private List<Double> priceList;
+    private List<HotelsOffer> priceList;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Room> roomConfiguration;
@@ -25,7 +25,7 @@ public class Hotel {
     
     public Hotel(){}
 
-    public Hotel(String name, String  address, String description, List<Double> priceList, List<Room> roomConfiguration){
+    public Hotel(String name, String  address, String description, List<HotelsOffer> priceList, List<Room> roomConfiguration){
         this.name = name;
         this.address = address;
         this.description = description;
@@ -48,11 +48,11 @@ public class Hotel {
 		this.description = description;
 	}
 
-	public List<Double> getPriceList() {
+	public List<HotelsOffer> getPriceList() {
 		return this.priceList;
 	}
 
-	public void setPriceList(List<Double> priceList) {
+	public void setPriceList(List<HotelsOffer> priceList) {
 		this.priceList = priceList;
 	}
 

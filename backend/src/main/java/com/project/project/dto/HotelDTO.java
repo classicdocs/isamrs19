@@ -2,14 +2,21 @@ package com.project.project.dto;
 
 import java.util.List;
 import com.project.project.model.Hotel;
+import com.project.project.model.HotelsOffer;
 import com.project.project.model.Room;
 
+import javax.validation.constraints.NotNull;
 
 public class HotelDTO {
+	@NotNull
     private String name;
-    private String address;
+    @NotNull
+	private String address;
+    @NotNull
     private String description;
-    private List<Double> priceList;
+    @NotNull
+    private List<HotelsOffer> priceList;
+    @NotNull
     private List<Room> roomConfiguration;
     
     public HotelDTO(){}
@@ -46,11 +53,11 @@ public class HotelDTO {
 		this.description = description;
 	}
 
-	public List<Double> getPriceList() {
+	public List<HotelsOffer> getPriceList() {
 		return this.priceList;
 	}
 
-	public void setPriceList(List<Double> priceList) {
+	public void setPriceList(List<HotelsOffer> priceList) {
 		this.priceList = priceList;
 	}
 
