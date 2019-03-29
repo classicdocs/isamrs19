@@ -302,9 +302,8 @@ export default {
   },
   methods: {
     validate() {
-      this.snackbar.msg = "Start, final and transfer destinations can't be the same!";
-          this.snackbar.color = "error"; 
-          this.snackbar.show = true;
+      console.log(this.flight.departureDate);
+      console.log(this.flight.departureTime);
       // if(this.$refs.form.validate()) {
         if (this.validateDestinations()) {
           FlightsController.create(this.flight)

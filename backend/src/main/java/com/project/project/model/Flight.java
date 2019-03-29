@@ -12,48 +12,41 @@ public class Flight {
     private Long id;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private AirlineCompany airlineCompany;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Destination startDestination;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Destination finalDestination;
 
-    @Column(name = "departureDate", nullable = false)
+    @Column(name = "departure_date", nullable = false)
     private String departureDate;
 
-    @Column(name = "landingDate", nullable = false)
+    @Column(name = "departure_time", nullable = false)
+    private String departureTime;
+
+    @Column(name = "landing_date", nullable = false)
     private String landingDate;
 
-    @Column(name = "flightTime", nullable = false)
+    @Column(name = "landing_time", nullable = false)
+    private String landingTime;
+
+    @Column(name = "flight_time", nullable = false)
     private String flightTime;
 
     @Column(name = "distance", nullable = false)
     private double distance;
-
-    @Column(name = "numOfTransfer", nullable = false)
-    private int numOfTransfer;
 
     @ElementCollection
     @CollectionTable(name = "flight_transfers", joinColumns = @JoinColumn(name = "flight_id"))
     @Column(name = "transfers")
     private Set<String> transfers = new HashSet<>();
 
-    @Column(name = "ticketPrice", nullable = false)
+    @Column(name = "ticket_price", nullable = false)
     private double ticketPrice;
 
     public Flight() {
-    }
-
-    public Flight(Long id, Destination startDestination, Destination finalDestination, String departureDate, String landingDate, String flightTime, double distance, int numOfTransfer, Set<String> transfers, double ticketPrice) {
-        this.id = id;
-        this.startDestination = startDestination;
-        this.finalDestination = finalDestination;
-        this.departureDate = departureDate;
-        this.landingDate = landingDate;
-        this.flightTime = flightTime;
-        this.distance = distance;
-        this.numOfTransfer = numOfTransfer;
-        this.transfers = transfers;
-        this.ticketPrice = ticketPrice;
     }
 
     public Long getId() {
@@ -62,6 +55,14 @@ public class Flight {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public AirlineCompany getAirlineCompany() {
+        return airlineCompany;
+    }
+
+    public void setAirlineCompany(AirlineCompany airlineCompany) {
+        this.airlineCompany = airlineCompany;
     }
 
     public Destination getStartDestination() {
@@ -88,12 +89,28 @@ public class Flight {
         this.departureDate = departureDate;
     }
 
+    public String getDepartureTime() {
+        return departureTime;
+    }
+
+    public void setDepartureTime(String departureTime) {
+        this.departureTime = departureTime;
+    }
+
     public String getLandingDate() {
         return landingDate;
     }
 
     public void setLandingDate(String landingDate) {
         this.landingDate = landingDate;
+    }
+
+    public String getLandingTime() {
+        return landingTime;
+    }
+
+    public void setLandingTime(String landingTime) {
+        this.landingTime = landingTime;
     }
 
     public String getFlightTime() {
@@ -112,14 +129,6 @@ public class Flight {
         this.distance = distance;
     }
 
-    public int getNumOfTransfer() {
-        return numOfTransfer;
-    }
-
-    public void setNumOfTransfer(int numOfTransfer) {
-        this.numOfTransfer = numOfTransfer;
-    }
-
     public Set<String> getTransfers() {
         return transfers;
     }
@@ -136,3 +145,4 @@ public class Flight {
         this.ticketPrice = ticketPrice;
     }
 }
+
