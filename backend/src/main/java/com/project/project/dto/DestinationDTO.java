@@ -1,6 +1,9 @@
 package com.project.project.dto;
 
+import javax.validation.constraints.NotNull;
+
 public class DestinationDTO {
+    @NotNull
     private String name;
 
     public DestinationDTO() {

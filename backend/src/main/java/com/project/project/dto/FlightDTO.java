@@ -4,19 +4,31 @@ import com.project.project.model.Destination;
 import com.project.project.model.Flight;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.HashSet;
 import java.util.Set;
 
 public class FlightDTO {
     private Long id;
+    @NotNull
     private DestinationDTO startDestination;
+    @NotNull
     private DestinationDTO finalDestination;
+    @NotNull
     private String departureDate;
+    @NotNull
     private String landingDate;
+    @NotNull
     private String flightTime;
+    @Positive
     private double distance;
+    @PositiveOrZero
     private int numOfTransfer;
-    private Set<DestinationDTO> transfers = new HashSet<DestinationDTO>();
+    private Set<String> transfers = new HashSet<>();
+    @Positive
     private double ticketPrice;
 
     public FlightDTO() {
@@ -32,11 +44,7 @@ public class FlightDTO {
         this.flightTime = flight.getFlightTime();
         this.distance = flight.getDistance();
         this.numOfTransfer = flight.getNumOfTransfer();
-
-        for (Destination d: flight.getTransfers()) {
-            this.transfers.add(new DestinationDTO(d.getName()));
-        }
-
+        this.transfers = flight.getTransfers();
         this.ticketPrice = flight.getTicketPrice();
     }
 
@@ -104,11 +112,11 @@ public class FlightDTO {
         this.numOfTransfer = numOfTransfer;
     }
 
-    public Set<DestinationDTO> getTransfers() {
+    public Set<String> getTransfers() {
         return transfers;
     }
 
-    public void setTransfers(Set<DestinationDTO> transfers) {
+    public void setTransfers(Set<String> transfers) {
         this.transfers = transfers;
     }
 

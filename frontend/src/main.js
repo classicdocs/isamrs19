@@ -1,20 +1,19 @@
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
-import BootstrapVue from 'bootstrap-vue';
-
+import Vuetify from 'vuetify';
+import Axios from 'axios';
+import Config from './config';
 Vue.config.productionTip = false;
 
-Vue.use(BootstrapVue);
 
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
+Vue.use(Vuetify);
 
-import VueTimepicker from 'vue2-timepicker'
-import Datepicker from 'vuejs-datepicker' 
+import 'vuetify/dist/vuetify.min.css'
 
-Vue.use(VueTimepicker);
-Vue.use(Datepicker);
+Axios.defaults.baseURL = Config.getApiUrl();
+Axios.defaults.headers.Accept = 'application/json';
+Axios.defaults.headers['Access-Control-Allow-Origin'] = '*';
 
 new Vue({
   router,
