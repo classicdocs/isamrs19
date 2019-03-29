@@ -1,26 +1,43 @@
 <template>
   <div>
-    <b-container fluid fill-height>
-      <b-row>
-        <b-col xl="4" md="6" sm="12"> 
-          <AirlineCompanyInfo></AirlineCompanyInfo>
-        </b-col>
-        <b-col>
-          <b-row>
-            <b-btn variant="success" @click="modalShow = true">Add flight</b-btn>
-            <AddFlightForm 
-            v-if="modalShow"
-            v-bind:modalShow="modalShow"
-            v-on:modalClosed="closeModal()"/>
-          </b-row>
-          <!-- <b-row>fast reservations</b-row> -->
-        </b-col>
-      </b-row>
-      <b-row>
-        <!-- <p>Destination and flights</p> -->
-      </b-row>
-    </b-container>
-    
+    <v-container grid-list-md text-xs-center>
+      <v-layout row wrap>
+        <v-flex xs12>
+          <v-btn color="success">INFO</v-btn>
+          <airline-company-info/>
+        </v-flex>
+        <v-flex xs12>
+          <v-btn 
+            color="success"
+            @click="addFormDialog = true"
+          >Add flight</v-btn>
+          <v-dialog
+            v-model="addFormDialog"
+            max-width="500px"
+          >
+            <add-flight-form v-if="addFormDialog"
+              v-on:operation="closeAddForm($event)"
+              v-on:destination-error="showSnackbar($event)"
+            ></add-flight-form>
+          </v-dialog>
+        </v-flex>
+      </v-layout>
+    </v-container>
+    <v-snackbar
+        v-model="snackbar.show"
+        :timeout="5000"
+        :color="snackbar.color"
+        :top="true"
+    >
+      {{snackbar.msg}}
+      <v-btn
+          dark
+          flat
+          @click="snackbar.show = false"
+      >
+      Close
+      </v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -32,16 +49,36 @@ import AddFlightForm from "@/components/AddFlightForm.vue";
 export default {
   name: "AirlineCompany",
   components: {
-    AirlineCompanyInfo,
-    AddFlightForm,
+    'airline-company-info': AirlineCompanyInfo,
+    'add-flight-form':AddFlightForm,
   },
   data: () => ({
-    modalShow: false,
+    id: null,
+    addFormDialog: false,
+    snackbar: {
+      show: false,
+      color: "",
+      msg: "",
+    },
   }),
+  created() {
+    this.fetchData();
+  },
+  watch: {
+    '$route': 'fetchData'
+  },
   methods: {
-    closeModal() {
-      this.modalShow = false;
-      console.log(this.modalShow);
+    fetchData() {
+      this.id = this.$route.params.id;
+    },
+    closeAddForm(obj) {
+      this.addFormDialog = false;
+      this.showSnackbar(obj);
+    },
+    showSnackbar(obj) {
+      this.snackbar.color = obj.color;
+      this.snackbar.msg = obj.msg;
+      this.snackbar.show = true;
     }
   }
 };
