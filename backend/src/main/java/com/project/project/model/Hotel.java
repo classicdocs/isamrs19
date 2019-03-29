@@ -14,7 +14,7 @@ public class Hotel {
     private String address;
 
     @Column(name = "description", nullable = false)
-    private String description;
+		private String description;
 
     @Column(name = "priceList", nullable = false)
     private List<HotelsOffer> priceList;
