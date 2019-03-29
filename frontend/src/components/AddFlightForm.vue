@@ -1,5 +1,20 @@
 <template>
   <div>
+    <v-snackbar
+        v-model="snackbar.show"
+        :timeout="5000"
+        :color="snackbar.color"
+        :top="true"
+    >
+      {{snackbar.msg}}
+      <v-btn
+          dark
+          flat
+          @click="snackbar.show = false"
+      >
+      Close
+      </v-btn>
+    </v-snackbar>
     <v-card>
       <v-form
         ref="form"
@@ -10,16 +25,17 @@
         <span class="headline">Add flight</span>
       </v-card-title>
         <v-card-text>
+          
           <v-select
             :items="startDestinations"
-            v-model="flight.startDesetination"
+            v-model="flight.startDestination"
             label="Start destination"
             :rules="[v => !!v || 'Start destination is required']"
             required
           ></v-select>
           <v-select
             :items="finalDestinations"
-            v-model="flight.finalDesetination"
+            v-model="flight.finalDestination"
             label="Final destination"
             :rules="[v => !!v || 'Final destination is required']"
             required
@@ -225,6 +241,7 @@
         </v-card-actions>
       </v-form>
     </v-card>
+    
   </div>
 </template>
 
@@ -244,6 +261,14 @@ export default {
     menuDepartureTime: false,
     menuLandingTime: false,
     menuFlightTime: false,
+
+    value: true,
+
+    snackbar: {
+      show: false,
+      color: "",
+      msg: "",
+    },
 
     rules: {
       distance: [v => !!v || 'Distance is required',
@@ -277,19 +302,41 @@ export default {
   },
   methods: {
     validate() {
-      if(this.$refs.form.validate()) {
-        FlightsController.create(this.flight)
+      this.snackbar.msg = "Start, final and transfer destinations can't be the same!";
+          this.snackbar.color = "error"; 
+          this.snackbar.show = true;
+      // if(this.$refs.form.validate()) {
+        if (this.validateDestinations()) {
+          FlightsController.create(this.flight)
           .then((response) => {
             this.$emit("operation", {msg: "Flight successfully added", color: "success"})
           })
           .catch((response) => {
             this.$emit("operation", {msg: "Error! Something went wrong...", color: "error"})
           })
-      }
+        } else {
+          this.$emit("destination-error", {msg: "Start,final and transfer destinations can't be the same!", color: "error"})
+        }
+        
+      // }
     },
     reset() {
       this.$refs.form.reset();
     },
+    validateDestinations() {
+      if (this.flight.startDestination === this.flight.finalDestination)
+        return false;
+      
+      let retVal = true;
+
+      this.flight.transferDestination.forEach(e => {
+       
+        if(e === this.flight.startDestination || e === this.flight.finalDestination)
+          retVal = false;
+      });
+
+      return retVal;
+    }
   }
 };
 </script>

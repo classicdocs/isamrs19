@@ -16,7 +16,8 @@
             max-width="500px"
           >
             <add-flight-form v-if="addFormDialog"
-              v-on:operation="showSnackbar($event)"
+              v-on:operation="closeAddForm($event)"
+              v-on:destination-error="showSnackbar($event)"
             ></add-flight-form>
           </v-dialog>
         </v-flex>
@@ -70,8 +71,11 @@ export default {
     fetchData() {
       this.id = this.$route.params.id;
     },
+    closeAddForm(obj) {
+      this.addFormDialog = false;
+      this.showSnackbar(obj);
+    },
     showSnackbar(obj) {
-      this.addFormDialog = false,
       this.snackbar.color = obj.color;
       this.snackbar.msg = obj.msg;
       this.snackbar.show = true;
