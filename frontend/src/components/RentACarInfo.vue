@@ -12,5 +12,9 @@ export default {
 
 <style>
 
+h3 {
+    text-align: center;
+}
+
 </style>
 
