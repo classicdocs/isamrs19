@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import AirlineCompany from "./views/AirlineCompany.vue";
-import Hotel from "./views/Hotel.vue";
+import SystemAdmin from "./views/SystemAdmin.vue";
 
 Vue.use(Router);
 
@@ -16,7 +16,7 @@ export default new Router({
     {
       path: "/sys-admin",
       name: "sys-admin",
-      component: Hotel
+      component: SystemAdmin
     }
   ]
 });
