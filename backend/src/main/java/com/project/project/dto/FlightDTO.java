@@ -1,32 +1,33 @@
 package com.project.project.dto;
 
-import com.project.project.model.Destination;
 import com.project.project.model.Flight;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
 import java.util.HashSet;
 import java.util.Set;
 
 public class FlightDTO {
     private Long id;
     @NotNull
-    private DestinationDTO startDestination;
+    private String airlineCompany;
     @NotNull
-    private DestinationDTO finalDestination;
+    private String startDestination;
+    @NotNull
+    private String finalDestination;
     @NotNull
     private String departureDate;
     @NotNull
+    private String departureTime;
+    @NotNull
     private String landingDate;
+    @NotNull
+    private String landingTime;
     @NotNull
     private String flightTime;
     @Positive
     private double distance;
-    @PositiveOrZero
-    private int numOfTransfer;
     private Set<String> transfers = new HashSet<>();
     @Positive
     private double ticketPrice;
@@ -37,13 +38,15 @@ public class FlightDTO {
 
     public FlightDTO(Flight flight) {
         this.id = flight.getId();
-        this.startDestination = new DestinationDTO(flight.getStartDestination().getName());
-        this.finalDestination = new DestinationDTO(flight.getFinalDestination().getName());
+        this.airlineCompany = flight.getAirlineCompany().getName();
+        this.startDestination = flight.getStartDestination().getName();
+        this.finalDestination = flight.getFinalDestination().getName();
         this.departureDate = flight.getDepartureDate();
+        this.departureTime = flight.getDepartureTime();
         this.landingDate = flight.getLandingDate();
+        this.landingTime = flight.getLandingTime();
         this.flightTime = flight.getFlightTime();
         this.distance = flight.getDistance();
-        this.numOfTransfer = flight.getNumOfTransfer();
         this.transfers = flight.getTransfers();
         this.ticketPrice = flight.getTicketPrice();
     }
@@ -56,19 +59,27 @@ public class FlightDTO {
         this.id = id;
     }
 
-    public DestinationDTO getStartDestination() {
+    public String getAirlineCompany() {
+        return airlineCompany;
+    }
+
+    public void setAirlineCompany(String airlineCompany) {
+        this.airlineCompany = airlineCompany;
+    }
+
+    public String getStartDestination() {
         return startDestination;
     }
 
-    public void setStartDestination(DestinationDTO startDestination) {
+    public void setStartDestination(String startDestination) {
         this.startDestination = startDestination;
     }
 
-    public DestinationDTO getFinalDestination() {
+    public String getFinalDestination() {
         return finalDestination;
     }
 
-    public void setFinalDestination(DestinationDTO finalDestination) {
+    public void setFinalDestination(String finalDestination) {
         this.finalDestination = finalDestination;
     }
 
@@ -80,12 +91,28 @@ public class FlightDTO {
         this.departureDate = departureDate;
     }
 
+    public String getDepartureTime() {
+        return departureTime;
+    }
+
+    public void setDepartureTime(String departureTime) {
+        this.departureTime = departureTime;
+    }
+
     public String getLandingDate() {
         return landingDate;
     }
 
     public void setLandingDate(String landingDate) {
         this.landingDate = landingDate;
+    }
+
+    public String getLandingTime() {
+        return landingTime;
+    }
+
+    public void setLandingTime(String landingTime) {
+        this.landingTime = landingTime;
     }
 
     public String getFlightTime() {
@@ -102,14 +129,6 @@ public class FlightDTO {
 
     public void setDistance(double distance) {
         this.distance = distance;
-    }
-
-    public int getNumOfTransfer() {
-        return numOfTransfer;
-    }
-
-    public void setNumOfTransfer(int numOfTransfer) {
-        this.numOfTransfer = numOfTransfer;
     }
 
     public Set<String> getTransfers() {

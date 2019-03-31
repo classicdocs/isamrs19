@@ -1,5 +1,20 @@
 <template>
   <div>
+    <v-snackbar
+        v-model="snackbar.show"
+        :timeout="5000"
+        :color="snackbar.color"
+        :top="true"
+    >
+      {{snackbar.msg}}
+      <v-btn
+          dark
+          flat
+          @click="snackbar.show = false"
+      >
+      Close
+      </v-btn>
+    </v-snackbar>
     <v-card>
       <v-form
         ref="form"
@@ -10,16 +25,17 @@
         <span class="headline">Add flight</span>
       </v-card-title>
         <v-card-text>
+          
           <v-select
-            :items="startDestinations"
-            v-model="flight.startDesetination"
+            :items="destinations"
+            v-model="flight.startDestination"
             label="Start destination"
             :rules="[v => !!v || 'Start destination is required']"
             required
           ></v-select>
           <v-select
-            :items="finalDestinations"
-            v-model="flight.finalDesetination"
+            :items="destinations"
+            v-model="flight.finalDestination"
             label="Final destination"
             :rules="[v => !!v || 'Final destination is required']"
             required
@@ -207,7 +223,7 @@
               <v-flex xs12>
                 <v-select
                 v-model="flight.transferDestination"
-                :items="transferDestinations"
+                :items="destinations"
                 label="Transfer destinations"
                 multiple
                 chips
@@ -225,20 +241,18 @@
         </v-card-actions>
       </v-form>
     </v-card>
+    
   </div>
 </template>
 
 <script>
 
 import Flight from "@/models/Flight";
-import {Datetime} from 'vue-datetime';
-import FlightsContoller from "@/controllers/flights.controller";
+import FlightsController from "@/controllers/flights.controller";
+import DestinationsController from "@/controllers/destinations.controller";
 
 export default {
   name: "AddFlightForm",
-  components: {
-    'date-time': Datetime,
-  },
   data: () => ({
     form: true,
 
@@ -248,6 +262,14 @@ export default {
     menuLandingTime: false,
     menuFlightTime: false,
 
+    value: true,
+
+    snackbar: {
+      show: false,
+      color: "",
+      msg: "",
+    },
+
     rules: {
       distance: [v => !!v || 'Distance is required',
                  v => /^[0-9]+$/.test(v) || "Distance must be a positive number"],
@@ -255,32 +277,55 @@ export default {
                  v => /^[0-9]+$/.test(v) || "Ticket price must be a positive number"],
 
     },
-    startDestinations: [],
-    finalDestinations: [],
-    transferDestinations: [],
+    destinations: [],
 
     flight: new Flight(),
   }),
-  beforeMount() {
+  created() {
     this.flight.airlineCompany = this.$route.params.id;
-    this.startDestinations= ['1'],
-    this.finalDestinations= ['2'],
-    this.transferDestinations= ['3']
+
+    DestinationsController.get()
+      .then((response) => {
+        response.data.forEach(element => {
+          this.destinations.push(element.name);
+        });
+      })
+      .catch((response) => {
+
+      })
   },
   methods: {
     validate() {
       if(this.$refs.form.validate()) {
-        FlightsContoller.create(this.flight)
+        if (this.validateDestinations()) {
+          FlightsController.create(this.flight)
           .then((response) => {
             this.$emit("operation", {msg: "Flight successfully added", color: "success"})
           })
           .catch((response) => {
             this.$emit("operation", {msg: "Error! Something went wrong...", color: "error"})
           })
+        } else {
+          this.$emit("destination-error", {msg: "Start,final and transfer destinations can't be the same!", color: "error"})
+        }
       }
     },
     reset() {
       this.$refs.form.reset();
+    },
+    validateDestinations() {
+      if (this.flight.startDestination === this.flight.finalDestination)
+        return false;
+      
+      let retVal = true;
+
+      this.flight.transferDestination.forEach(e => {
+       
+        if(e === this.flight.startDestination || e === this.flight.finalDestination)
+          retVal = false;
+      });
+
+      return retVal;
     }
   }
 };
@@ -288,13 +333,5 @@ export default {
 
 <style>
 
-.vdatetime {
-  border-bottom: 1px solid;
-  border-color: rgba(0,0,0,.42);
-}
-
-.date-time-label {
-  color: rgba(0,0,0,.42);
-}
 </style>
 

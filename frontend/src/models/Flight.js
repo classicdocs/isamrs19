@@ -1,6 +1,7 @@
 
 export default class Flight {
   constructor() {
+    this.airlineCompany = null,
     this.startDestination = null,
     this.finalDestination = null,
     this.transferDestination = [],
