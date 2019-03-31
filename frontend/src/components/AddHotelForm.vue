@@ -1,49 +1,45 @@
 <template>
   <div>
     <v-card>
+      <v-form ref="form" v-model="form" lazy-validation>
+          <!-- NASLOV -->
+          <v-card-title primary-title>
+            <span class="headline">Add new hotel <v-icon x-large>hotel</v-icon></span>
+          </v-card-title>
 
-        <v-form ref="form" v-model="form" lazy-validation>
+          <!-- LABELE -->
 
-        <v-card-title primary-title>
-            <span class="headline">Add hotel</span>
-        </v-card-title>
+          <v-container>
+            <v-text-field label="hotel name" :rules="[v => !!v || 'hotel name is required']">
+            </v-text-field> 
 
-        <v-card-text>
-          <v-container fluid grid-list-xs>
-            <v-layout wrap align-center>
-
-                <v-flex xs6>
-                    <v-text-field label="Name" v-model="flight.distance"
-                        :rules="rules.distance" required>
-                    </v-text-field>
-                </v-flex>
-
-                <v-flex xs6>
-                    <v-text-field label="Address" v-model="flight.ticketPrice"
-                        required :rules="rules.ticketPrice" >
-                    </v-text-field>
-                </v-flex>
-
-                <v-flex xs6>
-                    <v-text-field label="Promotional Description" v-model="flight.ticketPrice"
-                        required :rules="rules.ticketPrice" >
-                    </v-text-field>
-                </v-flex>
-                
-                <v-flex xs6>
-                    <v-text-field label="TODO hotel admin" v-model="flight.ticketPrice"
-                        required :rules="rules.ticketPrice" >
-                    </v-text-field>
-                </v-flex>
-              
+            <v-layout v-bind="binding">
+              <v-flex>
+                <v-text-field label="country" :rules="[v => !!v || 'country name is required']">
+                </v-text-field> 
+              </v-flex>
+              <v-flex>
+                <v-text-field label="city" :rules="[v => !!v || 'city name is required']">
+                </v-text-field> 
+              </v-flex>
             </v-layout>
+
+            <v-text-field label="street address" :rules="[v => !!v || 'street address is required']">
+            </v-text-field> 
+
+            <v-textarea name="promotionalDescription" label="promotional description" 
+             hint="Say something good about hotel services and prices" box>
+            </v-textarea>
           </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn @click="reset">Reset Form</v-btn>
-          <v-btn :disabled="!form" color="primary" @click="validate">Add new</v-btn>
-        </v-card-actions>
+
+          <!-- DUGMAD -->
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+              <v-btn v-on:click="validate" color="success">NEXT</v-btn>
+              <v-btn v-on:click="reset" color="error">RESET</v-btn>
+              <v-btn v-on:click="cancel" color="info">CANCEL</v-btn>
+           </v-card-actions>
       </v-form>
     </v-card>
   </div>
@@ -52,44 +48,33 @@
 <script>
 
 import Hotel from "@/models/Hotel";
-import HotelContoller from "@/controllers/hotels.controller";
+import sysAdminContoller from "@/controllers/sysAdmin.controller.js";
+import { thisExpression } from '@babel/types';
 
 export default {
   name: "AddHotelForm",
-//   components: {
-//     'date-time': Datetime,
-//   },
   data: () => ({
     form: true,
-
-    rules: {
-      name: [v => !!v || 'Name is required'],
-      address: [v => !!v || 'Address is required'],
-
-    },
-    
     hotel: new Hotel(),
   }),
-//   beforeMount() {
-//     this.flight.airlineCompany = this.$route.params.id;
-//     this.startDestinations= ['1'],
-//     this.finalDestinations= ['2'],
-//     this.transferDestinations= ['3']
-//   },
+
   methods: {
     validate() {
       if(this.$refs.form.validate()) {
         HotelContoller.create(this.hotel)
           .then((response) => {
-            this.$emit("operation", {msg: "Hotel successfully added", color: "success"})
+            this.$emit("finished", {msg: "Hotel successfully added", color: "success"})
           })
           .catch((response) => {
-            this.$emit("operation", {msg: "Error! Something went wrong...", color: "error"})
+            this.$emit("finished", {msg: "Error! Something went wrong...", color: "error"})
           })
       }
     },
     reset() {
       this.$refs.form.reset();
+    },
+    cancel(){
+      this.$emit("cancel")
     }
   }
 };
