@@ -17,6 +17,11 @@ export default new Router({
       path: "/sys-admin",
       name: "sys-admin",
       component: SystemAdmin
+    },
+    {
+      path: "/rentacar-service",
+      name: "rentacar-service",
+      component: () => import("./views/RentACarService.vue")
     }
   ]
 });

@@ -6,6 +6,8 @@ import Axios from 'axios';
 import Config from './config';
 Vue.config.productionTip = false;
 
+import VueNumberInput from '@chenfengyuan/vue-number-input';
+Vue.use(VueNumberInput);
 
 Vue.use(Vuetify);
 
