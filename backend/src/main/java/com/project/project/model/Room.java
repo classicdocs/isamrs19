@@ -8,6 +8,9 @@ import java.util.List;
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+	private int Id;
+
+	@Column(name = "roomNumber", nullable = false)
     private int roomNumber;
 
     @Column(name = "numberOfBeds", nullable = false)
@@ -19,27 +22,42 @@ public class Room {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Hotel hotel;
 
-
-
 	public Room(){}
 
-    public Room(int roomNumber, int numberOfBeds, List<RoomTaken> roomTaken, Hotel hotel){
-        this.roomNumber = roomNumber;
-        this.numberOfBeds = numberOfBeds;
-        this.roomTaken = roomTaken;
-        this.hotel = hotel;
-    }
+	public Room(int id, int roomNumber, int numberOfBeds, List<RoomTaken> roomTaken, Hotel hotel) {
+		Id = id;
+		this.roomNumber = roomNumber;
+		this.numberOfBeds = numberOfBeds;
+		this.roomTaken = roomTaken;
+		this.hotel = hotel;
+	}
+
+	public int getId() {
+		return Id;
+	}
+
+	public void setId(int id) {
+		Id = id;
+	}
+
+	public int getRoomNumber() {
+		return roomNumber;
+	}
+
+	public void setRoomNumber(int roomNumber) {
+		this.roomNumber = roomNumber;
+	}
 
 	public int getNumberOfBeds() {
-		return this.numberOfBeds;
+		return numberOfBeds;
 	}
 
 	public void setNumberOfBeds(int numberOfBeds) {
 		this.numberOfBeds = numberOfBeds;
 	}
-	
+
 	public List<RoomTaken> getRoomTaken() {
-		return this.roomTaken;
+		return roomTaken;
 	}
 
 	public void setRoomTaken(List<RoomTaken> roomTaken) {
@@ -47,18 +65,10 @@ public class Room {
 	}
 
 	public Hotel getHotel() {
-		return this.hotel;
+		return hotel;
 	}
 
 	public void setHotel(Hotel hotel) {
 		this.hotel = hotel;
-	}
-		
-	public int getRoomNumber() {
-		return this.roomNumber;
-	}
-
-	public void setRoomNumber(int roomNumber) {
-		this.roomNumber = roomNumber;
 	}
 }

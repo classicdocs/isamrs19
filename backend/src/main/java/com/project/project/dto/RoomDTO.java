@@ -11,6 +11,8 @@ import javax.validation.constraints.PositiveOrZero;
 
 public class RoomDTO{
 
+	@Positive
+	private int Id;
 	@PositiveOrZero
     private int roomNumber;
     @Positive
@@ -20,14 +22,24 @@ public class RoomDTO{
     @NotNull
     private Hotel hotel;
 
-    public RoomDTO(){}
-    
-	public RoomDTO(Room room){
-        this.roomNumber = room.getRoomNumber();
-        this.numberOfBeds = room.getNumberOfBeds();
-        this.roomTaken = room.getRoomTaken();
-        this.hotel = room.getHotel();
-    }
+	public RoomDTO(Room room) {
+		Id = room.getId();
+		this.roomNumber = room.getRoomNumber();
+		this.numberOfBeds = room.getNumberOfBeds();
+		this.roomTaken = room.getRoomTaken();
+		this.hotel = room.getHotel();
+	}
+
+	public int getId() {
+		return Id;
+	}
+
+	public void setId(int id) {
+		Id = id;
+	}
+
+	public RoomDTO(){}
+
 
 	public int getRoomNumber() {
 		return this.roomNumber;
