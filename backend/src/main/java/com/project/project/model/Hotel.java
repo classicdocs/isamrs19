@@ -8,67 +8,81 @@ import java.util.List;
 public class Hotel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long Id;
+
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "address", nullable = false)
     private String address;
 
-    @Column(name = "description", nullable = false)
-		private String description;
+    @Column(name = "description")
+    private String description;
 
-    @Column(name = "priceList", nullable = false)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<HotelsOffer> priceList;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Room> roomConfiguration;
 
     
     public Hotel(){}
 
-    public Hotel(String name, String  address, String description, List<HotelsOffer> priceList, List<Room> roomConfiguration){
+    public Hotel(Long id, String name, String address,
+                 String description, List<HotelsOffer> priceList, List<Room> roomConfiguration) {
+        Id = id;
         this.name = name;
         this.address = address;
         this.description = description;
         this.priceList = priceList;
         this.roomConfiguration = roomConfiguration;
     }
-	public String getAddress() {
-		return this.address;
-	}
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+    public Long getId() {
+        return Id;
+    }
 
-	public String getDescription() {
-		return this.description;
-	}
+    public void setId(Long id) {
+        Id = id;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public List<HotelsOffer> getPriceList() {
-		return this.priceList;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setPriceList(List<HotelsOffer> priceList) {
-		this.priceList = priceList;
-	}
+    public String getAddress() {
+        return address;
+    }
 
-	public List<Room> getRoomConfiguration() {
-		return this.roomConfiguration;
-	}
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-	public void setRoomConfiguration(List<Room> roomConfiguration) {
-		this.roomConfiguration = roomConfiguration;
-	}
-    
-	public String getName() {
-		return this.name;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<HotelsOffer> getPriceList() {
+        return priceList;
+    }
+
+    public void setPriceList(List<HotelsOffer> priceList) {
+        this.priceList = priceList;
+    }
+
+    public List<Room> getRoomConfiguration() {
+        return roomConfiguration;
+    }
+
+    public void setRoomConfiguration(List<Room> roomConfiguration) {
+        this.roomConfiguration = roomConfiguration;
+    }
 }

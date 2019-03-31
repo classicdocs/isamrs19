@@ -1,45 +1,42 @@
 package com.project.project.model;
 
 import javax.persistence.*;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 public class RentACar {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long Id;
+
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "address", nullable = false)
     private String address;
 
-    @Column(name = "promotionalDescription", nullable = false)
+    @Column(name = "promotionalDescription")
     private String promotionalDescription;
 
-    // FIXME
-    @Column(name = "priceList", nullable = false)
-    private HashMap<String, Double> priceList;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<RentACarOffer> priceList;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<VehicleMockup> vehicles;
 
-    // FIXME branch office
     @ElementCollection
-    @CollectionTable(name = "branchOffices", joinColumns = @JoinColumn(name = "id"))
+    @CollectionTable(name = "branchOffices", joinColumns = @JoinColumn(name = "Id"))
     @Column(name = "branches")
-    private Set<String> branches = new HashSet<>();
+    private List<String> branches;
 
-    public RentACar(){}
+    public RentACar() {}
 
-    public RentACar(String name, String address, String promotionalDescription, HashMap<String, Double> priceList, List<VehicleMockup> vehicles, Set<String> branches) {
-        this.name = name;
-        this.address = address;
-        this.promotionalDescription = promotionalDescription;
-        this.priceList = priceList;
-        this.vehicles = vehicles;
-        this.branches = branches;
+    public Long getId() {
+        return Id;
+    }
+
+    public void setId(Long id) {
+        Id = id;
     }
 
     public String getName() {
@@ -66,11 +63,11 @@ public class RentACar {
         this.promotionalDescription = promotionalDescription;
     }
 
-    public HashMap<String, Double> getPriceList() {
+    public List<RentACarOffer> getPriceList() {
         return priceList;
     }
 
-    public void setPriceList(HashMap<String, Double> priceList) {
+    public void setPriceList(List<RentACarOffer> priceList) {
         this.priceList = priceList;
     }
 
@@ -82,11 +79,22 @@ public class RentACar {
         this.vehicles = vehicles;
     }
 
-    public Set<String> getBranches() {
+    public List<String> getBranches() {
         return branches;
     }
 
-    public void setBranches(Set<String> branches) {
+    public void setBranches(List<String> branches) {
+        this.branches = branches;
+    }
+
+    public RentACar(Long id, String name, String address, String promotionalDescription,
+                    List<RentACarOffer> priceList, List<VehicleMockup> vehicles, List<String> branches) {
+        Id = id;
+        this.name = name;
+        this.address = address;
+        this.promotionalDescription = promotionalDescription;
+        this.priceList = priceList;
+        this.vehicles = vehicles;
         this.branches = branches;
     }
 }

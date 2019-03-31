@@ -2,6 +2,8 @@ package com.project.project.service;
 
 import java.util.List;
 
+import com.project.project.dto.HotelDTO;
+import com.project.project.exceptions.HotelNotFound;
 import com.project.project.model.Hotel;
 import com.project.project.repository.HotelRepository;
 
@@ -15,7 +17,18 @@ public class HotelService {
     @Autowired
     private HotelRepository hotelRepository;
 
-    public Hotel save(Hotel hotel) {
+    public Hotel save(HotelDTO hotelDTO)  throws HotelNotFound{
+
+        // FIXME mozda treba this.hotelRepository
+        Hotel hotel = hotelRepository.findOneById(hotelDTO.getId());
+
+        hotel.setId(hotelDTO.getId());
+        hotel.setRoomConfiguration(hotelDTO.getRoomConfiguration());
+        hotel.setPriceList(hotelDTO.getPriceList());
+        hotel.setName(hotelDTO.getName());
+        hotel.setDescription(hotelDTO.getDescription());
+        hotel.setAddress(hotelDTO.getAddress());
+
         return hotelRepository.save(hotel);
     }
 
@@ -23,9 +36,11 @@ public class HotelService {
         return hotelRepository.findAll();
     }
 
-    public void remove(String name) {
-        hotelRepository.deleteById(name);
+    public void remove(Long Id) {
+        hotelRepository.deleteById(Id);
     }
 
-    //public Hotel findOne(String name) {return hotelRepository.findOne(name); }
+    public Hotel findOneByName(String name)  throws HotelNotFound {
+        return hotelRepository.findOneByName(name);
+    }
 }

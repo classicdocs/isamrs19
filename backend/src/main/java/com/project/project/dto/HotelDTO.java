@@ -1,6 +1,7 @@
 package com.project.project.dto;
 
 import java.util.List;
+
 import com.project.project.model.Hotel;
 import com.project.project.model.HotelsOffer;
 import com.project.project.model.Room;
@@ -9,28 +10,44 @@ import javax.validation.constraints.NotNull;
 
 public class HotelDTO {
 	@NotNull
+	private Long Id;
+
+	@NotNull
     private String name;
+
     @NotNull
 	private String address;
+
     @NotNull
     private String description;
+
     @NotNull
     private List<HotelsOffer> priceList;
+
     @NotNull
     private List<Room> roomConfiguration;
     
     public HotelDTO(){}
 
-    public HotelDTO(Hotel hotel){
-        this.name = hotel.getName();
-        this.address = hotel.getAddress();
-        this.description = hotel.getDescription();
-        this.priceList = hotel.getPriceList();
-        this.roomConfiguration = hotel.getRoomConfiguration();
-    }
+	public HotelDTO(Hotel hotel) {
+		Id = hotel.getId();
+		this.name = hotel.getName();
+		this.address = hotel.getAddress();
+		this.description = hotel.getDescription();
+		this.priceList = hotel.getPriceList();
+		this.roomConfiguration = hotel.getRoomConfiguration();
+	}
 
-    public String getName() {
-		return this.name;
+	public Long getId() {
+		return Id;
+	}
+
+	public void setId(Long id) {
+		Id = id;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public void setName(String name) {
@@ -38,7 +55,7 @@ public class HotelDTO {
 	}
 
 	public String getAddress() {
-		return this.address;
+		return address;
 	}
 
 	public void setAddress(String address) {
@@ -46,7 +63,7 @@ public class HotelDTO {
 	}
 
 	public String getDescription() {
-		return this.description;
+		return description;
 	}
 
 	public void setDescription(String description) {
@@ -54,7 +71,7 @@ public class HotelDTO {
 	}
 
 	public List<HotelsOffer> getPriceList() {
-		return this.priceList;
+		return priceList;
 	}
 
 	public void setPriceList(List<HotelsOffer> priceList) {
@@ -62,11 +79,10 @@ public class HotelDTO {
 	}
 
 	public List<Room> getRoomConfiguration() {
-		return this.roomConfiguration;
+		return roomConfiguration;
 	}
 
 	public void setRoomConfiguration(List<Room> roomConfiguration) {
 		this.roomConfiguration = roomConfiguration;
 	}
-
 }

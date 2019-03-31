@@ -1,44 +1,42 @@
 package com.project.project.dto;
 
 import com.project.project.model.RentACar;
+import com.project.project.model.RentACarOffer;
 import com.project.project.model.VehicleMockup;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
 
 public class RentACarDTO {
     @NotNull
+    private Long Id;
+
+    @NotNull
     private String name;
+
     @NotNull
     private String address;
+
     @NotNull
     private String promotionalDescription;
-    // FIXME
+
     @NotNull
-    private HashMap<String, Double> priceList;
+    private List<RentACarOffer> priceList;
+
     @NotNull
     private List<VehicleMockup> vehicles;
 
-    // FIXME branch office
     @NotNull
-    private Set<String> branches = new HashSet<>();
+    private List<String> branches;
 
-    public RentACarDTO(RentACar rentACar) {
-        this.name = rentACar.getName();
-        this.address = rentACar.getAddress();
-        this.promotionalDescription = rentACar.getPromotionalDescription();
-        this.priceList = rentACar.getPriceList();
-        this.vehicles = rentACar.getVehicles();
-        this.branches = rentACar.getBranches();
+    public Long getId() {
+        return Id;
     }
 
-    public RentACarDTO(){}
+    public void setId(Long id) {
+        Id = id;
+    }
 
     public String getName() {
         return name;
@@ -64,11 +62,11 @@ public class RentACarDTO {
         this.promotionalDescription = promotionalDescription;
     }
 
-    public HashMap<String, Double> getPriceList() {
+    public List<RentACarOffer> getPriceList() {
         return priceList;
     }
 
-    public void setPriceList(HashMap<String, Double> priceList) {
+    public void setPriceList(List<RentACarOffer> priceList) {
         this.priceList = priceList;
     }
 
@@ -80,11 +78,23 @@ public class RentACarDTO {
         this.vehicles = vehicles;
     }
 
-    public Set<String> getBranches() {
+    public List<String> getBranches() {
         return branches;
     }
 
-    public void setBranches(Set<String> branches) {
+    public void setBranches(List<String> branches) {
         this.branches = branches;
+    }
+
+    public RentACarDTO(){}
+
+    public RentACarDTO(RentACar rentACar) {
+        Id = rentACar.getId();
+        this.name = rentACar.getName();
+        this.address = rentACar.getAddress();
+        this.promotionalDescription = rentACar.getPromotionalDescription();
+        this.priceList = rentACar.getPriceList();
+        this.vehicles = rentACar.getVehicles();
+        this.branches = rentACar.getBranches();
     }
 }
