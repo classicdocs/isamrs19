@@ -3,7 +3,7 @@ package com.project.project.service;
 import java.util.List;
 
 import com.project.project.model.Hotel;
-import com.project.project.repository.HotelReprository;
+import com.project.project.repository.HotelRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class HotelService {
 
     @Autowired
-    private HotelReprository hotelRepository;
+    private HotelRepository hotelRepository;
 
     public Hotel save(Hotel hotel) {
         return hotelRepository.save(hotel);
