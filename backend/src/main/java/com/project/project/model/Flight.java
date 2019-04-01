@@ -11,13 +11,13 @@ public class Flight {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private AirlineCompany airlineCompany;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Destination startDestination;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Destination finalDestination;
 
     @Column(name = "departure_date", nullable = false)
@@ -41,7 +41,7 @@ public class Flight {
     @ElementCollection
     @CollectionTable(name = "flight_transfers", joinColumns = @JoinColumn(name = "flight_id"))
     @Column(name = "transfers")
-    private Set<String> transfers = new HashSet<>();
+    private Set<String> transferDestinations = new HashSet<>();
 
     @Column(name = "ticket_price", nullable = false)
     private double ticketPrice;
@@ -129,12 +129,12 @@ public class Flight {
         this.distance = distance;
     }
 
-    public Set<String> getTransfers() {
-        return transfers;
+    public Set<String> getTransferDestinations() {
+        return transferDestinations;
     }
 
-    public void setTransfers(Set<String> transfers) {
-        this.transfers = transfers;
+    public void setTransferDestinations(Set<String> transferDestinations) {
+        this.transferDestinations = transferDestinations;
     }
 
     public double getTicketPrice() {
