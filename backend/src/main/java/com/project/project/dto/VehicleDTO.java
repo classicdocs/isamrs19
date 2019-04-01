@@ -1,58 +1,53 @@
-package com.project.project.model;
+package com.project.project.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import com.project.project.model.Vehicle;
 
-@Entity
-public class Vehicle {
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
-    @Id
-    @GeneratedValue
-    private Long id;
+public class VehicleDTO {
 
-    @Column(name = "name", nullable = false)
+    @NotNull
     private String name;
 
-    @Column(name = "vehicle_manufacturer", nullable = false)
+    @NotNull
     private String vehicleManufacturer;
 
-    @Column(name = "vehicle_model", nullable = false)
+    @NotNull
     private String vehicleModel;
 
-    @Column(name = "vehicle_type", nullable = false)
+    @NotNull
     private String vehicleType;
 
-    @Column(name = "number_of_passengers", nullable = false)
+    @Positive
     private int numberOfPassengers;
 
-    @Column(name = "year_of_production", nullable = false)
+    @Positive
     private int yearOfProduction;
 
-    @Column(name = "price_per_day", nullable = false)
+    @Positive
     private int pricePerDay;
 
-    @Column(name = "average_rating")
-    private double averageRating;
+    public VehicleDTO() {
 
-    public Vehicle(){
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public VehicleDTO(Vehicle vehicle) {
+        this.name = vehicle.getName();
+        this.vehicleManufacturer = vehicle.getVehicleManufacturer();
+        this.vehicleModel = vehicle.getVehicleModel();
+        this.vehicleType = vehicle.getVehicleType();
+        this.numberOfPassengers = vehicle.getNumberOfPassengers();
+        this.yearOfProduction = vehicle.getYearOfProduction();
+        this.pricePerDay = vehicle.getPricePerDay();
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String vehicleName) {
-        this.name = vehicleName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getVehicleManufacturer() {
@@ -101,13 +96,5 @@ public class Vehicle {
 
     public void setPricePerDay(int pricePerDay) {
         this.pricePerDay = pricePerDay;
-    }
-
-    public double getAverageRating() {
-        return averageRating;
-    }
-
-    public void setAverageRating(double averageRating) {
-        this.averageRating = averageRating;
     }
 }

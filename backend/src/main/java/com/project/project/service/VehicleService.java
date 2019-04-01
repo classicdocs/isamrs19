@@ -1,5 +1,6 @@
 package com.project.project.service;
 
+import com.project.project.dto.VehicleDTO;
 import com.project.project.model.Vehicle;
 import com.project.project.repository.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,4 +22,18 @@ public class VehicleService {
         return vehicleRepository.findAll();
     }
 
+    public Vehicle save(VehicleDTO vehicleDTO){
+        Vehicle vehicle = new Vehicle();
+
+        vehicle.setName(vehicleDTO.getName());
+        vehicle.setVehicleManufacturer(vehicleDTO.getVehicleManufacturer());
+        vehicle.setVehicleModel(vehicleDTO.getVehicleModel());
+        vehicle.setVehicleType(vehicleDTO.getVehicleType());
+        vehicle.setNumberOfPassengers(vehicleDTO.getNumberOfPassengers());
+        vehicle.setYearOfProduction(vehicleDTO.getYearOfProduction());
+        vehicle.setPricePerDay(vehicleDTO.getPricePerDay());
+        vehicle.setAverageRating(0);
+
+        return vehicleRepository.save(vehicle);
+    }
 }
