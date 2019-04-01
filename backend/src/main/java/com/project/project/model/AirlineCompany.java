@@ -10,7 +10,7 @@ public class AirlineCompany {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "name", unique = true, nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "description")
@@ -20,13 +20,6 @@ public class AirlineCompany {
     private List<Flight> flights;
 
     public AirlineCompany() {}
-
-    public AirlineCompany(Long id, String name, String description, List<Flight> flights) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.flights = flights;
-    }
 
     public Long getId() {
         return id;

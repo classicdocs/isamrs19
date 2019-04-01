@@ -101,12 +101,12 @@ modules.xml
 docs/_book
 
 # TODO: where does this rule come from?
-test/
+
 
 # End of https://www.gitignore.io/api/vue,intellij,visualstudiocode
 
 .idea/compiler.xml
 .idea/encodings.xml
 .idea/vcs.xml
-
+.idea/codeStyles/Project.xml
 target/
