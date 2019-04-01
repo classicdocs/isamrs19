@@ -1,8 +1,6 @@
 package com.project.project.model;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 public class Destination {
@@ -17,10 +15,10 @@ public class Destination {
     @Column(name = "country", nullable = false)
     private String country;
 
-    @Column(name = "airport", unique = true, nullable = false)
+    @Column(name = "airport", nullable = false)
     private String airport;
 
-    @Column(name = "zip", unique = true, nullable = false)
+    @Column(name = "zip", nullable = false)
     private String zip;
 
     public Destination() {
