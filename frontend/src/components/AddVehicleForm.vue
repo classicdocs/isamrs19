@@ -47,19 +47,26 @@
                       :rules="vehicle_type_rules"
                       label="Vehicle type*"
                       required
+                      @change="setPassengers(carType)"
                   ></v-select>
               </v-flex>
-              <v-flex xs12 sm6 md8>
+              <v-flex xs12 sm6 md4>
                   <span>Number of passengers:</span>
               </v-flex>
               <v-flex xs12 sm6 md4>
                   <span>Year of production:</span>
               </v-flex>
-              <v-flex xs12 sm6 md8>
-                  <number-input v-model="passengers" :min="1" :max="10" inline center controls></number-input>
+              <v-flex xs12 sm6 md4>
+                  <span>Price per day (in Euros):</span>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                  <number-input :disabled="!passengers_enabled"  v-model="passengers" :min="1" :max="max_passengers" inline center controls></number-input>
               </v-flex>
               <v-flex xs12 sm6 md4>
                   <number-input v-model="production" :min="1990" :max="2019" inline center controls></number-input>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                  <number-input v-model="price_per_day" :min="1" :max="200" inline center controls></number-input>
               </v-flex>
               </v-layout>
           </v-container>
@@ -88,7 +95,8 @@ export default {
             vehicleModel: '',
             vehicleType: '',
             passengerNumber: null,
-            productionYear: null
+            productionYear: null,
+            pricePerDay: null
         },
         addVehicle: false,
         valid: true,
@@ -111,8 +119,11 @@ export default {
             v => !!v || 'Vehicle type is required'
         ],
         carType: '',
-        passengers: 1,
-        production: 2012
+        passengers: null,
+        production: 2012,
+        price_per_day: 25,
+        max_passengers: 10,
+        passengers_enabled: false
     }),
     methods: {
         onSubmit() {
@@ -122,6 +133,7 @@ export default {
             this.form.vehicleType = this.carType
             this.form.passengerNumber = this.passengers
             this.form.productionYear = this.production
+            this.form.pricePerDay = this.price_per_day
             alert(JSON.stringify(this.form))
         },
         validate () {
@@ -135,7 +147,10 @@ export default {
             this.modelSelected = false
             this.passengers = 1
             this.production = 2012
+            this.price_per_day = 25
             this.$refs.form.reset()
+            this.passengers_enabled = false;
+            this.passengers = 1;
         },
         returnModels(carManufacturerParam) {
             this.modelSelected = true
@@ -166,9 +181,19 @@ export default {
                 this.car_models_list = []
             }
         },
-        selectManufacturer:function() {
-            this.selectedModel = '';
-       }
+        setPassengers(carTypeParam) {
+            this.passengers_enabled = true;
+            this.passengers = 1;
+            if (carTypeParam == 'Coupe') {
+                this.max_passengers = 2;
+            } else if (carTypeParam == 'Hatchback') {
+                this.max_passengers = 4;
+            } else if (carTypeParam == 'SUV') {
+                this.max_passengers = 7;
+            } else {
+                this.max_passengers = 5;
+            }
+        }
     }
 }
 </script>
