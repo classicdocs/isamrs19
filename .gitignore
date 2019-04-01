@@ -108,5 +108,5 @@ docs/_book
 .idea/compiler.xml
 .idea/encodings.xml
 .idea/vcs.xml
-
+.idea/codeStyles/Project.xml
 target/
