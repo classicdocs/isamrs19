@@ -3,11 +3,7 @@ package com.project.project.service;
 import com.project.project.dto.FlightDTO;
 import com.project.project.exceptions.AirlineCompanyNotFound;
 import com.project.project.exceptions.DestinationNotFound;
-import com.project.project.model.AirlineCompany;
-import com.project.project.model.Destination;
 import com.project.project.model.Flight;
-import com.project.project.repository.AirlineCompanyRepository;
-import com.project.project.repository.DestinationRepository;
 import com.project.project.repository.FlightRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,12 +27,6 @@ public class FlightServiceTest {
 
     @Autowired
     private FlightRepository flightRepository;
-
-    @Autowired
-    private DestinationRepository destinationRepository;
-
-    @Autowired
-    AirlineCompanyRepository airlineCompanyRepository;
 
     @Before
     public void setUp() throws Exception {
