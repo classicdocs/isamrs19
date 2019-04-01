@@ -19,7 +19,7 @@ public class Room {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<RoomTaken> roomTaken;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     private Hotel hotel;
 
 	public Room(){}

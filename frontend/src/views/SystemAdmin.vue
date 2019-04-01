@@ -4,6 +4,7 @@
           <v-toolbar-title> SYSTEM ADMIN PAGE</v-toolbar-title>
         </v-toolbar>
         <v-container grid-list-md text-xs-center>
+
               <v-btn color="info" @click="openHotelDialog">
                 <v-icon left>hotel</v-icon>
                   Add new hotel
@@ -16,14 +17,9 @@
 
               <v-dialog v-model="addHotelDialog" max-width="500px">
                 <add-hotel-form  v-if="addHotelDialog"
-                  v-on:finished="activateHotelAdminForm($event)"
+                  v-on:finished="validateHotel($event)"
                   v-on:cancel  ="cancel">
                 </add-hotel-form>
-              </v-dialog>
-
-              <v-dialog v-model="addHotelAdminDialog" max-width="500px">
-                <add-hotel-admin-form>
-                </add-hotel-admin-form>
               </v-dialog>
 
               <v-dialog v-model="addRentACarDialog" max-width="500px">
@@ -37,43 +33,31 @@
 <script>
 
 import AddHotelForm from "@/components/AddHotelForm.vue";
-import AddHotelAdminForm from "@/components/AddHotelAdminForm.vue";
 import AddRentACarForm from "@/components/AddRentACarForm.vue";
 
 export default {
     name: "sys-admin",
     components: {
     'add-hotel-form': AddHotelForm,
-    'add-hotel-admin-form' : AddHotelAdminForm,
     'add-rentacar-form' : AddRentACarForm,
   },
   data: () => ({
     addHotelDialog: false,
-    addHotelAdminDialog: false,
-    AddRentACarDialog: false,
+    addRentACarDialog: false,
   }),
   methods: {
-    activateHotelAdminForm(obj) {
-      alert(obj)
-      this.addHotelDialog = false;
+    validateHotel(){
     },
     cancel(){
       this.addHotelDialog = false;
     },
     openHotelDialog(){
-      this.AddRentACarDialog = false;
-      this.addHotelAdminDialog = false;
+      this.addRentACarDialog = false;
       this.addHotelDialog = true;
-    },
-    openHotelAdminDialog(){
-      this.AddRentACarDialog = false;
-      this.addHotelDialog = false;
-      this.addHotelAdminDialog = true;
     },
     openRentACarDialog(){
       this.addHotelDialog = false;
-      this.addHotelAdminDialog = false;
-      this.AddRentACarDialog = true;
+      this.addRentACarDialog = true;
     },
   }
 };

@@ -19,7 +19,6 @@ public class HotelService {
 
     public Hotel save(HotelDTO hotelDTO)  throws HotelNotFound{
 
-        // FIXME mozda treba this.hotelRepository
         Hotel hotel = hotelRepository.findOneById(hotelDTO.getId());
 
         hotel.setId(hotelDTO.getId());

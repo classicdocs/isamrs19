@@ -6,10 +6,9 @@ import Axios from 'axios';
 import Config from './config';
 Vue.config.productionTip = false;
 
-// FIXME preuzeto od Milosa, ne radi.
 
-// import VueNumberInput from '@chenfengyuan/vue-number-input';
-// Vue.use(VueNumberInput);   
+import VueNumberInput from '@chenfengyuan/vue-number-input';
+Vue.use(VueNumberInput);   
 
 Vue.use(Vuetify);
 
