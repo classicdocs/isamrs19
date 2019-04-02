@@ -5,7 +5,8 @@ export default class RentACar {
       this.promotionalDescription = null,
       this.priceList = [],
       this.vehicles = [],
-      this.branches = []
+      this.branches = [],
+      this.admins = []
     }
   
     reset() {
@@ -14,6 +15,7 @@ export default class RentACar {
       this.promotionalDescription = null;
       this.priceList = [];
       this.vehicles = [];
-      this.branches = []
+      this.branches = [];
+      this.admins = [];
     }
   }

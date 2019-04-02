@@ -11,8 +11,9 @@ import javax.validation.constraints.PositiveOrZero;
 
 public class RoomDTO{
 
-	@Positive
-	private int Id;
+
+	private Long ID;
+
 	@PositiveOrZero
     private int roomNumber;
     @Positive
@@ -23,19 +24,19 @@ public class RoomDTO{
     private Hotel hotel;
 
 	public RoomDTO(Room room) {
-		Id = room.getId();
+		this.ID = room.getId();
 		this.roomNumber = room.getRoomNumber();
 		this.numberOfBeds = room.getNumberOfBeds();
 		this.roomTaken = room.getRoomTaken();
 		this.hotel = room.getHotel();
 	}
 
-	public int getId() {
-		return Id;
+	public Long getId() {
+		return this.ID;
 	}
 
-	public void setId(int id) {
-		Id = id;
+	public void setId(Long id) {
+		this.ID = id;
 	}
 
 	public RoomDTO(){}

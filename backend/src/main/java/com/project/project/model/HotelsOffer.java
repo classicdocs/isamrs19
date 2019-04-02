@@ -2,6 +2,7 @@ package com.project.project.model;
 
 import javax.persistence.*;
 
+@Entity
 public class HotelsOffer {
     /*
     * Ova klasa predstavlja uslugu hotela. Usluga moze da bude nocenje ili neka prethodno definisana
@@ -21,7 +22,7 @@ public class HotelsOffer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long ID;
 
     @Column(name = "price", nullable = false)
     private double price;
@@ -29,20 +30,25 @@ public class HotelsOffer {
     @Column(name = "type", nullable = false)
     private offerType type;
 
-    public HotelsOffer() {    }
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Hotel hotel;
 
-    public HotelsOffer(Long id, double price, offerType type) {
-        this.id = id;
-        this.price = price;
-        this.type = type;
+    public Hotel getHotel() {
+        return hotel;
     }
 
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
+    }
+
+    public HotelsOffer() {    }
+
     public Long getId() {
-        return id;
+        return this.ID;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.ID = id;
     }
 
     public double getPrice() {

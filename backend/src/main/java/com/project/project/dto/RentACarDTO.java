@@ -1,16 +1,15 @@
 package com.project.project.dto;
 
-import com.project.project.model.RentACar;
-import com.project.project.model.RentACarOffer;
-import com.project.project.model.VehicleMockup;
+import com.project.project.model.*;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.validation.constraints.NotNull;
 
 public class RentACarDTO {
-    @NotNull
-    private Long Id;
+
+    private Long ID;
 
     @NotNull
     private String name;
@@ -22,20 +21,41 @@ public class RentACarDTO {
     private String promotionalDescription;
 
     @NotNull
-    private List<RentACarOffer> priceList;
+    private Set<VehicleMockup> vehicles;
 
     @NotNull
-    private List<VehicleMockup> vehicles;
+    private Set<String> branches;
 
     @NotNull
-    private List<String> branches;
+    private Set<RentACarAdmin> admins;
+
+
+    public RentACarDTO(){}
+
+    public RentACarDTO(RentACar rentACar) {
+        this.ID = rentACar.getId();
+        this.name = rentACar.getName();
+        this.address = rentACar.getAddress();
+        this.promotionalDescription = rentACar.getPromotionalDescription();
+        this.vehicles = rentACar.getVehicles();
+        this.branches = rentACar.getBranches();
+        this.admins = rentACar.getAdmins();
+    }
+
+    public Set<RentACarAdmin> getAdmins() {
+        return admins;
+    }
+
+    public void setAdmins(Set<RentACarAdmin> admins) {
+        this.admins = admins;
+    }
 
     public Long getId() {
-        return Id;
+        return this.ID;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.ID = id;
     }
 
     public String getName() {
@@ -62,39 +82,20 @@ public class RentACarDTO {
         this.promotionalDescription = promotionalDescription;
     }
 
-    public List<RentACarOffer> getPriceList() {
-        return priceList;
-    }
-
-    public void setPriceList(List<RentACarOffer> priceList) {
-        this.priceList = priceList;
-    }
-
-    public List<VehicleMockup> getVehicles() {
+    public Set<VehicleMockup> getVehicles() {
         return vehicles;
     }
 
-    public void setVehicles(List<VehicleMockup> vehicles) {
+    public void setVehicles(Set<VehicleMockup> vehicles) {
         this.vehicles = vehicles;
     }
 
-    public List<String> getBranches() {
+    public Set<String> getBranches() {
         return branches;
     }
 
-    public void setBranches(List<String> branches) {
+    public void setBranches(Set<String> branches) {
         this.branches = branches;
     }
 
-    public RentACarDTO(){}
-
-    public RentACarDTO(RentACar rentACar) {
-        Id = rentACar.getId();
-        this.name = rentACar.getName();
-        this.address = rentACar.getAddress();
-        this.promotionalDescription = rentACar.getPromotionalDescription();
-        this.priceList = rentACar.getPriceList();
-        this.vehicles = rentACar.getVehicles();
-        this.branches = rentACar.getBranches();
-    }
 }

@@ -27,6 +27,7 @@ public class HotelService {
         hotel.setName(hotelDTO.getName());
         hotel.setDescription(hotelDTO.getDescription());
         hotel.setAddress(hotelDTO.getAddress());
+        hotel.setAdmins(hotelDTO.getAdmins());
 
         return hotelRepository.save(hotel);
     }
@@ -35,9 +36,9 @@ public class HotelService {
         return hotelRepository.findAll();
     }
 
-    public void remove(Long Id) {
-        hotelRepository.deleteById(Id);
-    }
+//    public void remove(Long Id) {
+//        hotelRepository.deleteById(Id);
+//    }
 
     public Hotel findOneByName(String name)  throws HotelNotFound {
         return hotelRepository.findOneByName(name);

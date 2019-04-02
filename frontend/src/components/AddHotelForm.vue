@@ -35,10 +35,17 @@
               v-model="hotel.description" 
               hint="Say something good about hotel services and prices" box>
             </v-textarea>
-
+<!-- 
             <v-checkbox label="create default hotel administrator - (admin : admin)"
-             :rules="[v => !!v || 'you need to have admin for every hotel.']">
-              </v-checkbox>  
+             :rules="[v => !!v || 'you need to have admin for every hotel.']" class="check">
+            </v-checkbox>   -->
+
+            <v-select :items="admins" v-model="hotel.admins"
+            label="Available hotel administrators"  item-value="last"
+            :rules="[v => !!v || 'Hotel administrator is required']">
+            persistent-hint = true
+            </v-select>
+
           </v-container>
 
           <!-- DUGMAD -->
@@ -57,6 +64,7 @@
 <script>
 
 import Hotel from "@/models/Hotel";
+import HotelAdmin from "@/models/HotelAdmin"
 import sysAdminContoller from "@/controllers/sysAdmin.controller.js";
 import { thisExpression } from '@babel/types';
 
@@ -71,6 +79,10 @@ export default {
 
 
     hotel: new Hotel(),
+    hotelAdmin: new HotelAdmin(),
+
+    selectedDefault: ["check"],
+    admins : ["Default(admin:admin)","Admin1", "Admin2", "Admin3"],
   }),
   created() {
   },
@@ -81,6 +93,11 @@ export default {
         this.hotel.priceList = [];
         this.hotel.roomConfiguration = [];
         
+        //FIXME create hotelAdmin
+        this.hotelAdmin.username = "admin";
+        this.hotelAdmin.password = "admin";
+        this.hotelAdmin.hotel = this.hotel;
+
         sysAdminContoller.create(this.hotel)
           .then((response) => {
 

@@ -2,12 +2,13 @@ package com.project.project.model;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class RentACar {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long Id;
+    private Long ID;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -18,25 +19,25 @@ public class RentACar {
     @Column(name = "promotionalDescription")
     private String promotionalDescription;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<RentACarOffer> priceList;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<VehicleMockup> vehicles;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<VehicleMockup> vehicles;
+    @OneToMany(fetch = FetchType.LAZY)
+    private Set<RentACarAdmin> admins;
 
     @ElementCollection
     @CollectionTable(name = "branchOffices", joinColumns = @JoinColumn(name = "Id"))
     @Column(name = "branches")
-    private List<String> branches;
+    private Set<String> branches;
 
     public RentACar() {}
 
     public Long getId() {
-        return Id;
+        return this.ID;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.ID = id;
     }
 
     public String getName() {
@@ -63,38 +64,27 @@ public class RentACar {
         this.promotionalDescription = promotionalDescription;
     }
 
-    public List<RentACarOffer> getPriceList() {
-        return priceList;
-    }
-
-    public void setPriceList(List<RentACarOffer> priceList) {
-        this.priceList = priceList;
-    }
-
-    public List<VehicleMockup> getVehicles() {
+    public Set<VehicleMockup> getVehicles() {
         return vehicles;
     }
 
-    public void setVehicles(List<VehicleMockup> vehicles) {
+    public void setVehicles(Set<VehicleMockup> vehicles) {
         this.vehicles = vehicles;
     }
 
-    public List<String> getBranches() {
+    public Set<String> getBranches() {
         return branches;
     }
 
-    public void setBranches(List<String> branches) {
+    public void setBranches(Set<String> branches) {
         this.branches = branches;
     }
 
-    public RentACar(Long id, String name, String address, String promotionalDescription,
-                    List<RentACarOffer> priceList, List<VehicleMockup> vehicles, List<String> branches) {
-        Id = id;
-        this.name = name;
-        this.address = address;
-        this.promotionalDescription = promotionalDescription;
-        this.priceList = priceList;
-        this.vehicles = vehicles;
-        this.branches = branches;
+    public Set<RentACarAdmin> getAdmins() {
+        return admins;
+    }
+
+    public void setAdmins(Set<RentACarAdmin> admins) {
+        this.admins = admins;
     }
 }

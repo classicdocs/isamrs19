@@ -58,6 +58,7 @@
 <script>
 
 import RentACar from "@/models/RentACar";
+import RentACarAdmin from "@/models/RentACarAdmin";
 import sysAdminContoller from "@/controllers/sysAdmin.controller.js";
 
 export default {
@@ -69,6 +70,7 @@ export default {
     city: "",
     street : "",
     rentACar: new RentACar(),
+    rentACarAdmin: new RentACarAdmin(),
   }),
   created() {
   },
@@ -79,6 +81,12 @@ export default {
         this.rentACar.priceList = [];
         this.rentACar.vehicles = [];
         this.rentACar.branches = [];
+
+        // create rentACarAdmin
+        this.rentACarAdmin.username = "admin";
+        this.rentACarAdmin.password = "admin";
+        this.rentACarAdmin.rentACar = rentACar;
+
         sysAdminContoller.create(this.rentACar)
           .then((response) => {
             this.$emit("finished", {msg: "RentACar successfully added", color: "success"})

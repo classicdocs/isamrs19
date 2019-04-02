@@ -8,7 +8,7 @@ import java.util.List;
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-	private int Id;
+	private Long ID;
 
 	@Column(name = "roomNumber", nullable = false)
     private int roomNumber;
@@ -16,28 +16,24 @@ public class Room {
     @Column(name = "numberOfBeds", nullable = false)
     private int numberOfBeds;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "room_booked",
+			joinColumns = { @JoinColumn(name = "room_id", referencedColumnName = "Id" )},
+			inverseJoinColumns = { @JoinColumn(name = "room_taken_id", referencedColumnName = "Id" ) })
     private List<RoomTaken> roomTaken;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    //FIXME proveri ovu referencu V
+    @ManyToOne(fetch = FetchType.EAGER)
     private Hotel hotel;
 
 	public Room(){}
 
-	public Room(int id, int roomNumber, int numberOfBeds, List<RoomTaken> roomTaken, Hotel hotel) {
-		Id = id;
-		this.roomNumber = roomNumber;
-		this.numberOfBeds = numberOfBeds;
-		this.roomTaken = roomTaken;
-		this.hotel = hotel;
+	public Long getId() {
+		return this.ID;
 	}
 
-	public int getId() {
-		return Id;
-	}
-
-	public void setId(int id) {
-		Id = id;
+	public void setId(Long id) {
+		this.ID = id;
 	}
 
 	public int getRoomNumber() {

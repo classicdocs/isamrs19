@@ -12,7 +12,12 @@
 
               <v-btn color="info" @click="openRentACarDialog">
                 <v-icon left>directions_car</v-icon>
-                  Add rent-a-car
+                  Add new rent-a-car
+              </v-btn>
+
+              <v-btn color="info" @click="openAirlineCompanyDialog">
+                <v-icon left>flight_takeoff</v-icon>
+                  Add new airline company
               </v-btn>
 
               <v-dialog v-model="addHotelDialog" max-width="500px">

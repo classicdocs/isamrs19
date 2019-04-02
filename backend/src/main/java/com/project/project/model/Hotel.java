@@ -2,13 +2,13 @@ package com.project.project.model;
 
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Hotel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long Id;
+    private Long ID;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -19,31 +19,31 @@ public class Hotel {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<HotelsOffer> priceList;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<HotelsOffer> priceList;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Room> roomConfiguration;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)   // to one - EAGER, to many - LAZY
+    private Set<Room> roomConfiguration;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    private Set<HotelAdmin> admins;
     
     public Hotel(){}
 
-    public Hotel(Long id, String name, String address,
-                 String description, List<HotelsOffer> priceList, List<Room> roomConfiguration) {
-        Id = id;
-        this.name = name;
-        this.address = address;
-        this.description = description;
-        this.priceList = priceList;
-        this.roomConfiguration = roomConfiguration;
+    public Set<HotelAdmin> getAdmins() {
+        return admins;
+    }
+
+    public void setAdmins(Set<HotelAdmin> admins) {
+        this.admins = admins;
     }
 
     public Long getId() {
-        return Id;
+        return this.ID;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.ID = id;
     }
 
     public String getName() {
@@ -70,19 +70,20 @@ public class Hotel {
         this.description = description;
     }
 
-    public List<HotelsOffer> getPriceList() {
+    public Set<HotelsOffer> getPriceList() {
         return priceList;
     }
 
-    public void setPriceList(List<HotelsOffer> priceList) {
+    public void setPriceList(Set<HotelsOffer> priceList) {
         this.priceList = priceList;
     }
 
-    public List<Room> getRoomConfiguration() {
+    public Set<Room> getRoomConfiguration() {
         return roomConfiguration;
     }
 
-    public void setRoomConfiguration(List<Room> roomConfiguration) {
+    public void setRoomConfiguration(Set<Room> roomConfiguration) {
         this.roomConfiguration = roomConfiguration;
     }
+
 }
