@@ -10,4 +10,7 @@ public interface AirlineCompanyRepository extends JpaRepository<AirlineCompany, 
     Optional<AirlineCompany> findOneByName(String name);
 
     Optional<AirlineCompany> findOneById(Long id);
+
+    Optional<AirlineCompany> findOneByNameAndIdNot(String name, Long id);
+
 }
