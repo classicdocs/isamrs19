@@ -24,14 +24,11 @@ public class FlightController {
     )
     public ResponseEntity create(@RequestBody FlightDTO flightDTO) {
         try {
-            Flight flight = flightService.save(flightDTO);
-            return new ResponseEntity<FlightDTO>(new FlightDTO(flight), HttpStatus.CREATED);
-        } catch (AirlineCompanyNotFound airlineCompanyNotFound) {
-            airlineCompanyNotFound.printStackTrace();
-            return new ResponseEntity<String>(airlineCompanyNotFound.getMessage(),HttpStatus.BAD_REQUEST);
-        } catch (DestinationNotFound destinationNotFound) {
-            destinationNotFound.printStackTrace();
-            return new ResponseEntity<String>(destinationNotFound.getMessage(),HttpStatus.BAD_REQUEST);
+            FlightDTO flight = flightService.save(flightDTO);
+            return new ResponseEntity<FlightDTO>(flight, HttpStatus.CREATED);
+        } catch (AirlineCompanyNotFound|DestinationNotFound ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<String>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }

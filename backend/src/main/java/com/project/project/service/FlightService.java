@@ -25,7 +25,7 @@ public class FlightService {
     @Autowired
     private AirlineCompanyService airlineCompanyService;
 
-    public Flight save(FlightDTO flightDTO) throws DestinationNotFound, AirlineCompanyNotFound {
+    public FlightDTO save(FlightDTO flightDTO) throws DestinationNotFound, AirlineCompanyNotFound {
 
         Destination startDestination = destinationService.findOne(flightDTO.getStartDestination());
         Destination finalDestination = destinationService.findOne(flightDTO.getFinalDestination());
@@ -39,15 +39,16 @@ public class FlightService {
         flight.setDepartureDate(flightDTO.getDepartureDate());
         flight.setDepartureTime(flightDTO.getDepartureTime());
         flight.setDistance(flightDTO.getDistance());
-        flight.setFinalDestination(startDestination);
+        flight.setFinalDestination(finalDestination);
         flight.setFlightTime(flightDTO.getFlightTime());
         flight.setLandingDate(flightDTO.getLandingDate());
         flight.setLandingTime(flightDTO.getLandingTime());
-        flight.setStartDestination(finalDestination);
+        flight.setStartDestination(startDestination);
         flight.setTicketPrice(flightDTO.getTicketPrice());
-        flight.setTransfers(transfers);
+        flight.setTransferDestinations(transfers);
 
-        return flightRepository.save(flight);
+        flight = flightRepository.save(flight);
+        return (new FlightDTO(flight));
     }
 
     public List<Flight> findAll() {
