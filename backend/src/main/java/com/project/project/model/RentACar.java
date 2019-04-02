@@ -1,14 +1,14 @@
 package com.project.project.model;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity
 public class RentACar {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long ID;
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    private Long id;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -16,28 +16,28 @@ public class RentACar {
     @Column(name = "address", nullable = false)
     private String address;
 
-    @Column(name = "promotionalDescription")
+    @Column(name = "promotional_description")
     private String promotionalDescription;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<VehicleMockup> vehicles;
+    private Set<Vehicle> vehicles;
 
     @OneToMany(fetch = FetchType.LAZY)
     private Set<RentACarAdmin> admins;
 
     @ElementCollection
-    @CollectionTable(name = "branchOffices", joinColumns = @JoinColumn(name = "Id"))
+    @CollectionTable(name = "branch_offices", joinColumns = @JoinColumn(name = "Id"))
     @Column(name = "branches")
     private Set<String> branches;
 
     public RentACar() {}
 
     public Long getId() {
-        return this.ID;
+        return id;
     }
 
-    public void setId(Long id) {
-        this.ID = id;
+    public void setId(Long ID) {
+        this.id = id;
     }
 
     public String getName() {
@@ -64,20 +64,12 @@ public class RentACar {
         this.promotionalDescription = promotionalDescription;
     }
 
-    public Set<VehicleMockup> getVehicles() {
+    public Set<Vehicle> getVehicles() {
         return vehicles;
     }
 
-    public void setVehicles(Set<VehicleMockup> vehicles) {
+    public void setVehicles(Set<Vehicle> vehicles) {
         this.vehicles = vehicles;
-    }
-
-    public Set<String> getBranches() {
-        return branches;
-    }
-
-    public void setBranches(Set<String> branches) {
-        this.branches = branches;
     }
 
     public Set<RentACarAdmin> getAdmins() {
@@ -86,5 +78,13 @@ public class RentACar {
 
     public void setAdmins(Set<RentACarAdmin> admins) {
         this.admins = admins;
+    }
+
+    public Set<String> getBranches() {
+        return branches;
+    }
+
+    public void setBranches(Set<String> branches) {
+        this.branches = branches;
     }
 }
