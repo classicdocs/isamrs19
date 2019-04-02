@@ -25,7 +25,7 @@ public class RentACarService {
         rentACar.setPromotionalDescription(rentACarDTO.getPromotionalDescription());
         rentACar.setBranches(rentACarDTO.getBranches());
         rentACar.setVehicles(rentACarDTO.getVehicles());
-        rentACar.setPriceList(rentACarDTO.getPriceList());
+        rentACar.setAdmins(rentACarDTO.getAdmins());
 
         return rentACarRepository.save(rentACar);
     }

@@ -7,9 +7,11 @@ import java.util.HashMap;
 public class VehicleMockup {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long Id;
+    private Long ID;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private RentACar rentACarCompany;
+
+
 
 }

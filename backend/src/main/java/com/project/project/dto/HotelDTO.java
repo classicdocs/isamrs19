@@ -1,16 +1,18 @@
 package com.project.project.dto;
 
 import java.util.List;
+import java.util.Set;
 
 import com.project.project.model.Hotel;
+import com.project.project.model.HotelAdmin;
 import com.project.project.model.HotelsOffer;
 import com.project.project.model.Room;
 
 import javax.validation.constraints.NotNull;
 
 public class HotelDTO {
-	@NotNull
-	private Long Id;
+
+	private Long ID;
 
 	@NotNull
     private String name;
@@ -22,28 +24,40 @@ public class HotelDTO {
     private String description;
 
     @NotNull
-    private List<HotelsOffer> priceList;
+    private Set<HotelsOffer> priceList;
 
     @NotNull
-    private List<Room> roomConfiguration;
-    
+    private Set<Room> roomConfiguration;
+
+	@NotNull
+	private Set<HotelAdmin> admins;
+
     public HotelDTO(){}
 
 	public HotelDTO(Hotel hotel) {
-		Id = hotel.getId();
+		this.ID = hotel.getId();
 		this.name = hotel.getName();
 		this.address = hotel.getAddress();
 		this.description = hotel.getDescription();
 		this.priceList = hotel.getPriceList();
 		this.roomConfiguration = hotel.getRoomConfiguration();
+		this.admins = hotel.getAdmins();
+	}
+
+	public Set<HotelAdmin> getAdmins() {
+		return admins;
+	}
+
+	public void setAdmins(Set<HotelAdmin> admins) {
+		this.admins = admins;
 	}
 
 	public Long getId() {
-		return Id;
+		return this.ID;
 	}
 
 	public void setId(Long id) {
-		Id = id;
+		this.ID = id;
 	}
 
 	public String getName() {
@@ -70,19 +84,19 @@ public class HotelDTO {
 		this.description = description;
 	}
 
-	public List<HotelsOffer> getPriceList() {
+	public Set<HotelsOffer> getPriceList() {
 		return priceList;
 	}
 
-	public void setPriceList(List<HotelsOffer> priceList) {
+	public void setPriceList(Set<HotelsOffer> priceList) {
 		this.priceList = priceList;
 	}
 
-	public List<Room> getRoomConfiguration() {
+	public Set<Room> getRoomConfiguration() {
 		return roomConfiguration;
 	}
 
-	public void setRoomConfiguration(List<Room> roomConfiguration) {
+	public void setRoomConfiguration(Set<Room> roomConfiguration) {
 		this.roomConfiguration = roomConfiguration;
 	}
 }

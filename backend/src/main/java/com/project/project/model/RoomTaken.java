@@ -2,12 +2,14 @@ package com.project.project.model;
 
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class RoomTaken {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long Id;
+    private Long ID;
 
     @Column(name = "startDate", nullable = false)
     private String startDate;
@@ -15,15 +17,21 @@ public class RoomTaken {
     @Column(name = "endDaTe", nullable = false)
     private String endDaTe;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Room room;
+    //@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.LAZY,
+			mappedBy = "roomTaken")
+    private Set<Room> rooms;
+
+
+	public RoomTaken() {
+	}
 
 	public long getId() {
-		return this.Id;
+		return this.ID;
 	}
 
 	public void setId(long Id) {
-		this.Id = Id;
+		this.ID = Id;
     }
     
     public String getStartDate() {
@@ -41,12 +49,12 @@ public class RoomTaken {
 	public void setEndDaTe(String endDaTe) {
 		this.endDaTe = endDaTe;
     }
-    
-	public Room getRoom() {
-		return this.room;
+
+	public Set<Room> getRooms() {
+		return rooms;
 	}
 
-	public void setRoom(Room room) {
-		this.room = room;
+	public void setRooms(Set<Room> rooms) {
+		this.rooms = rooms;
 	}
 }

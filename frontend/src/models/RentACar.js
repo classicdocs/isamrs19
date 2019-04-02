@@ -1,19 +1,21 @@
-export default class Hotel {
+export default class RentACar {
     constructor() {
       this.name = null,
       this.address = null,
-      this.description = null,
+      this.promotionalDescription = null,
       this.priceList = [],
-      this.roomConfiguration = [],
+      this.vehicles = [],
+      this.branches = [],
       this.admins = []
     }
   
     reset() {
       this.name = null;
       this.address = null;
-      this.description = null;
+      this.promotionalDescription = null;
       this.priceList = [];
-      this.roomConfiguration = [];
+      this.vehicles = [];
+      this.branches = [];
       this.admins = [];
     }
   }

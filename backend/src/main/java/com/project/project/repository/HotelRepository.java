@@ -13,8 +13,6 @@ public interface HotelRepository extends JpaRepository<Hotel, String> {
 
     Hotel findOneById(Long id);
 
-    Hotel deleteById(Long Id);
-
     List<Hotel> findAll();
 
 

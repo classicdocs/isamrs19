@@ -1,8 +1,8 @@
 import Axios from 'axios';
 
 const ENDPOINTS = {
-  // Fixme: proveri da li treba izmeniti bekend jer sve su ovo akcije SISTEM admina
-  HOTELS: 'hotels/'
+  //FIXME testiraj ovo, proveri je l treba ovako
+  HOTELS: 'sys-admin-page/'
 };
 
 export default {
