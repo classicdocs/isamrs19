@@ -12,7 +12,7 @@ import javax.validation.constraints.PositiveOrZero;
 public class RoomDTO{
 
 
-	private Long ID;
+	private Long id;
 
 	@PositiveOrZero
     private int roomNumber;
@@ -24,7 +24,7 @@ public class RoomDTO{
     private Hotel hotel;
 
 	public RoomDTO(Room room) {
-		this.ID = room.getId();
+		this.id = room.getId();
 		this.roomNumber = room.getRoomNumber();
 		this.numberOfBeds = room.getNumberOfBeds();
 		this.roomTaken = room.getRoomTaken();
@@ -32,11 +32,11 @@ public class RoomDTO{
 	}
 
 	public Long getId() {
-		return this.ID;
+		return id;
 	}
 
 	public void setId(Long id) {
-		this.ID = id;
+		this.id = id;
 	}
 
 	public RoomDTO(){}

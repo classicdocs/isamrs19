@@ -8,7 +8,7 @@ public class HotelAdmin {
 
     @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long ID;
+    private Long id;
 
     @Column(name = "username", nullable = false)
     private String username;
@@ -42,12 +42,12 @@ public class HotelAdmin {
         this.password = password;
     }
 
-    public Long getID() {
-        return ID;
+    public Long getId() {
+        return id;
     }
 
-    public void setID(Long ID) {
-        this.ID = ID;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {

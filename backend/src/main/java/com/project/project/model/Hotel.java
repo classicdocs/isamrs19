@@ -8,7 +8,7 @@ import java.util.Set;
 public class Hotel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long ID;
+    private Long id;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -39,11 +39,11 @@ public class Hotel {
     }
 
     public Long getId() {
-        return this.ID;
+        return id;
     }
 
     public void setId(Long id) {
-        this.ID = id;
+        this.id = id;
     }
 
     public String getName() {

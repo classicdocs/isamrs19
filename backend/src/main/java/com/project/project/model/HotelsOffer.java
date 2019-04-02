@@ -22,7 +22,7 @@ public class HotelsOffer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long ID;
+    private Long id;
 
     @Column(name = "price", nullable = false)
     private double price;
@@ -44,11 +44,11 @@ public class HotelsOffer {
     public HotelsOffer() {    }
 
     public Long getId() {
-        return this.ID;
+        return id;
     }
 
     public void setId(Long id) {
-        this.ID = id;
+        this.id = id;
     }
 
     public double getPrice() {

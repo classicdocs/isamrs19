@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 public class RentACarDTO {
 
-    private Long ID;
+    private Long id;
 
     @NotNull
     private String name;
@@ -33,7 +33,7 @@ public class RentACarDTO {
     public RentACarDTO(){}
 
     public RentACarDTO(RentACar rentACar) {
-        this.ID = rentACar.getId();
+        this.id = rentACar.getId();
         this.name = rentACar.getName();
         this.address = rentACar.getAddress();
         this.promotionalDescription = rentACar.getPromotionalDescription();
@@ -50,12 +50,13 @@ public class RentACarDTO {
         this.admins = admins;
     }
 
+
     public Long getId() {
-        return this.ID;
+        return id;
     }
 
     public void setId(Long id) {
-        this.ID = id;
+        this.id = id;
     }
 
     public String getName() {

@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 public class RentACarAdminDTO {
 
-    private Long ID;
+    private Long id;
 
     @NotNull
     private String username;
@@ -19,7 +19,7 @@ public class RentACarAdminDTO {
     private RentACar rentACar;
 
     public RentACarAdminDTO(RentACarAdmin rentACarAdmin) {
-        this.ID = rentACarAdmin.getID();
+        this.id = rentACarAdmin.getId();
         this.username = rentACarAdmin.getUsername();
         this.password = rentACarAdmin.getPassword();
         this.rentACar = rentACarAdmin.getRentACar();
@@ -28,12 +28,12 @@ public class RentACarAdminDTO {
     public RentACarAdminDTO() {
     }
 
-    public Long getID() {
-        return this.ID;
+    public Long getId() {
+        return id;
     }
 
-    public void setID(Long ID) {
-        this.ID = ID;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {

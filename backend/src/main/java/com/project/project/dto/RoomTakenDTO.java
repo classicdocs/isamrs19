@@ -10,7 +10,7 @@ import java.util.Set;
 public class RoomTakenDTO {
 
     @Positive
-    private long ID;
+    private long id;
 
     @NotNull
     private String startDate;
@@ -22,7 +22,7 @@ public class RoomTakenDTO {
     private Set<Room> rooms;
 
     public RoomTakenDTO(RoomTaken roomTaken) {
-        this.ID = roomTaken.getId();
+        this.id = roomTaken.getId();
         this.startDate = roomTaken.getStartDate();
         this.endDaTe = roomTaken.getEndDaTe();
         this.rooms = roomTaken.getRooms();
@@ -32,11 +32,11 @@ public class RoomTakenDTO {
     }
 
     public long getID() {
-        return ID;
+        return id;
     }
 
     public void setID(long ID) {
-        this.ID = ID;
+        this.id = ID;
     }
 
     public String getStartDate() {
