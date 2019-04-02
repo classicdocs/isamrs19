@@ -13,7 +13,7 @@ export default new Router({
       component: AirlineCompany
     },
     {
-      path: "/rentacar-service",
+      path: "/rentacar-service/:id",
       name: "rentacar-service",
       component: () => import("./views/RentACarService.vue")
     }

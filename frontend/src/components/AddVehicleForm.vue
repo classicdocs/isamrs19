@@ -86,18 +86,13 @@
 </template>
 
 <script>
+
+import Vehicle from "@/models/Vehicle";
+import VehicleController from "@/controllers/vehicle.controller";
+
 export default {
     name: "AddVehicleForm",
     data: () => ({
-        form: {
-            vehicleName: '',
-            vehicleManufacturer: '',
-            vehicleModel: '',
-            vehicleType: '',
-            passengerNumber: null,
-            productionYear: null,
-            pricePerDay: null
-        },
         addVehicle: false,
         valid: true,
         vehicle_name: '',
@@ -123,18 +118,17 @@ export default {
         production: 2012,
         price_per_day: 25,
         max_passengers: 10,
-        passengers_enabled: false
+        passengers_enabled: false,
+        vehicle: null
     }),
     methods: {
         onSubmit() {
-            this.form.vehicleName = this.vehicle_name
-            this.form.vehicleManufacturer = this.carManufacturer
-            this.form.vehicleModel = this.carModel
-            this.form.vehicleType = this.carType
-            this.form.passengerNumber = this.passengers
-            this.form.productionYear = this.production
-            this.form.pricePerDay = this.price_per_day
-            alert(JSON.stringify(this.form))
+            this.vehicle = new Vehicle(this.$route.params.id,this.vehicle_name,this.carManufacturer,this.carModel,this.carType,
+            this.passengers,this.production,this.price_per_day);
+
+            VehicleController.create(this.vehicle);
+            this.reset();
+            this.addVehicle = false;
         },
         validate () {
             if (this.$refs.form.validate()) {

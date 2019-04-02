@@ -8,6 +8,9 @@ import javax.validation.constraints.Positive;
 public class VehicleDTO {
 
     @NotNull
+    private Long rentACar;
+
+    @NotNull
     private String name;
 
     @NotNull
@@ -33,6 +36,7 @@ public class VehicleDTO {
     }
 
     public VehicleDTO(Vehicle vehicle) {
+        this.rentACar = vehicle.getRentACar().getId();
         this.name = vehicle.getName();
         this.vehicleManufacturer = vehicle.getVehicleManufacturer();
         this.vehicleModel = vehicle.getVehicleModel();
@@ -48,6 +52,14 @@ public class VehicleDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getRentACar() {
+        return rentACar;
+    }
+
+    public void setRentACar(Long rentACar) {
+        this.rentACar = rentACar;
     }
 
     public String getVehicleManufacturer() {
