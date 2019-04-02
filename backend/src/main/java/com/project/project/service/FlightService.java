@@ -7,6 +7,7 @@ import com.project.project.exceptions.DestinationNotFound;
 import com.project.project.model.AirlineCompany;
 import com.project.project.model.Destination;
 import com.project.project.model.Flight;
+import com.project.project.repository.AirlineCompanyRepository;
 import com.project.project.repository.FlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,9 @@ public class FlightService {
 
     @Autowired
     private FlightRepository flightRepository;
+
+    @Autowired
+    private AirlineCompanyRepository airlineCompanyRepository;
 
     @Autowired
     private DestinationService destinationService;
@@ -60,6 +64,8 @@ public class FlightService {
         flight.setTransferDestinations(transfers);
 
         flight = flightRepository.save(flight);
+        airlineCompany.getFlights().add(flight);
+        airlineCompanyRepository.save(airlineCompany);
         return (new FlightDTO(flight));
     }
 

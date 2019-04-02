@@ -28,7 +28,7 @@ public class AirlineCompany {
     @Column(name = "destinations")
     private Set<String> destinations = new HashSet<String>();
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Flight> flights;
 
     public AirlineCompany() {}

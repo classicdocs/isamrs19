@@ -2,9 +2,13 @@ package com.project.project.dto;
 
 import com.project.project.model.AirlineCompany;
 
+import javax.validation.constraints.NotNull;
+
 public class AirlineCompanyDTO {
     private Long id;
+    @NotNull
     private String name;
+    @NotNull
     private String address;
     private String description;
 
