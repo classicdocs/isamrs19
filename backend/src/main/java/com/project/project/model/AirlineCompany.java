@@ -23,7 +23,7 @@ public class AirlineCompany {
     @Column(name = "description")
     private String description;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "airline_company_destinations", joinColumns = @JoinColumn(name = "airline_company_id"))
     @Column(name = "destinations")
     private Set<String> destinations = new HashSet<String>();

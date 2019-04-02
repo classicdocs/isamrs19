@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -103,4 +105,14 @@ public class AirlineCompanyServiceTest {
         airlineCompanyService.update(Integer.toUnsignedLong(1000),airlineCompanyDTO);
     }
 
+    @Test
+    public void getDestinationsSuccess() throws AirlineCompanyNotFound {
+        Set<String> destinations = airlineCompanyService.getDestinations(Integer.toUnsignedLong(1));
+        assertEquals(3, destinations.size());
+    }
+
+    @Test(expected = AirlineCompanyNotFound.class)
+    public void getDestinationFail() throws AirlineCompanyNotFound {
+        Set<String> destinations = airlineCompanyService.getDestinations(Integer.toUnsignedLong(10));
+    }
 }

@@ -8,11 +8,14 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -87,4 +90,28 @@ public class AirlineCompanyControllerTest {
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
+
+    @Test
+    public void getDestinationsSuccess() {
+
+        ResponseEntity<Set<String>> response = client.exchange(
+                "/api/airline-companies/1/destinations",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<Set<String>>() {}
+        );
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+    }
+
+    @Test
+    public void getDestinationsFail() {
+        ResponseEntity<String> response = client.getForEntity(
+                "/api/airline-companies/10000/destinations",
+                String.class
+        );
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+
 }

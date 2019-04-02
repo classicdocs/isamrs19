@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class AirlineCompanyService {
@@ -43,5 +44,16 @@ public class AirlineCompanyService {
             }
 
         }
+    }
+
+    public Set<String> getDestinations(Long id) throws AirlineCompanyNotFound {
+
+        Optional<AirlineCompany> ac = airlineCompanyRepository.findOneById(id);
+        if (ac.isPresent()) {
+            return ac.get().getDestinations();
+        } else {
+            throw new AirlineCompanyNotFound(id);
+        }
+
     }
 }

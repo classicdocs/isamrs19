@@ -2,6 +2,7 @@ package com.project.project.service;
 
 import com.project.project.dto.FlightDTO;
 import com.project.project.exceptions.AirlineCompanyNotFound;
+import com.project.project.exceptions.DateException;
 import com.project.project.exceptions.DestinationNotFound;
 import com.project.project.model.Flight;
 import com.project.project.repository.FlightRepository;
@@ -12,9 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
+import java.text.ParseException;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -33,7 +33,7 @@ public class FlightServiceTest {
     }
 
     @Test
-    public void save() throws DestinationNotFound, AirlineCompanyNotFound {
+    public void save() throws DestinationNotFound, AirlineCompanyNotFound, ParseException, DateException {
         FlightDTO f = new FlightDTO();
         f.setAirlineCompany("1");
         f.setStartDestination("Beograd");
@@ -51,6 +51,44 @@ public class FlightServiceTest {
         FlightDTO flightDTO = flightService.save(f);
         assertNotNull(flightDTO);
         assertEquals(size + 1, flightRepository.findAll().size());
+    }
+
+    @Test(expected = DateException.class)
+    public void saveFailDateException() throws DestinationNotFound, AirlineCompanyNotFound, ParseException, DateException {
+        FlightDTO f = new FlightDTO();
+        f.setAirlineCompany("1");
+        f.setStartDestination("Beograd");
+        f.setFinalDestination("London");
+        f.setDepartureDate("2018-04-22");
+        f.setDepartureTime("11:10");
+        f.setLandingDate("2018-03-23");
+        f.setLandingTime("10:45");
+        f.setFlightTime("05:05");
+        f.setDistance(250);
+        f.setTicketPrice(1000);
+
+
+        int size = flightRepository.findAll().size();
+        FlightDTO flightDTO = flightService.save(f);
+    }
+
+    @Test(expected = DateException.class)
+    public void saveFailTimeException() throws DestinationNotFound, AirlineCompanyNotFound, ParseException, DateException {
+        FlightDTO f = new FlightDTO();
+        f.setAirlineCompany("1");
+        f.setStartDestination("Beograd");
+        f.setFinalDestination("London");
+        f.setDepartureDate("2018-04-22");
+        f.setDepartureTime("11:10");
+        f.setLandingDate("2018-04-22");
+        f.setLandingTime("10:45");
+        f.setFlightTime("05:05");
+        f.setDistance(250);
+        f.setTicketPrice(1000);
+
+
+        int size = flightRepository.findAll().size();
+        FlightDTO flightDTO = flightService.save(f);
     }
 
     @Test
