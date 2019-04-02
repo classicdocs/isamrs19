@@ -21,7 +21,7 @@ public class RentACarDTO {
     private String promotionalDescription;
 
     @NotNull
-    private Set<VehicleMockup> vehicles;
+    private Set<Vehicle> vehicles;
 
     @NotNull
     private Set<String> branches;
@@ -82,11 +82,11 @@ public class RentACarDTO {
         this.promotionalDescription = promotionalDescription;
     }
 
-    public Set<VehicleMockup> getVehicles() {
+    public Set<Vehicle> getVehicles() {
         return vehicles;
     }
 
-    public void setVehicles(Set<VehicleMockup> vehicles) {
+    public void setVehicles(Set<Vehicle> vehicles) {
         this.vehicles = vehicles;
     }
 

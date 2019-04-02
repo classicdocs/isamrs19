@@ -27,6 +27,7 @@ public class SystemAdminController {
     private RentACarService rentACarService;
 
 /*============================================================================================================*/
+    //FIXME post
     public ResponseEntity create(@RequestBody HotelDTO hotelDTO) {
         try {
 
