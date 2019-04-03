@@ -2,7 +2,6 @@ package com.project.project.dto;
 
 import com.project.project.model.Flight;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.HashSet;
@@ -12,6 +11,8 @@ public class FlightDTO {
     private Long id;
     @NotNull
     private String airlineCompany;
+    @NotNull
+    private String airplane;
     @NotNull
     private String startDestination;
     @NotNull
@@ -40,6 +41,7 @@ public class FlightDTO {
     public FlightDTO(Flight flight) {
         this.id = flight.getId();
         this.airlineCompany = flight.getAirlineCompany().getId().toString();
+        this.airplane = flight.getAirplane().getModel();
         this.startDestination = flight.getStartDestination().getName();
         this.finalDestination = flight.getFinalDestination().getName();
         this.departureDate = flight.getDepartureDate();
@@ -66,6 +68,14 @@ public class FlightDTO {
 
     public void setAirlineCompany(String airlineCompany) {
         this.airlineCompany = airlineCompany;
+    }
+
+    public String getAirplane() {
+        return airplane;
+    }
+
+    public void setAirplane(String airplane) {
+        this.airplane = airplane;
     }
 
     public String getStartDestination() {

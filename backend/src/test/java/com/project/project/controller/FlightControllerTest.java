@@ -35,7 +35,8 @@ public class FlightControllerTest {
     public void createSuccess() {
         FlightDTO f = new FlightDTO();
         f.setAirlineCompany("1");
-        f.setStartDestination("Beograd");
+        f.setAirplane("Boing 747");
+        f.setStartDestination("Belgrade");
         f.setFinalDestination("London");
         f.setDepartureDate("2019-04-22");
         f.setDepartureTime("11:10");
@@ -60,7 +61,8 @@ public class FlightControllerTest {
     public void createFailAirlineCompanyNotFound() {
         FlightDTO f = new FlightDTO();
         f.setAirlineCompany("-1");
-        f.setStartDestination("Beograd");
+        f.setAirplane("Boing 747");
+        f.setStartDestination("Belgrade");
         f.setFinalDestination("London");
         f.setDepartureDate("2019-04-22");
         f.setDepartureTime("11:10");
@@ -84,7 +86,8 @@ public class FlightControllerTest {
     public void createFailDestinationNotFound() {
         FlightDTO f = new FlightDTO();
         f.setAirlineCompany("1");
-        f.setStartDestination("Beograddddd");
+        f.setAirplane("Boing 747");
+        f.setStartDestination("Belgradeddd");
         f.setFinalDestination("London");
         f.setDepartureDate("2019-04-22");
         f.setDepartureTime("11:10");
@@ -108,7 +111,8 @@ public class FlightControllerTest {
     public void createFailDateException() {
         FlightDTO f = new FlightDTO();
         f.setAirlineCompany("1");
-        f.setStartDestination("Beograd");
+        f.setAirplane("Boing 747");
+        f.setStartDestination("Belgrade");
         f.setFinalDestination("London");
         f.setDepartureDate("2019-04-22");
         f.setDepartureTime("11:10");
@@ -132,12 +136,38 @@ public class FlightControllerTest {
     public void createFailTimeException() {
         FlightDTO f = new FlightDTO();
         f.setAirlineCompany("1");
-        f.setStartDestination("Beograd");
+        f.setAirplane("Boing 747");
+        f.setStartDestination("Belgrade");
         f.setFinalDestination("London");
         f.setDepartureDate("2019-04-22");
         f.setDepartureTime("11:10");
         f.setLandingDate("2019-04-22");
         f.setLandingTime("10:45");
+        f.setFlightTime("05:05");
+        f.setDistance(250);
+        f.setTicketPrice(400);
+
+        ResponseEntity<String> response = client.exchange(
+                "/api/flights",
+                HttpMethod.POST,
+                new HttpEntity<>(f),
+                String.class
+        );
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test()
+    public void createFailAirplaneException() {
+        FlightDTO f = new FlightDTO();
+        f.setAirlineCompany("1");
+        f.setAirplane("Boing 747213");
+        f.setStartDestination("Belgrade");
+        f.setFinalDestination("London");
+        f.setDepartureDate("2019-04-22");
+        f.setDepartureTime("11:10");
+        f.setLandingDate("2019-04-22");
+        f.setLandingTime("12:45");
         f.setFlightTime("05:05");
         f.setDistance(250);
         f.setTicketPrice(400);

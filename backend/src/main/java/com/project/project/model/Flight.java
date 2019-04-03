@@ -1,6 +1,8 @@
 package com.project.project.model;
 
 
+import org.hibernate.action.internal.OrphanRemovalAction;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,13 +13,16 @@ public class Flight {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     private AirlineCompany airlineCompany;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Airplane airplane;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     private Destination startDestination;
 
-    @ManyToOne(fetch = FetchType.EAGER , cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Destination finalDestination;
 
     @Column(name = "departure_date", nullable = false)
@@ -63,6 +68,14 @@ public class Flight {
 
     public void setAirlineCompany(AirlineCompany airlineCompany) {
         this.airlineCompany = airlineCompany;
+    }
+
+    public Airplane getAirplane() {
+        return airplane;
+    }
+
+    public void setAirplane(Airplane airplane) {
+        this.airplane = airplane;
     }
 
     public Destination getStartDestination() {

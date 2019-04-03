@@ -2,12 +2,15 @@ package com.project.project.service;
 
 import com.project.project.dto.FlightDTO;
 import com.project.project.exceptions.AirlineCompanyNotFound;
+import com.project.project.exceptions.AirplaneNotExist;
 import com.project.project.exceptions.DateException;
 import com.project.project.exceptions.DestinationNotFound;
 import com.project.project.model.AirlineCompany;
+import com.project.project.model.Airplane;
 import com.project.project.model.Destination;
 import com.project.project.model.Flight;
 import com.project.project.repository.AirlineCompanyRepository;
+import com.project.project.repository.AirplaneRepository;
 import com.project.project.repository.FlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,12 +31,15 @@ public class FlightService {
     private AirlineCompanyRepository airlineCompanyRepository;
 
     @Autowired
+    private AirplaneRepository airplaneRepository;
+
+    @Autowired
     private DestinationService destinationService;
 
     @Autowired
     private AirlineCompanyService airlineCompanyService;
 
-    public FlightDTO save(FlightDTO flightDTO) throws DestinationNotFound, AirlineCompanyNotFound, ParseException, DateException {
+    public FlightDTO save(FlightDTO flightDTO) throws DestinationNotFound, AirlineCompanyNotFound, ParseException, DateException, AirplaneNotExist {
 
         Destination startDestination = destinationService.findOne(flightDTO.getStartDestination());
         Destination finalDestination = destinationService.findOne(flightDTO.getFinalDestination());
@@ -41,6 +47,16 @@ public class FlightService {
         AirlineCompany airlineCompany = airlineCompanyService.findOneById(Long.parseLong(flightDTO.getAirlineCompany()));
 
         HashSet<String> transfers = new HashSet<String>();
+
+        Airplane airplane = null;
+        for (Airplane a: airlineCompany.getAirplanes()) {
+            if (flightDTO.getAirplane().equals(a.getModel())) {
+                airplane = a;
+            }
+        }
+        if (airplane == null) {
+            throw new AirplaneNotExist(flightDTO.getAirplane(), airlineCompany.getName());
+        }
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Date d1 = sdf.parse(flightDTO.getDepartureDate() + " " + flightDTO.getDepartureTime());
@@ -52,6 +68,7 @@ public class FlightService {
 
         Flight flight = new Flight();
         flight.setAirlineCompany(airlineCompany);
+        flight.setAirplane(airplane);
         flight.setDepartureDate(flightDTO.getDepartureDate());
         flight.setDepartureTime(flightDTO.getDepartureTime());
         flight.setDistance(flightDTO.getDistance());
@@ -63,9 +80,10 @@ public class FlightService {
         flight.setTicketPrice(flightDTO.getTicketPrice());
         flight.setTransferDestinations(transfers);
 
-        flight = flightRepository.save(flight);
+        airplane.getFlight().add(flight);
         airlineCompany.getFlights().add(flight);
         airlineCompanyRepository.save(airlineCompany);
+
         return (new FlightDTO(flight));
     }
 
