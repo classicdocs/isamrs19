@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "api/hotels")
-public class SysAdminHotelControler {
+public class SysAdminHotelController {
 
     @Autowired
     private HotelService hotelService;

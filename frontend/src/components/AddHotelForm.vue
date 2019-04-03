@@ -65,7 +65,7 @@
 
 import Hotel from "@/models/Hotel";
 import HotelAdmin from "@/models/HotelAdmin"
-import sysAdminContoller from "@/controllers/sysAdmin.controller.js";
+import HotelAdminController from "@/controllers/hotelAdmin.controller"
 import { thisExpression } from '@babel/types';
 
 export default {
@@ -81,10 +81,15 @@ export default {
     hotel: new Hotel(),
     hotelAdmin: new HotelAdmin(),
 
-    selectedDefault: ["check"],
-    admins : ["Default(admin:admin)","Admin1", "Admin2", "Admin3"],
+    admins : [],
   }),
   created() {
+      HotelAdminController.get()
+      .then((response) => {
+        response.data.forEach(element => {
+          this.admins.push(element);
+        });
+      })
   },
   methods: {
     validate() {
