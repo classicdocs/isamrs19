@@ -36,6 +36,7 @@ public class Seat {
         this.id = id;
     }
 
+
     public Integer getRowNum() {
         return rowNum;
     }
