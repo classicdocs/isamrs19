@@ -4,10 +4,12 @@ import com.project.project.dto.AirlineCompanyDTO;
 import com.project.project.exceptions.AirlineCompanyAlreadyExist;
 import com.project.project.exceptions.AirlineCompanyNotFound;
 import com.project.project.model.AirlineCompany;
+import com.project.project.model.Airplane;
 import com.project.project.repository.AirlineCompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -51,6 +53,20 @@ public class AirlineCompanyService {
         Optional<AirlineCompany> ac = airlineCompanyRepository.findOneById(id);
         if (ac.isPresent()) {
             return ac.get().getDestinations();
+        } else {
+            throw new AirlineCompanyNotFound(id);
+        }
+
+    }
+
+    public Set<String> getAirplanes(Long id) throws AirlineCompanyNotFound {
+        Optional<AirlineCompany> ac = airlineCompanyRepository.findOneById(id);
+        if (ac.isPresent()) {
+            Set<String> airplanes = new HashSet<String>();
+            for (Airplane a : ac.get().getAirplanes()) {
+                airplanes.add(a.getModel());
+            }
+            return airplanes;
         } else {
             throw new AirlineCompanyNotFound(id);
         }

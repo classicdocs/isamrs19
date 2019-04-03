@@ -2,6 +2,7 @@
 export default class Flight {
   constructor() {
     this.airlineCompany = null,
+    this.airplane = null,
     this.startDestination = null,
     this.finalDestination = null,
     this.transferDestination = [],
@@ -16,6 +17,7 @@ export default class Flight {
 
   reset() {
     this.startDestination = null;
+    this.airplane = null,
     this.finalDestination = null;
     this.transferDestination = [];
     this.departureDate = null,

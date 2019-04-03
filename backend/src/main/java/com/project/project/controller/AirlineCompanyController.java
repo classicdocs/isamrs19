@@ -6,6 +6,7 @@ import com.project.project.dto.DestinationDTO;
 import com.project.project.exceptions.AirlineCompanyAlreadyExist;
 import com.project.project.exceptions.AirlineCompanyNotFound;
 import com.project.project.model.AirlineCompany;
+import com.project.project.model.Airplane;
 import com.project.project.service.AirlineCompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.attribute.standard.Media;
 import java.util.List;
 import java.util.Set;
 
@@ -68,6 +70,22 @@ public class AirlineCompanyController {
         } catch (AirlineCompanyNotFound ex) {
             ex.printStackTrace();
             return new ResponseEntity<String>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(
+            value = "/{id}/airplanes",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity getAirplanes(@PathVariable("id") Long id) {
+
+        Set<String> airplanes = null;
+        try {
+            airplanes = airlineCompanyService.getAirplanes(id);
+            return new ResponseEntity<Set<String>>(airplanes, HttpStatus.OK);
+        } catch (AirlineCompanyNotFound airlineCompanyNotFound) {
+            airlineCompanyNotFound.printStackTrace();
+            return new ResponseEntity<String>(airlineCompanyNotFound.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

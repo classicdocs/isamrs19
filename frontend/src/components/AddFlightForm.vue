@@ -25,6 +25,13 @@
             :rules="[v => !!v || 'Final destination is required']"
             required
           ></v-select>
+          <v-select
+            :items="airplanes"
+            v-model="flight.airplane"
+            label="Airplane"
+            :rules="[v => !!v || 'Airplane is required']"
+            required
+          ></v-select>
           <v-container fluid grid-list-xs>
             <v-layout wrap align-center>
               <v-flex xs6>
@@ -221,6 +228,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
+          <v-btn color="blue darken" flat @click="closeDialog">Close</v-btn> 
+          <v-btn @click="resetValidation">Reset Validation</v-btn>
           <v-btn @click="reset">Reset Form</v-btn>
           <v-btn :disabled="!form" color="success" @click="validate">Add new</v-btn>
         </v-card-actions>
@@ -256,6 +265,7 @@ export default {
 
     },
     destinations: [],
+    airplanes: [],
 
     flight: new Flight(),
   }),
@@ -268,9 +278,19 @@ export default {
           this.destinations.push(element);
         });
       })
-      .catch((response) => {
-
+      .catch((error) => {
+        alert(error.response.data);
       })
+
+      AirlineCompanyController.getAirplanes(this.flight.airlineCompany)
+        .then((response) => {
+          response.data.forEach(element => {
+            this.airplanes.push(element);
+          })
+        })
+        .catch((error) => {
+          alert(error.response.data);
+        })
   },
   methods: {
     validate() {
@@ -291,6 +311,9 @@ export default {
     reset() {
       this.$refs.form.reset();
     },
+     resetValidation() {
+      this.$refs.form.resetValidation();
+    },
     validateDestinations() {
       if (this.flight.startDestination === this.flight.finalDestination)
         return false;
@@ -304,6 +327,9 @@ export default {
       });
 
       return retVal;
+    },
+    closeDialog() {
+      this.$emit('closeDialog', false);
     }
   }
 };
