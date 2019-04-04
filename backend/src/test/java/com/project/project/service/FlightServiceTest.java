@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -31,6 +32,34 @@ public class FlightServiceTest {
 
     @Before
     public void setUp() throws Exception {
+    }
+
+    @Test
+    public void searchSuccess() throws DestinationNotFound {
+        String startDestination = "Belgrade";
+        String finalDestination = "London";
+        String departureDate = "2019-03-16";
+        String landingDate = "2019-07-20";
+        int passengersNumber = 1;
+        int page = 0;
+
+        Set<FlightDTO> flights = flightService.search(startDestination,finalDestination, departureDate, landingDate, passengersNumber, page);
+        assertNotNull(flights);
+        assertEquals(1, flights.size());
+    }
+
+    @Test
+    public void searchFail() throws DestinationNotFound {
+        String startDestination = "Belgrade";
+        String finalDestination = "Tokyo";
+        String departureDate = "2018-04-22";
+        String landingDate = "2018-04-23";
+        int passengersNumber = 0;
+        int page = 0;
+
+        Set<FlightDTO> flights = flightService.search(startDestination,finalDestination, departureDate, landingDate, passengersNumber, page);
+        assertNotNull(flights);
+        assertEquals(0, flights.size());
     }
 
     @Test

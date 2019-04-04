@@ -41,10 +41,10 @@ insert into airline_company_flights(airline_company_id, flights_id) values (1, 3
 insert into airplane_flight(airplane_id,flight_id) values(1,2);
 insert into airplane_flight(airplane_id,flight_id) values(1,3);
 
-insert into seat(id, col_num, row_num, seat_class) values (1, 1, 1, 'First');
-insert into seat(id, col_num, row_num, seat_class) values (2, 1, 2, 'First');
-insert into seat(id, col_num, row_num, seat_class) values (3, 2, 1, 'Buissness');
-insert into seat(id, col_num, row_num, seat_class) values (4, 2, 2, 'Economy');
+insert into seat(id, col_num, row_num, seat_class, taken) values (1, 1, 1, 'First', FALSE);
+insert into seat(id, col_num, row_num, seat_class, taken) values (2, 1, 2, 'First', FALSE);
+insert into seat(id, col_num, row_num, seat_class, taken) values (3, 2, 1, 'Buissness', FALSE);
+insert into seat(id, col_num, row_num, seat_class, taken) values (4, 2, 2, 'Economy', FALSE);
 
 insert into airplane_seats(airplane_id, seats_id) values (1, 1)
 

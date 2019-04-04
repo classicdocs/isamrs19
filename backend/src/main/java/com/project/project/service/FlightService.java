@@ -1,25 +1,21 @@
 package com.project.project.service;
 
 import com.project.project.dto.FlightDTO;
-import com.project.project.exceptions.AirlineCompanyNotFound;
-import com.project.project.exceptions.AirplaneNotExist;
-import com.project.project.exceptions.DateException;
-import com.project.project.exceptions.DestinationNotFound;
-import com.project.project.model.AirlineCompany;
-import com.project.project.model.Airplane;
-import com.project.project.model.Destination;
-import com.project.project.model.Flight;
+import com.project.project.exceptions.*;
+import com.project.project.model.*;
 import com.project.project.repository.AirlineCompanyRepository;
 import com.project.project.repository.AirplaneRepository;
 import com.project.project.repository.FlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class FlightService {
@@ -95,4 +91,33 @@ public class FlightService {
         flightRepository.deleteById(id);
     }
 
+    public Set<FlightDTO> search(
+            String startDestination, String finalDestination,
+            String departureDate, String landingDate,
+            int passengersNumber,
+            int page
+    ) throws DestinationNotFound {
+        Pageable pageable = PageRequest.of(page, 10);
+
+        Long startDest = destinationService.findOne(startDestination).getId();
+        Long finalDest = destinationService.findOne(finalDestination).getId();
+        Page<Flight> flights = flightRepository.search(startDest, finalDest, departureDate, landingDate, pageable);
+        Set<FlightDTO> flightsDTO = new HashSet<FlightDTO>();
+
+        for (Flight f: flights.getContent()) {
+
+            int cnt = 0;
+            for (Seat s: f.getAirplane().getSeats()) {
+                if (!s.isTaken()) {
+                    cnt++;
+                }
+            }
+            if (cnt >= passengersNumber)
+                flightsDTO.add(new FlightDTO(f));
+        }
+        return flightsDTO;
+
+
+
+    }
 }
