@@ -24,10 +24,10 @@ public class VehicleController {
         List<Vehicle> vehicles = vehicleService.findAll();
         return new ResponseEntity<List<Vehicle>>(vehicles, HttpStatus.OK);
     }
-
+    //dodati vozilo u listu,pa onda odraditi update na rent a car-u
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity create(@RequestBody VehicleDTO vehicleDTO){
         Vehicle vehicle = vehicleService.save(vehicleDTO);
-        return new ResponseEntity<VehicleDTO>(new VehicleDTO(vehicle), HttpStatus.CREATED);
+        return new ResponseEntity<Vehicle>(vehicle, HttpStatus.CREATED);
     }
 }

@@ -1,6 +1,8 @@
 <template>
-    <div>
-        <h3>Service information goes here.</h3>
+    <div id="info">
+        <h2>Company profile </h2>
+
+        <p id="about">This text will be different for each company</p>
     </div>
 </template>
 
@@ -12,8 +14,16 @@ export default {
 
 <style>
 
-h3 {
-    text-align: center;
+#about {
+    padding-top: 2%;
+}
+
+#info {
+    padding-top: 3%;
+}
+
+h2 {
+    text-align: left;
 }
 
 </style>

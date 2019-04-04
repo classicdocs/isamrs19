@@ -3,7 +3,7 @@
     <v-layout row justify-center>
       <v-dialog v-model="addVehicle" persistent max-width="600px">
       <template v-slot:activator="{ on }">
-          <v-btn color="primary" dark v-on="on">Add a vehicle</v-btn>
+          <v-btn color="#43A047" dark v-on="on">Add a vehicle</v-btn>
       </template>
       <v-card>
           <v-form
@@ -82,6 +82,18 @@
       </v-card>
       </v-dialog>
     </v-layout>
+    
+
+    <v-list two-line>
+        <v-list-tile id="listitem" v-for="vehicle in vehicle_list" v-bind:key="vehicle">
+        <v-list-tile-content>
+            <v-list-tile-title v-html="vehicle.vehicleManufacturer + ' ' + vehicle.vehicleModel "></v-list-tile-title>
+            <v-list-tile-title v-html="'Vehicle name: ' + vehicle.name + ' | Vehicle type: ' + vehicle.vehicleType + ' | Number of pasengers: ' 
+            + vehicle.numberOfPassengers + ' | Year of production: ' + vehicle.yearOfProduction + ' | Price per day: ' 
+            + vehicle.pricePerDay + ' euros'"></v-list-tile-title>
+        </v-list-tile-content>
+        </v-list-tile>
+    </v-list>
   </div>
 </template>
 
@@ -119,14 +131,26 @@ export default {
         price_per_day: 25,
         max_passengers: 10,
         passengers_enabled: false,
-        vehicle: null
+        vehicle: null,
+        vehicle_list: []
     }),
+    created() {
+        this.vehicle_list = [];
+        VehicleController.get().then((response) => {
+        response.data.forEach(element => {
+          this.vehicle_list.push(element);
+        });
+      })
+    },
     methods: {
         onSubmit() {
             this.vehicle = new Vehicle(this.$route.params.id,this.vehicle_name,this.carManufacturer,this.carModel,this.carType,
             this.passengers,this.production,this.price_per_day);
 
-            VehicleController.create(this.vehicle);
+            VehicleController.create(this.vehicle)
+                .then((response) => {
+                   this.vehicle_list.push(response.data);
+            });
             this.reset();
             this.addVehicle = false;
         },
@@ -191,3 +215,13 @@ export default {
     }
 }
 </script>
+
+<style>
+
+#listitem {
+    padding-left: 2%;
+    background-color: #f2f2f2;
+    border: solid 0.1px  #dbdbdb;
+}
+
+</style>
