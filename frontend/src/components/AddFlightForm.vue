@@ -1,20 +1,5 @@
 <template>
   <div>
-    <v-snackbar
-        v-model="snackbar.show"
-        :timeout="5000"
-        :color="snackbar.color"
-        :top="true"
-    >
-      {{snackbar.msg}}
-      <v-btn
-          dark
-          flat
-          @click="snackbar.show = false"
-      >
-      Close
-      </v-btn>
-    </v-snackbar>
     <v-card>
       <v-form
         ref="form"
@@ -237,11 +222,10 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn @click="reset">Reset Form</v-btn>
-          <v-btn :disabled="!form" color="primary" @click="validate">Add new</v-btn>
+          <v-btn :disabled="!form" color="success" @click="validate">Add new</v-btn>
         </v-card-actions>
       </v-form>
     </v-card>
-    
   </div>
 </template>
 
@@ -250,6 +234,7 @@
 import Flight from "@/models/Flight";
 import FlightsController from "@/controllers/flights.controller";
 import DestinationsController from "@/controllers/destinations.controller";
+import AirlineCompanyController from "@/controllers/airline-company.controller"
 
 export default {
   name: "AddFlightForm",
@@ -263,13 +248,6 @@ export default {
     menuFlightTime: false,
 
     value: true,
-
-    snackbar: {
-      show: false,
-      color: "",
-      msg: "",
-    },
-
     rules: {
       distance: [v => !!v || 'Distance is required',
                  v => /^[0-9]+$/.test(v) || "Distance must be a positive number"],
@@ -284,10 +262,10 @@ export default {
   created() {
     this.flight.airlineCompany = this.$route.params.id;
 
-    DestinationsController.get()
+    AirlineCompanyController.getDestinations(this.flight.airlineCompany)
       .then((response) => {
         response.data.forEach(element => {
-          this.destinations.push(element.name);
+          this.destinations.push(element);
         });
       })
       .catch((response) => {
@@ -302,8 +280,8 @@ export default {
           .then((response) => {
             this.$emit("operation", {msg: "Flight successfully added", color: "success"})
           })
-          .catch((response) => {
-            this.$emit("operation", {msg: "Error! Something went wrong...", color: "error"})
+          .catch((error) => {
+            this.$emit("operation", {msg: error.response.data, color: "error"})
           })
         } else {
           this.$emit("destination-error", {msg: "Start,final and transfer destinations can't be the same!", color: "error"})
