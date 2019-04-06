@@ -1,6 +1,7 @@
 package com.project.project.service;
 
 import com.project.project.dto.AirlineCompanyDTO;
+import com.project.project.dto.AirplaneDTO;
 import com.project.project.exceptions.AirlineCompanyAlreadyExist;
 import com.project.project.exceptions.AirlineCompanyNotFound;
 import com.project.project.model.AirlineCompany;
@@ -59,12 +60,15 @@ public class AirlineCompanyService {
 
     }
 
-    public Set<String> getAirplanes(Long id) throws AirlineCompanyNotFound {
+    public Set<AirplaneDTO> getAirplanes(Long id) throws AirlineCompanyNotFound {
         Optional<AirlineCompany> ac = airlineCompanyRepository.findOneById(id);
         if (ac.isPresent()) {
-            Set<String> airplanes = new HashSet<String>();
+            Set<AirplaneDTO> airplanes = new HashSet<AirplaneDTO>();
             for (Airplane a : ac.get().getAirplanes()) {
-                airplanes.add(a.getModel());
+                AirplaneDTO airplaneDTO = new AirplaneDTO();
+                airplaneDTO.setId(a.getId());
+                airplaneDTO.setModel(a.getModel());
+                airplanes.add(airplaneDTO);
             }
             return airplanes;
         } else {
