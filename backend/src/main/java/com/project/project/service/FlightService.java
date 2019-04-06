@@ -50,12 +50,12 @@ public class FlightService {
 
         Airplane airplane = null;
         for (Airplane a: airlineCompany.getAirplanes()) {
-            if (flightDTO.getAirplane().equals(a.getModel())) {
+            if (flightDTO.getAirplane().getModel().equals(a.getModel())) {
                 airplane = a;
             }
         }
         if (airplane == null) {
-            throw new AirplaneNotExist(flightDTO.getAirplane(), airlineCompany.getName());
+            throw new AirplaneNotExist(flightDTO.getAirplane().getModel(), airlineCompany.getName());
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");

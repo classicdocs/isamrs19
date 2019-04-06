@@ -31,7 +31,7 @@ public class AirlineCompany {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Flight> flights;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<Airplane> airplanes;
 
     public AirlineCompany() {}

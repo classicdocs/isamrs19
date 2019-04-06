@@ -1,5 +1,6 @@
 package com.project.project.service;
 
+import com.project.project.dto.AirplaneDTO;
 import com.project.project.dto.FlightDTO;
 import com.project.project.exceptions.AirlineCompanyNotFound;
 import com.project.project.exceptions.AirplaneNotExist;
@@ -37,7 +38,10 @@ public class FlightServiceTest {
     public void save() throws DestinationNotFound, AirlineCompanyNotFound, ParseException, DateException, AirplaneNotExist {
         FlightDTO f = new FlightDTO();
         f.setAirlineCompany("1");
-        f.setAirplane("Boing 747");
+        AirplaneDTO a = new AirplaneDTO();
+        a.setId(Integer.toUnsignedLong(1));
+        a.setModel("Boing 747");
+        f.setAirplane(a);
         f.setStartDestination("Belgrade");
         f.setFinalDestination("London");
         f.setDepartureDate("2018-04-22");
@@ -59,7 +63,10 @@ public class FlightServiceTest {
     public void saveFailDateException() throws DestinationNotFound, AirlineCompanyNotFound, ParseException, DateException, AirplaneNotExist {
         FlightDTO f = new FlightDTO();
         f.setAirlineCompany("1");
-        f.setAirplane("Boing 747");
+        AirplaneDTO a = new AirplaneDTO();
+        a.setId(Integer.toUnsignedLong(1));
+        a.setModel("Boing 747");
+        f.setAirplane(a);
         f.setStartDestination("Belgrade");
         f.setFinalDestination("London");
         f.setDepartureDate("2018-04-22");
@@ -79,7 +86,10 @@ public class FlightServiceTest {
     public void saveFailTimeException() throws DestinationNotFound, AirlineCompanyNotFound, ParseException, DateException, AirplaneNotExist {
         FlightDTO f = new FlightDTO();
         f.setAirlineCompany("1");
-        f.setAirplane("Boing 747");
+        AirplaneDTO a = new AirplaneDTO();
+        a.setId(Integer.toUnsignedLong(1));
+        a.setModel("Boing 747");
+        f.setAirplane(a);
         f.setStartDestination("Belgrade");
         f.setFinalDestination("London");
         f.setDepartureDate("2018-04-22");
@@ -99,7 +109,10 @@ public class FlightServiceTest {
     public void saveFailAirplaneException() throws DestinationNotFound, AirlineCompanyNotFound, ParseException, DateException, AirplaneNotExist {
         FlightDTO f = new FlightDTO();
         f.setAirlineCompany("1");
-        f.setAirplane("Boing 747333df");
+        AirplaneDTO a = new AirplaneDTO();
+        a.setId(Integer.toUnsignedLong(1));
+        a.setModel("Boing 747214");
+        f.setAirplane(a);
         f.setStartDestination("Belgrade");
         f.setFinalDestination("London");
         f.setDepartureDate("2018-04-22");
