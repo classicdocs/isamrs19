@@ -190,5 +190,7 @@ public class Flight {
     public void setSeatsEconomy(Set<Seat> seatsEconomy) {
         this.seatsEconomy = seatsEconomy;
     }
+
+
 }
 

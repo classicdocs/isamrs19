@@ -18,9 +18,6 @@ public class Seat {
     @Column(name = "taken", nullable = false)
     private boolean taken;
 
-    @Column(name = "taken", nullable = false)
-    private boolean taken = false;
-
     public Seat() {
         this.taken = false;
     }
@@ -28,14 +25,6 @@ public class Seat {
     public Seat(Integer rowNum, Integer colNum, boolean taken) {
         this.rowNum = rowNum;
         this.colNum = colNum;
-        this.taken = taken;
-    }
-
-    public boolean isTaken() {
-        return taken;
-    }
-
-    public void setTaken(boolean taken) {
         this.taken = taken;
     }
 
