@@ -26,7 +26,7 @@
             required
           ></v-select>
           <v-select
-            :items="airplanes"
+            :items="getAirplanes"
             v-model="flight.airplane"
             label="Airplane"
             :rules="[v => !!v || 'Airplane is required']"
@@ -291,6 +291,15 @@ export default {
         .catch((error) => {
           alert(error.response.data);
         })
+  },
+  computed: {
+    getAirplanes() {
+      let result = []
+      this.airplanes.forEach(element => {
+        result.push("Id: " + element.id + ", Model: " + element.model);
+      }); 
+      return result;
+    }
   },
   methods: {
     validate() {

@@ -6,7 +6,7 @@ import javax.persistence.*;
 public class Seat {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "row_num", nullable = false)
@@ -15,20 +15,19 @@ public class Seat {
     @Column(name = "col_num", nullable =  false)
     private Integer colNum;
 
-    @Column(name = "seatClass", nullable = false)
-    private String seatClass;
+    @Column(name = "taken", nullable = false)
+    private boolean taken;
 
     @Column(name = "taken", nullable = false)
     private boolean taken = false;
 
     public Seat() {
-
+        this.taken = false;
     }
 
-    public Seat(Integer rowNum, Integer colNum, String seatClass, boolean taken) {
+    public Seat(Integer rowNum, Integer colNum, boolean taken) {
         this.rowNum = rowNum;
         this.colNum = colNum;
-        this.seatClass = seatClass;
         this.taken = taken;
     }
 
@@ -65,11 +64,11 @@ public class Seat {
         this.colNum = colNum;
     }
 
-    public String getSeatClass() {
-        return seatClass;
+    public boolean isTaken() {
+        return taken;
     }
 
-    public void setSeatClass(String seatClass) {
-        this.seatClass = seatClass;
+    public void setTaken(boolean taken) {
+        this.taken = taken;
     }
 }

@@ -12,7 +12,7 @@ public class FlightDTO {
     @NotNull
     private String airlineCompany;
     @NotNull
-    private String airplane;
+    private AirplaneDTO airplane;
     @NotNull
     private String startDestination;
     @NotNull
@@ -29,7 +29,6 @@ public class FlightDTO {
     private String flightTime;
     @Positive
     private double distance;
-
     private Set<String> transferDestinations = new HashSet<>();
     @Positive
     private double ticketPrice;
@@ -38,10 +37,12 @@ public class FlightDTO {
 
     }
 
-    public FlightDTO(Flight flight) {
+    public FlightDTO(@NotNull Flight flight) {
         this.id = flight.getId();
-        this.airlineCompany = flight.getAirlineCompany().getId().toString();
-        this.airplane = flight.getAirplane().getModel();
+;        this.airlineCompany = flight.getAirlineCompany().getId().toString();
+        this.airplane = new AirplaneDTO();
+        this.airplane.setId(flight.getAirplane().getId());
+        this.airplane.setModel(flight.getAirplane().getModel());
         this.startDestination = flight.getStartDestination().getName();
         this.finalDestination = flight.getFinalDestination().getName();
         this.departureDate = flight.getDepartureDate();
@@ -70,11 +71,11 @@ public class FlightDTO {
         this.airlineCompany = airlineCompany;
     }
 
-    public String getAirplane() {
+    public AirplaneDTO getAirplane() {
         return airplane;
     }
 
-    public void setAirplane(String airplane) {
+    public void setAirplane(AirplaneDTO airplane) {
         this.airplane = airplane;
     }
 

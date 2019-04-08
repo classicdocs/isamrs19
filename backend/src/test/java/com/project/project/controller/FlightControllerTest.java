@@ -1,5 +1,6 @@
 package com.project.project.controller;
 
+import com.project.project.dto.AirplaneDTO;
 import com.project.project.dto.FlightDTO;
 import com.project.project.exceptions.AirlineCompanyNotFound;
 import org.junit.Before;
@@ -35,7 +36,10 @@ public class FlightControllerTest {
     public void createSuccess() {
         FlightDTO f = new FlightDTO();
         f.setAirlineCompany("1");
-        f.setAirplane("Boing 747");
+        AirplaneDTO a = new AirplaneDTO();
+        a.setId(Integer.toUnsignedLong(1));
+        a.setModel("Boing 747");
+        f.setAirplane(a);
         f.setStartDestination("Belgrade");
         f.setFinalDestination("London");
         f.setDepartureDate("2019-04-22");
@@ -61,7 +65,10 @@ public class FlightControllerTest {
     public void createFailAirlineCompanyNotFound() {
         FlightDTO f = new FlightDTO();
         f.setAirlineCompany("-1");
-        f.setAirplane("Boing 747");
+        AirplaneDTO a = new AirplaneDTO();
+        a.setId(Integer.toUnsignedLong(1));
+        a.setModel("Boing 747");
+        f.setAirplane(a);
         f.setStartDestination("Belgrade");
         f.setFinalDestination("London");
         f.setDepartureDate("2019-04-22");
@@ -86,7 +93,10 @@ public class FlightControllerTest {
     public void createFailDestinationNotFound() {
         FlightDTO f = new FlightDTO();
         f.setAirlineCompany("1");
-        f.setAirplane("Boing 747");
+        AirplaneDTO a = new AirplaneDTO();
+        a.setId(Integer.toUnsignedLong(1));
+        a.setModel("Boing 747");
+        f.setAirplane(a);
         f.setStartDestination("Belgradeddd");
         f.setFinalDestination("London");
         f.setDepartureDate("2019-04-22");
@@ -111,7 +121,10 @@ public class FlightControllerTest {
     public void createFailDateException() {
         FlightDTO f = new FlightDTO();
         f.setAirlineCompany("1");
-        f.setAirplane("Boing 747");
+        AirplaneDTO a = new AirplaneDTO();
+        a.setId(Integer.toUnsignedLong(1));
+        a.setModel("Boing 747");
+        f.setAirplane(a);
         f.setStartDestination("Belgrade");
         f.setFinalDestination("London");
         f.setDepartureDate("2019-04-22");
@@ -136,7 +149,10 @@ public class FlightControllerTest {
     public void createFailTimeException() {
         FlightDTO f = new FlightDTO();
         f.setAirlineCompany("1");
-        f.setAirplane("Boing 747");
+        AirplaneDTO a = new AirplaneDTO();
+        a.setId(Integer.toUnsignedLong(1));
+        a.setModel("Boing 747");
+        f.setAirplane(a);
         f.setStartDestination("Belgrade");
         f.setFinalDestination("London");
         f.setDepartureDate("2019-04-22");
@@ -161,7 +177,11 @@ public class FlightControllerTest {
     public void createFailAirplaneException() {
         FlightDTO f = new FlightDTO();
         f.setAirlineCompany("1");
-        f.setAirplane("Boing 747213");
+
+        AirplaneDTO a = new AirplaneDTO();
+        a.setId(Integer.toUnsignedLong(1));
+        a.setModel("Boing 747213");
+        f.setAirplane(a);
         f.setStartDestination("Belgrade");
         f.setFinalDestination("London");
         f.setDepartureDate("2019-04-22");

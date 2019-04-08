@@ -11,7 +11,7 @@ import java.util.Set;
 public class AirlineCompany {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name", nullable = false)
@@ -31,7 +31,7 @@ public class AirlineCompany {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Flight> flights;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<Airplane> airplanes;
 
     public AirlineCompany() {}

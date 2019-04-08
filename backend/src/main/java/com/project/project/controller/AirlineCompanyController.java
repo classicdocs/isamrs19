@@ -2,6 +2,7 @@ package com.project.project.controller;
 
 
 import com.project.project.dto.AirlineCompanyDTO;
+import com.project.project.dto.AirplaneDTO;
 import com.project.project.dto.DestinationDTO;
 import com.project.project.exceptions.AirlineCompanyAlreadyExist;
 import com.project.project.exceptions.AirlineCompanyNotFound;
@@ -79,10 +80,10 @@ public class AirlineCompanyController {
     )
     public ResponseEntity getAirplanes(@PathVariable("id") Long id) {
 
-        Set<String> airplanes = null;
+        Set<AirplaneDTO> airplanes = null;
         try {
             airplanes = airlineCompanyService.getAirplanes(id);
-            return new ResponseEntity<Set<String>>(airplanes, HttpStatus.OK);
+            return new ResponseEntity<Set<AirplaneDTO>>(airplanes, HttpStatus.OK);
         } catch (AirlineCompanyNotFound airlineCompanyNotFound) {
             airlineCompanyNotFound.printStackTrace();
             return new ResponseEntity<String>(airlineCompanyNotFound.getMessage(), HttpStatus.BAD_REQUEST);
