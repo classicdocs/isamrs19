@@ -10,7 +10,7 @@ import java.util.Set;
 @Entity
 public class Flight {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -50,6 +50,15 @@ public class Flight {
 
     @Column(name = "ticket_price", nullable = false)
     private double ticketPrice;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Seat> seatsFirst = new HashSet<Seat>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Seat> seatsBuissness = new HashSet<Seat>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Seat> seatsEconomy = new HashSet<Seat>();
 
     public Flight() {
     }
@@ -156,6 +165,30 @@ public class Flight {
 
     public void setTicketPrice(double ticketPrice) {
         this.ticketPrice = ticketPrice;
+    }
+
+    public Set<Seat> getSeatsFirst() {
+        return seatsFirst;
+    }
+
+    public void setSeatsFirst(Set<Seat> seatsFirst) {
+        this.seatsFirst = seatsFirst;
+    }
+
+    public Set<Seat> getSeatsBuissness() {
+        return seatsBuissness;
+    }
+
+    public void setSeatsBuissness(Set<Seat> seatsBuissness) {
+        this.seatsBuissness = seatsBuissness;
+    }
+
+    public Set<Seat> getSeatsEconomy() {
+        return seatsEconomy;
+    }
+
+    public void setSeatsEconomy(Set<Seat> seatsEconomy) {
+        this.seatsEconomy = seatsEconomy;
     }
 }
 

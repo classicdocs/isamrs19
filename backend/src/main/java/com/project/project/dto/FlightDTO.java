@@ -1,6 +1,5 @@
 package com.project.project.dto;
 
-import com.project.project.model.Airplane;
 import com.project.project.model.Flight;
 
 import javax.validation.constraints.NotNull;
@@ -30,7 +29,6 @@ public class FlightDTO {
     private String flightTime;
     @Positive
     private double distance;
-
     private Set<String> transferDestinations = new HashSet<>();
     @Positive
     private double ticketPrice;
@@ -41,7 +39,7 @@ public class FlightDTO {
 
     public FlightDTO(@NotNull Flight flight) {
         this.id = flight.getId();
-        this.airlineCompany = flight.getAirlineCompany().getId().toString();
+;        this.airlineCompany = flight.getAirlineCompany().getId().toString();
         this.airplane = new AirplaneDTO();
         this.airplane.setId(flight.getAirplane().getId());
         this.airplane.setModel(flight.getAirplane().getModel());
