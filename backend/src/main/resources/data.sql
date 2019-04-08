@@ -9,13 +9,6 @@ price_per_day,average_rating) values ('1','Automobil','BMW','320','Sedan',5,2014
 insert into rentacar (id,name,address,promotional_description) values ('1','test rentacar', 'adress unknown',
 'no promotional description');
 
-insert into vehicle (id,name,vehicle_manufacturer,vehicle_model,vehicle_type,number_of_passengers,year_of_production,
-price_per_day,average_rating) values ('1','Automobil','BMW','320','Sedan',5,2014,40,0);
-
-insert into rentacar (id,name,address,promotional_description) values ('1','test rentacar', 'adress unknown',
-'no promotional description');
-
-
 insert into airline_company (id,description, address, name) values (1, 'Cheap flights', 'Kraljevica Marka 2', 'AirSerbia');
 insert into airline_company (id,description, address, name) values (2, '', 'Oslobodjenja 3', 'AirFrance');
 
@@ -26,10 +19,6 @@ insert into airline_company_destinations(airline_company_id, destinations ) valu
 
 insert into airplane(id, model) values (1, 'Boing 747');
 insert into airline_company_airplanes(airline_company_id, airplanes_id) values (1,1);
-
-INSERT INTO flight (id,departure_date,departure_time,distance,flight_time,landing_date,landing_time,ticket_price,airline_company_id,final_destination_id,start_destination_id, airplane_id) VALUES (3,'2019-03-16','11:02',100,'11:11','2019-03-20','11:11',100,1,2,3,1);
-INSERT INTO flight (id,departure_date,departure_time,distance,flight_time,landing_date,landing_time,ticket_price,airline_company_id,final_destination_id,start_destination_id, airplane_id) VALUES (2,'2019-03-16','15:02',100,'02:11','2019-07-20','11:11',200,1,3,2,1);
-
 
 INSERT INTO flight (id,departure_date,departure_time,distance,flight_time,landing_date,landing_time,ticket_price,airline_company_id,final_destination_id,start_destination_id) VALUES (3,'2019-03-16','11:02',100,'11:11','2019-03-20','11:11',100,1,2,3);
 INSERT INTO flight (id,departure_date,departure_time,distance,flight_time,landing_date,landing_time,ticket_price,airline_company_id,final_destination_id,start_destination_id) VALUES (2,'2019-03-16','15:02',100,'02:11','2019-07-20','11:11',200,1,3,2);

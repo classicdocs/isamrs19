@@ -1,6 +1,7 @@
 package com.project.project.service;
 
 import com.project.project.dto.FlightDTO;
+import com.project.project.dto.SearchFlightDTO;
 import com.project.project.exceptions.AirlineCompanyNotFound;
 import com.project.project.exceptions.AirplaneNotExist;
 import com.project.project.exceptions.DateException;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.ParseException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -39,11 +41,10 @@ public class FlightServiceTest {
         String startDestination = "Belgrade";
         String finalDestination = "London";
         String departureDate = "2019-03-16";
-        String landingDate = "2019-07-20";
+        String returnDate = "";
         int passengersNumber = 1;
-        int page = 0;
 
-        Set<FlightDTO> flights = flightService.search(startDestination,finalDestination, departureDate, landingDate, passengersNumber, page);
+        Set<SearchFlightDTO> flights = flightService.search(startDestination,finalDestination, departureDate, returnDate,passengersNumber);
         assertNotNull(flights);
         assertEquals(1, flights.size());
     }
@@ -53,11 +54,11 @@ public class FlightServiceTest {
         String startDestination = "Belgrade";
         String finalDestination = "Tokyo";
         String departureDate = "2018-04-22";
-        String landingDate = "2018-04-23";
+        String returnDate = "";
         int passengersNumber = 0;
         int page = 0;
 
-        Set<FlightDTO> flights = flightService.search(startDestination,finalDestination, departureDate, landingDate, passengersNumber, page);
+        Set<SearchFlightDTO> flights = flightService.search(startDestination,finalDestination, departureDate, returnDate, passengersNumber);
         assertNotNull(flights);
         assertEquals(0, flights.size());
     }
@@ -157,5 +158,31 @@ public class FlightServiceTest {
         int size = flightRepository.findAll().size();
         flightService.remove(Integer.toUnsignedLong(2));
         assertEquals(size - 1, flightRepository.findAll().size());
+    }
+
+    @Test
+    public void searchReturnSuccess() throws DestinationNotFound {
+        String startDestination = "Belgrade";
+        String finalDestination = "London";
+        String departureDate = "2019-03-16";
+        String returnDate = "2019-03-16";
+        int passengersNumber = 1;
+
+        Set<SearchFlightDTO> result = flightService.search(startDestination,finalDestination,departureDate,returnDate,passengersNumber);
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    public void searchOneWaySuccess() throws DestinationNotFound {
+        String startDestination = "Belgrade";
+        String finalDestination = "London";
+        String departureDate = "2019-03-16";
+        String returnDate = null;
+        int passengersNumber = 1;
+
+        Set<SearchFlightDTO> result = flightService.search(startDestination,finalDestination,departureDate,returnDate,passengersNumber);
+
+        assertEquals(1, result.size());
     }
 }

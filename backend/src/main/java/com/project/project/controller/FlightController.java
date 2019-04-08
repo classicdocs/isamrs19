@@ -1,6 +1,7 @@
 package com.project.project.controller;
 
 import com.project.project.dto.FlightDTO;
+import com.project.project.dto.SearchFlightDTO;
 import com.project.project.exceptions.*;
 import com.project.project.service.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,19 +44,16 @@ public class FlightController {
             @RequestParam("startDestination") String startDestination,
             @RequestParam("finalDestination") String finalDestination,
             @RequestParam("departureDate") String departureDate,
-            @RequestParam("landingDate") String landingDate,
-            @RequestParam("passengersNumber") int passengersNumber,
-            @RequestParam("page") int page
+            @RequestParam("returnDate") String returnDate,
+            @RequestParam("passengersNumber") int passengersNumber
     ) {
-        Set<FlightDTO> flights = null;
+        Set<SearchFlightDTO> flights = null;
         try {
-            flights = flightService.search(startDestination, finalDestination, departureDate, landingDate, passengersNumber, page);
-            return new ResponseEntity<Set<FlightDTO>>(flights, HttpStatus.OK);
+            flights = flightService.search(startDestination, finalDestination, departureDate,returnDate, passengersNumber);
+            return new ResponseEntity<Set<SearchFlightDTO>>(flights, HttpStatus.OK);
         } catch (DestinationNotFound destinationNotFound) {
             destinationNotFound.printStackTrace();
             return new ResponseEntity<String>(destinationNotFound.getMessage(), HttpStatus.BAD_REQUEST);
         }
-
-
     }
 }

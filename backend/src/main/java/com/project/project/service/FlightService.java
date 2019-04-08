@@ -1,6 +1,7 @@
 package com.project.project.service;
 
 import com.project.project.dto.FlightDTO;
+import com.project.project.dto.SearchFlightDTO;
 import com.project.project.exceptions.*;
 import com.project.project.model.*;
 import com.project.project.repository.AirlineCompanyRepository;
@@ -91,33 +92,59 @@ public class FlightService {
         flightRepository.deleteById(id);
     }
 
-    public Set<FlightDTO> search(
+    public Set<SearchFlightDTO> search(
             String startDestination, String finalDestination,
-            String departureDate, String landingDate,
-            int passengersNumber,
-            int page
+            String departureDate, String returnDate,
+            int passengersNumber
     ) throws DestinationNotFound {
-        Pageable pageable = PageRequest.of(page, 10);
 
         Long startDest = destinationService.findOne(startDestination).getId();
         Long finalDest = destinationService.findOne(finalDestination).getId();
-        Page<Flight> flights = flightRepository.search(startDest, finalDest, departureDate, landingDate, pageable);
-        Set<FlightDTO> flightsDTO = new HashSet<FlightDTO>();
+        Set<Flight> departureFlights = flightRepository.search(startDest, finalDest, departureDate);
 
-        for (Flight f: flights.getContent()) {
 
-            int cnt = 0;
-            for (Seat s: f.getAirplane().getSeats()) {
-                if (!s.isTaken()) {
-                    cnt++;
+        Set<SearchFlightDTO> result = new HashSet<SearchFlightDTO>();
+        if (returnDate != null) {
+            Set<Flight> returnFlights = flightRepository.search(finalDest, startDest, returnDate);
+            for (Flight f: departureFlights) {
+                for (Flight f2 : returnFlights) {
+                    int cnt = 0;
+                    for (Seat s : f.getAirplane().getSeats()) {
+                        if (!s.isTaken()) {
+                            cnt++;
+                        }
+                    }
+                    int cnt2 = 0;
+                    for (Seat s : f2.getAirplane().getSeats()) {
+                        if (!s.isTaken()) {
+                            cnt++;
+                        }
+                    }
+                    if (cnt >= passengersNumber && cnt2 >= passengersNumber) {
+                        SearchFlightDTO sf = new SearchFlightDTO();
+                        sf.setDepartureFlight(new FlightDTO(f));
+                        sf.setReturnFlight(new FlightDTO(f2));
+                        result.add(sf);
+                    }
                 }
             }
-            if (cnt >= passengersNumber)
-                flightsDTO.add(new FlightDTO(f));
+        } else {
+            for (Flight f: departureFlights) {
+                    int cnt = 0;
+                    for (Seat s : f.getAirplane().getSeats()) {
+                        if (!s.isTaken()) {
+                            cnt++;
+                        }
+                    }
+                    if (cnt >= passengersNumber) {
+                        SearchFlightDTO sf = new SearchFlightDTO();
+                        sf.setDepartureFlight(new FlightDTO(f));
+                        result.add(sf);
+                    }
+            }
         }
-        return flightsDTO;
 
 
-
+        return result;
     }
 }
