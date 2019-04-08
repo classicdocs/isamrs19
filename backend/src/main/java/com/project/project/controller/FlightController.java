@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -37,19 +38,20 @@ public class FlightController {
     }
 
     @GetMapping(
-        params = {"startDestination", "finalDestination", "departureDate", "landingDate", "passengersNumber", "page"},
-            produces = MediaType.APPLICATION_JSON_VALUE
+        value = "/search",
+        produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity get(
             @RequestParam("startDestination") String startDestination,
             @RequestParam("finalDestination") String finalDestination,
             @RequestParam("departureDate") String departureDate,
-            @RequestParam("returnDate") String returnDate,
+            @RequestParam("returnDate") Optional<String> returnDate,
+            @RequestParam("seatClass") String seatClass,
             @RequestParam("passengersNumber") int passengersNumber
     ) {
         Set<SearchFlightDTO> flights = null;
         try {
-            flights = flightService.search(startDestination, finalDestination, departureDate,returnDate, passengersNumber);
+            flights = flightService.search(startDestination, finalDestination, departureDate,returnDate,seatClass, passengersNumber);
             return new ResponseEntity<Set<SearchFlightDTO>>(flights, HttpStatus.OK);
         } catch (DestinationNotFound destinationNotFound) {
             destinationNotFound.printStackTrace();

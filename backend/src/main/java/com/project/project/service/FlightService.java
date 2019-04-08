@@ -126,33 +126,39 @@ public class FlightService {
 
     public Set<SearchFlightDTO> search(
             String startDestination, String finalDestination,
-            String departureDate, String returnDate,
-            int passengersNumber
+            String departureDate, Optional<String> returnDate,
+            String seatClass, int passengersNumber
     ) throws DestinationNotFound {
 
         Long startDest = destinationService.findOne(startDestination).getId();
         Long finalDest = destinationService.findOne(finalDestination).getId();
         Set<Flight> departureFlights = flightRepository.search(startDest, finalDest, departureDate);
 
-
         Set<SearchFlightDTO> result = new HashSet<SearchFlightDTO>();
-        if (returnDate != null) {
-            Set<Flight> returnFlights = flightRepository.search(finalDest, startDest, returnDate);
+
+        if (returnDate.isPresent()) {
+            Set<Flight> returnFlights = flightRepository.search(finalDest, startDest, returnDate.get());
             for (Flight f: departureFlights) {
                 for (Flight f2 : returnFlights) {
-                    int cnt = 0;
-                    for (Seat s : f.getAirplane().getSeats()) {
-                        if (!s.isTaken()) {
-                            cnt++;
+                    boolean ok = false;
+                    switch (seatClass) {
+                        case "first": {
+                            if (f.getFreeFirstSeats() >= passengersNumber && f2.getFreeFirstSeats() >= passengersNumber)
+                                ok = true;
+                            break;
+                        }
+                        case "buissness": {
+                            if (f.getFreeBuissnessSeats() >= passengersNumber && f2.getFreeBuissnessSeats() >= passengersNumber)
+                                ok = true;
+                            break;
+                        }
+                        case "economy": {
+                            if (f.getFreeEconomySeats() >= passengersNumber && f2.getFreeEconomySeats() >= passengersNumber)
+                                ok = true;
+                            break;
                         }
                     }
-                    int cnt2 = 0;
-                    for (Seat s : f2.getAirplane().getSeats()) {
-                        if (!s.isTaken()) {
-                            cnt++;
-                        }
-                    }
-                    if (cnt >= passengersNumber && cnt2 >= passengersNumber) {
+                    if (ok) {
                         SearchFlightDTO sf = new SearchFlightDTO();
                         sf.setDepartureFlight(new FlightDTO(f));
                         sf.setReturnFlight(new FlightDTO(f2));
@@ -162,20 +168,31 @@ public class FlightService {
             }
         } else {
             for (Flight f: departureFlights) {
-                    int cnt = 0;
-                    for (Seat s : f.getAirplane().getSeats()) {
-                        if (!s.isTaken()) {
-                            cnt++;
-                        }
+                boolean ok = false;
+                switch (seatClass) {
+                    case "first": {
+                        if (f.getFreeFirstSeats() >= passengersNumber)
+                            ok = true;
+                        break;
                     }
-                    if (cnt >= passengersNumber) {
-                        SearchFlightDTO sf = new SearchFlightDTO();
-                        sf.setDepartureFlight(new FlightDTO(f));
-                        result.add(sf);
+                    case "buissness": {
+                        if (f.getFreeBuissnessSeats() >= passengersNumber)
+                            ok = true;
+                        break;
                     }
+                    case "economy": {
+                        if (f.getFreeEconomySeats() >= passengersNumber)
+                            ok = true;
+                        break;
+                    }
+                }
+                if (ok) {
+                    SearchFlightDTO sf = new SearchFlightDTO();
+                    sf.setDepartureFlight(new FlightDTO(f));
+                    result.add(sf);
+                }
             }
         }
-
 
         return result;
     }

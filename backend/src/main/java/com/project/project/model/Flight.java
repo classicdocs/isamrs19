@@ -63,6 +63,34 @@ public class Flight {
     public Flight() {
     }
 
+    public int getFreeFirstSeats() {
+        int cnt = this.seatsFirst.size();
+        for (Seat s: this.seatsFirst) {
+            if (s.isTaken()) {
+                cnt--;
+            }
+        }
+        return cnt;
+    }
+    public int getFreeBuissnessSeats() {
+        int cnt = this.seatsBuissness.size();
+        for (Seat s: this.seatsBuissness) {
+            if (s.isTaken()) {
+                cnt--;
+            }
+        }
+        return cnt;
+    }
+    public int getFreeEconomySeats() {
+        int cnt = this.seatsEconomy.size();
+        for (Seat s: this.seatsEconomy) {
+            if (s.isTaken()) {
+                cnt--;
+            }
+        }
+        return cnt;
+    }
+
     public Long getId() {
         return id;
     }

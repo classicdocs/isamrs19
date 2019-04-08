@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.text.ParseException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -37,32 +38,8 @@ public class FlightServiceTest {
     public void setUp() throws Exception {
     }
 
-    @Test
-    public void searchSuccess() throws DestinationNotFound {
-        String startDestination = "Belgrade";
-        String finalDestination = "London";
-        String departureDate = "2019-03-16";
-        String returnDate = "";
-        int passengersNumber = 1;
 
-        Set<SearchFlightDTO> flights = flightService.search(startDestination,finalDestination, departureDate, returnDate,passengersNumber);
-        assertNotNull(flights);
-        assertEquals(1, flights.size());
-    }
 
-    @Test
-    public void searchFail() throws DestinationNotFound {
-        String startDestination = "Belgrade";
-        String finalDestination = "Tokyo";
-        String departureDate = "2018-04-22";
-        String returnDate = "";
-        int passengersNumber = 0;
-        int page = 0;
-
-        Set<SearchFlightDTO> flights = flightService.search(startDestination,finalDestination, departureDate, returnDate, passengersNumber);
-        assertNotNull(flights);
-        assertEquals(0, flights.size());
-    }
 
     @Test
     public void save() throws DestinationNotFound, AirlineCompanyNotFound, ParseException, DateException, AirplaneNotExist {
@@ -178,10 +155,11 @@ public class FlightServiceTest {
         String startDestination = "Belgrade";
         String finalDestination = "London";
         String departureDate = "2019-03-16";
-        String returnDate = "2019-03-16";
+        Optional<String> returnDate = Optional.of("2019-03-16");
+        String seatClass = "first";
         int passengersNumber = 1;
 
-        Set<SearchFlightDTO> result = flightService.search(startDestination,finalDestination,departureDate,returnDate,passengersNumber);
+        Set<SearchFlightDTO> result = flightService.search(startDestination,finalDestination,departureDate,returnDate,seatClass,passengersNumber);
 
         assertEquals(1, result.size());
     }
@@ -191,11 +169,26 @@ public class FlightServiceTest {
         String startDestination = "Belgrade";
         String finalDestination = "London";
         String departureDate = "2019-03-16";
-        String returnDate = null;
+        Optional<String> returnDate = Optional.empty();
+        String seatClass = "first";
         int passengersNumber = 1;
 
-        Set<SearchFlightDTO> result = flightService.search(startDestination,finalDestination,departureDate,returnDate,passengersNumber);
+        Set<SearchFlightDTO> result = flightService.search(startDestination,finalDestination,departureDate,returnDate, seatClass,passengersNumber);
 
         assertEquals(1, result.size());
+    }
+
+    @Test
+    public void searchFail() throws DestinationNotFound {
+        String startDestination = "Belgrade";
+        String finalDestination = "Tokyo";
+        String departureDate = "2018-04-22";
+        Optional<String> returnDate = Optional.empty();
+        String seatClass = "first";
+        int passengersNumber = 0;
+
+        Set<SearchFlightDTO> flights = flightService.search(startDestination,finalDestination, departureDate, returnDate,seatClass, passengersNumber);
+        assertNotNull(flights);
+        assertEquals(0, flights.size());
     }
 }
