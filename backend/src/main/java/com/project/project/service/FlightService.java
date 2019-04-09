@@ -131,7 +131,7 @@ public class FlightService {
             String startDestination, String finalDestination,
             String departureDate, Optional<String> returnDate,
             String seatClass, int passengersNumber
-    ) throws DestinationNotFound {
+    ) throws DestinationNotFound, ParseException {
 
         Long startDest = destinationService.findOne(startDestination).getId();
         Long finalDest = destinationService.findOne(finalDestination).getId();
@@ -144,6 +144,24 @@ public class FlightService {
             for (Flight f: departureFlights) {
                 for (Flight f2 : returnFlights) {
                     boolean ok = false;
+
+                    SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm");
+                    Date dateDeparture = sdfDate.parse(f.getDepartureDate());
+                    Date dateReturn = sdfDate.parse(f2.getDepartureDate());
+                    Date departureTime = sdfTime.parse(f.getDepartureTime());
+                    Date returnTime = sdfDate.parse(f2.getDepartureTime());
+
+                    if (dateReturn.before(dateDeparture)) {
+                        continue;
+                    } else {
+                        if (dateDeparture.compareTo(dateReturn) == 0) {
+                            if (returnTime.before(departureTime)) {
+                                continue;
+                            }
+                        }
+                    }
+
                     switch (seatClass) {
                         case "First": {
                             if (f.getFreeFirstSeats() >= passengersNumber && f2.getFreeFirstSeats() >= passengersNumber)

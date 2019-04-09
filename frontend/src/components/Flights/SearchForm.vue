@@ -119,6 +119,21 @@
         </v-card-actions>
       </v-form>
     </v-card>
+    <v-snackbar
+        v-model="snackbar.show"
+        :timeout="5000"
+        :color="snackbar.color"
+        :top="true"
+    >
+      {{snackbar.msg}}
+      <v-btn
+          dark
+          flat
+          @click="snackbar.show = false"
+      >
+      Close
+      </v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -143,7 +158,12 @@ export default {
     destinations: [],
     passengersNumber: [1,2,3,4,5,6],
     seatClasses: ['First', 'Business', 'Economy'],
-  
+
+    snackbar: {
+      show: false,
+      color: "",
+      msg: "",
+    },
   }),
   created() {
     DestinationController.get()
@@ -174,23 +194,45 @@ export default {
     },
     searchFlights() {
       if(this.$refs.form.validate()) {
-        if (this.oneWay) {
+        if (this.validate()) {
+          if (this.oneWay) {
           this.search.returnDate = null;
+          }
+          FlightController.search(this.search)
+            .then((response) => {
+              var json = {
+                'data': response.data,
+                'seatClass': this.search.seatClass,
+                'passengersNumber': this.search.passengersNumber
+              }
+              this.$emit("search-result", json)
+            })
+            .catch((error) => {
+              console.error.response.data();
+            })
         }
-        FlightController.search(this.search)
-          .then((response) => {
-            var json = {
-              'data': response.data,
-              'seatClass': this.search.seatClass,
-              'passengersNumber': this.search.passengersNumber
-            }
-            this.$emit("search-result", json)
-          })
-          .catch((error) => {
-            console.error.response.data();
-          })
       }
     },
+    validate() {
+      if (this.search.startDestination === this.search.finalDestination) {
+        this.snackbar.color = "error";
+        this.snackbar.msg = "Start and final destination can't be the same!";
+        this.snackbar.show = true;
+        return false;
+      }
+      let departureDate = new Date(this.search.departureDate);
+      let returnDate = new Date(this.search.returnDate);
+      if (!this.oneWay && returnDate !== null) {
+          if (returnDate < departureDate) {
+            this.snackbar.color = "error";
+            this.snackbar.msg = "Return date can't be before departure date!";
+            this.snackbar.show = true;
+            return false;
+          }
+      }
+      return true;
+
+    }
   }
 }
 </script>

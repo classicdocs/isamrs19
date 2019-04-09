@@ -53,7 +53,7 @@ public class FlightController {
         try {
             flights = flightService.search(startDestination, finalDestination, departureDate,returnDate,seatClass, passengersNumber);
             return new ResponseEntity<Set<SearchFlightDTO>>(flights, HttpStatus.OK);
-        } catch (DestinationNotFound destinationNotFound) {
+        } catch (DestinationNotFound | ParseException destinationNotFound) {
             destinationNotFound.printStackTrace();
             return new ResponseEntity<String>(destinationNotFound.getMessage(), HttpStatus.BAD_REQUEST);
         }

@@ -14,11 +14,13 @@
         <v-flex lg3>
           <!-- filter -->
         </v-flex>
-        <v-flex lg9 v-if="searchResult.length !== 0" id="result">
+        
+        <v-flex lg9 v-if="searchResult.length !== 0" >
           <search-result v-for="(item, index) in searchResult"
-          :key="index" 
-          v-bind:data="item" 
-          v-bind:searchParams="searchParams"></search-result>
+            :key="index" 
+            v-bind:data="item" 
+            v-bind:searchParams="searchParams">
+          </search-result>
         </v-flex>
         <v-flex v-else-if="zeroResult" lg9>
           <h3>No result found!</h3>
@@ -59,9 +61,6 @@ export default {
 </script>
 <style>
 
-#result {
-  max-height: 700px;
-  overflow: scroll;
-}
+
 </style>
 
