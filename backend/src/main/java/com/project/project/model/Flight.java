@@ -54,8 +54,8 @@ public class Flight {
     @Column(name = "ticket_price_first", nullable = false)
     private double ticketPriceFirst;
 
-    @Column(name = "ticket_price_buissness", nullable = false)
-    private double ticketPriceBuisness;
+    @Column(name = "ticket_price_business", nullable = false)
+    private double ticketPriceBusiness;
 
     @Column(name = "ticket_price_economy", nullable = false)
     private double ticketPriceEconomy;
@@ -64,7 +64,7 @@ public class Flight {
     private Set<Seat> seatsFirst = new HashSet<Seat>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Seat> seatsBuissness = new HashSet<Seat>();
+    private Set<Seat> seatsBusiness = new HashSet<Seat>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Seat> seatsEconomy = new HashSet<Seat>();
@@ -81,9 +81,9 @@ public class Flight {
         }
         return cnt;
     }
-    public int getFreeBuissnessSeats() {
-        int cnt = this.seatsBuissness.size();
-        for (Seat s: this.seatsBuissness) {
+    public int getFreeBusinessSeats() {
+        int cnt = this.seatsBusiness.size();
+        for (Seat s: this.seatsBusiness) {
             if (s.isTaken()) {
                 cnt--;
             }
@@ -212,12 +212,12 @@ public class Flight {
         this.ticketPriceFirst = ticketPriceFirst;
     }
 
-    public double getTicketPriceBuisness() {
-        return ticketPriceBuisness;
+    public double getTicketPriceBusiness() {
+        return ticketPriceBusiness;
     }
 
-    public void setTicketPriceBuisness(double ticketPriceBuisness) {
-        this.ticketPriceBuisness = ticketPriceBuisness;
+    public void setTicketPriceBusiness(double ticketPriceBuisness) {
+        this.ticketPriceBusiness = ticketPriceBuisness;
     }
 
     public double getTicketPriceEconomy() {
@@ -236,12 +236,12 @@ public class Flight {
         this.seatsFirst = seatsFirst;
     }
 
-    public Set<Seat> getSeatsBuissness() {
-        return seatsBuissness;
+    public Set<Seat> getSeatsBusiness() {
+        return seatsBusiness;
     }
 
-    public void setSeatsBuissness(Set<Seat> seatsBuissness) {
-        this.seatsBuissness = seatsBuissness;
+    public void setSeatsBusiness(Set<Seat> seatsBusiness) {
+        this.seatsBusiness = seatsBusiness;
     }
 
     public Set<Seat> getSeatsEconomy() {
@@ -251,7 +251,5 @@ public class Flight {
     public void setSeatsEconomy(Set<Seat> seatsEconomy) {
         this.seatsEconomy = seatsEconomy;
     }
-
-
 }
 

@@ -43,10 +43,10 @@ public class FlightService {
 
     public FlightDTO save(FlightDTO flightDTO) throws DestinationNotFound, AirlineCompanyNotFound, ParseException, DateException, AirplaneNotExist {
 
-        Destination startDestination = destinationService.findOne(flightDTO.getStartDestination());
-        Destination finalDestination = destinationService.findOne(flightDTO.getFinalDestination());
+        Destination startDestination = destinationService.findOne(flightDTO.getStartDestination().getName());
+        Destination finalDestination = destinationService.findOne(flightDTO.getFinalDestination().getName());
 
-        AirlineCompany airlineCompany = airlineCompanyService.findOneById(Long.parseLong(flightDTO.getAirlineCompany()));
+        AirlineCompany airlineCompany = airlineCompanyService.findOneById(flightDTO.getAirlineCompany().getId());
 
         HashSet<String> transfers = new HashSet<String>(flightDTO.getTransferDestinations());
 
@@ -81,7 +81,7 @@ public class FlightService {
         flight.setLandingTime(flightDTO.getLandingTime());
         flight.setStartDestination(startDestination);
         flight.setTicketPriceFirst(flightDTO.getTicketPriceFirst());
-        flight.setTicketPriceBuisness(flightDTO.getTicketPriceBuissness());
+        flight.setTicketPriceBusiness(flightDTO.getTicketPriceBusiness());
         flight.setTicketPriceEconomy(flightDTO.getTicketPriceEconomy());
         flight.setTransferDestinations(transfers);
 
@@ -94,12 +94,12 @@ public class FlightService {
             }
         }
 
-        for (int i = 0; i < flight.getAirplane().getSeatsBuissnessRows(); i++) {
-            for (int j = 0; j < flight.getAirplane().getSeatsBuissnessCols(); j++) {
+        for (int i = 0; i < flight.getAirplane().getSeatsBusinessRows(); i++) {
+            for (int j = 0; j < flight.getAirplane().getSeatsBusinessCols(); j++) {
                 Seat s = new Seat();
                 s.setRowNum(i);
                 s.setColNum(j);
-                flight.getSeatsBuissness().add(s);
+                flight.getSeatsBusiness().add(s);
             }
         }
 
@@ -150,8 +150,8 @@ public class FlightService {
                                 ok = true;
                             break;
                         }
-                        case "Buissness": {
-                            if (f.getFreeBuissnessSeats() >= passengersNumber && f2.getFreeBuissnessSeats() >= passengersNumber)
+                        case "Business": {
+                            if (f.getFreeBusinessSeats() >= passengersNumber && f2.getFreeBusinessSeats() >= passengersNumber)
                                 ok = true;
                             break;
                         }
@@ -178,8 +178,8 @@ public class FlightService {
                             ok = true;
                         break;
                     }
-                    case "Buissness": {
-                        if (f.getFreeBuissnessSeats() >= passengersNumber)
+                    case "Business": {
+                        if (f.getFreeBusinessSeats() >= passengersNumber)
                             ok = true;
                         break;
                     }

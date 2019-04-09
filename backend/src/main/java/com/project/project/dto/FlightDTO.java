@@ -1,5 +1,6 @@
 package com.project.project.dto;
 
+import com.project.project.model.Destination;
 import com.project.project.model.Flight;
 
 import javax.validation.constraints.NotNull;
@@ -10,13 +11,13 @@ import java.util.Set;
 public class FlightDTO {
     private Long id;
     @NotNull
-    private String airlineCompany;
+    private AirlineCompanyDTO airlineCompany;
     @NotNull
     private AirplaneDTO airplane;
     @NotNull
-    private String startDestination;
+    private Destination startDestination;
     @NotNull
-    private String finalDestination;
+    private Destination finalDestination;
     @NotNull
     private String departureDate;
     @NotNull
@@ -35,7 +36,7 @@ public class FlightDTO {
     @Positive
     private double ticketPriceFirst;
     @Positive
-    private double ticketPriceBuissness;
+    private double ticketPriceBusiness;
     @Positive
     private double ticketPriceEconomy;
 
@@ -44,12 +45,12 @@ public class FlightDTO {
 
     public FlightDTO(@NotNull Flight flight) {
         this.id = flight.getId();
-;        this.airlineCompany = flight.getAirlineCompany().getId().toString();
+        this.airlineCompany = new AirlineCompanyDTO(flight.getAirlineCompany());
         this.airplane = new AirplaneDTO();
         this.airplane.setId(flight.getAirplane().getId());
         this.airplane.setModel(flight.getAirplane().getModel());
-        this.startDestination = flight.getStartDestination().getName();
-        this.finalDestination = flight.getFinalDestination().getName();
+        this.startDestination = flight.getStartDestination();
+        this.finalDestination = flight.getFinalDestination();
         this.departureDate = flight.getDepartureDate();
         this.departureTime = flight.getDepartureTime();
         this.landingDate = flight.getLandingDate();
@@ -59,7 +60,7 @@ public class FlightDTO {
         this.distance = flight.getDistance();
         this.transferDestinations = flight.getTransferDestinations();
         this.ticketPriceFirst = flight.getTicketPriceFirst();
-        this.ticketPriceBuissness = flight.getTicketPriceBuisness();
+        this.ticketPriceBusiness = flight.getTicketPriceBusiness();
         this.ticketPriceEconomy = flight.getTicketPriceEconomy();
     }
 
@@ -71,11 +72,11 @@ public class FlightDTO {
         this.id = id;
     }
 
-    public String getAirlineCompany() {
+    public AirlineCompanyDTO getAirlineCompany() {
         return airlineCompany;
     }
 
-    public void setAirlineCompany(String airlineCompany) {
+    public void setAirlineCompany(AirlineCompanyDTO airlineCompany) {
         this.airlineCompany = airlineCompany;
     }
 
@@ -87,19 +88,19 @@ public class FlightDTO {
         this.airplane = airplane;
     }
 
-    public String getStartDestination() {
+    public Destination getStartDestination() {
         return startDestination;
     }
 
-    public void setStartDestination(String startDestination) {
+    public void setStartDestination(Destination startDestination) {
         this.startDestination = startDestination;
     }
 
-    public String getFinalDestination() {
+    public Destination getFinalDestination() {
         return finalDestination;
     }
 
-    public void setFinalDestination(String finalDestination) {
+    public void setFinalDestination(Destination finalDestination) {
         this.finalDestination = finalDestination;
     }
 
@@ -175,12 +176,12 @@ public class FlightDTO {
         this.ticketPriceFirst = ticketPriceFirst;
     }
 
-    public double getTicketPriceBuissness() {
-        return ticketPriceBuissness;
+    public double getTicketPriceBusiness() {
+        return ticketPriceBusiness;
     }
 
-    public void setTicketPriceBuissness(double ticketPriceBuissness) {
-        this.ticketPriceBuissness = ticketPriceBuissness;
+    public void setTicketPriceBusiness(double ticketPriceBusiness) {
+        this.ticketPriceBusiness = ticketPriceBusiness;
     }
 
     public double getTicketPriceEconomy() {

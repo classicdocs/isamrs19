@@ -63,11 +63,11 @@
 
 <script>
 
-import AirlineCompanyInfo from "@/components/AirlineCompanyInfo.vue";
-import AddFlightForm from "@/components/AddFlightForm.vue";
+import AirlineCompanyInfo from "@/components/AirlineCompany/AirlineCompanyInfo.vue";
+import AddFlightForm from "@/components/AirlineCompany/AddFlightForm.vue";
 import AirlineCompanyController from "@/controllers/airline-company.controller";
 import AirlineCompany from "@/models/AirlineCompany";
-import EditAirlineCompanyForm from "@/components/EditAirlineCompanyForm.vue";
+import EditAirlineCompanyForm from "@/components/AirlineCompany/EditAirlineCompanyForm.vue";
 
 export default {
   name: "AirlineCompany",

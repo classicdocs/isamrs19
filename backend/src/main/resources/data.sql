@@ -13,16 +13,16 @@ insert into airline_company_destinations(airline_company_id, destinations ) valu
 insert into airline_company_destinations(airline_company_id, destinations ) values (1, "London");
 
 --avion
-insert into airplane(id, model, seats_first_rows, seats_first_cols, seats_buissness_rows, seats_buissness_cols, seats_economy_rows, seats_economy_cols)
+insert into airplane(id, model, seats_first_rows, seats_first_cols, seats_business_rows, seats_business_cols, seats_economy_rows, seats_economy_cols)
  values (1, 'Boing747',1,2,1,2,1,2);
 
 --lista aviona u aviokompaniji
 insert into airline_company_airplanes(airline_company_id, airplanes_id) values (1,1);
 
 --let
-INSERT INTO flight (id,departure_date,departure_time,distance,flight_time_hours, flight_time_minutes,landing_date,landing_time,airline_company_id,final_destination_id,start_destination_id, airplane_id, ticket_price_first, ticket_price_buissness, ticket_price_economy)
+INSERT INTO flight (id,departure_date,departure_time,distance,flight_time_hours, flight_time_minutes,landing_date,landing_time,airline_company_id,final_destination_id,start_destination_id, airplane_id, ticket_price_first, ticket_price_business, ticket_price_economy)
  VALUES (3,'2019-03-16','11:02',100,3,50,'2019-03-20','11:11',1,2,3,1,500,400,300);
-INSERT INTO flight (id,departure_date,departure_time,distance,flight_time_hours, flight_time_minutes,landing_date,landing_time,airline_company_id,final_destination_id,start_destination_id, airplane_id, ticket_price_first, ticket_price_buissness, ticket_price_economy)
+INSERT INTO flight (id,departure_date,departure_time,distance,flight_time_hours, flight_time_minutes,landing_date,landing_time,airline_company_id,final_destination_id,start_destination_id, airplane_id, ticket_price_first, ticket_price_business, ticket_price_economy)
  VALUES (2,'2019-03-16','15:02',100,2,0,'2019-07-20','11:11',1,3,2,1,500,400,300);
 
 --lista letova u aviokompaniji
@@ -47,8 +47,8 @@ insert into flight_seats_first(flight_id, seats_first_id)  values (3,1);
 insert into flight_seats_first(flight_id, seats_first_id)  values (3,2);
 insert into flight_seats_economy(flight_id, seats_economy_id)  values (3,3);
 insert into flight_seats_economy(flight_id, seats_economy_id)  values (3,4);
-insert into flight_seats_buissness(flight_id, seats_buissness_id)  values (3,5);
-insert into flight_seats_buissness(flight_id, seats_buissness_id)  values (3,6);
+insert into flight_seats_business(flight_id, seats_business_id)  values (3,5);
+insert into flight_seats_business(flight_id, seats_business_id)  values (3,6);
 
 --sedista
 insert into seat(id, col_num, row_num, taken) values (7, 1, 1, FALSE);
@@ -64,8 +64,8 @@ insert into flight_seats_first(flight_id, seats_first_id)  values (2,7);
 insert into flight_seats_first(flight_id, seats_first_id)  values (2,8);
 insert into flight_seats_economy(flight_id, seats_economy_id)  values (2,9);
 insert into flight_seats_economy(flight_id, seats_economy_id)  values (2,10);
-insert into flight_seats_buissness(flight_id, seats_buissness_id)  values (2,11);
-insert into flight_seats_buissness(flight_id, seats_buissness_id)  values (2,12);
+insert into flight_seats_business(flight_id, seats_business_id)  values (2,11);
+insert into flight_seats_business(flight_id, seats_business_id)  values (2,12);
 
 
 ------------------------------------------------------------------------------------------------------------------------

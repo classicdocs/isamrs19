@@ -1,8 +1,10 @@
 package com.project.project.controller;
 
+import com.project.project.dto.AirlineCompanyDTO;
 import com.project.project.dto.AirplaneDTO;
 import com.project.project.dto.FlightDTO;
 import com.project.project.exceptions.AirlineCompanyNotFound;
+import com.project.project.model.Destination;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,13 +37,32 @@ public class FlightControllerTest {
     @Test()
     public void createSuccess() {
         FlightDTO f = new FlightDTO();
-        f.setAirlineCompany("1");
+        AirlineCompanyDTO ac = new AirlineCompanyDTO();
+        ac.setId(Integer.toUnsignedLong(1));
+        ac.setName("AirSerbia");
+        f.setAirlineCompany(ac);
         AirplaneDTO a = new AirplaneDTO();
         a.setId(Integer.toUnsignedLong(1));
         a.setModel("Boing 747");
         f.setAirplane(a);
-        f.setStartDestination("Belgrade");
-        f.setFinalDestination("London");
+
+        Destination d1 = new Destination();
+        d1.setId(Integer.toUnsignedLong(2));
+        d1.setCountry("Srbija");
+        d1.setName("Belgrade");
+        d1.setAirport("Nikola Tesla");
+        d1.setZip("BGD");
+
+        Destination d2 = new Destination();
+        d2.setId(Integer.toUnsignedLong(3));
+        d2.setCountry("Velika britanija");
+        d2.setName("London");
+        d2.setAirport("london");
+        d2.setZip("LON");
+
+
+        f.setStartDestination(d1);
+        f.setFinalDestination(d2);
         f.setDepartureDate("2019-04-22");
         f.setDepartureTime("11:10");
         f.setLandingDate("2019-04-23");
@@ -50,7 +71,7 @@ public class FlightControllerTest {
         f.setFlightTimeMinutes(0);
         f.setDistance(250);
         f.setTicketPriceFirst(400);
-        f.setTicketPriceBuissness(300);
+        f.setTicketPriceBusiness(300);
         f.setTicketPriceEconomy(200);
 
         ResponseEntity<FlightDTO> response = client.exchange(
@@ -67,13 +88,31 @@ public class FlightControllerTest {
     @Test()
     public void createFailAirlineCompanyNotFound() {
         FlightDTO f = new FlightDTO();
-        f.setAirlineCompany("-1");
+        AirlineCompanyDTO ac = new AirlineCompanyDTO();
+        ac.setId(Integer.toUnsignedLong(-1));
+        ac.setName("AirSerbia");
+        f.setAirlineCompany(ac);
         AirplaneDTO a = new AirplaneDTO();
         a.setId(Integer.toUnsignedLong(1));
         a.setModel("Boing 747");
         f.setAirplane(a);
-        f.setStartDestination("Belgrade");
-        f.setFinalDestination("London");
+        Destination d1 = new Destination();
+        d1.setId(Integer.toUnsignedLong(2));
+        d1.setCountry("Srbija");
+        d1.setName("Belgrade");
+        d1.setAirport("Nikola Tesla");
+        d1.setZip("BGD");
+
+        Destination d2 = new Destination();
+        d2.setId(Integer.toUnsignedLong(3));
+        d2.setCountry("Velika britanija");
+        d2.setName("London");
+        d2.setAirport("london");
+        d2.setZip("LON");
+
+
+        f.setStartDestination(d1);
+        f.setFinalDestination(d2);
         f.setDepartureDate("2019-04-22");
         f.setDepartureTime("11:10");
         f.setLandingDate("2019-04-23");
@@ -82,7 +121,7 @@ public class FlightControllerTest {
         f.setFlightTimeMinutes(0);
         f.setDistance(250);
         f.setTicketPriceFirst(400);
-        f.setTicketPriceBuissness(300);
+        f.setTicketPriceBusiness(300);
         f.setTicketPriceEconomy(200);
 
         ResponseEntity<String> response = client.exchange(
@@ -98,13 +137,31 @@ public class FlightControllerTest {
     @Test()
     public void createFailDestinationNotFound() {
         FlightDTO f = new FlightDTO();
-        f.setAirlineCompany("1");
+        AirlineCompanyDTO ac = new AirlineCompanyDTO();
+        ac.setId(Integer.toUnsignedLong(1));
+        ac.setName("AirSerbia");
+        f.setAirlineCompany(ac);
         AirplaneDTO a = new AirplaneDTO();
         a.setId(Integer.toUnsignedLong(1));
         a.setModel("Boing 747");
         f.setAirplane(a);
-        f.setStartDestination("Belgradeddd");
-        f.setFinalDestination("London");
+        Destination d1 = new Destination();
+        d1.setId(Integer.toUnsignedLong(2));
+        d1.setCountry("Srbija");
+        d1.setName("Belgradedfsfds");
+        d1.setAirport("Nikola Tesla");
+        d1.setZip("BGD");
+
+        Destination d2 = new Destination();
+        d2.setId(Integer.toUnsignedLong(3));
+        d2.setCountry("Velika britanija");
+        d2.setName("London");
+        d2.setAirport("london");
+        d2.setZip("LON");
+
+
+        f.setStartDestination(d1);
+        f.setFinalDestination(d2);
         f.setDepartureDate("2019-04-22");
         f.setDepartureTime("11:10");
         f.setLandingDate("2019-04-23");
@@ -113,7 +170,7 @@ public class FlightControllerTest {
         f.setFlightTimeMinutes(0);
         f.setDistance(250);
         f.setTicketPriceFirst(400);
-        f.setTicketPriceBuissness(300);
+        f.setTicketPriceBusiness(300);
         f.setTicketPriceEconomy(200);
 
         ResponseEntity<String> response = client.exchange(
@@ -129,13 +186,31 @@ public class FlightControllerTest {
     @Test()
     public void createFailDateException() {
         FlightDTO f = new FlightDTO();
-        f.setAirlineCompany("1");
+        AirlineCompanyDTO ac = new AirlineCompanyDTO();
+        ac.setId(Integer.toUnsignedLong(1));
+        ac.setName("AirSerbia");
+        f.setAirlineCompany(ac);
         AirplaneDTO a = new AirplaneDTO();
         a.setId(Integer.toUnsignedLong(1));
         a.setModel("Boing 747");
         f.setAirplane(a);
-        f.setStartDestination("Belgrade");
-        f.setFinalDestination("London");
+        Destination d1 = new Destination();
+        d1.setId(Integer.toUnsignedLong(2));
+        d1.setCountry("Srbija");
+        d1.setName("Belgrade");
+        d1.setAirport("Nikola Tesla");
+        d1.setZip("BGD");
+
+        Destination d2 = new Destination();
+        d2.setId(Integer.toUnsignedLong(3));
+        d2.setCountry("Velika britanija");
+        d2.setName("London");
+        d2.setAirport("london");
+        d2.setZip("LON");
+
+
+        f.setStartDestination(d1);
+        f.setFinalDestination(d2);
         f.setDepartureDate("2019-04-22");
         f.setDepartureTime("11:10");
         f.setLandingDate("2019-03-23");
@@ -144,7 +219,7 @@ public class FlightControllerTest {
         f.setFlightTimeMinutes(0);
         f.setDistance(250);
         f.setTicketPriceFirst(400);
-        f.setTicketPriceBuissness(300);
+        f.setTicketPriceBusiness(300);
         f.setTicketPriceEconomy(200);
 
         ResponseEntity<String> response = client.exchange(
@@ -160,13 +235,31 @@ public class FlightControllerTest {
     @Test()
     public void createFailTimeException() {
         FlightDTO f = new FlightDTO();
-        f.setAirlineCompany("1");
+        AirlineCompanyDTO ac = new AirlineCompanyDTO();
+        ac.setId(Integer.toUnsignedLong(1));
+        ac.setName("AirSerbia");
+        f.setAirlineCompany(ac);
         AirplaneDTO a = new AirplaneDTO();
         a.setId(Integer.toUnsignedLong(1));
         a.setModel("Boing 747");
         f.setAirplane(a);
-        f.setStartDestination("Belgrade");
-        f.setFinalDestination("London");
+        Destination d1 = new Destination();
+        d1.setId(Integer.toUnsignedLong(2));
+        d1.setCountry("Srbija");
+        d1.setName("Belgrade");
+        d1.setAirport("Nikola Tesla");
+        d1.setZip("BGD");
+
+        Destination d2 = new Destination();
+        d2.setId(Integer.toUnsignedLong(3));
+        d2.setCountry("Velika britanija");
+        d2.setName("London");
+        d2.setAirport("london");
+        d2.setZip("LON");
+
+
+        f.setStartDestination(d1);
+        f.setFinalDestination(d2);
         f.setDepartureDate("2019-04-22");
         f.setDepartureTime("11:10");
         f.setLandingDate("2019-04-22");
@@ -175,7 +268,7 @@ public class FlightControllerTest {
         f.setFlightTimeMinutes(0);
         f.setDistance(250);
         f.setTicketPriceFirst(400);
-        f.setTicketPriceBuissness(300);
+        f.setTicketPriceBusiness(300);
         f.setTicketPriceEconomy(200);
 
         ResponseEntity<String> response = client.exchange(
@@ -191,14 +284,32 @@ public class FlightControllerTest {
     @Test()
     public void createFailAirplaneException() {
         FlightDTO f = new FlightDTO();
-        f.setAirlineCompany("1");
+        AirlineCompanyDTO ac = new AirlineCompanyDTO();
+        ac.setId(Integer.toUnsignedLong(1));
+        ac.setName("AirSerbia");
+        f.setAirlineCompany(ac);
 
         AirplaneDTO a = new AirplaneDTO();
         a.setId(Integer.toUnsignedLong(1));
         a.setModel("Boing 747213");
         f.setAirplane(a);
-        f.setStartDestination("Belgrade");
-        f.setFinalDestination("London");
+        Destination d1 = new Destination();
+        d1.setId(Integer.toUnsignedLong(2));
+        d1.setCountry("Srbija");
+        d1.setName("Belgrade");
+        d1.setAirport("Nikola Tesla");
+        d1.setZip("BGD");
+
+        Destination d2 = new Destination();
+        d2.setId(Integer.toUnsignedLong(3));
+        d2.setCountry("Velika britanija");
+        d2.setName("London");
+        d2.setAirport("london");
+        d2.setZip("LON");
+
+
+        f.setStartDestination(d1);
+        f.setFinalDestination(d2);
         f.setDepartureDate("2019-04-22");
         f.setDepartureTime("11:10");
         f.setLandingDate("2019-04-22");
@@ -207,7 +318,7 @@ public class FlightControllerTest {
         f.setFlightTimeMinutes(0);
         f.setDistance(250);
         f.setTicketPriceFirst(400);
-        f.setTicketPriceBuissness(300);
+        f.setTicketPriceBusiness(300);
         f.setTicketPriceEconomy(200);
 
         ResponseEntity<String> response = client.exchange(

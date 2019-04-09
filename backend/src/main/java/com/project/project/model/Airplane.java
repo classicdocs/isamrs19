@@ -20,11 +20,11 @@ public class Airplane {
     @Column(name = "seats_first_cols" ,nullable = false)
     private int seatsFirstCols;
 
-    @Column(name = "seats_buissness_rows", nullable = false)
-    private int seatsBuissnessRows;
+    @Column(name = "seats_business_rows", nullable = false)
+    private int seatsBusinessRows;
 
-    @Column(name = "seats_buissness_cols", nullable = false)
-    private int seatsBuissnessCols;
+    @Column(name = "seats_business_cols", nullable = false)
+    private int seatsBusinessCols;
 
     @Column(name = "seats_economy_rows", nullable = false)
     private int seatsEconomyRows;
@@ -70,20 +70,20 @@ public class Airplane {
         this.seatsFirstCols = seatsFirstCols;
     }
 
-    public int getSeatsBuissnessRows() {
-        return seatsBuissnessRows;
+    public int getSeatsBusinessRows() {
+        return seatsBusinessRows;
     }
 
-    public void setSeatsBuissnessRows(int seatsBuissnessRows) {
-        this.seatsBuissnessRows = seatsBuissnessRows;
+    public void setSeatsBusinessRows(int seatsBusinessRows) {
+        this.seatsBusinessRows = seatsBusinessRows;
     }
 
-    public int getSeatsBuissnessCols() {
-        return seatsBuissnessCols;
+    public int getSeatsBusinessCols() {
+        return seatsBusinessCols;
     }
 
-    public void setSeatsBuissnessCols(int seatsBuissnessCols) {
-        this.seatsBuissnessCols = seatsBuissnessCols;
+    public void setSeatsBusinessCols(int seatsBusinessCols) {
+        this.seatsBusinessCols = seatsBusinessCols;
     }
 
     public int getSeatsEconomyRows() {

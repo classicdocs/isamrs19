@@ -13,7 +13,7 @@
           
           <v-select
             :items="destinations"
-            v-model="flight.startDestination"
+            v-model="flight.startDestination.name"
             label="Start destination"
             :rules="[v => !!v || 'Start destination is required']"
             required
@@ -21,7 +21,7 @@
           ></v-select>
           <v-select
             :items="destinations"
-            v-model="flight.finalDestination"
+            v-model="flight.finalDestination.name"
             label="Final destination"
             :rules="[v => !!v || 'Final destination is required']"
             required
@@ -176,8 +176,8 @@
               </v-flex>
               <v-flex xs4>
                 <v-text-field
-                  label="Buissness Class"
-                  v-model="flight.ticketPriceBuissness"
+                  label="businessClass"
+                  v-model="flight.ticketPriceBusiness"
                   required
                   :rules="rules.ticketPrice"
                   prepend-icon="euro_symbol"
@@ -280,9 +280,9 @@ export default {
     flight: new Flight(),
   }),
   created() {
-    this.flight.airlineCompany = this.$route.params.id;
+    this.flight.airlineCompany.id = this.$route.params.id;
 
-    AirlineCompanyController.getDestinations(this.flight.airlineCompany)
+    AirlineCompanyController.getDestinations(this.flight.airlineCompany.id)
       .then((response) => {
         response.data.forEach(element => {
           this.destinations.push(element);
@@ -292,7 +292,7 @@ export default {
         alert(error.response.data);
       })
 
-    AirlineCompanyController.getAirplanes(this.flight.airlineCompany)
+    AirlineCompanyController.getAirplanes(this.flight.airlineCompany.id)
       .then((response) => {
         response.data.forEach(element => {
           this.airplanes.push(element);
@@ -342,14 +342,14 @@ export default {
       this.$refs.form.resetValidation();
     },
     validateDestinations() {
-      if (this.flight.startDestination === this.flight.finalDestination)
+      if (this.flight.startDestination.name === this.flight.finalDestination.name)
         return false;
       
       let retVal = true;
 
       this.flight.transferDestinations.forEach(e => {
        
-        if(e === this.flight.startDestination || e === this.flight.finalDestination)
+        if(e === this.flight.startDestination.name || e === this.flight.finalDestination.name)
           retVal = false;
       });
 
