@@ -37,8 +37,11 @@ public class Flight {
     @Column(name = "landing_time", nullable = false)
     private String landingTime;
 
-    @Column(name = "flight_time", nullable = false)
-    private String flightTime;
+    @Column(name = "flight_time_hours", nullable = false)
+    private int flightTimeHours;
+
+    @Column(name = "flight_time_minutes", nullable = false)
+    private int flightTimeMinutes;
 
     @Column(name = "distance", nullable = false)
     private double distance;
@@ -48,8 +51,14 @@ public class Flight {
     @Column(name = "transfers")
     private Set<String> transferDestinations = new HashSet<>();
 
-    @Column(name = "ticket_price", nullable = false)
-    private double ticketPrice;
+    @Column(name = "ticket_price_first", nullable = false)
+    private double ticketPriceFirst;
+
+    @Column(name = "ticket_price_buissness", nullable = false)
+    private double ticketPriceBuisness;
+
+    @Column(name = "ticket_price_economy", nullable = false)
+    private double ticketPriceEconomy;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Seat> seatsFirst = new HashSet<Seat>();
@@ -163,12 +172,20 @@ public class Flight {
         this.landingTime = landingTime;
     }
 
-    public String getFlightTime() {
-        return flightTime;
+    public int getFlightTimeHours() {
+        return flightTimeHours;
     }
 
-    public void setFlightTime(String flightTime) {
-        this.flightTime = flightTime;
+    public void setFlightTimeHours(int flightTimeHours) {
+        this.flightTimeHours = flightTimeHours;
+    }
+
+    public int getFlightTimeMinutes() {
+        return flightTimeMinutes;
+    }
+
+    public void setFlightTimeMinutes(int flightTimeMinutes) {
+        this.flightTimeMinutes = flightTimeMinutes;
     }
 
     public double getDistance() {
@@ -187,12 +204,28 @@ public class Flight {
         this.transferDestinations = transferDestinations;
     }
 
-    public double getTicketPrice() {
-        return ticketPrice;
+    public double getTicketPriceFirst() {
+        return ticketPriceFirst;
     }
 
-    public void setTicketPrice(double ticketPrice) {
-        this.ticketPrice = ticketPrice;
+    public void setTicketPriceFirst(double ticketPriceFirst) {
+        this.ticketPriceFirst = ticketPriceFirst;
+    }
+
+    public double getTicketPriceBuisness() {
+        return ticketPriceBuisness;
+    }
+
+    public void setTicketPriceBuisness(double ticketPriceBuisness) {
+        this.ticketPriceBuisness = ticketPriceBuisness;
+    }
+
+    public double getTicketPriceEconomy() {
+        return ticketPriceEconomy;
+    }
+
+    public void setTicketPriceEconomy(double ticketPriceEconomy) {
+        this.ticketPriceEconomy = ticketPriceEconomy;
     }
 
     public Set<Seat> getSeatsFirst() {

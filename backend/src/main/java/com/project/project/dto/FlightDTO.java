@@ -25,16 +25,21 @@ public class FlightDTO {
     private String landingDate;
     @NotNull
     private String landingTime;
-    @NotNull
-    private String flightTime;
+    @Positive
+    private int flightTimeHours;
+    @Positive
+    private int flightTimeMinutes;
     @Positive
     private double distance;
-    private Set<String> transferDestinations = new HashSet<>();
+    private Set<String> transferDestinations;
     @Positive
-    private double ticketPrice;
+    private double ticketPriceFirst;
+    @Positive
+    private double ticketPriceBuissness;
+    @Positive
+    private double ticketPriceEconomy;
 
     public FlightDTO() {
-
     }
 
     public FlightDTO(@NotNull Flight flight) {
@@ -49,10 +54,13 @@ public class FlightDTO {
         this.departureTime = flight.getDepartureTime();
         this.landingDate = flight.getLandingDate();
         this.landingTime = flight.getLandingTime();
-        this.flightTime = flight.getFlightTime();
+        this.flightTimeHours = flight.getFlightTimeHours();
+        this.flightTimeMinutes = flight.getFlightTimeMinutes();
         this.distance = flight.getDistance();
         this.transferDestinations = flight.getTransferDestinations();
-        this.ticketPrice = flight.getTicketPrice();
+        this.ticketPriceFirst = flight.getTicketPriceFirst();
+        this.ticketPriceBuissness = flight.getTicketPriceBuisness();
+        this.ticketPriceEconomy = flight.getTicketPriceEconomy();
     }
 
     public Long getId() {
@@ -127,12 +135,20 @@ public class FlightDTO {
         this.landingTime = landingTime;
     }
 
-    public String getFlightTime() {
-        return flightTime;
+    public int getFlightTimeHours() {
+        return flightTimeHours;
     }
 
-    public void setFlightTime(String flightTime) {
-        this.flightTime = flightTime;
+    public void setFlightTimeHours(int flightTimeHours) {
+        this.flightTimeHours = flightTimeHours;
+    }
+
+    public int getFlightTimeMinutes() {
+        return flightTimeMinutes;
+    }
+
+    public void setFlightTimeMinutes(int flightTimeMinutes) {
+        this.flightTimeMinutes = flightTimeMinutes;
     }
 
     public double getDistance() {
@@ -151,11 +167,27 @@ public class FlightDTO {
         this.transferDestinations = transferDestinations;
     }
 
-    public double getTicketPrice() {
-        return ticketPrice;
+    public double getTicketPriceFirst() {
+        return ticketPriceFirst;
     }
 
-    public void setTicketPrice(double ticketPrice) {
-        this.ticketPrice = ticketPrice;
+    public void setTicketPriceFirst(double ticketPriceFirst) {
+        this.ticketPriceFirst = ticketPriceFirst;
+    }
+
+    public double getTicketPriceBuissness() {
+        return ticketPriceBuissness;
+    }
+
+    public void setTicketPriceBuissness(double ticketPriceBuissness) {
+        this.ticketPriceBuissness = ticketPriceBuissness;
+    }
+
+    public double getTicketPriceEconomy() {
+        return ticketPriceEconomy;
+    }
+
+    public void setTicketPriceEconomy(double ticketPriceEconomy) {
+        this.ticketPriceEconomy = ticketPriceEconomy;
     }
 }

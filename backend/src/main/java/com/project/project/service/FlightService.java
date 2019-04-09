@@ -48,7 +48,7 @@ public class FlightService {
 
         AirlineCompany airlineCompany = airlineCompanyService.findOneById(Long.parseLong(flightDTO.getAirlineCompany()));
 
-        HashSet<String> transfers = new HashSet<String>();
+        HashSet<String> transfers = new HashSet<String>(flightDTO.getTransferDestinations());
 
         Airplane airplane = null;
         for (Airplane a: airlineCompany.getAirplanes()) {
@@ -75,11 +75,14 @@ public class FlightService {
         flight.setDepartureTime(flightDTO.getDepartureTime());
         flight.setDistance(flightDTO.getDistance());
         flight.setFinalDestination(finalDestination);
-        flight.setFlightTime(flightDTO.getFlightTime());
+        flight.setFlightTimeHours(flightDTO.getFlightTimeHours());
+        flight.setFlightTimeMinutes(flightDTO.getFlightTimeMinutes());
         flight.setLandingDate(flightDTO.getLandingDate());
         flight.setLandingTime(flightDTO.getLandingTime());
         flight.setStartDestination(startDestination);
-        flight.setTicketPrice(flightDTO.getTicketPrice());
+        flight.setTicketPriceFirst(flightDTO.getTicketPriceFirst());
+        flight.setTicketPriceBuisness(flightDTO.getTicketPriceBuissness());
+        flight.setTicketPriceEconomy(flightDTO.getTicketPriceEconomy());
         flight.setTransferDestinations(transfers);
 
         for (int i = 0; i < flight.getAirplane().getSeatsFirstRows(); i++) {

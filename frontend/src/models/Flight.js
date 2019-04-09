@@ -5,13 +5,16 @@ export default class Flight {
     this.airplane = null,
     this.startDestination = null,
     this.finalDestination = null,
-    this.transferDestination = [],
+    this.transferDestinations = [],
     this.departureDate = null,
     this.departureTime = null,
     this.landingDate = null,
     this.landingTime = null,
-    this.flightTime = null,
-    this.ticketPrice = null,
+    this.flightTimeHours = null,
+    this.flightTimeMinutes = null;
+    this.ticketPriceFirst = null,
+    this.ticketPriceBuissness = null,
+    this.ticketPriceEconomy = null,
     this.distance = null
   }
 
@@ -19,13 +22,16 @@ export default class Flight {
     this.startDestination = null;
     this.airplane = null,
     this.finalDestination = null;
-    this.transferDestination = [];
+    this.transferDestinations = [];
     this.departureDate = null,
     this.departureTime = null,
     this.landingDate = null,
     this.landingTime = null,
-    this.flightTime = null,
-    this.ticketPrice = null;
+    this.flightTimeHours = null,
+    this.flightTimeMinutes = null;
+    this.ticketPriceFirst = null,
+    this.ticketPriceBuissness = null,
+    this.ticketPriceEconomy = null,
     this.distance = null;
   }
 }
