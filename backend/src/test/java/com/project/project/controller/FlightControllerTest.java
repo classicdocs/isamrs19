@@ -46,9 +46,12 @@ public class FlightControllerTest {
         f.setDepartureTime("11:10");
         f.setLandingDate("2019-04-23");
         f.setLandingTime("10:45");
-        f.setFlightTime("05:05");
+        f.setFlightTimeHours(5);
+        f.setFlightTimeMinutes(0);
         f.setDistance(250);
-        f.setTicketPrice(400);
+        f.setTicketPriceFirst(400);
+        f.setTicketPriceBuissness(300);
+        f.setTicketPriceEconomy(200);
 
         ResponseEntity<FlightDTO> response = client.exchange(
                 "/api/flights",
@@ -75,9 +78,12 @@ public class FlightControllerTest {
         f.setDepartureTime("11:10");
         f.setLandingDate("2019-04-23");
         f.setLandingTime("10:45");
-        f.setFlightTime("05:05");
+        f.setFlightTimeHours(5);
+        f.setFlightTimeMinutes(0);
         f.setDistance(250);
-        f.setTicketPrice(1000);
+        f.setTicketPriceFirst(400);
+        f.setTicketPriceBuissness(300);
+        f.setTicketPriceEconomy(200);
 
         ResponseEntity<String> response = client.exchange(
                 "/api/flights",
@@ -103,9 +109,12 @@ public class FlightControllerTest {
         f.setDepartureTime("11:10");
         f.setLandingDate("2019-04-23");
         f.setLandingTime("10:45");
-        f.setFlightTime("05:05");
+        f.setFlightTimeHours(5);
+        f.setFlightTimeMinutes(0);
         f.setDistance(250);
-        f.setTicketPrice(1000);
+        f.setTicketPriceFirst(400);
+        f.setTicketPriceBuissness(300);
+        f.setTicketPriceEconomy(200);
 
         ResponseEntity<String> response = client.exchange(
                 "/api/flights",
@@ -131,9 +140,12 @@ public class FlightControllerTest {
         f.setDepartureTime("11:10");
         f.setLandingDate("2019-03-23");
         f.setLandingTime("10:45");
-        f.setFlightTime("05:05");
+        f.setFlightTimeHours(5);
+        f.setFlightTimeMinutes(0);
         f.setDistance(250);
-        f.setTicketPrice(400);
+        f.setTicketPriceFirst(400);
+        f.setTicketPriceBuissness(300);
+        f.setTicketPriceEconomy(200);
 
         ResponseEntity<String> response = client.exchange(
                 "/api/flights",
@@ -159,9 +171,12 @@ public class FlightControllerTest {
         f.setDepartureTime("11:10");
         f.setLandingDate("2019-04-22");
         f.setLandingTime("10:45");
-        f.setFlightTime("05:05");
+        f.setFlightTimeHours(5);
+        f.setFlightTimeMinutes(0);
         f.setDistance(250);
-        f.setTicketPrice(400);
+        f.setTicketPriceFirst(400);
+        f.setTicketPriceBuissness(300);
+        f.setTicketPriceEconomy(200);
 
         ResponseEntity<String> response = client.exchange(
                 "/api/flights",
@@ -188,9 +203,12 @@ public class FlightControllerTest {
         f.setDepartureTime("11:10");
         f.setLandingDate("2019-04-22");
         f.setLandingTime("12:45");
-        f.setFlightTime("05:05");
+        f.setFlightTimeHours(5);
+        f.setFlightTimeMinutes(0);
         f.setDistance(250);
-        f.setTicketPrice(400);
+        f.setTicketPriceFirst(400);
+        f.setTicketPriceBuissness(300);
+        f.setTicketPriceEconomy(200);
 
         ResponseEntity<String> response = client.exchange(
                 "/api/flights",

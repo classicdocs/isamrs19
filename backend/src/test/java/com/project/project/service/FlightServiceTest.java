@@ -48,9 +48,12 @@ public class FlightServiceTest {
         f.setDepartureTime("11:10");
         f.setLandingDate("2018-04-23");
         f.setLandingTime("10:45");
-        f.setFlightTime("05:05");
+        f.setFlightTimeHours(5);
+        f.setFlightTimeMinutes(0);
         f.setDistance(250);
-        f.setTicketPrice(1000);
+        f.setTicketPriceFirst(400);
+        f.setTicketPriceBuissness(300);
+        f.setTicketPriceEconomy(200);
 
 
         int size = flightRepository.findAll().size();
@@ -73,9 +76,12 @@ public class FlightServiceTest {
         f.setDepartureTime("11:10");
         f.setLandingDate("2018-03-23");
         f.setLandingTime("10:45");
-        f.setFlightTime("05:05");
+        f.setFlightTimeHours(5);
+        f.setFlightTimeMinutes(0);
         f.setDistance(250);
-        f.setTicketPrice(1000);
+        f.setTicketPriceFirst(400);
+        f.setTicketPriceBuissness(300);
+        f.setTicketPriceEconomy(200);
 
 
         int size = flightRepository.findAll().size();
@@ -96,9 +102,12 @@ public class FlightServiceTest {
         f.setDepartureTime("11:10");
         f.setLandingDate("2018-04-22");
         f.setLandingTime("10:45");
-        f.setFlightTime("05:05");
+        f.setFlightTimeHours(5);
+        f.setFlightTimeMinutes(0);
         f.setDistance(250);
-        f.setTicketPrice(1000);
+        f.setTicketPriceFirst(400);
+        f.setTicketPriceBuissness(300);
+        f.setTicketPriceEconomy(200);
 
 
         int size = flightRepository.findAll().size();
@@ -119,9 +128,12 @@ public class FlightServiceTest {
         f.setDepartureTime("11:10");
         f.setLandingDate("2018-04-22");
         f.setLandingTime("10:45");
-        f.setFlightTime("05:05");
+        f.setFlightTimeHours(5);
+        f.setFlightTimeMinutes(0);
         f.setDistance(250);
-        f.setTicketPrice(1000);
+        f.setTicketPriceFirst(400);
+        f.setTicketPriceBuissness(300);
+        f.setTicketPriceEconomy(200);
 
         int size = flightRepository.findAll().size();
         FlightDTO flightDTO = flightService.save(f);
