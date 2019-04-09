@@ -142,17 +142,17 @@ public class FlightService {
                 for (Flight f2 : returnFlights) {
                     boolean ok = false;
                     switch (seatClass) {
-                        case "first": {
+                        case "First": {
                             if (f.getFreeFirstSeats() >= passengersNumber && f2.getFreeFirstSeats() >= passengersNumber)
                                 ok = true;
                             break;
                         }
-                        case "buissness": {
+                        case "Buissness": {
                             if (f.getFreeBuissnessSeats() >= passengersNumber && f2.getFreeBuissnessSeats() >= passengersNumber)
                                 ok = true;
                             break;
                         }
-                        case "economy": {
+                        case "Economy": {
                             if (f.getFreeEconomySeats() >= passengersNumber && f2.getFreeEconomySeats() >= passengersNumber)
                                 ok = true;
                             break;
@@ -170,17 +170,17 @@ public class FlightService {
             for (Flight f: departureFlights) {
                 boolean ok = false;
                 switch (seatClass) {
-                    case "first": {
+                    case "First": {
                         if (f.getFreeFirstSeats() >= passengersNumber)
                             ok = true;
                         break;
                     }
-                    case "buissness": {
+                    case "Buissness": {
                         if (f.getFreeBuissnessSeats() >= passengersNumber)
                             ok = true;
                         break;
                     }
-                    case "economy": {
+                    case "Economy": {
                         if (f.getFreeEconomySeats() >= passengersNumber)
                             ok = true;
                         break;

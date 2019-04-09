@@ -156,7 +156,7 @@ public class FlightServiceTest {
         String finalDestination = "London";
         String departureDate = "2019-03-16";
         Optional<String> returnDate = Optional.of("2019-03-16");
-        String seatClass = "first";
+        String seatClass = "First";
         int passengersNumber = 1;
 
         Set<SearchFlightDTO> result = flightService.search(startDestination,finalDestination,departureDate,returnDate,seatClass,passengersNumber);
@@ -170,7 +170,7 @@ public class FlightServiceTest {
         String finalDestination = "London";
         String departureDate = "2019-03-16";
         Optional<String> returnDate = Optional.empty();
-        String seatClass = "first";
+        String seatClass = "First";
         int passengersNumber = 1;
 
         Set<SearchFlightDTO> result = flightService.search(startDestination,finalDestination,departureDate,returnDate, seatClass,passengersNumber);
@@ -184,7 +184,7 @@ public class FlightServiceTest {
         String finalDestination = "Tokyo";
         String departureDate = "2018-04-22";
         Optional<String> returnDate = Optional.empty();
-        String seatClass = "first";
+        String seatClass = "First";
         int passengersNumber = 0;
 
         Set<SearchFlightDTO> flights = flightService.search(startDestination,finalDestination, departureDate, returnDate,seatClass, passengersNumber);

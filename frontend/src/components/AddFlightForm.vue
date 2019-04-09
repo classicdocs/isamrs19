@@ -282,15 +282,15 @@ export default {
         alert(error.response.data);
       })
 
-      AirlineCompanyController.getAirplanes(this.flight.airlineCompany)
-        .then((response) => {
-          response.data.forEach(element => {
-            this.airplanes.push(element);
-          })
+    AirlineCompanyController.getAirplanes(this.flight.airlineCompany)
+      .then((response) => {
+        response.data.forEach(element => {
+          this.airplanes.push(element);
         })
-        .catch((error) => {
-          alert(error.response.data);
-        })
+      })
+      .catch((error) => {
+        alert(error.response.data);
+      })
   },
   computed: {
     getAirplanes() {
