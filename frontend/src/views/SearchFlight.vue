@@ -11,7 +11,7 @@
     </v-expansion-panel>
     <v-container grid-list-xl>
       <v-layout row wrap >
-        <v-flex lg4 md4 sm6 xs12 v-if="zeroResult" >
+        <v-flex lg4 md4 sm6 xs12 v-if="searchResult.length !== 0" >
           <filter-form v-on:filter="filter($event)"></filter-form>
         </v-flex>
         <v-flex lg8 md8 sm6 xs12 v-if="filterResult.length !== 0">
@@ -66,70 +66,78 @@ export default {
       this.searchResult.forEach(flight => {
         let f1 = flight.departureFlight;
         let f2 = flight.returnFlight;
-        if (f2 === null) {
-          if (data.stops !== null) {
-            switch(data.stops) {
-              case "Direct": {
-                if (f1.transferDestinations.length !== 0) {
-                  return;
-                }
-                break;
-              }
-              case "1": {
-                if (f1.transferDestinations.length !== 1) 
-                  return;
-                break;
-              }
-              case "2+": {
-                if (f1.transferDestinations.length < 2) 
-                  return;
-                break;
-              }
-            }
-          }
-          console.log("CENAA");
-          let minPrice = data.priceSlider.range[0];
-          let maxPrice = data.priceSlider.range[1];
-          console.log(minPrice);
-          console.log(maxPrice);
-          console.log(f1.ticketPriceFirst);
-          console.log(this.searchParams.seatClass);
-          switch(this.searchParams.seatClass) {
-            case "First": {
-              if (!(minPrice <= f1.ticketPriceFirst && f1.ticketPriceFirst <= maxPrice))
+        if (data.stops !== null) {
+
+          let transfers = f1.transferDestinations.length;
+          if (f2 !== null)
+            transfers += f2.transferDestinations.length;
+
+          switch(data.stops) {
+            case "Direct": {
+              if (transfers !== 0)
                 return;
               break;
             }
-            case "Business": {
-              if (!(minPrice <= f1.ticketPriceBusiness && f1.ticketPriceBusiness <= maxPrice))
+            case "1": {
+              if (transfers !== 1)
                 return;
               break;
             }
-            case "Economy": {
-              if (!(minPrice <= f1.ticketPriceEconomy && f1.ticketPriceEconomy <= maxPrice))
+            case "2+": {
+              if (transfers < 2) 
                 return;
               break;
             }
           }
-          let minTime = data.flightDurationSlider.range[0];
-          let maxTime = data.flightDurationSlider.range[1];
-          console.log(minTime);
-          console.log(maxTime);
-          console.log(f1.flightTimeHours);
-          console.log(!(minTime <= f1.flightTimeHours && f1.flightTimeHours <= maxTime));
-          if (!(minTime <= f1.flightTimeHours && f1.flightTimeHours <= maxTime))
-            return;
-          console.log("KRAJ");
-          let r = {
-            "departureFlight": f1,
-            "returnFlight": null,
-          }
-          result.push(r);
         }
+        console.log("transfer");
+        let minPrice = data.priceSlider.range[0];
+        let maxPrice = data.priceSlider.range[1];
+
         
+        switch(this.searchParams.seatClass) {
+          case "First": {
+            let price = f1.ticketPriceFirst;
+            if (f2 !== null)
+              price += f2.ticketPriceFirst;
+            if (!(minPrice <= price && price <= maxPrice))
+              return;
+            break;
+          }
+          case "Business": {
+            let price = f1.ticketPriceBusiness;
+            if (f2 !== null)
+              price += f2.ticketPriceBusiness;
+            if (!(minPrice <= price && price <= maxPrice))
+              return;
+            break;
+          }
+          case "Economy": {
+            let price = f1.ticketPriceEconomy;
+            if (f2 !== null)
+              price += f2.ticketPriceEconomy;
+            if (!(minPrice <= price && price <= maxPrice))
+              return;
+            break;
+          }
+        }
+        console.log("price");
+        let minTime = data.flightDurationSlider.range[0];
+        let maxTime = data.flightDurationSlider.range[1];
+        let time = f1.flightTimeHours;
+        if (f2 !== null)
+          time += f2.flightTimeHours;
+        if (!(minTime <= time && time <= maxTime))
+          return;
+
+        console.log("time");
+        let r = {
+          "departureFlight": f1,
+          "returnFlight":  f2 ? f2 : null,
+        }
+        result.push(r);
       });
       this.filterResult = result;
-      console.log(this.filterResult);
     }
   }
 }
