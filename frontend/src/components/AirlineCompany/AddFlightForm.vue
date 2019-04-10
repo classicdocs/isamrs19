@@ -13,17 +13,27 @@
           
           <v-select
             :items="destinations"
-            v-model="flight.startDestination"
+            v-model="flight.startDestination.name"
             label="Start destination"
             :rules="[v => !!v || 'Start destination is required']"
             required
+            prepend-icon="flight_takeoff"
           ></v-select>
           <v-select
             :items="destinations"
-            v-model="flight.finalDestination"
+            v-model="flight.finalDestination.name"
             label="Final destination"
             :rules="[v => !!v || 'Final destination is required']"
             required
+            prepend-icon="flight_land"
+          ></v-select>
+          <v-select
+            :items="getAirplanes"
+            v-model="flight.airplane"
+            label="Airplane"
+            :rules="[v => !!v || 'Airplane is required']"
+            required
+            prepend-icon="flight"
           ></v-select>
           <v-container fluid grid-list-xs>
             <v-layout wrap align-center>
@@ -155,59 +165,63 @@
                   ></v-time-picker>
                 </v-menu>
               </v-flex>
-              <v-flex xs6>
+              <v-flex xs4>
+                <v-text-field
+                  label="First class"
+                  v-model="flight.ticketPriceFirst"
+                  required
+                  :rules="rules.ticketPrice"
+                  prepend-icon="euro_symbol"
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs4>
+                <v-text-field
+                  label="businessClass"
+                  v-model="flight.ticketPriceBusiness"
+                  required
+                  :rules="rules.ticketPrice"
+                  prepend-icon="euro_symbol"
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs4>
+                <v-text-field
+                  label="Economy Class"
+                  v-model="flight.ticketPriceEconomy"
+                  required
+                  :rules="rules.ticketPrice"
+                  prepend-icon="euro_symbol"
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs4>
                 <v-text-field
                   label="Distance"
                   v-model="flight.distance"
                   :rules="rules.distance"
                   required
+                  prepend-icon="compare_arrows"
                 ></v-text-field>
               </v-flex>
-              <v-flex xs6>
+              <v-flex xs4>
                 <v-text-field
-                  label="Ticket price"
-                  v-model="flight.ticketPrice"
+                  label="Hour"
+                  v-model="flight.flightTimeHours"
                   required
-                  :rules="rules.ticketPrice"
+                  :rules="rules.time"
+                  prepend-icon="access_time"
                 ></v-text-field>
               </v-flex>
-              <v-flex xs6>
-                <v-menu
-                  ref="menuFlightTime"
-                  v-model="menuFlightTime"
-                  :close-on-content-click="false"
-                  :nudge-right="40"
-                  :return-value.sync="flight.flightTime"
-                  lazy
-                  transition="scale-transition"
-                  offset-y
-                  full-width
-                  max-width="290px"
-                  min-width="290px"
-                >
-                  <template v-slot:activator="{ on }">
-                    <v-text-field
-                      v-model="flight.flightTime"
-                      label="Flight time"
-                      prepend-icon="access_time"
-                      readonly
-                      required
-                      :rules= "[v => !!v || 'Flight time is required']"
-                      v-on="on"
-                    ></v-text-field>
-                  </template>
-                  <v-time-picker
-                    v-if="menuFlightTime"
-                    v-model="flight.flightTime"
-                    full-width
-                    format="24hr"
-                    @click:minute="$refs.menuFlightTime.save(flight.flightTime)"
-                  ></v-time-picker>
-                </v-menu>
+              <v-flex xs4>
+                <v-text-field
+                  label="Minuts"
+                  v-model="flight.flightTimeMinutes"
+                  required
+                  :rules="rules.time"
+                  prepend-icon="access_time"
+                ></v-text-field>
               </v-flex>
               <v-flex xs12>
                 <v-select
-                v-model="flight.transferDestination"
+                v-model="flight.transferDestinations"
                 :items="destinations"
                 label="Transfer destinations"
                 multiple
@@ -215,12 +229,15 @@
                 hint="You can select multiple destinations"
                 persistent-hint
               ></v-select>
+              <label>{{flight.transferDestinations}}</label>
               </v-flex>
             </v-layout>
           </v-container>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
+          <v-btn color="blue darken" flat @click="closeDialog">Close</v-btn> 
+          <v-btn @click="resetValidation">Reset Validation</v-btn>
           <v-btn @click="reset">Reset Form</v-btn>
           <v-btn :disabled="!form" color="success" @click="validate">Add new</v-btn>
         </v-card-actions>
@@ -253,29 +270,59 @@ export default {
                  v => /^[0-9]+$/.test(v) || "Distance must be a positive number"],
       ticketPrice: [v => !!v || 'Ticket price is required',
                  v => /^[0-9]+$/.test(v) || "Ticket price must be a positive number"],
+      time: [v => !!v || 'Time is required',
+                 v => /^[0-9]+$/.test(v) || "Time must be a positive number"],
 
     },
     destinations: [],
+    airplanes: [],
 
     flight: new Flight(),
   }),
   created() {
-    this.flight.airlineCompany = this.$route.params.id;
+    this.flight.airlineCompany.id = this.$route.params.id;
 
-    AirlineCompanyController.getDestinations(this.flight.airlineCompany)
+    AirlineCompanyController.getDestinations(this.flight.airlineCompany.id)
       .then((response) => {
         response.data.forEach(element => {
           this.destinations.push(element);
         });
       })
-      .catch((response) => {
-
+      .catch((error) => {
+        alert(error.response.data);
       })
+
+    AirlineCompanyController.getAirplanes(this.flight.airlineCompany.id)
+      .then((response) => {
+        response.data.forEach(element => {
+          this.airplanes.push(element);
+        })
+      })
+      .catch((error) => {
+        alert(error.response.data);
+      })
+  },
+  computed: {
+    getAirplanes() {
+      let result = []
+      this.airplanes.forEach(element => {
+        result.push("Id: " + element.id + ", Model: " + element.model);
+      }); 
+      return result;
+    }
   },
   methods: {
     validate() {
       if(this.$refs.form.validate()) {
         if (this.validateDestinations()) {
+          let airplane = this.flight.airplane;
+          let space1 = airplane.indexOf(" ");
+          let space2 = airplane.lastIndexOf(" ");
+          let comma = airplane.indexOf(",");
+          this.flight.airplane = {
+            'id': airplane.substring(space1 + 1, comma),
+            'model' : airplane.substr(space2 + 1, airplane.length)
+          }
           FlightsController.create(this.flight)
           .then((response) => {
             this.$emit("operation", {msg: "Flight successfully added", color: "success"})
@@ -291,19 +338,25 @@ export default {
     reset() {
       this.$refs.form.reset();
     },
+     resetValidation() {
+      this.$refs.form.resetValidation();
+    },
     validateDestinations() {
-      if (this.flight.startDestination === this.flight.finalDestination)
+      if (this.flight.startDestination.name === this.flight.finalDestination.name)
         return false;
       
       let retVal = true;
 
-      this.flight.transferDestination.forEach(e => {
+      this.flight.transferDestinations.forEach(e => {
        
-        if(e === this.flight.startDestination || e === this.flight.finalDestination)
+        if(e === this.flight.startDestination.name || e === this.flight.finalDestination.name)
           retVal = false;
       });
 
       return retVal;
+    },
+    closeDialog() {
+      this.$emit('closeDialog', false);
     }
   }
 };

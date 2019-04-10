@@ -1,13 +1,16 @@
 package com.project.project.service;
 
 import com.project.project.dto.AirlineCompanyDTO;
+import com.project.project.dto.AirplaneDTO;
 import com.project.project.exceptions.AirlineCompanyAlreadyExist;
 import com.project.project.exceptions.AirlineCompanyNotFound;
 import com.project.project.model.AirlineCompany;
+import com.project.project.model.Airplane;
 import com.project.project.repository.AirlineCompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -51,6 +54,23 @@ public class AirlineCompanyService {
         Optional<AirlineCompany> ac = airlineCompanyRepository.findOneById(id);
         if (ac.isPresent()) {
             return ac.get().getDestinations();
+        } else {
+            throw new AirlineCompanyNotFound(id);
+        }
+
+    }
+
+    public Set<AirplaneDTO> getAirplanes(Long id) throws AirlineCompanyNotFound {
+        Optional<AirlineCompany> ac = airlineCompanyRepository.findOneById(id);
+        if (ac.isPresent()) {
+            Set<AirplaneDTO> airplanes = new HashSet<AirplaneDTO>();
+            for (Airplane a : ac.get().getAirplanes()) {
+                AirplaneDTO airplaneDTO = new AirplaneDTO();
+                airplaneDTO.setId(a.getId());
+                airplaneDTO.setModel(a.getModel());
+                airplanes.add(airplaneDTO);
+            }
+            return airplanes;
         } else {
             throw new AirlineCompanyNotFound(id);
         }

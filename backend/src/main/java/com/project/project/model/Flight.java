@@ -1,6 +1,8 @@
 package com.project.project.model;
 
 
+import org.hibernate.action.internal.OrphanRemovalAction;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -8,16 +10,19 @@ import java.util.Set;
 @Entity
 public class Flight {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     private AirlineCompany airlineCompany;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Airplane airplane;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     private Destination startDestination;
 
-    @ManyToOne(fetch = FetchType.EAGER , cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Destination finalDestination;
 
     @Column(name = "departure_date", nullable = false)
@@ -32,8 +37,11 @@ public class Flight {
     @Column(name = "landing_time", nullable = false)
     private String landingTime;
 
-    @Column(name = "flight_time", nullable = false)
-    private String flightTime;
+    @Column(name = "flight_time_hours", nullable = false)
+    private int flightTimeHours;
+
+    @Column(name = "flight_time_minutes", nullable = false)
+    private int flightTimeMinutes;
 
     @Column(name = "distance", nullable = false)
     private double distance;
@@ -43,10 +51,53 @@ public class Flight {
     @Column(name = "transfers")
     private Set<String> transferDestinations = new HashSet<>();
 
-    @Column(name = "ticket_price", nullable = false)
-    private double ticketPrice;
+    @Column(name = "ticket_price_first", nullable = false)
+    private double ticketPriceFirst;
+
+    @Column(name = "ticket_price_business", nullable = false)
+    private double ticketPriceBusiness;
+
+    @Column(name = "ticket_price_economy", nullable = false)
+    private double ticketPriceEconomy;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Seat> seatsFirst = new HashSet<Seat>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Seat> seatsBusiness = new HashSet<Seat>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Seat> seatsEconomy = new HashSet<Seat>();
 
     public Flight() {
+    }
+
+    public int getFreeFirstSeats() {
+        int cnt = this.seatsFirst.size();
+        for (Seat s: this.seatsFirst) {
+            if (s.isTaken()) {
+                cnt--;
+            }
+        }
+        return cnt;
+    }
+    public int getFreeBusinessSeats() {
+        int cnt = this.seatsBusiness.size();
+        for (Seat s: this.seatsBusiness) {
+            if (s.isTaken()) {
+                cnt--;
+            }
+        }
+        return cnt;
+    }
+    public int getFreeEconomySeats() {
+        int cnt = this.seatsEconomy.size();
+        for (Seat s: this.seatsEconomy) {
+            if (s.isTaken()) {
+                cnt--;
+            }
+        }
+        return cnt;
     }
 
     public Long getId() {
@@ -63,6 +114,14 @@ public class Flight {
 
     public void setAirlineCompany(AirlineCompany airlineCompany) {
         this.airlineCompany = airlineCompany;
+    }
+
+    public Airplane getAirplane() {
+        return airplane;
+    }
+
+    public void setAirplane(Airplane airplane) {
+        this.airplane = airplane;
     }
 
     public Destination getStartDestination() {
@@ -113,12 +172,20 @@ public class Flight {
         this.landingTime = landingTime;
     }
 
-    public String getFlightTime() {
-        return flightTime;
+    public int getFlightTimeHours() {
+        return flightTimeHours;
     }
 
-    public void setFlightTime(String flightTime) {
-        this.flightTime = flightTime;
+    public void setFlightTimeHours(int flightTimeHours) {
+        this.flightTimeHours = flightTimeHours;
+    }
+
+    public int getFlightTimeMinutes() {
+        return flightTimeMinutes;
+    }
+
+    public void setFlightTimeMinutes(int flightTimeMinutes) {
+        this.flightTimeMinutes = flightTimeMinutes;
     }
 
     public double getDistance() {
@@ -137,12 +204,52 @@ public class Flight {
         this.transferDestinations = transferDestinations;
     }
 
-    public double getTicketPrice() {
-        return ticketPrice;
+    public double getTicketPriceFirst() {
+        return ticketPriceFirst;
     }
 
-    public void setTicketPrice(double ticketPrice) {
-        this.ticketPrice = ticketPrice;
+    public void setTicketPriceFirst(double ticketPriceFirst) {
+        this.ticketPriceFirst = ticketPriceFirst;
+    }
+
+    public double getTicketPriceBusiness() {
+        return ticketPriceBusiness;
+    }
+
+    public void setTicketPriceBusiness(double ticketPriceBuisness) {
+        this.ticketPriceBusiness = ticketPriceBuisness;
+    }
+
+    public double getTicketPriceEconomy() {
+        return ticketPriceEconomy;
+    }
+
+    public void setTicketPriceEconomy(double ticketPriceEconomy) {
+        this.ticketPriceEconomy = ticketPriceEconomy;
+    }
+
+    public Set<Seat> getSeatsFirst() {
+        return seatsFirst;
+    }
+
+    public void setSeatsFirst(Set<Seat> seatsFirst) {
+        this.seatsFirst = seatsFirst;
+    }
+
+    public Set<Seat> getSeatsBusiness() {
+        return seatsBusiness;
+    }
+
+    public void setSeatsBusiness(Set<Seat> seatsBusiness) {
+        this.seatsBusiness = seatsBusiness;
+    }
+
+    public Set<Seat> getSeatsEconomy() {
+        return seatsEconomy;
+    }
+
+    public void setSeatsEconomy(Set<Seat> seatsEconomy) {
+        this.seatsEconomy = seatsEconomy;
     }
 }
 
