@@ -164,7 +164,7 @@ export default {
           price += this.data.departureFlight.ticketPriceFirst;
           break;
         }
-        case "business": {
+        case "Business": {
           price += this.data.departureFlight.ticketPriceBusiness;
           break;
         }
@@ -179,7 +179,7 @@ export default {
             price += this.data.returnFlight.ticketPriceFirst;
             break;
           }
-          case "business": {
+          case "Business": {
             price += this.data.returnFlight.ticketPriceBusiness;
             break;
           }
