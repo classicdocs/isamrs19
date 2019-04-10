@@ -237,7 +237,7 @@ public class FlightServiceTest {
     }
 
     @Test
-    public void searchReturnSuccess() throws DestinationNotFound {
+    public void searchReturnSuccess() throws DestinationNotFound, ParseException {
         String startDestination = "Belgrade";
         String finalDestination = "London";
         String departureDate = "2019-03-16";
@@ -251,7 +251,7 @@ public class FlightServiceTest {
     }
 
     @Test
-    public void searchOneWaySuccess() throws DestinationNotFound {
+    public void searchOneWaySuccess() throws DestinationNotFound, ParseException {
         String startDestination = "Belgrade";
         String finalDestination = "London";
         String departureDate = "2019-03-16";
@@ -265,7 +265,7 @@ public class FlightServiceTest {
     }
 
     @Test
-    public void searchFail() throws DestinationNotFound {
+    public void searchFail() throws DestinationNotFound, ParseException {
         String startDestination = "Belgrade";
         String finalDestination = "Tokyo";
         String departureDate = "2018-04-22";
