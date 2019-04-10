@@ -29,9 +29,6 @@ public class VehicleService {
     public Vehicle save(VehicleDTO vehicleDTO){
         Vehicle vehicle = new Vehicle();
 
-        RentACar rentACar = rentACarService.findOneById(vehicleDTO.getRentACar());
-
-        vehicle.setRentACar(rentACar);
         vehicle.setName(vehicleDTO.getName());
         vehicle.setVehicleManufacturer(vehicleDTO.getVehicleManufacturer());
         vehicle.setVehicleModel(vehicleDTO.getVehicleModel());
@@ -41,6 +38,7 @@ public class VehicleService {
         vehicle.setPricePerDay(vehicleDTO.getPricePerDay());
         vehicle.setAverageRating(0);
 
-        return vehicleRepository.save(vehicle);
+        //return vehicleRepository.save(vehicle);
+        return vehicle;
     }
 }

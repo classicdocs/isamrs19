@@ -1,30 +1,25 @@
 <template>
     <div id="info">
-        <h2>Company profile </h2>
+        <v-card-text><h2> {{ rentacar.name }} </h2></v-card-text>
 
-        <p id="about">This text will be different for each company</p>
+        <v-card-text> {{ rentacar.address }} </v-card-text>
+        <v-card-text> {{ rentacar.promotionalDescription }} </v-card-text>
     </div>
 </template>
 
 <script>
 export default {
-    name: "RentACarInfo"
+    name: "RentACarInfo",
+    props: ["rentacar"],
+    data: () => ({
+        name:"",
+        address: "",
+        promotionalDescription: ""
+    })
 }
 </script>
 
 <style>
-
-#about {
-    padding-top: 2%;
-}
-
-#info {
-    padding-top: 3%;
-}
-
-h2 {
-    text-align: left;
-}
 
 </style>
 

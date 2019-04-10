@@ -36,7 +36,6 @@ public class VehicleDTO {
     }
 
     public VehicleDTO(Vehicle vehicle) {
-        this.rentACar = vehicle.getRentACar().getId();
         this.name = vehicle.getName();
         this.vehicleManufacturer = vehicle.getVehicleManufacturer();
         this.vehicleModel = vehicle.getVehicleModel();

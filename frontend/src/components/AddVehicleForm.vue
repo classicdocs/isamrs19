@@ -66,7 +66,7 @@
                   <number-input v-model="production" :min="1990" :max="2019" inline center controls></number-input>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                  <number-input v-model="price_per_day" :min="1" :max="200" inline center controls></number-input>
+                  <number-input v-model="price_per_day" :min="1" :max="1000" inline center controls></number-input>
               </v-flex>
               </v-layout>
           </v-container>
@@ -77,7 +77,7 @@
           <v-btn color="blue darken" flat @click="addVehicle = false">Close</v-btn>
           <v-btn :disabled="!valid" color="success" @click="validate">Add</v-btn>
           <v-btn color="error" @click="reset">Reset</v-btn>
-          </v-card-actions>
+          </v-card-actions>`
           </v-form>
       </v-card>
       </v-dialog>
@@ -101,6 +101,7 @@
 
 import Vehicle from "@/models/Vehicle";
 import VehicleController from "@/controllers/vehicle.controller";
+import RentACarController from "@/controllers/rentacar.controller.js"
 
 export default {
     name: "AddVehicleForm",
@@ -136,7 +137,8 @@ export default {
     }),
     created() {
         this.vehicle_list = [];
-        VehicleController.get().then((response) => {
+
+        RentACarController.getVehicles(this.$route.params.id).then((response) => {
         response.data.forEach(element => {
           this.vehicle_list.push(element);
         });

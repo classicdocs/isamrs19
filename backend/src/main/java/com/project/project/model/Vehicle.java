@@ -9,9 +9,6 @@ public class Vehicle {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private RentACar rentACar;
-
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -77,14 +74,6 @@ public class Vehicle {
 
     public void setVehicleType(String vehicleType) {
         this.vehicleType = vehicleType;
-    }
-
-    public RentACar getRentACar() {
-        return rentACar;
-    }
-
-    public void setRentACar(RentACar rentACar) {
-        this.rentACar = rentACar;
     }
 
     public int getNumberOfPassengers() {

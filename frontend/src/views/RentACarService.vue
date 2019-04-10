@@ -26,13 +26,13 @@
             </v-tab>
 
             <v-tab href="#tab-4">
-                Contact us
-                <v-icon>account_box</v-icon>
+                Edit
+                <i class="material-icons">border_color</i>
             </v-tab>
         
             <v-tab-item :value="'tab-1'" >
                 <v-card flat>
-                    <RentACarInfo></RentACarInfo>
+                    <RentACarInfo :rentacar="rentacar"></RentACarInfo>
                 </v-card>
             </v-tab-item>
 
@@ -50,10 +50,9 @@
 
             <v-tab-item :value="'tab-4'" >
                 <v-card flat>
-                <v-card-text>tab 3</v-card-text>
+                <EditRentacarForm @update-rentacar="updateRentacar"></EditRentacarForm>
                 </v-card>
             </v-tab-item>
-
             </v-tabs>
         </v-app>
         
@@ -65,11 +64,35 @@
 
 import RentACarInfo from "@/components/RentACarInfo.vue";
 import RentACarAdminOptions from "@/components/RentACarAdminOptions.vue";
+import RentACarController from "@/controllers/rentacar.controller.js"
+import RentACar from "@/models/RentACar.js"
+import EditRentacarForm from "@/components/EditRentacarForm.vue"
 
 export default {
     components: {
         RentACarInfo,
-        RentACarAdminOptions
+        RentACarAdminOptions,
+        EditRentacarForm
+    },
+    data: () => ({
+        id: null,
+        rentacar : new RentACar()
+    }),
+    created() {
+        this.getData();
+    },
+    methods: {
+        getData() {
+            this.id = this.$route.params.id;
+
+            RentACarController.get(this.id)
+                .then((response) => {
+                    this.rentacar = response.data;
+                })
+        },
+        updateRentacar(r){
+            this.rentacar = r;
+        }
     }
 }
 </script>
