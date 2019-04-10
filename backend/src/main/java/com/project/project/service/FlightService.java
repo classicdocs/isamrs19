@@ -150,7 +150,7 @@ public class FlightService {
                     Date dateDeparture = sdfDate.parse(f.getDepartureDate());
                     Date dateReturn = sdfDate.parse(f2.getDepartureDate());
                     Date departureTime = sdfTime.parse(f.getDepartureTime());
-                    Date returnTime = sdfDate.parse(f2.getDepartureTime());
+                    Date returnTime = sdfTime.parse(f2.getDepartureTime());
 
                     if (dateReturn.before(dateDeparture)) {
                         continue;

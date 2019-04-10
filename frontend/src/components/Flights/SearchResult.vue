@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container >
-      <v-layout row wrap>
+      <v-layout row wrap justify-end>
         <v-flex lg8 md8 sm8 xs8>
           <v-card class="card" >
             <v-card-text>
@@ -31,7 +31,7 @@
                         <v-container >
                           <v-layout row wrap>
                           <v-flex lg12 md12 sm12 xs12>
-                            <label>Flight time: {{data.departureFlight.flightTimeHours}}h {{data.departureFlight.flightTimeMinutes}}m</label>
+                            <label>Flight duration: {{data.departureFlight.flightTimeHours}}h {{data.departureFlight.flightTimeMinutes}}m</label>
                           </v-flex>
                           <v-flex lg12 md12 sm12 xs12 id="arrow">
                             <v-icon class="icon">arrow_right_alt</v-icon>
@@ -164,7 +164,7 @@ export default {
           price += this.data.departureFlight.ticketPriceFirst;
           break;
         }
-        case "business": {
+        case "Business": {
           price += this.data.departureFlight.ticketPriceBusiness;
           break;
         }
@@ -173,14 +173,13 @@ export default {
           break;
         }
       }
-
       if (this.data.returnFlight !== null) {
         switch(this.searchParams.seatClass) {
           case "First": {
             price += this.data.returnFlight.ticketPriceFirst;
             break;
           }
-          case "business": {
+          case "Business": {
             price += this.data.returnFlight.ticketPriceBusiness;
             break;
           }
