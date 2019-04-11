@@ -67,6 +67,22 @@ insert into flight_seats_economy(flight_id, seats_economy_id)  values (2,10);
 insert into flight_seats_business(flight_id, seats_business_id)  values (2,11);
 insert into flight_seats_business(flight_id, seats_business_id)  values (2,12);
 
+--hotelAdmin
+insert into hotel_admin(id,username,password) values (1,'Dragan','dzaja');
+insert into hotel_admin(id,username,password) values (2,'Dragoslav','seki');
+insert into hotel_admin(id,username,password) values (3,'Vladislav','pizon');
+
+--hotel
+insert into hotel(id,name,address,description) values (1,'Moskva','Srbija/Beograd/Bulevar 55','Visok hotel');
+insert into hotel(id,name,address,description) values (2,'Seraton','Srbija/Novi Sad/Futoski put 76','Skup hotel');
+insert into hotel(id,name,address,description) values (3,'Kasina','Srbija/Beograd/bb','Poznat hotel');
+insert into hotel(id,name,address,description) values (4,'Parisjen','Francuska/Pariz/Ajfelovog Tornja 45','Z v z');
+
+--hotel-hoteladmin
+insert into admins_hotels(admin_id,hotel_id) values (1,1);
+insert into admins_hotels(admin_id,hotel_id) values (1,2);
+insert into admins_hotels(admin_id,hotel_id) values (3,4);
+insert into admins_hotels(admin_id,hotel_id) values (2,3);
 
 ------------------------------------------------------------------------------------------------------------------------
 

@@ -18,8 +18,6 @@ public class HotelsOffer {
                             FivePersonNightStand,
                             AdditionalService}
 
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -41,7 +39,7 @@ public class HotelsOffer {
         this.hotel = hotel;
     }
 
-    public HotelsOffer() {    }
+    public HotelsOffer() {}
 
     public Long getId() {
         return id;

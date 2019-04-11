@@ -17,28 +17,23 @@ public class HotelService {
     @Autowired
     private HotelRepository hotelRepository;
 
-    public Hotel save(HotelDTO hotelDTO)  throws HotelNotFound{
+    public HotelDTO save(HotelDTO hotelDTO) throws HotelNotFound{
 
-        Hotel hotel = hotelRepository.findOneById(hotelDTO.getId());
+        Hotel h = new Hotel();
+        h.setAdmins(hotelDTO.getAdmins());
+        h.setAddress(hotelDTO.getAddress());
+        h.setDescription(hotelDTO.getDescription());
+        h.setName(hotelDTO.getName());
+        h.setPriceList(hotelDTO.getPriceList());
+        h.setRoomConfiguration(hotelDTO.getRoomConfiguration());
 
-        hotel.setId(hotelDTO.getId());
-        hotel.setRoomConfiguration(hotelDTO.getRoomConfiguration());
-        hotel.setPriceList(hotelDTO.getPriceList());
-        hotel.setName(hotelDTO.getName());
-        hotel.setDescription(hotelDTO.getDescription());
-        hotel.setAddress(hotelDTO.getAddress());
-        hotel.setAdmins(hotelDTO.getAdmins());
-
-        return hotelRepository.save(hotel);
+        h = hotelRepository.save(h);
+        return (new HotelDTO(h));
     }
 
     public List<Hotel> findAll() {
         return hotelRepository.findAll();
     }
-
-//    public void remove(Long Id) {
-//        hotelRepository.deleteById(Id);
-//    }
 
     public Hotel findOneByName(String name)  throws HotelNotFound {
         return hotelRepository.findOneByName(name);

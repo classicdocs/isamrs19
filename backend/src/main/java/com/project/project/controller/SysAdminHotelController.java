@@ -24,11 +24,11 @@ public class SysAdminHotelController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity createHotel(@RequestBody HotelDTO hotelDTO) {
+    public ResponseEntity createHotel(@RequestBody HotelDTO hotelDTO) throws HotelNotFound {
         try {
 
-            Hotel hotel = hotelService.save(hotelDTO);
-            return new ResponseEntity<HotelDTO>(new HotelDTO(hotel), HttpStatus.CREATED);
+            HotelDTO hotel = hotelService.save(hotelDTO);
+            return new ResponseEntity<HotelDTO>(hotel, HttpStatus.CREATED);
 
         } catch (HotelNotFound hotelNotFound) {
 
