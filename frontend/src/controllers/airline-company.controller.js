@@ -10,5 +10,9 @@ export default {
   },
   update(id, data) {
     return AirlineCompanyApiService.update(id, data);
+  },
+  getAirplanes(id) {
+    return AirlineCompanyApiService.getAirplanes(id);
   }
+
 };

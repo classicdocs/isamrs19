@@ -32,6 +32,7 @@
       
       <v-card-actions>
         <v-spacer></v-spacer>
+        <v-btn color="blue darken" flat @click="closeDialog">Close</v-btn> 
         <v-btn @click="resetValidation">Reset Validation</v-btn>
         <v-btn @click="reset">Reset Form</v-btn>
         <v-btn :disabled="!form || !changed" color="success" @click="validate">Update</v-btn>
@@ -74,6 +75,9 @@ export default {
     },
     resetValidation() {
       this.$refs.form.resetValidation();
+    },
+    closeDialog() {
+      this.$emit("closeDialog", false);
     }
   }
 
