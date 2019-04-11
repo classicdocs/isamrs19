@@ -7,6 +7,7 @@ import com.project.project.exceptions.AirlineCompanyNotFound;
 import com.project.project.model.AirlineCompany;
 import com.project.project.model.Airplane;
 import com.project.project.repository.AirlineCompanyRepository;
+import com.project.project.repository.AirplaneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,9 @@ public class AirlineCompanyService {
 
     @Autowired
     private AirlineCompanyRepository airlineCompanyRepository;
+
+    @Autowired
+    private AirplaneRepository airplaneRepository;
 
     public AirlineCompany findOneById(Long id) throws AirlineCompanyNotFound {
         return airlineCompanyRepository.findOneById(id).orElseThrow(() -> new AirlineCompanyNotFound(id));
@@ -74,6 +78,32 @@ public class AirlineCompanyService {
         } else {
             throw new AirlineCompanyNotFound(id);
         }
+
+    }
+
+    public AirplaneDTO addAirplane(Long airlineCompany, AirplaneDTO airplaneDTO) throws AirlineCompanyNotFound {
+
+        Optional<AirlineCompany> ac = airlineCompanyRepository.findOneById(airlineCompany);
+
+        if (ac.isPresent()) {
+            Airplane a = new Airplane();
+            a.setModel(airplaneDTO.getModel());
+            a.setSeatsFirstRows(airplaneDTO.getSeatsFirstRows());
+            a.setSeatsFirstCols(airplaneDTO.getSeatsFirstCols());
+            a.setSeatsBusinessRows(airplaneDTO.getSeatsBusinessRows());
+            a.setSeatsBusinessCols(airplaneDTO.getSeatsBusinessCols());
+            a.setSeatsEconomyRows(airplaneDTO.getSeatsEconomyRows());
+            a.setSeatsEconomyCols(airplaneDTO.getSeatsEconomyCols());
+
+            a = airplaneRepository.save(a);
+            ac.get().getAirplanes().add(a);
+            airlineCompanyRepository.save(ac.get());
+
+            return (new AirplaneDTO(a));
+        } else {
+            throw  new AirlineCompanyNotFound(airlineCompany);
+        }
+
 
     }
 }

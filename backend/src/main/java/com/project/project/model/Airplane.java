@@ -36,6 +36,7 @@ public class Airplane {
     private Set<Flight> flight;
 
     public Airplane() {
+        this.flight = new HashSet<>();
     }
 
     public Long getId() {

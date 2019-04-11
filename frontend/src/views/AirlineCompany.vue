@@ -1,45 +1,28 @@
 <template>
   <div>
-    <v-container grid-list-md text-xs-center>
+    <v-container >
       <v-layout row wrap>
-        <v-flex xs6>
+        <v-flex lg4 md6 sm6 xs12>
           <airline-company-info v-bind:airlineCompany="airlineCompany"/>
         </v-flex>
-        <v-flex xs6>
-          <v-btn 
-            color="primary"
-            @click="addFormDialog = true"
-          >Add flight</v-btn>
-          <v-dialog
-            v-model="addFormDialog"
-            max-width="500px"
-            persistent
-          >
-            <add-flight-form v-if="addFormDialog"
-              v-on:operation="closeAddForm($event)"
-              v-on:destination-error="showSnackbar($event)"
-              v-on:closeDialog="addFormDialog = $event"
-            ></add-flight-form>
-          </v-dialog>
-
-          <v-btn 
-            color="primary"
-            @click="editDialog = true"
-          >Edit information</v-btn>
-          <v-dialog
-            v-model="editDialog"
-            max-width="500px"
-            persistent
-          >
-            <edit-airline-company-form 
-              v-if="editDialog"
+        <v-flex lg8 md6 sm6 xs12>
+          <v-container>
+            <v-layout row wrap>
+              <add-flight-form 
+                v-on:snack="showSnackbar($event)"
+              ></add-flight-form>
+              <edit-airline-company-form 
+                v-bind:airlineCompany="airlineCompany"
+                v-on:info-update="infoUpdate($event)"
+                v-on:snack="showSnackbar($event)"
+              ></edit-airline-company-form>
+              <add-airplane-form 
               v-bind:airlineCompany="airlineCompany"
-              v-on:info-update="infoUpdate($event)"
-              v-on:update-error="updateError($event)"
-              v-on:closeDialog="editDialog = $event"
-            ></edit-airline-company-form>
-          </v-dialog>
-
+              v-on:snack="showSnackbar($event)"
+              ></add-airplane-form>
+            </v-layout>
+          </v-container>
+          
         </v-flex>
       </v-layout>
     </v-container>
@@ -68,6 +51,7 @@ import AddFlightForm from "@/components/AirlineCompany/AddFlightForm.vue";
 import AirlineCompanyController from "@/controllers/airline-company.controller";
 import AirlineCompany from "@/models/AirlineCompany";
 import EditAirlineCompanyForm from "@/components/AirlineCompany/EditAirlineCompanyForm.vue";
+import AddAirplaneForm from "@/components/AirlineCompany/AddAirplaneForm.vue";
 
 export default {
   name: "AirlineCompany",
@@ -75,11 +59,10 @@ export default {
     'airline-company-info': AirlineCompanyInfo,
     'add-flight-form':AddFlightForm,
     'edit-airline-company-form': EditAirlineCompanyForm,
+    'add-airplane-form': AddAirplaneForm,
   },
   data: () => ({
     id: null,
-    editDialog: false,
-    addFormDialog: false,
     snackbar: {
       show: false,
       color: "",
@@ -100,24 +83,19 @@ export default {
 
       AirlineCompanyController.get(this.id)
         .then((response) => {
+          console.log("1");
+          console.log(this.airlineCompany);
           this.airlineCompany = response.data;
+          console.log("2");
+          console.log(this.airlineCompany);
         })
         .catch(() => {
           console.log("redirect");
           // redirect
         });
     },
-    closeAddForm(obj) {
-      this.addFormDialog = false;
-      this.showSnackbar(obj);
-    },
     infoUpdate(obj) {
       this.airlineCompany = obj;
-      this.editDialog = false;
-      this.showSnackbar({color: "success", msg: "Successfully updated!"});
-    },
-    updateError(obj) {
-      this.showSnackbar(obj);
     },
     showSnackbar(obj) {
       this.snackbar.color = obj.color;

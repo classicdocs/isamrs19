@@ -1,5 +1,13 @@
 <template>
   <div>
+    <v-dialog
+      v-model="editDialog"
+      max-width="500px"
+      persistent
+    >
+    <template v-slot:activator="{ on }">
+      <v-btn color="primary" dark v-on="on" @click="getProp">Edit information</v-btn>
+    </template>
     <v-card>
       <v-form
         ref="form"
@@ -32,13 +40,14 @@
       
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue darken" flat @click="closeDialog">Close</v-btn> 
+        <v-btn color="blue darken" flat @click="editDialog = false">Close</v-btn> 
         <v-btn @click="resetValidation">Reset Validation</v-btn>
         <v-btn @click="reset">Reset Form</v-btn>
         <v-btn :disabled="!form || !changed" color="success" @click="validate">Update</v-btn>
       </v-card-actions>
       </v-form>
     </v-card>
+    </v-dialog>
   </div>    
 </template>
 
@@ -51,22 +60,31 @@ export default {
   name: "EditAirlineCompanyForm",
   props: ["airlineCompany"],
   data:() => ({
+    editDialog: false,
     form: true,
     changed: false,
     newAirlineCompany: new AirlineCompany(),
   }),
-  beforeMount() {
-    this.newAirlineCompany = JSON.parse(JSON.stringify(this.airlineCompany));
+  watch: {
+    editDialog (val) {
+      !val && this.reset();
+    }
   },
   methods: {
+    getProp() {
+      this.newAirlineCompany = JSON.parse(JSON.stringify(this.airlineCompany));
+    },
     validate() {
       if(this.$refs.form.validate()) {
         AirlineCompanyContoller.update(this.airlineCompany.id, this.newAirlineCompany)
           .then((response) => {
+            this.editDialog = false;
             this.$emit("info-update", response.data);
+            this.$emit('snack', {color: "success", msg: "Successfully updated!"});
           })
           .catch((error) => {
-            this.$emit("update-error", {color:"error", msg: error.response.data});
+            this.editDialog = false;
+            this.$emit("snack", {color:"error", msg: error.response.data});
           })
       }
     },
@@ -76,9 +94,6 @@ export default {
     resetValidation() {
       this.$refs.form.resetValidation();
     },
-    closeDialog() {
-      this.$emit("closeDialog", false);
-    }
   }
 
 };

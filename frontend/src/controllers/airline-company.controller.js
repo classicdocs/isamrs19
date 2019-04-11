@@ -13,6 +13,9 @@ export default {
   },
   getAirplanes(id) {
     return AirlineCompanyApiService.getAirplanes(id);
+  },
+  addAirplane(id, data) {
+    return AirlineCompanyApiService.addAirplane(id, data);
   }
 
 };

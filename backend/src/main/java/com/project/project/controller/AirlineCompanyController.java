@@ -90,4 +90,22 @@ public class AirlineCompanyController {
         }
     }
 
+    @PostMapping(
+            value = "/{id}/airplanes",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity addAirplane(@PathVariable("id") Long id, @RequestBody AirplaneDTO airplaneDTO) {
+
+        AirplaneDTO airplane = null;
+        try {
+            airplane = airlineCompanyService.addAirplane(id, airplaneDTO);
+            return new ResponseEntity<AirplaneDTO>(airplane, HttpStatus.OK);
+        } catch (AirlineCompanyNotFound airlineCompanyNotFound) {
+            airlineCompanyNotFound.printStackTrace();
+            return new ResponseEntity<String>(airlineCompanyNotFound.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
 }

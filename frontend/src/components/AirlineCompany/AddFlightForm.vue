@@ -1,5 +1,13 @@
 <template>
   <div>
+    <v-dialog
+      v-model="addFormDialog"
+      max-width="500px"
+      persistent
+    >
+    <template v-slot:activator="{ on }">
+      <v-btn color="primary" dark v-on="on">Add a flight</v-btn>
+    </template>
     <v-card>
       <v-form
         ref="form"
@@ -229,20 +237,20 @@
                 hint="You can select multiple destinations"
                 persistent-hint
               ></v-select>
-              <label>{{flight.transferDestinations}}</label>
               </v-flex>
             </v-layout>
           </v-container>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken" flat @click="closeDialog">Close</v-btn> 
+          <v-btn color="blue darken" flat @click="addFormDialog = false">Close</v-btn> 
           <v-btn @click="resetValidation">Reset Validation</v-btn>
           <v-btn @click="reset">Reset Form</v-btn>
           <v-btn :disabled="!form" color="success" @click="validate">Add new</v-btn>
         </v-card-actions>
       </v-form>
     </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -257,7 +265,7 @@ export default {
   name: "AddFlightForm",
   data: () => ({
     form: true,
-
+    addFormDialog: false,
     menuDepartureDate: false,
     menuLandingDate: false,
     menuDepartureTime: false,
@@ -311,27 +319,34 @@ export default {
       return result;
     }
   },
+  watch: {
+    addFormDialog (val) {
+      !val && this.reset();
+    }
+  },
   methods: {
     validate() {
       if(this.$refs.form.validate()) {
         if (this.validateDestinations()) {
           let airplane = this.flight.airplane;
           let space1 = airplane.indexOf(" ");
-          let space2 = airplane.lastIndexOf(" ");
+          let space2 = airplane.lastIndexOf(":");
           let comma = airplane.indexOf(",");
           this.flight.airplane = {
             'id': airplane.substring(space1 + 1, comma),
-            'model' : airplane.substr(space2 + 1, airplane.length)
+            'model' : airplane.substr(space2 + 2, airplane.length)
           }
           FlightsController.create(this.flight)
           .then((response) => {
-            this.$emit("operation", {msg: "Flight successfully added", color: "success"})
+            this.addFormDialog = false;
+            this.$emit("snack", {msg: "Flight successfully added", color: "success"})
           })
           .catch((error) => {
-            this.$emit("operation", {msg: error.response.data, color: "error"})
+            this.addFormDialog = false;
+            this.$emit("snack", {msg: error.response.data, color: "error"})
           })
         } else {
-          this.$emit("destination-error", {msg: "Start,final and transfer destinations can't be the same!", color: "error"})
+          this.$emit("snack", {msg: "Start,final and transfer destinations can't be the same!", color: "error"})
         }
       }
     },
@@ -355,9 +370,6 @@ export default {
 
       return retVal;
     },
-    closeDialog() {
-      this.$emit('closeDialog', false);
-    }
   }
 };
 </script>
