@@ -13,5 +13,8 @@ export default {
   },
   update(id, data) {
     return Axios.put(ENDPOINTS.AIRLINE_COMPANY + id, data);
+  },
+  getAirplanes(id) {
+    return Axios.get(ENDPOINTS.AIRLINE_COMPANY + id + "/airplanes");
   }
 };
