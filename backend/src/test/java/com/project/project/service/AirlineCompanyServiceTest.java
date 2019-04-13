@@ -1,10 +1,14 @@
 package com.project.project.service;
 
 import com.project.project.dto.AirlineCompanyDTO;
+import com.project.project.dto.AirplaneDTO;
 import com.project.project.exceptions.AirlineCompanyAlreadyExist;
 import com.project.project.exceptions.AirlineCompanyNotFound;
+import com.project.project.exceptions.AirplaneNotExist;
 import com.project.project.model.AirlineCompany;
+import com.project.project.model.Airplane;
 import com.project.project.repository.AirlineCompanyRepository;
+import com.project.project.repository.AirplaneRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +31,9 @@ public class AirlineCompanyServiceTest {
 
     @Autowired
     private AirlineCompanyRepository airlineCompanyRepository;
+
+    @Autowired
+    private AirplaneRepository airplaneRepository;
 
     @Before
     public void setUp() throws Exception {
@@ -114,5 +121,60 @@ public class AirlineCompanyServiceTest {
     @Test(expected = AirlineCompanyNotFound.class)
     public void getDestinationFail() throws AirlineCompanyNotFound {
         Set<String> destinations = airlineCompanyService.getDestinations(Integer.toUnsignedLong(10));
+    }
+
+    @Test
+    public void updateAirplaneSuccess() throws AirlineCompanyNotFound, AirplaneNotExist {
+        Long airlineCompany = Integer.toUnsignedLong(1);
+        Long airplaneId = Integer.toUnsignedLong(2);
+        String model = "A300";
+        AirplaneDTO airplaneDTO = new AirplaneDTO();
+        airplaneDTO.setModel(model);
+        airplaneDTO.setSeatsBusinessCols(2);
+        airplaneDTO.setSeatsBusinessRows(2);
+        airplaneDTO.setSeatsFirstCols(1);
+        airplaneDTO.setSeatsFirstRows(1);
+        airplaneDTO.setSeatsEconomyCols(3);
+        airplaneDTO.setSeatsEconomyRows(3);
+        airlineCompanyService.updateAirplane(airlineCompany,airplaneId, airplaneDTO);
+
+        Optional<Airplane> a = airplaneRepository.findById(airplaneId);
+        a.ifPresent(airplane -> assertEquals(airplane.getModel(), model));
+    }
+
+    @Test(expected = AirplaneNotExist.class)
+    public void updateAirplaneFailAirplaneNotExist() throws AirlineCompanyNotFound, AirplaneNotExist {
+        Long airlineCompany = Integer.toUnsignedLong(1);
+        Long airplaneId = Integer.toUnsignedLong(200);
+        String model = "A300";
+        AirplaneDTO airplaneDTO = new AirplaneDTO();
+        airplaneDTO.setModel(model);
+        airplaneDTO.setSeatsBusinessCols(2);
+        airplaneDTO.setSeatsBusinessRows(2);
+        airplaneDTO.setSeatsFirstCols(1);
+        airplaneDTO.setSeatsFirstRows(1);
+        airplaneDTO.setSeatsEconomyCols(3);
+        airplaneDTO.setSeatsEconomyRows(3);
+        airlineCompanyService.updateAirplane(airlineCompany,airplaneId, airplaneDTO);
+
+        Optional<Airplane> a = airplaneRepository.findById(airplaneId);
+    }
+
+    @Test(expected = AirlineCompanyNotFound.class)
+    public void updateAirplaneFailAirlineCompanyNotFound() throws AirlineCompanyNotFound, AirplaneNotExist {
+        Long airlineCompany = Integer.toUnsignedLong(10);
+        Long airplaneId = Integer.toUnsignedLong(2);
+        String model = "A300";
+        AirplaneDTO airplaneDTO = new AirplaneDTO();
+        airplaneDTO.setModel(model);
+        airplaneDTO.setSeatsBusinessCols(2);
+        airplaneDTO.setSeatsBusinessRows(2);
+        airplaneDTO.setSeatsFirstCols(1);
+        airplaneDTO.setSeatsFirstRows(1);
+        airplaneDTO.setSeatsEconomyCols(3);
+        airplaneDTO.setSeatsEconomyRows(3);
+        airlineCompanyService.updateAirplane(airlineCompany,airplaneId, airplaneDTO);
+
+        Optional<Airplane> a = airplaneRepository.findById(airplaneId);
     }
 }
