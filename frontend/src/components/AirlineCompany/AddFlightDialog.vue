@@ -262,7 +262,7 @@ import DestinationsController from "@/controllers/destinations.controller";
 import AirlineCompanyController from "@/controllers/airline-company.controller"
 
 export default {
-  name: "AddFlightForm",
+  name: "AddFlightDialog",
   data: () => ({
     form: true,
     addFormDialog: false,

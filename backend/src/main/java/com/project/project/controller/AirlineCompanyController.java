@@ -114,7 +114,9 @@ public class AirlineCompanyController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity updateAirplane(@PathVariable("id") Long airlineCompany ,@PathVariable("airplane_id") Long airplaneId, @RequestBody AirplaneDTO airplaneDTO) {
+    public ResponseEntity updateAirplane(@PathVariable("id") Long airlineCompany,
+                                         @PathVariable("airplane_id") Long airplaneId,
+                                         @RequestBody AirplaneDTO airplaneDTO) {
         AirplaneDTO airplaneDTO1 = null;
         try {
             airplaneDTO1 = airlineCompanyService.updateAirplane(airlineCompany, airplaneId, airplaneDTO);

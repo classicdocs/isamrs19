@@ -57,7 +57,7 @@ import AirlineCompany from "@/models/AirlineCompany";
 import AirlineCompanyContoller from "@/controllers/airline-company.controller";
 
 export default {
-  name: "EditAirlineCompanyForm",
+  name: "EditAirlineCompanyDialog",
   props: ["airlineCompany"],
   data:() => ({
     editDialog: false,

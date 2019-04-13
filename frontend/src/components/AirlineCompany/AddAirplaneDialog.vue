@@ -6,7 +6,7 @@
       persistent
     >
     <template v-slot:activator="{ on }">
-      <v-btn color="primary" dark v-on="on">Add airplane</v-btn>
+      <v-btn color="primary" dark v-on="on">Add an airplane</v-btn>
     </template>
     <v-card>
       <v-form
@@ -79,7 +79,7 @@ import Airplane from "@/models/Airplane";
 import AirlineCompanyContoller from "@/controllers/airline-company.controller";
 
 export default {
-  name: "AddAirplaneForm",
+  name: "AddAirplaneDialog",
   props: ['airlineCompany'],
   data:() => ({
     dialog: false,
@@ -96,7 +96,6 @@ export default {
   },
   methods: {
     validate() {
-      console.log(this.$refs.form);
       if(this.$refs.form.validate()) {
         AirlineCompanyContoller.addAirplane(this.airlineCompany.id, this.airplane)
           .then((response) => {

@@ -8,18 +8,21 @@
         <v-flex lg8 md6 sm6 xs12>
           <v-container>
             <v-layout row wrap>
-              <add-flight-form 
+              <add-flight-dialog 
                 v-on:snack="showSnackbar($event)"
-              ></add-flight-form>
-              <edit-airline-company-form 
+              ></add-flight-dialog>
+              <edit-airline-company-dialog 
                 v-bind:airlineCompany="airlineCompany"
                 v-on:info-update="infoUpdate($event)"
                 v-on:snack="showSnackbar($event)"
-              ></edit-airline-company-form>
-              <add-airplane-form 
-              v-bind:airlineCompany="airlineCompany"
-              v-on:snack="showSnackbar($event)"
-              ></add-airplane-form>
+              ></edit-airline-company-dialog>
+              <add-airplane-dialog 
+                v-bind:airlineCompany="airlineCompany"
+                v-on:snack="showSnackbar($event)"
+              ></add-airplane-dialog>
+              <manage-seats-dialog
+                v-on:snack="showSnackbar($event)"
+              ></manage-seats-dialog>
             </v-layout>
           </v-container>
           
@@ -47,20 +50,22 @@
 <script>
 
 import AirlineCompanyInfo from "@/components/AirlineCompany/AirlineCompanyInfo.vue";
-import AddFlightForm from "@/components/AirlineCompany/AddFlightForm.vue";
+import AddFlightDialog from "@/components/AirlineCompany/AddFlightDialog.vue";
 import AirlineCompanyController from "@/controllers/airline-company.controller";
 import AirlineCompany from "@/models/AirlineCompany";
-import EditAirlineCompanyForm from "@/components/AirlineCompany/EditAirlineCompanyForm.vue";
-import AddAirplaneForm from "@/components/AirlineCompany/AddAirplaneForm.vue";
+import EditAirlineCompanyDialog from "@/components/AirlineCompany/EditAirlineCompanyDialog.vue";
+import AddAirplaneDialog from "@/components/AirlineCompany/AddAirplaneDialog.vue";
+import ManageSeatsDialog from "@/components/AirlineCompany/ManageSeatsDialog.vue";
 
 export default {
   name: "AirlineCompany",
   components: {
     'airline-company-info': AirlineCompanyInfo,
-    'add-flight-form':AddFlightForm,
-    'edit-airline-company-form': EditAirlineCompanyForm,
-    'add-airplane-form': AddAirplaneForm,
-  },
+    'add-flight-dialog':AddFlightDialog,
+    'edit-airline-company-dialog': EditAirlineCompanyDialog,
+    'add-airplane-dialog': AddAirplaneDialog,
+    'manage-seats-dialog': ManageSeatsDialog,
+},
   data: () => ({
     id: null,
     snackbar: {

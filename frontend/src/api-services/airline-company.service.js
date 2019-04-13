@@ -20,5 +20,8 @@ export default {
   },
   addAirplane(id, data) {
     return Axios.post(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.AIRPLANES, data)
+  },
+  updateAirplane(airlineCompany, airplane, data) {
+    return Axios.put(ENDPOINTS.AIRLINE_COMPANY + airlineCompany + ENDPOINTS.AIRPLANES + airplane, data);
   }
 };

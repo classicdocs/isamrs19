@@ -73,6 +73,12 @@ public class AirlineCompanyService {
                 AirplaneDTO airplaneDTO = new AirplaneDTO();
                 airplaneDTO.setId(a.getId());
                 airplaneDTO.setModel(a.getModel());
+                airplaneDTO.setSeatsFirstRows(a.getSeatsFirstRows());
+                airplaneDTO.setSeatsFirstCols(a.getSeatsFirstCols());
+                airplaneDTO.setSeatsBusinessRows(a.getSeatsBusinessRows());
+                airplaneDTO.setSeatsBusinessCols(a.getSeatsBusinessCols());
+                airplaneDTO.setSeatsEconomyRows(a.getSeatsEconomyRows());
+                airplaneDTO.setSeatsEconomyCols(a.getSeatsEconomyCols());
                 airplanes.add(airplaneDTO);
             }
             return airplanes;
