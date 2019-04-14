@@ -79,10 +79,9 @@ insert into hotel(id,name,address,description) values (3,'Kasina','Srbija/Beogra
 insert into hotel(id,name,address,description) values (4,'Parisjen','Francuska/Pariz/Ajfelovog Tornja 45','Z v z');
 
 --hotel-hoteladmin
-insert into admins_hotels(admin_id,hotel_id) values (1,1);
-insert into admins_hotels(admin_id,hotel_id) values (1,2);
-insert into admins_hotels(admin_id,hotel_id) values (3,4);
-insert into admins_hotels(admin_id,hotel_id) values (2,3);
+insert into hotel_admins(hotel_id,admins_id) values (1,1);
+insert into hotel_admins(hotel_id, admins_id) values (1,2);
+insert into hotel_admins(hotel_id, admins_id) values (4,3);
 
 ------------------------------------------------------------------------------------------------------------------------
 

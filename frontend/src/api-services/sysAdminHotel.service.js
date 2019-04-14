@@ -5,7 +5,10 @@ const ENDPOINTS = {
 };
 
 export default {
-  create(data) {
+  createHotel(data) {
     return Axios.post(ENDPOINTS.HOTELS, data);
+  },
+  get(){
+    return Axios.get(ENDPOINTS.HOTELS);
   }
 };

@@ -1,7 +1,10 @@
 import sysAdminHotelApiService from "@/api-services/sysAdminHotel.service";
 
 export default {
-  create(data) {
-    return sysAdminHotelApiService.create(data);
+  createHotel(data) {
+    return sysAdminHotelApiService.createHotel(data);
+  },
+  get(){
+    return sysAdminHotelApiService.get();
   }
 };

@@ -6,8 +6,8 @@ import java.util.Set;
 @Entity
 public class HotelAdmin {
 
-    @javax.persistence.Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "username", nullable = false)

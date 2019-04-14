@@ -7,7 +7,7 @@ import java.util.Set;
 @Entity
 public class Hotel {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name", nullable = false)
@@ -25,7 +25,7 @@ public class Hotel {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)   // to one - EAGER, to many - LAZY
     private Set<Room> roomConfiguration;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     private Set<HotelAdmin> admins;
     
     public Hotel(){}
