@@ -64,6 +64,10 @@ export default {
       this.addHotelDialog = false;
       this.addRentACarDialog = true;
     },
+    openAirlineCompanyDialog(){
+      this.addHotelDialog = false;
+      this.addRentACarDialog = false;
+    },
   }
 };
 </script>

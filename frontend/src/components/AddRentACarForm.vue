@@ -15,7 +15,7 @@
             :rules="[v => !!v || 'rent a car service name is required']">
             </v-text-field> 
 
-            <v-layout v-bind="binding">
+            <v-layout>
               <v-flex>
                 <v-text-field label="country" v-model="country"
                 :rules="[v => !!v || 'country name is required']">
@@ -59,14 +59,14 @@
 
 import RentACar from "@/models/RentACar";
 import RentACarAdmin from "@/models/RentACarAdmin";
-import sysAdminContoller from "@/controllers/sysAdmin.controller.js";
+import RentACarController from "@/controllers/sysAdminRAC.controller.js"
 
 export default {
   name: "AddRentACarForm",
 
   data: () => ({
     form: true,
-    coutry: "",
+    country: "",
     city: "",
     street : "",
     rentACar: new RentACar(),
@@ -83,11 +83,11 @@ export default {
         this.rentACar.branches = [];
 
         // create rentACarAdmin
-        this.rentACarAdmin.username = "admin";
+        this.rentACarAdmin.username = "admin_" + this.rentACar.name;
         this.rentACarAdmin.password = "admin";
         this.rentACarAdmin.rentACar = rentACar;
 
-        sysAdminContoller.create(this.rentACar)
+        RentACarController.create(this.rentACar)
           .then((response) => {
             this.$emit("finished", {msg: "RentACar successfully added", color: "success"})
             console.log("Uspeh");

@@ -6,7 +6,7 @@ import com.project.project.model.HotelAdmin;
 import javax.validation.constraints.NotNull;
 
 public class HotelAdminDTO {
-    private Long ID;
+    private Long id;
 
     @NotNull
     private String username;
@@ -18,7 +18,7 @@ public class HotelAdminDTO {
     private Hotel hotel;
 
     public HotelAdminDTO(HotelAdmin hotelAdmin) {
-        this.ID = hotelAdmin.getID();
+        this.id = hotelAdmin.getId();
         this.username = hotelAdmin.getUsername();
         this.password = hotelAdmin.getPassword();
         this.hotel = hotelAdmin.getHotel();
@@ -27,12 +27,12 @@ public class HotelAdminDTO {
     public HotelAdminDTO() {
     }
 
-    public Long getID() {
-        return ID;
+    public Long getId() {
+        return id;
     }
 
-    public void setID(Long ID) {
-        this.ID = ID;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {

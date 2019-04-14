@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 
 public class HotelDTO {
 
-	private Long ID;
+	private Long id;
 
 	@NotNull
     private String name;
@@ -35,7 +35,7 @@ public class HotelDTO {
     public HotelDTO(){}
 
 	public HotelDTO(Hotel hotel) {
-		this.ID = hotel.getId();
+		this.id = hotel.getId();
 		this.name = hotel.getName();
 		this.address = hotel.getAddress();
 		this.description = hotel.getDescription();
@@ -53,11 +53,11 @@ public class HotelDTO {
 	}
 
 	public Long getId() {
-		return this.ID;
+		return id;
 	}
 
 	public void setId(Long id) {
-		this.ID = id;
+		this.id = id;
 	}
 
 	public String getName() {

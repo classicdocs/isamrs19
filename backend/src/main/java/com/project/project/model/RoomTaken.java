@@ -8,8 +8,8 @@ import java.util.Set;
 @Entity
 public class RoomTaken {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long ID;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "startDate", nullable = false)
     private String startDate;
@@ -26,15 +26,15 @@ public class RoomTaken {
 	public RoomTaken() {
 	}
 
-	public long getId() {
-		return this.ID;
+	public Long getId() {
+		return id;
 	}
 
-	public void setId(long Id) {
-		this.ID = Id;
-    }
-    
-    public String getStartDate() {
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getStartDate() {
 		return this.startDate;
 	}
 

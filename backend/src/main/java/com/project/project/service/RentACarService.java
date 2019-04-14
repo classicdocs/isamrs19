@@ -40,4 +40,7 @@ public class RentACarService {
 
     //public RentACar findOne(String name) {return hotelRepository.findOne(name); }
 
+    public RentACar findOneById(Long id) {
+        return rentACarRepository.findOneById(id);
+    }
 }

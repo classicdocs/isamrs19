@@ -1,23 +1,38 @@
 package com.project.project.model;
 
+import org.hibernate.annotations.CollectionType;
+
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class AirlineCompany {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "address", nullable = false)
+    private String address;
+
     @Column(name = "description")
     private String description;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "airline_company_destinations", joinColumns = @JoinColumn(name = "airline_company_id"))
+    @Column(name = "destinations")
+    private Set<String> destinations = new HashSet<String>();
+
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Flight> flights;
+    private Set<Flight> flights;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<Airplane> airplanes;
 
     public AirlineCompany() {}
 
@@ -45,11 +60,35 @@ public class AirlineCompany {
         this.description = description;
     }
 
-    public List<Flight> getFlights() {
+    public Set<Flight> getFlights() {
         return flights;
     }
 
-    public void setFlights(List<Flight> flights) {
+    public void setFlights(Set<Flight> flights) {
         this.flights = flights;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Set<String> getDestinations() {
+        return destinations;
+    }
+
+    public void setDestinations(Set<String> destinations) {
+        this.destinations = destinations;
+    }
+
+    public Set<Airplane> getAirplanes() {
+        return airplanes;
+    }
+
+    public void setAirplanes(Set<Airplane> airplanes) {
+        this.airplanes = airplanes;
     }
 }

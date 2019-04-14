@@ -14,7 +14,7 @@
             :rules="[v => !!v || 'hotel name is required']">
             </v-text-field> 
 
-            <v-layout v-bind="binding">
+            <v-layout > <!--v-bind="binding"-->
               <v-flex>
                 <v-text-field label="country" v-model="country"
                 :rules="[v => !!v || 'country name is required']">
@@ -33,18 +33,19 @@
 
             <v-textarea name="promotionalDescription" label="promotional description" 
               v-model="hotel.description" 
-              hint="Say something good about hotel services and prices" box>
+              hint="Say something good about hotel services and prices..." box>
             </v-textarea>
-<!-- 
-            <v-checkbox label="create default hotel administrator - (admin : admin)"
+ 
+            <v-checkbox label="create default hotel administrator"
              :rules="[v => !!v || 'you need to have admin for every hotel.']" class="check">
-            </v-checkbox>   -->
-
-            <v-select :items="admins" v-model="hotel.admins"
+            </v-checkbox>   
+<!--
+            <v-select :items="admins" v-model="hotelAdminUsername"
             label="Available hotel administrators"  item-value="last"
             :rules="[v => !!v || 'Hotel administrator is required']">
             persistent-hint = true
             </v-select>
+-->
 
           </v-container>
 
@@ -65,7 +66,8 @@
 
 import Hotel from "@/models/Hotel";
 import HotelAdmin from "@/models/HotelAdmin"
-import sysAdminContoller from "@/controllers/sysAdmin.controller.js";
+import HotelAdminController from "@/controllers/hotelAdmin.controller.js"
+import SysHotelControler from "@/controllers/sysAdminHotel.controller"
 import { thisExpression } from '@babel/types';
 
 export default {
@@ -77,14 +79,21 @@ export default {
     city : "",
     street : "",
 
-
     hotel: new Hotel(),
-    hotelAdmin: new HotelAdmin(),
+    //hotelAdminUsername: "",
+    hotelAdmin : new HotelAdmin(),
 
-    selectedDefault: ["check"],
-    admins : ["Default(admin:admin)","Admin1", "Admin2", "Admin3"],
+    admins : [],
+    loadedHotel : new Hotel(),
+    
   }),
   created() {
+      HotelAdminController.get()
+      .then((response) => {
+        response.data.forEach(element => {
+          this.admins.push(element);
+        });
+      })
   },
   methods: {
     validate() {
@@ -92,22 +101,31 @@ export default {
         this.hotel.address = this.country + '/' + this.city + '/' + this.street;
         this.hotel.priceList = [];
         this.hotel.roomConfiguration = [];
-        
-        //FIXME create hotelAdmin
-        this.hotelAdmin.username = "admin";
+
+        this.hotelAdmin.username = "admin_" + this.hotel.name;
         this.hotelAdmin.password = "admin";
         this.hotelAdmin.hotel = this.hotel;
 
-        sysAdminContoller.create(this.hotel)
-          .then((response) => {
+        //this.hotel.admins.push(this.hotelAdmin);
 
-            this.$emit("finished", {msg: "Hotel successfully added", color: "success"})
-            console.log("Uspeh");
+        HotelAdminController.createAdmin(this.hotelAdmin)
+        .then((response) => {
+            this.$emit("finished", {msg: "Hotel admin successfully added", color: "success"})
+            alert("Uspeh");
           })
           .catch((response) => {
-            this.$emit("finished", {msg: "Error! Something went wrong...", color: "error"})
-            console.log("Neuspeh");
+            alert("Neuspeh admina " + response);
           })
+
+        // SysHotelControler.createHotel(this.hotel)
+        //   .then((response) => {
+        //     this.$emit("finished", {msg: "Hotel successfully added", color: "success"})
+        //     alert("Uspeh");
+        //   })
+        //   .catch((response) => {
+        //     this.$emit("finished", {msg: "Error! Something went wrong...", color: "error"})
+        //     alert("Neuspeh  ");
+        //   })
       }
     },
     reset() {

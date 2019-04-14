@@ -1,11 +1,11 @@
 import Axios from 'axios';
 
 const ENDPOINTS = {
-  FLIGHTS: 'destinations/'
+  DESTINATIONS: 'destinations/'
 };
 
 export default {
   get() {
-    return Axios.get(ENDPOINTS.FLIGHTS);
+    return Axios.get(ENDPOINTS.DESTINATIONS);
   }
 };

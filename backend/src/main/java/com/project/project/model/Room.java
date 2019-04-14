@@ -7,8 +7,8 @@ import java.util.List;
 @Entity
 public class Room {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-	private Long ID;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	@Column(name = "roomNumber", nullable = false)
     private int roomNumber;
@@ -29,11 +29,11 @@ public class Room {
 	public Room(){}
 
 	public Long getId() {
-		return this.ID;
+		return id;
 	}
 
 	public void setId(Long id) {
-		this.ID = id;
+		this.id = id;
 	}
 
 	public int getRoomNumber() {
