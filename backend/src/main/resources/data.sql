@@ -28,3 +28,5 @@ insert into rentacar (id,name,address,promotional_description) values (2,'EcoCar
 insert into vehicle (id,name,vehicle_manufacturer,vehicle_model,vehicle_type,number_of_passengers,year_of_production,price_per_day,average_rating) values (99,'Test vehicle','Audi','A4','Sedan',4,2014,50,0);
 
 insert into rentacar_vehicles (rentacar_id, vehicles_id) values (1,99);
+
+insert into role (id,role) values (1,'User');

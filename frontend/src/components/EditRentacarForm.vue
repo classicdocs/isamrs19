@@ -46,7 +46,7 @@ export default {
         validEdit:true,
         promotionalDescription: "",
         service_name_rules: [
-        v => !!v || 'Name is required'
+            v => !!v || 'Name is required'
         ],
         service_address_rules: [
             v => !!v || 'Address is required'

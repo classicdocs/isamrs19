@@ -29,11 +29,7 @@ public class RentACarController {
     @GetMapping(value="/{id}/vehicles", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getVehicles(@PathVariable("id") Long id){
         Set<Vehicle> vehicles = rentACarService.getVehicles(id);
-        for (Vehicle v: vehicles) {
-            System.out.println(v.getName());
-        }
         return new ResponseEntity<Set<Vehicle>>(vehicles,HttpStatus.OK);
-
     }
 
     @PutMapping(value="/{id}",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
