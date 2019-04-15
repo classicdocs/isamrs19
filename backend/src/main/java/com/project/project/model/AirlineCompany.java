@@ -11,7 +11,7 @@ import java.util.Set;
 public class AirlineCompany {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name", nullable = false)
@@ -28,8 +28,11 @@ public class AirlineCompany {
     @Column(name = "destinations")
     private Set<String> destinations = new HashSet<String>();
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Flight> flights;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<Flight> flights;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<Airplane> airplanes;
 
     public AirlineCompany() {}
 
@@ -57,11 +60,11 @@ public class AirlineCompany {
         this.description = description;
     }
 
-    public List<Flight> getFlights() {
+    public Set<Flight> getFlights() {
         return flights;
     }
 
-    public void setFlights(List<Flight> flights) {
+    public void setFlights(Set<Flight> flights) {
         this.flights = flights;
     }
 
@@ -79,5 +82,13 @@ public class AirlineCompany {
 
     public void setDestinations(Set<String> destinations) {
         this.destinations = destinations;
+    }
+
+    public Set<Airplane> getAirplanes() {
+        return airplanes;
+    }
+
+    public void setAirplanes(Set<Airplane> airplanes) {
+        this.airplanes = airplanes;
     }
 }

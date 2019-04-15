@@ -13,10 +13,12 @@
           <v-dialog
             v-model="addFormDialog"
             max-width="500px"
+            persistent
           >
             <add-flight-form v-if="addFormDialog"
               v-on:operation="closeAddForm($event)"
               v-on:destination-error="showSnackbar($event)"
+              v-on:closeDialog="addFormDialog = $event"
             ></add-flight-form>
           </v-dialog>
 
@@ -27,12 +29,14 @@
           <v-dialog
             v-model="editDialog"
             max-width="500px"
+            persistent
           >
             <edit-airline-company-form 
               v-if="editDialog"
               v-bind:airlineCompany="airlineCompany"
               v-on:info-update="infoUpdate($event)"
               v-on:update-error="updateError($event)"
+              v-on:closeDialog="editDialog = $event"
             ></edit-airline-company-form>
           </v-dialog>
 
@@ -59,11 +63,11 @@
 
 <script>
 
-import AirlineCompanyInfo from "@/components/AirlineCompanyInfo.vue";
-import AddFlightForm from "@/components/AddFlightForm.vue";
+import AirlineCompanyInfo from "@/components/AirlineCompany/AirlineCompanyInfo.vue";
+import AddFlightForm from "@/components/AirlineCompany/AddFlightForm.vue";
 import AirlineCompanyController from "@/controllers/airline-company.controller";
 import AirlineCompany from "@/models/AirlineCompany";
-import EditAirlineCompanyForm from "@/components/EditAirlineCompanyForm.vue";
+import EditAirlineCompanyForm from "@/components/AirlineCompany/EditAirlineCompanyForm.vue";
 
 export default {
   name: "AirlineCompany",
@@ -96,9 +100,7 @@ export default {
 
       AirlineCompanyController.get(this.id)
         .then((response) => {
-          console.log(response);
           this.airlineCompany = response.data;
-          console.log(this.airlineCompany);
         })
         .catch(() => {
           console.log("redirect");

@@ -1,8 +1,8 @@
 package com.project.project.dto;
 
+import com.project.project.model.Destination;
 import com.project.project.model.Flight;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.HashSet;
@@ -11,11 +11,13 @@ import java.util.Set;
 public class FlightDTO {
     private Long id;
     @NotNull
-    private String airlineCompany;
+    private AirlineCompanyDTO airlineCompany;
     @NotNull
-    private String startDestination;
+    private AirplaneDTO airplane;
     @NotNull
-    private String finalDestination;
+    private Destination startDestination;
+    @NotNull
+    private Destination finalDestination;
     @NotNull
     private String departureDate;
     @NotNull
@@ -24,32 +26,42 @@ public class FlightDTO {
     private String landingDate;
     @NotNull
     private String landingTime;
-    @NotNull
-    private String flightTime;
+    @Positive
+    private int flightTimeHours;
+    @Positive
+    private int flightTimeMinutes;
     @Positive
     private double distance;
-
-    private Set<String> transferDestinations = new HashSet<>();
+    private Set<String> transferDestinations;
     @Positive
-    private double ticketPrice;
+    private double ticketPriceFirst;
+    @Positive
+    private double ticketPriceBusiness;
+    @Positive
+    private double ticketPriceEconomy;
 
     public FlightDTO() {
-
     }
 
-    public FlightDTO(Flight flight) {
+    public FlightDTO(@NotNull Flight flight) {
         this.id = flight.getId();
-        this.airlineCompany = flight.getAirlineCompany().getId().toString();
-        this.startDestination = flight.getStartDestination().getName();
-        this.finalDestination = flight.getFinalDestination().getName();
+        this.airlineCompany = new AirlineCompanyDTO(flight.getAirlineCompany());
+        this.airplane = new AirplaneDTO();
+        this.airplane.setId(flight.getAirplane().getId());
+        this.airplane.setModel(flight.getAirplane().getModel());
+        this.startDestination = flight.getStartDestination();
+        this.finalDestination = flight.getFinalDestination();
         this.departureDate = flight.getDepartureDate();
         this.departureTime = flight.getDepartureTime();
         this.landingDate = flight.getLandingDate();
         this.landingTime = flight.getLandingTime();
-        this.flightTime = flight.getFlightTime();
+        this.flightTimeHours = flight.getFlightTimeHours();
+        this.flightTimeMinutes = flight.getFlightTimeMinutes();
         this.distance = flight.getDistance();
         this.transferDestinations = flight.getTransferDestinations();
-        this.ticketPrice = flight.getTicketPrice();
+        this.ticketPriceFirst = flight.getTicketPriceFirst();
+        this.ticketPriceBusiness = flight.getTicketPriceBusiness();
+        this.ticketPriceEconomy = flight.getTicketPriceEconomy();
     }
 
     public Long getId() {
@@ -60,27 +72,35 @@ public class FlightDTO {
         this.id = id;
     }
 
-    public String getAirlineCompany() {
+    public AirlineCompanyDTO getAirlineCompany() {
         return airlineCompany;
     }
 
-    public void setAirlineCompany(String airlineCompany) {
+    public void setAirlineCompany(AirlineCompanyDTO airlineCompany) {
         this.airlineCompany = airlineCompany;
     }
 
-    public String getStartDestination() {
+    public AirplaneDTO getAirplane() {
+        return airplane;
+    }
+
+    public void setAirplane(AirplaneDTO airplane) {
+        this.airplane = airplane;
+    }
+
+    public Destination getStartDestination() {
         return startDestination;
     }
 
-    public void setStartDestination(String startDestination) {
+    public void setStartDestination(Destination startDestination) {
         this.startDestination = startDestination;
     }
 
-    public String getFinalDestination() {
+    public Destination getFinalDestination() {
         return finalDestination;
     }
 
-    public void setFinalDestination(String finalDestination) {
+    public void setFinalDestination(Destination finalDestination) {
         this.finalDestination = finalDestination;
     }
 
@@ -116,12 +136,20 @@ public class FlightDTO {
         this.landingTime = landingTime;
     }
 
-    public String getFlightTime() {
-        return flightTime;
+    public int getFlightTimeHours() {
+        return flightTimeHours;
     }
 
-    public void setFlightTime(String flightTime) {
-        this.flightTime = flightTime;
+    public void setFlightTimeHours(int flightTimeHours) {
+        this.flightTimeHours = flightTimeHours;
+    }
+
+    public int getFlightTimeMinutes() {
+        return flightTimeMinutes;
+    }
+
+    public void setFlightTimeMinutes(int flightTimeMinutes) {
+        this.flightTimeMinutes = flightTimeMinutes;
     }
 
     public double getDistance() {
@@ -140,11 +168,27 @@ public class FlightDTO {
         this.transferDestinations = transferDestinations;
     }
 
-    public double getTicketPrice() {
-        return ticketPrice;
+    public double getTicketPriceFirst() {
+        return ticketPriceFirst;
     }
 
-    public void setTicketPrice(double ticketPrice) {
-        this.ticketPrice = ticketPrice;
+    public void setTicketPriceFirst(double ticketPriceFirst) {
+        this.ticketPriceFirst = ticketPriceFirst;
+    }
+
+    public double getTicketPriceBusiness() {
+        return ticketPriceBusiness;
+    }
+
+    public void setTicketPriceBusiness(double ticketPriceBusiness) {
+        this.ticketPriceBusiness = ticketPriceBusiness;
+    }
+
+    public double getTicketPriceEconomy() {
+        return ticketPriceEconomy;
+    }
+
+    public void setTicketPriceEconomy(double ticketPriceEconomy) {
+        this.ticketPriceEconomy = ticketPriceEconomy;
     }
 }

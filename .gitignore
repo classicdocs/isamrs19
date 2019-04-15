@@ -109,4 +109,5 @@ docs/_book
 .idea/encodings.xml
 .idea/vcs.xml
 .idea/codeStyles/Project.xml
+.idea/kotlinc.xml
 target/
