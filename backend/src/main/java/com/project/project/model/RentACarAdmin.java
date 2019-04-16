@@ -5,9 +5,9 @@ import javax.persistence.*;
 @Entity
 public class RentACarAdmin {
 
-    @javax.persistence.Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long ID;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "username", nullable = false)
     private String username;
@@ -21,12 +21,12 @@ public class RentACarAdmin {
     public RentACarAdmin() {
     }
 
-    public Long getID() {
-        return ID;
+    public Long getId() {
+        return id;
     }
 
-    public void setID(Long ID) {
-        this.ID = ID;
+    public void setId(Long ID) {
+        this.id = ID;
     }
 
     public String getUsername() {

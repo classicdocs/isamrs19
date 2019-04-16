@@ -38,11 +38,13 @@
 <script>
 
 import AddHotelForm from "@/components/AddHotelForm.vue";
+import AddRentACarForm from "@/components/AddRentACarForm.vue";
 
 export default {
     name: "sys-admin",
     components: {
     'add-hotel-form': AddHotelForm,
+    'add-rentacar-form' : AddRentACarForm,
   },
   data: () => ({
     addHotelDialog: false,
@@ -63,13 +65,16 @@ export default {
       this.addHotelDialog = false;
     },
     openHotelDialog(){
+      this.addRentACarDialog = false;
       this.addHotelDialog = true;
     },
     openRentACarDialog(){
       this.addHotelDialog = false;
+      this.addRentACarDialog = true;
     },
     openAirlineCompanyDialog(){
       this.addHotelDialog = false;
+      this.addRentACarDialog = false;
     },
     showSnackbar(obj) {
 
