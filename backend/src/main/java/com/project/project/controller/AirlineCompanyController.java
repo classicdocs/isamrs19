@@ -6,6 +6,7 @@ import com.project.project.dto.AirplaneDTO;
 import com.project.project.dto.DestinationDTO;
 import com.project.project.exceptions.AirlineCompanyAlreadyExist;
 import com.project.project.exceptions.AirlineCompanyNotFound;
+import com.project.project.exceptions.AirplaneNotExist;
 import com.project.project.model.AirlineCompany;
 import com.project.project.model.Airplane;
 import com.project.project.service.AirlineCompanyService;
@@ -87,6 +88,42 @@ public class AirlineCompanyController {
         } catch (AirlineCompanyNotFound airlineCompanyNotFound) {
             airlineCompanyNotFound.printStackTrace();
             return new ResponseEntity<String>(airlineCompanyNotFound.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(
+            value = "/{id}/airplanes",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity addAirplane(@PathVariable("id") Long id, @RequestBody AirplaneDTO airplaneDTO) {
+
+        AirplaneDTO airplane = null;
+        try {
+            airplane = airlineCompanyService.addAirplane(id, airplaneDTO);
+            return new ResponseEntity<AirplaneDTO>(airplane, HttpStatus.OK);
+        } catch (AirlineCompanyNotFound airlineCompanyNotFound) {
+            airlineCompanyNotFound.printStackTrace();
+            return new ResponseEntity<String>(airlineCompanyNotFound.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+    @PutMapping(
+            value = "/{id}/airplanes/{airplane_id}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity updateAirplane(@PathVariable("id") Long airlineCompany,
+                                         @PathVariable("airplane_id") Long airplaneId,
+                                         @RequestBody AirplaneDTO airplaneDTO) {
+        AirplaneDTO airplaneDTO1 = null;
+        try {
+            airplaneDTO1 = airlineCompanyService.updateAirplane(airlineCompany, airplaneId, airplaneDTO);
+            return new ResponseEntity<AirplaneDTO>(airplaneDTO1, HttpStatus.OK);
+        } catch (AirplaneNotExist|AirlineCompanyNotFound e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
