@@ -34,6 +34,7 @@
 import SearchForm from "@/components/Flights/SearchForm.vue";
 import SearchResult from "@/components/Flights/SearchResult.vue";
 import FilterForm from "@/components/Flights/FilterForm.vue";
+import SearchParams from "@/models/SearchParams.js";
 
 export default {
   name: "SearchFlight",
@@ -47,17 +48,15 @@ export default {
     resultDialog: true,
     searchResult: [],
     filterResult: [],
-    searchParams: null,
+    searchParams: new SearchParams(),
     zeroResult: false,
   }),
   methods: {
     showSearchResult(data) {
       this.filterResult = data.data;
       this.searchResult = data.data;
-      this.searchParams = {
-        'seatClass': data.seatClass,
-        'passengersNumber': data.passengersNumber
-      }
+      this.searchParams.seatClass = data.seatClass;
+      this.searchParams.passengersNumber = data.passengersNumber;
       this.zeroResult = true;
     },
     filter(data) {

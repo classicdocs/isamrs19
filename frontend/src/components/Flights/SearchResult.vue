@@ -143,7 +143,7 @@
           </v-card>
         </v-flex>
         <v-flex lg2 md2 sm2 xs2>
-          <v-btn color="primary">{{getPrice * searchParams.passengersNumber}} EUR</v-btn>
+          <v-btn @click="goToReservationView" color="primary">{{getPrice * searchParams.passengersNumber}} EUR</v-btn>
         </v-flex>
       </v-layout>
     </v-container>
@@ -152,6 +152,8 @@
 
 <script>
 import Flight from "@/models/Flight.js";
+import FlightReservation from "@/models/FlightReservation.js";
+import store from '@/store';
 
 export default {
   name: 'SearchResult',
@@ -191,6 +193,17 @@ export default {
       }
 
       return price;
+    }
+  },
+  methods: {
+    goToReservationView() {
+      console.log("OPA");
+      let f = new FlightReservation();
+      f.flights = this.data;
+      f.searchParams = this.searchParams;
+      console.log(f);
+      store.commit('flightReservation', f);
+      this.$router.push("flight-reservation");
     }
   }
 };
