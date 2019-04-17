@@ -72,8 +72,6 @@ export default {
       this.addHotelDialog = false;
     },
     showSnackbar(obj) {
-
-      alert("alert " + obj);
       this.snackbar.color = obj.color;
       this.snackbar.msg = obj.msg;
       this.snackbar.show = true;
