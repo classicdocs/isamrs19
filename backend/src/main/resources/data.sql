@@ -67,7 +67,11 @@ insert into flight_seats_economy(flight_id, seats_economy_id)  values (2,10);
 insert into flight_seats_business(flight_id, seats_business_id)  values (2,11);
 insert into flight_seats_business(flight_id, seats_business_id)  values (2,12);
 
-
+--hotel
+insert into hotel(id,name,address,description) values (1,'Moskva','Srbija/Beograd/Bulevar 55','Visok hotel');
+insert into hotel(id,name,address,description) values (2,'Seraton','Srbija/Novi Sad/Futoski put 76','Skup hotel');
+insert into hotel(id,name,address,description) values (3,'Kasina','Srbija/Beograd/bb','Poznat hotel');
+insert into hotel(id,name,address,description) values (4,'Parisjen','Francuska/Pariz/Ajfelovog Tornja 45','Z v z');
 ------------------------------------------------------------------------------------------------------------------------
 
 --insert into vehicle (id,name,vehicle_manufacturer,vehicle_model,vehicle_type,number_of_passengers,year_of_production,

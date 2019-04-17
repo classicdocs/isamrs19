@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import AirlineCompany from "./views/AirlineCompany.vue";
 import Home from "./views/Home.vue";
+import SystemAdmin from "./views/SystemAdmin.vue";
 
 Vue.use(Router);
 
@@ -22,6 +23,11 @@ export default new Router({
       path: "/",
       name: "home",
       component: Home
+    },
+    {
+      path: "/sys-admin",
+      name: "sys-admin",
+      component: SystemAdmin
     },
   ]
 });
