@@ -35,18 +35,6 @@
               v-model="hotel.description" 
               hint="Say something good about hotel services and prices..." box>
             </v-textarea>
-<!-- 
-            <v-checkbox label="create default hotel administrator"
-             :rules="[v => !!v || 'you need to have admin for every hotel.']" class="check">
-            </v-checkbox>   
-
-            <v-select :items="admins" v-model="hotelAdminUsername"
-            label="Available hotel administrators"  item-value="last"
-            :rules="[v => !!v || 'Hotel administrator is required']">
-            persistent-hint = true
-            </v-select>
--->
-
           </v-container>
 
           <!-- DUGMAD -->

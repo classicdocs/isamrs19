@@ -1,6 +1,7 @@
 package com.project.project.controller;
 
 import com.project.project.dto.HotelDTO;
+import com.project.project.exceptions.HotelAlreadyExists;
 import com.project.project.exceptions.HotelNotFound;
 import com.project.project.model.Hotel;
 import com.project.project.service.HotelService;
@@ -17,30 +18,19 @@ public class SysAdminHotelController {
     @Autowired
     private HotelService hotelService;
 
-    // TEST METODA
-    @GetMapping(
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity get() throws HotelNotFound
-    {
-        Hotel hotel = hotelService.findOneByName("Moskva");
-        return new ResponseEntity<Hotel>(hotel, HttpStatus.OK);
-    }
-
-
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity createHotel(@RequestBody HotelDTO hotelDTO) throws HotelNotFound {
+    public ResponseEntity createHotel(@RequestBody HotelDTO hotelDTO) throws HotelAlreadyExists {
         try {
             HotelDTO hotel = hotelService.save(hotelDTO);
             return new ResponseEntity<HotelDTO>(hotel, HttpStatus.CREATED);
 
-        } catch (HotelNotFound hotelNotFound) {
+        } catch (HotelAlreadyExists hotelAlreadyExists) {
 
-            hotelNotFound.printStackTrace();
-            return new ResponseEntity<String>(hotelNotFound.getMessage(),HttpStatus.BAD_REQUEST);
+            hotelAlreadyExists.printStackTrace();
+            return new ResponseEntity<String>(hotelAlreadyExists.getMessage(),HttpStatus.BAD_REQUEST);
 
         }
     }

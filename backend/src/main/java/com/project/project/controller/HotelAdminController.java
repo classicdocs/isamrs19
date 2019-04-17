@@ -1,6 +1,7 @@
 package com.project.project.controller;
 
 import com.project.project.dto.HotelAdminDTO;
+import com.project.project.exceptions.HotelAdminAlreadyExists;
 import com.project.project.exceptions.HotelAdminNotFound;
 import com.project.project.model.HotelAdmin;
 import com.project.project.service.HotelAdminService;
@@ -31,29 +32,18 @@ public class HotelAdminController {
         return new ResponseEntity<List<HotelAdmin>>(hotelAdmins, HttpStatus.OK);
     }
 
-
-    @GetMapping(
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity getAdmin(String username)
-    {
-        try{
-            HotelAdmin hotelAdmin = hotelAdminService.findOne(username);
-            return new ResponseEntity<HotelAdmin>(hotelAdmin, HttpStatus.OK);
-
-        }catch (HotelAdminNotFound hanf){
-            hanf.printStackTrace();
-            return new ResponseEntity<String>(hanf.getMessage(),HttpStatus.BAD_REQUEST);
-        }
-    }
-
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity createAdmin(@RequestBody HotelAdminDTO hotelAdminDTO){
-        HotelAdminDTO admin = hotelAdminService.save(hotelAdminDTO);
-        return new ResponseEntity<HotelAdminDTO>(admin, HttpStatus.CREATED);
+    public ResponseEntity createAdmin(@RequestBody HotelAdminDTO hotelAdminDTO) throws HotelAdminAlreadyExists {
+        try {
+            HotelAdminDTO admin = hotelAdminService.save(hotelAdminDTO);
+            return new ResponseEntity<HotelAdminDTO>(admin, HttpStatus.CREATED);
+        }catch (HotelAdminAlreadyExists hotelAdminAlreadyExists){
+            hotelAdminAlreadyExists.printStackTrace();
+            return new ResponseEntity<String>(hotelAdminAlreadyExists.getMessage(),HttpStatus.BAD_REQUEST);
+
+        }
     }
 }

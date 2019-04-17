@@ -1,7 +1,9 @@
 package com.project.project.service;
 
 import com.project.project.dto.HotelAdminDTO;
+import com.project.project.exceptions.HotelAdminAlreadyExists;
 import com.project.project.exceptions.HotelAdminNotFound;
+import com.project.project.exceptions.HotelAlreadyExists;
 import com.project.project.model.Hotel;
 import com.project.project.model.HotelAdmin;
 import com.project.project.repository.HotelAdminRepository;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class HotelAdminService {
@@ -27,7 +30,13 @@ public class HotelAdminService {
         return hotelAdminRepository.findAll();
     }
 
-    public HotelAdminDTO save(HotelAdminDTO admin){
+    public HotelAdminDTO save(HotelAdminDTO admin) throws HotelAdminAlreadyExists {
+
+        Optional<HotelAdmin> hAdmin = hotelAdminRepository.findOneByUsername(admin.getUsername());
+
+        if(hAdmin.isPresent()){
+            throw new HotelAdminAlreadyExists(admin.getUsername());
+        }
 
         HotelAdmin hotelAdmin = new HotelAdmin();
         hotelAdmin.setUsername(admin.getUsername());
