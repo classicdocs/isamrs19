@@ -3,5 +3,7 @@ export default class FlightReservation {
     this.flights = null;
     this.searchParams = null;
     this.price = null;
+    this.seatsPickedDeparture = [];
+    this.seatsPickedReturn = [];
   }
 }

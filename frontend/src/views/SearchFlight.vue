@@ -60,7 +60,6 @@ export default {
       this.zeroResult = true;
     },
     filter(data) {
-      console.log(this.filterResult);
       let result = [];
       this.searchResult.forEach(flight => {
         let f1 = flight.departureFlight;
@@ -89,7 +88,6 @@ export default {
             }
           }
         }
-        console.log("transfer");
         let minPrice = data.priceSlider.range[0];
         let maxPrice = data.priceSlider.range[1];
 
@@ -120,7 +118,6 @@ export default {
             break;
           }
         }
-        console.log("price");
         let minTime = data.flightDurationSlider.range[0];
         let maxTime = data.flightDurationSlider.range[1];
         let time = f1.flightTimeHours;
@@ -129,7 +126,6 @@ export default {
         if (!(minTime <= time && time <= maxTime))
           return;
 
-        console.log("time");
         let r = {
           "departureFlight": f1,
           "returnFlight":  f2 ? f2 : null,

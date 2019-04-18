@@ -42,6 +42,20 @@ insert into seat(id, col_num, row_num,taken) values (4, 1, 2, FALSE);
 insert into seat(id, col_num, row_num,taken) values (5, 1, 1, FALSE);
 insert into seat(id, col_num, row_num,taken) values (6, 1, 2, FALSE);
 
+insert into seat_row(id) values (1);
+insert into seat_row(id) values (2);
+insert into seat_row(id) values (3);
+insert into seat_row(id) values (4);
+insert into seat_row(id) values (5);
+insert into seat_row(id) values (6);
+
+insert into seat_row_seats(seat_row_id, seats_id) values (1, 1);
+insert into seat_row_seats(seat_row_id, seats_id) values (2, 2);
+insert into seat_row_seats(seat_row_id, seats_id) values (3, 3);
+insert into seat_row_seats(seat_row_id, seats_id) values (4, 4);
+insert into seat_row_seats(seat_row_id, seats_id) values (5, 5);
+insert into seat_row_seats(seat_row_id, seats_id) values (6, 6);
+
 --sedista za let id 3
 insert into flight_seats_first(flight_id, seats_first_id)  values (1,1);
 insert into flight_seats_first(flight_id, seats_first_id)  values (1,2);
@@ -58,6 +72,19 @@ insert into seat(id, col_num, row_num, taken) values (10, 1, 2, FALSE);
 insert into seat(id, col_num, row_num, taken) values (11, 1, 1, FALSE);
 insert into seat(id, col_num, row_num, taken) values (12, 1, 2, FALSE);
 
+insert into seat_row(id) values (7);
+insert into seat_row(id) values (8);
+insert into seat_row(id) values (9);
+insert into seat_row(id) values (10);
+insert into seat_row(id) values (11);
+insert into seat_row(id) values (12);
+
+insert into seat_row_seats(seat_row_id, seats_id) values (7, 7);
+insert into seat_row_seats(seat_row_id, seats_id) values (8, 8);
+insert into seat_row_seats(seat_row_id, seats_id) values (9, 9);
+insert into seat_row_seats(seat_row_id, seats_id) values (10, 10);
+insert into seat_row_seats(seat_row_id, seats_id) values (11, 11);
+insert into seat_row_seats(seat_row_id, seats_id) values (12, 12);
 
 --sedista za let id 2
 insert into flight_seats_first(flight_id, seats_first_id)  values (2,7);

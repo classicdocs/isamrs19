@@ -51,12 +51,10 @@ export default {
   },
   methods: {
     goToReservationView() {
-      console.log("OPA");
       let f = new FlightReservation();
       f.flights = this.data;
       f.searchParams = this.searchParams;
       f.price = this.getPrice;
-      console.log(f);
       store.commit('flightReservation', f);
       this.$router.push({name: "flight-reservation"});
     },

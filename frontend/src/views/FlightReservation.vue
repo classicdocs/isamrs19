@@ -1,5 +1,20 @@
 <template>
   <div>
+     <v-snackbar
+        v-model="snackbar.show"
+        :timeout="5000"
+        :color="snackbar.color"
+        :top="true"
+    >
+      {{snackbar.msg}}
+      <v-btn
+          dark
+          flat
+          @click="snackbar.show = false"
+      >
+      Close
+      </v-btn>
+    </v-snackbar>
     <v-container fluid> 
       <!-- FLIGHTS INFO -->
       <v-layout row wrap>
@@ -49,11 +64,15 @@
                 <seats
                   v-bind:seatsDeparture="getDepartureSeats"
                   v-bind:seatsReturn="getReturnSeats"
+                  v-bind:passengersNumber="flightReservation.searchParams.passengersNumber"
+                  v-on:snack="showSnackBar($event)"
                 ></seats>
 
                 <v-btn
+                  style="float:right"
                   color="primary"
                   @click="stepper = 2"
+                  :disabled="!enableBtnStep1"
                 >
                   Next
                 </v-btn>
@@ -138,6 +157,11 @@ export default {
   data:() => ({
     flightReservation: null,
     stepper: 0,
+    snackbar: {
+      show: false,
+      color: "",
+      msg: "",
+    },
   }),
   computed: {
     getDepartureSeats() {
@@ -170,16 +194,38 @@ export default {
           return flight.seatsEconomy;
         }
       }
+    },
+    enableBtnStep1() {
+      let seatsPickedDeparture = store.getters.seatsPickedDeparture.length;
+      let seatsPickedReturn = store.getters.seatsPickedReturn.length;
+      let num = this.flightReservation.searchParams.passengersNumber;
+      console.log(seatsPickedDeparture);
+      console.log(seatsPickedReturn);
+      console.log(this.flightReservation.flights.returnFlight);
+      if (seatsPickedDeparture ===  num) {
+        if (this.flightReservation.flights.returnFlight === null)
+          return true;
+        else
+          if (seatsPickedReturn === num)
+            return true;
+      }
+      return false;
     }
   },
   created() {
-    console.log(store.getters.flightReservation);
     let fr = store.getters.flightReservation;
     if (fr)
       this.flightReservation = fr;
     else
       this.$router.push({name: "home"});
   },
+  methods: {
+    showSnackBar(data) {
+      this.snackbar.msg = data.msg;
+      this.snackbar.color = data.color;
+      this.snackbar.show = true;
+    }
+  }
 }
 </script>
 

@@ -3,14 +3,15 @@ package com.project.project.dto;
 import com.project.project.model.Destination;
 import com.project.project.model.Flight;
 import com.project.project.model.Seat;
+import com.project.project.model.SeatRow;
+import org.hibernate.mapping.Collection;
 
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class FlightDTO {
     private Long id;
@@ -44,11 +45,11 @@ public class FlightDTO {
     @Positive
     private double ticketPriceEconomy;
 
-    private Set<Seat> seatsFirst = new HashSet<Seat>();
+    private List<SeatRow> seatsFirst ;
 
-    private Set<Seat> seatsBusiness = new HashSet<Seat>();
+    private List<SeatRow> seatsBusiness ;
 
-    private Set<Seat> seatsEconomy = new HashSet<Seat>();
+    private List<SeatRow> seatsEconomy;
 
     public FlightDTO() {
     }
@@ -72,6 +73,7 @@ public class FlightDTO {
         this.ticketPriceFirst = flight.getTicketPriceFirst();
         this.ticketPriceBusiness = flight.getTicketPriceBusiness();
         this.ticketPriceEconomy = flight.getTicketPriceEconomy();
+
         this.seatsFirst = flight.getSeatsFirst();
         this.seatsBusiness = flight.getSeatsBusiness();
         this.seatsEconomy = flight.getSeatsEconomy();
@@ -205,27 +207,27 @@ public class FlightDTO {
         this.ticketPriceEconomy = ticketPriceEconomy;
     }
 
-    public Set<Seat> getSeatsFirst() {
+    public List<SeatRow> getSeatsFirst() {
         return seatsFirst;
     }
 
-    public void setSeatsFirst(Set<Seat> seatsFirst) {
+    public void setSeatsFirst(List<SeatRow> seatsFirst) {
         this.seatsFirst = seatsFirst;
     }
 
-    public Set<Seat> getSeatsBusiness() {
+    public List<SeatRow> getSeatsBusiness() {
         return seatsBusiness;
     }
 
-    public void setSeatsBusiness(Set<Seat> seatsBusiness) {
+    public void setSeatsBusiness(List<SeatRow> seatsBusiness) {
         this.seatsBusiness = seatsBusiness;
     }
 
-    public Set<Seat> getSeatsEconomy() {
+    public List<SeatRow> getSeatsEconomy() {
         return seatsEconomy;
     }
 
-    public void setSeatsEconomy(Set<Seat> seatsEconomy) {
+    public void setSeatsEconomy(List<SeatRow> seatsEconomy) {
         this.seatsEconomy = seatsEconomy;
     }
 }

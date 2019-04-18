@@ -88,11 +88,7 @@ export default {
 
       AirlineCompanyController.get(this.id)
         .then((response) => {
-          console.log("1");
-          console.log(this.airlineCompany);
           this.airlineCompany = response.data;
-          console.log("2");
-          console.log(this.airlineCompany);
         })
         .catch(() => {
           console.log("redirect");
