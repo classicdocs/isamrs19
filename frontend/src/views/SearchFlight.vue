@@ -9,22 +9,22 @@
         <search-form v-on:search-result="showSearchResult($event)"></search-form>
       </v-expansion-panel-content>
     </v-expansion-panel>
-    <v-container grid-list-xl>
+    <v-container grid-list-xl id="container" fluid>
       <v-layout row wrap >
-        <v-flex lg4 md4 sm6 xs12 v-if="searchResult.length !== 0" >
+        <v-flex lg4 md4 sm12 xs12 v-if="searchResult.length !== 0" >
           <filter-form v-on:filter="filter($event)"></filter-form>
         </v-flex>
-        <v-flex lg8 md8 sm6 xs12 v-if="filterResult.length !== 0">
-          <search-result v-for="(item, index) in filterResult"
-            :key="index" 
-            v-bind:data="item" 
-            v-bind:searchParams="searchParams"
-            >
-          </search-result>
-        </v-flex>
-        <v-flex v-else-if="zeroResult" lg8 md8 sm6 xs12>
-          <h3>No result found!</h3>
-        </v-flex>
+      <v-flex lg8 md8 sm12 xs12 v-if="filterResult.length !== 0">
+        <search-result v-for="(item, index) in filterResult"
+          :key="index" 
+          v-bind:data="item" 
+          v-bind:searchParams="searchParams"
+          >
+        </search-result>
+      </v-flex>
+      <v-flex v-else-if="zeroResult" lg8 md8 sm6 xs12>
+        <h3>No result found!</h3>
+      </v-flex>
       </v-layout>
     </v-container>
   </div>
@@ -143,5 +143,8 @@ export default {
 </script>
 <style>
 
+#containter {
+  margin: 0px;
+}
 </style>
 

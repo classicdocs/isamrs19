@@ -2,7 +2,11 @@ package com.project.project.dto;
 
 import com.project.project.model.Destination;
 import com.project.project.model.Flight;
+import com.project.project.model.Seat;
 
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.HashSet;
@@ -40,6 +44,12 @@ public class FlightDTO {
     @Positive
     private double ticketPriceEconomy;
 
+    private Set<Seat> seatsFirst = new HashSet<Seat>();
+
+    private Set<Seat> seatsBusiness = new HashSet<Seat>();
+
+    private Set<Seat> seatsEconomy = new HashSet<Seat>();
+
     public FlightDTO() {
     }
 
@@ -62,6 +72,9 @@ public class FlightDTO {
         this.ticketPriceFirst = flight.getTicketPriceFirst();
         this.ticketPriceBusiness = flight.getTicketPriceBusiness();
         this.ticketPriceEconomy = flight.getTicketPriceEconomy();
+        this.seatsFirst = flight.getSeatsFirst();
+        this.seatsBusiness = flight.getSeatsBusiness();
+        this.seatsEconomy = flight.getSeatsEconomy();
     }
 
     public Long getId() {
@@ -190,5 +203,29 @@ public class FlightDTO {
 
     public void setTicketPriceEconomy(double ticketPriceEconomy) {
         this.ticketPriceEconomy = ticketPriceEconomy;
+    }
+
+    public Set<Seat> getSeatsFirst() {
+        return seatsFirst;
+    }
+
+    public void setSeatsFirst(Set<Seat> seatsFirst) {
+        this.seatsFirst = seatsFirst;
+    }
+
+    public Set<Seat> getSeatsBusiness() {
+        return seatsBusiness;
+    }
+
+    public void setSeatsBusiness(Set<Seat> seatsBusiness) {
+        this.seatsBusiness = seatsBusiness;
+    }
+
+    public Set<Seat> getSeatsEconomy() {
+        return seatsEconomy;
+    }
+
+    public void setSeatsEconomy(Set<Seat> seatsEconomy) {
+        this.seatsEconomy = seatsEconomy;
     }
 }
