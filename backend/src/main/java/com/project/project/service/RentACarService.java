@@ -1,6 +1,6 @@
 package com.project.project.service;
 
-import com.project.project.dto.RentACarDTO;
+import com.project.project.dto.RentACarInfoDTO;
 import com.project.project.model.RentACar;
 import com.project.project.model.Vehicle;
 import com.project.project.repository.RentACarRepository;
@@ -29,16 +29,16 @@ public class RentACarService {
         rentACarRepository.save(rentACar);
     }
 
-    public RentACarDTO update(Long id, RentACarDTO rentACarDTO) {
+    public RentACarInfoDTO update(Long id, RentACarInfoDTO rentACarInfoDTO) {
 
         RentACar oldRentACar = rentACarRepository.findOneById(id);
 
         oldRentACar.setId(id);
-        oldRentACar.setName(rentACarDTO.getName());
-        oldRentACar.setAddress(rentACarDTO.getAddress());
-        oldRentACar.setPromotionalDescription(rentACarDTO.getPromotionalDescription());
+        oldRentACar.setName(rentACarInfoDTO.getName());
+        oldRentACar.setAddress(rentACarInfoDTO.getAddress());
+        oldRentACar.setPromotionalDescription(rentACarInfoDTO.getPromotionalDescription());
 
         oldRentACar = rentACarRepository.save(oldRentACar);
-        return (new RentACarDTO(oldRentACar));
+        return (new RentACarInfoDTO(oldRentACar));
     }
 }
