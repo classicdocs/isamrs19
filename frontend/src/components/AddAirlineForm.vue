@@ -10,7 +10,7 @@
           <!-- LABELE -->
 
           <v-container>
-            <v-text-field label="airline company name" v-model=""
+            <v-text-field label="airline company name" v-model="airlineCompany.name"
             :rules="[v => !!v || 'airline company name is required']">
             </v-text-field> 
 
@@ -32,7 +32,7 @@
             </v-text-field> 
 
             <v-textarea name="promotionalDescription" label="promotional description" 
-              v-model="hotel.description" 
+              v-model="airlineCompany.description" 
               hint="Say something good about airline company services and prices..." box>
             </v-textarea>
           </v-container>
@@ -53,7 +53,7 @@
 <script>
 
 import AirlineCompany from "@/models/AirlineCompany";
-import SysHotelControler from "@/controllers/airline-company.controller";
+import SystemAdminControler from "@/controllers/system-admin.controller";
 import { thisExpression } from '@babel/types';
 
 export default {
@@ -72,6 +72,15 @@ export default {
     validate() {
       if(this.$refs.form.validate()) {
         this.airlineCompany.address = this.country + '/' + this.city + '/' + this.street;
+
+
+        SystemAdminControler.createAirline(this.airlineCompany)
+        .then((Response) => {
+          this.$emit("finished", {msg: "Airline company successfully added", color: "success"})
+        })
+        .catch((response) => {
+          this.$emit("finished", {msg: "Error! Something went wrong...", color: "error"})
+        })
 
         // SysHotelControler.createHotel(this.hotel)
         //   .then((response) => {

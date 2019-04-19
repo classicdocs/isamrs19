@@ -53,8 +53,8 @@
 <script>
 
 import Hotel from "@/models/Hotel";
-import HotelAdminController from "@/controllers/hotelAdmin.controller"
-import SysHotelControler from "@/controllers/sysAdminHotel.controller"
+
+import SystemAdminController from "@/controllers/system-admin.controller"
 import { thisExpression } from '@babel/types';
 
 export default {
@@ -77,7 +77,7 @@ export default {
         this.hotel.roomConfiguration = [];
         this.hotel.admins = [];
 
-        SysHotelControler.createHotel(this.hotel)
+        SystemAdminController.createHotel(this.hotel)
           .then((response) => {
             this.$emit("finished", {msg: "Hotel successfully added", color: "success"})
           })
