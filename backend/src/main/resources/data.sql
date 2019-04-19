@@ -78,6 +78,33 @@ insert into vehicle (id,name,vehicle_manufacturer,vehicle_model,vehicle_type,num
 --vozilo 1 u servis 1
 insert into rentacar_vehicles (rentacar_id, vehicles_id) values (1,99);
 
-insert into rentacar_vehicles (rentacar_id, vehicles_id) values (1,99);
+--hotel 1
+insert into hotel (id) values (1);
 
+--tabela uloga
 insert into role (id,role) values (1,'User');
+insert into role (id,role) values (2,'RentACar Admin');
+insert into role (id,role) values (3,'Airline Company Admin');
+insert into role (id,role) values (4,'Hotel Admin');
+insert into role (id,role) values (5,'System Admin');
+
+--obicni korisnici
+insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id) values (0,1,'adresa','email','ime','prezime','obican korisnik','sifra','5154',1,null,null,null);
+insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id) values (0,2,'adresa1','email1','ime1','prezime1','obican korisnik 2','sifra1','51541',1,null,null,null);
+insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id) values (0,7,'adresa6','email6','ime6','prezime6','obican korisnik 3','sifra6','51546',1,null,null,null);
+
+--rentacar admini
+insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id) values (0,3,'adresa2','email2','ime2','prezime2','rentacar admin','sifra2','51542',2,1,null,null);
+
+--airline company admini
+insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id) values (0,4,'adresa3','email3','ime3','prezime3','airline company admin','sifra3','51543',3,null,1,null);
+
+--hotel admini
+insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id) values (0,5,'adresa4','email4','ime4','prezime4','hotel admin','sifra4','51544',4,null,null,1);
+
+--system admini
+insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id) values (0,6,'adresa5','email5','ime5','prezime5','system admin','sifra5','51545',5,null,null,null);
+
+--dodavanje prijatelja
+insert into user_friends (id, friends_id) values (1,2);
+

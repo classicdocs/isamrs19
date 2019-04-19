@@ -4,7 +4,7 @@ import com.project.project.model.User;
 
 import javax.validation.constraints.NotNull;
 
-public class RegistrationDTO {
+public class UserRegistrationDTO {
 
     @NotNull
     private String username;
@@ -27,10 +27,10 @@ public class RegistrationDTO {
     @NotNull
     private String phone;
 
-    public RegistrationDTO() {
+    public UserRegistrationDTO() {
     }
 
-    public RegistrationDTO(User user){
+    public UserRegistrationDTO(User user){
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.firstname = user.getFirstname();

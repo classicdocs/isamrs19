@@ -1,8 +1,9 @@
 package com.project.project.service;
 
-import com.project.project.dto.RegistrationDTO;
+import com.project.project.dto.UserRegistrationDTO;
 import com.project.project.exceptions.UsernameNotFound;
 import com.project.project.exceptions.UsernameTaken;
+import com.project.project.model.RegisteredUser;
 import com.project.project.model.Role;
 import com.project.project.model.User;
 import com.project.project.repository.RoleRepository;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class UserService {
@@ -28,29 +28,28 @@ public class UserService {
         return userRepository.findOneByUsername(username).orElseThrow(() -> new UsernameNotFound(username));
     }
 
-    public User save(RegistrationDTO registrationDTO) throws UsernameTaken {
+    public User save(UserRegistrationDTO userRegistrationDTO) throws UsernameTaken {
 
 
-        Optional<User> user = userRepository.findOneByUsername(registrationDTO.getUsername());
+        Optional<User> user = userRepository.findOneByUsername(userRegistrationDTO.getUsername());
 
-        if (user.isPresent())
-        {
-           throw new UsernameTaken();
+        if (user.isPresent()) {
+            throw new UsernameTaken();
         } else {
-            User newUser = new User();
+            RegisteredUser newUser = new RegisteredUser();
 
-            newUser.setFirstname(registrationDTO.getFirstname());
-            newUser.setLastname(registrationDTO.getLastname());
-            newUser.setUsername(registrationDTO.getUsername());
-            newUser.setPassword(registrationDTO.getPassword());
-            newUser.setEmail(registrationDTO.getEmail());
-            newUser.setAddress(registrationDTO.getAddress());
-            newUser.setPhone(registrationDTO.getPhone());
+            newUser.setFirstname(userRegistrationDTO.getFirstname());
+            newUser.setLastname(userRegistrationDTO.getLastname());
+            newUser.setUsername(userRegistrationDTO.getUsername());
+            newUser.setPassword(userRegistrationDTO.getPassword());
+            newUser.setEmail(userRegistrationDTO.getEmail());
+            newUser.setAddress(userRegistrationDTO.getAddress());
+            newUser.setPhone(userRegistrationDTO.getPhone());
 
-            HashSet<Role> roles = new HashSet<Role>();
             Role role = roleRepository.findOneById(1L);
-            roles.add(role);
-            newUser.setRoles(roles);
+            newUser.setRole(role);
+
+            newUser.setFriends(new HashSet<RegisteredUser>());
 
             return userRepository.save(newUser);
         }

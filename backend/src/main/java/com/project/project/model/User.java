@@ -1,13 +1,17 @@
 package com.project.project.model;
 
 import javax.persistence.*;
-import java.util.Set;
+
+import static javax.persistence.InheritanceType.JOINED;
 
 @Entity
-public class User {
+@Table(name="user")
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+public abstract class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="id", unique=true, nullable=false)
     private Long id;
 
     @Column(name = "username", nullable = false)
@@ -31,8 +35,8 @@ public class User {
     @Column(name = "phone", nullable = false)
     private String phone;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Role> roles;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Role role;
 
     public User() {
     }
@@ -101,11 +105,11 @@ public class User {
         this.phone = phone;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

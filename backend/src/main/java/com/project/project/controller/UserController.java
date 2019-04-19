@@ -1,8 +1,6 @@
 package com.project.project.controller;
 
-import com.project.project.dto.LoginDTO;
-import com.project.project.dto.RegistrationDTO;
-import com.project.project.exceptions.UsernameNotFound;
+import com.project.project.dto.UserRegistrationDTO;
 import com.project.project.exceptions.UsernameTaken;
 import com.project.project.model.User;
 import com.project.project.service.UserService;
@@ -20,9 +18,9 @@ public class UserController {
     private UserService userService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity create(@RequestBody RegistrationDTO registrationDTO) {
+    public ResponseEntity create(@RequestBody UserRegistrationDTO userRegistrationDTO) {
         try {
-            User user = userService.save(registrationDTO);
+            User user = userService.save(userRegistrationDTO);
             return new ResponseEntity<User>(user, HttpStatus.CREATED);
         } catch (UsernameTaken ex) {
             ex.printStackTrace();
