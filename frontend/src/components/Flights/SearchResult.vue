@@ -210,9 +210,9 @@ export default {
 .v-icon.icon.material-icons.theme--light {
   font-size: 5em;
 }
-.v-card__text {
+/* .v-card__text {
   padding: 0px !important;
-}
+} */
 .company, .class, .passengers, .city, .date{
   font-size: 1em;
 }

@@ -1,34 +1,48 @@
-package com.project.project.model;
+package com.project.project.dto;
 
-
-import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
-@Entity
-public class Hotel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+import com.project.project.model.Hotel;
+import com.project.project.model.HotelAdmin;
+import com.project.project.model.HotelsOffer;
+import com.project.project.model.Room;
+
+import javax.validation.constraints.NotNull;
+
+public class HotelDTO {
+
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @NotNull
     private String name;
 
-    @Column(name = "address", nullable = false)
+    @NotNull
     private String address;
 
-    @Column(name = "description")
+    @NotNull
     private String description;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @NotNull
     private Set<HotelsOffer> priceList;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)   // to one - EAGER, to many - LAZY
+    @NotNull
     private Set<Room> roomConfiguration;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @NotNull
     private Set<HotelAdmin> admins;
 
-    public Hotel(){}
+    public HotelDTO(){}
+
+    public HotelDTO(Hotel hotel) {
+        this.id = hotel.getId();
+        this.name = hotel.getName();
+        this.address = hotel.getAddress();
+        this.description = hotel.getDescription();
+        this.priceList = hotel.getPriceList();
+        this.roomConfiguration = hotel.getRoomConfiguration();
+        this.admins = hotel.getAdmins();
+    }
 
     public Set<HotelAdmin> getAdmins() {
         return admins;
@@ -85,5 +99,4 @@ public class Hotel {
     public void setRoomConfiguration(Set<Room> roomConfiguration) {
         this.roomConfiguration = roomConfiguration;
     }
-
 }
