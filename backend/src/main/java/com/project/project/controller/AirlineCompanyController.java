@@ -127,4 +127,19 @@ public class AirlineCompanyController {
         }
     }
 
+    /* JANKO DODAO KOD ZA DODAVANJE NOVE AVIOKOMPANIJE  |*/
+    /*                                                  V*/
+//    @PostMapping(
+//            consumes = MediaType.APPLICATION_JSON_VALUE,
+//            produces = MediaType.APPLICATION_JSON_VALUE
+//    )
+//    public ResponseEntity createAirline(@RequestBody AirlineCompanyDTO airlineCompanyDTO) throws AirlineCompanyAlreadyExist{
+//        try {
+//            AirlineCompanyDTO airline = airlineCompanyService.save(airlineCompanyDTO);
+//            return new ResponseEntity<>(airline, HttpStatus.CREATED);
+//        }catch (AirlineCompanyAlreadyExist airlineCompanyAlreadyExist) {
+//            airlineCompanyAlreadyExist.printStackTrace();
+//            return new ResponseEntity<String>(airlineCompanyAlreadyExist.getMessage(), HttpStatus.BAD_REQUEST);
+//        }
+//    }
 }
