@@ -66,7 +66,6 @@ export default {
     },
     methods: {
         onSubmit() {
-            //this.newRentacar = new RentACar(this.$route.params.id,this.newName, this.newAddress, this.newDescription); 
             RentACarController.update(this.$route.params.id, this.newRentacar);
             this.$emit('update-rentacar', this.newRentacar);
         },

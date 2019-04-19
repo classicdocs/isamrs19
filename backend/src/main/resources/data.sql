@@ -84,8 +84,6 @@ insert into vehicle (id,name,vehicle_manufacturer,vehicle_model,vehicle_type,num
 --vozilo 1 u servis 1
 insert into rentacar_vehicles (rentacar_id, vehicles_id) values (1,99);
 
---hotel 1
-insert into hotel (id) values (1);
 
 --tabela uloga
 insert into role (id,role) values (1,'User');
