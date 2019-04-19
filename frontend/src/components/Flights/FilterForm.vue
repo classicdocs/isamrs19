@@ -138,7 +138,5 @@ export default {
 </script>
 
 <style>
-#filter-layout {
-  padding: 0px 30px 0px 0px;
-}
+
 </style>

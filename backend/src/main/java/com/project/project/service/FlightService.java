@@ -85,32 +85,45 @@ public class FlightService {
         flight.setTicketPriceEconomy(flightDTO.getTicketPriceEconomy());
         flight.setTransferDestinations(transfers);
 
-        for (int i = 0; i < flight.getAirplane().getSeatsFirstRows(); i++) {
-            for (int j = 0; j < flight.getAirplane().getSeatsFirstCols(); j++) {
+        List<SeatRow> seatsFirst = new ArrayList<>();
+        for (int i = 1; i <= flight.getAirplane().getSeatsFirstRows(); i++) {
+            SeatRow seatRow = new SeatRow();
+            for (int j = 1; j <= flight.getAirplane().getSeatsFirstCols(); j++) {
                 Seat s = new Seat();
                 s.setRowNum(i);
                 s.setColNum(j);
-                flight.getSeatsFirst().add(s);
+                seatRow.getSeats().add(s);
             }
+            seatsFirst.add(seatRow);
         }
+        flight.setSeatsFirst(seatsFirst);
 
-        for (int i = 0; i < flight.getAirplane().getSeatsBusinessRows(); i++) {
-            for (int j = 0; j < flight.getAirplane().getSeatsBusinessCols(); j++) {
+        List<SeatRow> seatsBusiness = new ArrayList<>();
+        for (int i = 1; i <= flight.getAirplane().getSeatsBusinessRows(); i++) {
+            SeatRow seatRow = new SeatRow();
+            for (int j = 1; j <= flight.getAirplane().getSeatsBusinessCols(); j++) {
                 Seat s = new Seat();
                 s.setRowNum(i);
                 s.setColNum(j);
-                flight.getSeatsBusiness().add(s);
+                seatRow.getSeats().add(s);
             }
+            seatsBusiness.add(seatRow);
         }
+        flight.setSeatsBusiness(seatsBusiness);
 
-        for (int i = 0; i < flight.getAirplane().getSeatsEconomyRows(); i++) {
-            for (int j = 0; j < flight.getAirplane().getSeatsEconomyCols(); j++) {
+        List<SeatRow> seatsEconomy = new ArrayList<>();
+        for (int i = 1; i <= flight.getAirplane().getSeatsEconomyRows(); i++) {
+            SeatRow seatRow = new SeatRow();
+            for (int j = 1; j <= flight.getAirplane().getSeatsEconomyCols(); j++) {
                 Seat s = new Seat();
                 s.setRowNum(i);
                 s.setColNum(j);
-                flight.getSeatsEconomy().add(s);
+                seatRow.getSeats().add(s);
             }
+            seatsEconomy.add(seatRow);
         }
+        flight.setSeatsEconomy(seatsEconomy);
+
         flight = flightRepository.save(flight);
         airplane.getFlight().add(flight);
         airlineCompany.getFlights().add(flight);

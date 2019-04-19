@@ -4,7 +4,9 @@ package com.project.project.model;
 import org.hibernate.action.internal.OrphanRemovalAction;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -60,41 +62,57 @@ public class Flight {
     @Column(name = "ticket_price_economy", nullable = false)
     private double ticketPriceEconomy;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Seat> seatsFirst = new HashSet<Seat>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<SeatRow> seatsFirst = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Seat> seatsBusiness = new HashSet<Seat>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<SeatRow> seatsBusiness = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Seat> seatsEconomy = new HashSet<Seat>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<SeatRow> seatsEconomy = new ArrayList<>();
 
     public Flight() {
     }
 
     public int getFreeFirstSeats() {
-        int cnt = this.seatsFirst.size();
-        for (Seat s: this.seatsFirst) {
-            if (s.isTaken()) {
-                cnt--;
+        int cnt = 0;
+        for (SeatRow s : this.seatsFirst) {
+            cnt += s.getSeats().size();
+        }
+        for (SeatRow s: this.seatsFirst) {
+            for(Seat ss : s.getSeats()) {
+                if (ss.isTaken()) {
+                    cnt--;
+                }
             }
         }
         return cnt;
     }
     public int getFreeBusinessSeats() {
-        int cnt = this.seatsBusiness.size();
-        for (Seat s: this.seatsBusiness) {
-            if (s.isTaken()) {
-                cnt--;
+        int cnt = 0;
+        for (SeatRow s : this.seatsBusiness) {
+            cnt += s.getSeats().size();
+        }
+
+        for (SeatRow s: this.seatsBusiness) {
+            for(Seat ss : s.getSeats()) {
+                if (ss.isTaken()) {
+                    cnt--;
+                }
             }
         }
         return cnt;
     }
     public int getFreeEconomySeats() {
-        int cnt = this.seatsEconomy.size();
-        for (Seat s: this.seatsEconomy) {
-            if (s.isTaken()) {
-                cnt--;
+        int cnt = 0;
+        for (SeatRow s : this.seatsEconomy) {
+            cnt += s.getSeats().size();
+        }
+        for (SeatRow s: this.seatsEconomy) {
+            for(Seat ss : s.getSeats()) {
+                if (ss.isTaken()) {
+                    cnt--;
+                }
             }
         }
         return cnt;
@@ -228,27 +246,27 @@ public class Flight {
         this.ticketPriceEconomy = ticketPriceEconomy;
     }
 
-    public Set<Seat> getSeatsFirst() {
+    public List<SeatRow> getSeatsFirst() {
         return seatsFirst;
     }
 
-    public void setSeatsFirst(Set<Seat> seatsFirst) {
+    public void setSeatsFirst(List<SeatRow> seatsFirst) {
         this.seatsFirst = seatsFirst;
     }
 
-    public Set<Seat> getSeatsBusiness() {
+    public List<SeatRow> getSeatsBusiness() {
         return seatsBusiness;
     }
 
-    public void setSeatsBusiness(Set<Seat> seatsBusiness) {
+    public void setSeatsBusiness(List<SeatRow> seatsBusiness) {
         this.seatsBusiness = seatsBusiness;
     }
 
-    public Set<Seat> getSeatsEconomy() {
+    public List<SeatRow> getSeatsEconomy() {
         return seatsEconomy;
     }
 
-    public void setSeatsEconomy(Set<Seat> seatsEconomy) {
+    public void setSeatsEconomy(List<SeatRow> seatsEconomy) {
         this.seatsEconomy = seatsEconomy;
     }
 }

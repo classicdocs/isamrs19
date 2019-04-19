@@ -17,7 +17,10 @@ export default class Flight {
     this.ticketPriceFirst = null,
     this.ticketPriceBusiness = null,
     this.ticketPriceEconomy = null,
-    this.distance = null
+    this.distance = null,
+    this.seatsFirst =null,
+    this.seatsBusiness = null,
+    this.seatsEconomy = null
   }
 
   reset() {
