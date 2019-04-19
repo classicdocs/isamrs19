@@ -7,5 +7,8 @@ const ENDPOINTS = {
 export default {
   create(data) {
     return Axios.post(ENDPOINTS.VEHICLES, data);
+  },
+  get() {
+    return Axios.get(ENDPOINTS.VEHICLES);
   }
 };

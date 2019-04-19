@@ -16,7 +16,8 @@ public class RentACar {
     @Column(name = "address", nullable = false)
     private String address;
 
-    @Column(name = "promotional_description")
+    @Lob
+    @Column(name = "promotional_description", length=512)
     private String promotionalDescription;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

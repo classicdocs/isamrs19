@@ -198,7 +198,7 @@ export default {
 
 <style>
 
-.flex.lg2.md2.sm2.xs2 {
+/* .flex.lg2.md2.sm2.xs2 {
   display: flex;
 }
 .flex.lg1.md1.sm1.xs1 {
@@ -229,7 +229,7 @@ export default {
   display: flex;
   align-items: center;
   padding: 0px !important;
-}
+} */
 .flex{
   /* display: flex; */
   align-items: center;
