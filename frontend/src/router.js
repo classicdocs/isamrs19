@@ -36,7 +36,7 @@ export default new Router({
       path: "/flight-reservation",
       name: "flight-reservation",
       component: FlightReservation
-    }
+    },
     {
       path: "/registration",
       name: "/registration",
