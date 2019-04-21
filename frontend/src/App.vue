@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import LoginController from './controllers/login.controller.js';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'App',
@@ -14,6 +16,19 @@ export default {
     return {
       //
     }
-  }
+  },
+  computed: {
+    ...mapGetters([
+      'activeUser',
+      'isAdmin',
+      'isLogged',
+      'activeUserRole',
+    ]),
+  },
+  methods: {
+    logout() {
+      LoginController.logout();
+    },
+  },
 }
 </script>
