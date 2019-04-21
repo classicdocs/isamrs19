@@ -32,7 +32,7 @@
                 </add-rentacar-form>
               </v-dialog>
 
-              <v-dialog v-model="addAirlineDialog" max-width="500px">
+              <v-dialog v-model="addAirlineDialog" max-width="500px" persistent="true">
                 <add-airline-form  v-if="addAirlineDialog"
                   v-on:finished="closeAddAirline($event)"
                   v-on:cancel  ="cancel">
@@ -80,18 +80,15 @@ export default {
     },
     openHotelDialog(){
       this.addRentACarDialog = false;
-      this.addAirlineDialog = false;
       this.addHotelDialog = true;
     },
     openRentACarDialog(){
       this.addHotelDialog = false;
-      this.addAirlineDialog = false;
       this.addRentACarDialog = true;
     },
     openAirlineCompanyDialog(){
       this.addHotelDialog = false;
       this.addRentACarDialog = false;
-      this.addAirlineDialog = true;
     },
     showSnackbar(obj) {
       this.snackbar.color = obj.color;

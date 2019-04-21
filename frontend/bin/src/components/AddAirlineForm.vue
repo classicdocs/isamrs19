@@ -4,14 +4,14 @@
       <v-form ref="form" v-model="form" lazy-validation>
           <!-- NASLOV -->
           <v-card-title primary-title>
-            <span class="headline">Add new hotel <v-icon x-large>hotel</v-icon></span>
+            <span class="headline">Add new airline company <v-icon x-large>flight_takeoff</v-icon></span>
           </v-card-title>
 
           <!-- LABELE -->
 
           <v-container>
-            <v-text-field label="hotel name" v-model="hotel.name"
-            :rules="[v => !!v || 'hotel name is required']">
+            <v-text-field label="airline company name" v-model=""
+            :rules="[v => !!v || 'airline company name is required']">
             </v-text-field> 
 
             <v-layout > <!--v-bind="binding"-->
@@ -33,7 +33,7 @@
 
             <v-textarea name="promotionalDescription" label="promotional description" 
               v-model="hotel.description" 
-              hint="Say something good about hotel services and prices..." box>
+              hint="Say something good about airline company services and prices..." box>
             </v-textarea>
           </v-container>
 
@@ -52,13 +52,12 @@
 
 <script>
 
-import Hotel from "@/models/Hotel";
-
-import SystemAdminController from "@/controllers/system-admin.controller"
+import AirlineCompany from "@/models/AirlineCompany";
+import SysHotelControler from "@/controllers/airline-company.controller";
 import { thisExpression } from '@babel/types';
 
 export default {
-  name: "AddHotelForm",
+  name: "AddAirlineForm",
   data: () => ({
     form: true,
 
@@ -66,24 +65,21 @@ export default {
     city : "",
     street : "",
 
-    hotel: new Hotel(),
+    airlineCompany: new AirlineCompany(),
 
   }),
   methods: {
     validate() {
       if(this.$refs.form.validate()) {
-        this.hotel.address = this.country + '/' + this.city + '/' + this.street;
-        this.hotel.priceList = [];
-        this.hotel.roomConfiguration = [];
-        this.hotel.admins = [];
+        this.airlineCompany.address = this.country + '/' + this.city + '/' + this.street;
 
-        SystemAdminController.createHotel(this.hotel)
-          .then((response) => {
-            this.$emit("finished", {msg: "Hotel successfully added", color: "success"})
-          })
-          .catch((response) => {
-            this.$emit("finished", {msg: "Error! Something went wrong...", color: "error"})
-          })
+        // SysHotelControler.createHotel(this.hotel)
+        //   .then((response) => {
+        //     this.$emit("finished", {msg: "Hotel successfully added", color: "success"})
+        //   })
+        //   .catch((response) => {
+        //     this.$emit("finished", {msg: "Error! Something went wrong...", color: "error"})
+        //   })
       }
     },
     reset() {
