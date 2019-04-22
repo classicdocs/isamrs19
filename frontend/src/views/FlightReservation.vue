@@ -199,9 +199,6 @@ export default {
       let seatsPickedDeparture = store.getters.seatsPickedDeparture.length;
       let seatsPickedReturn = store.getters.seatsPickedReturn.length;
       let num = this.flightReservation.searchParams.passengersNumber;
-      console.log(seatsPickedDeparture);
-      console.log(seatsPickedReturn);
-      console.log(this.flightReservation.flights.returnFlight);
       if (seatsPickedDeparture ===  num) {
         if (this.flightReservation.flights.returnFlight === null)
           return true;

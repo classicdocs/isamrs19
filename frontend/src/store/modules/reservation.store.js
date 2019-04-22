@@ -1,6 +1,7 @@
+import FlightReservation from "../../models/FlightReservation";
 
 const state = {
-  flightReservation: null,
+  flightReservation: new FlightReservation(),
 };
 
 const getters = {
