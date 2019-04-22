@@ -4,13 +4,14 @@ import Axios from 'axios';
 //import store from '../store';
 import store from '@/store';
 import LoginApiService from "@/api-services/login.service";
+import { User } from '../models/User';
 
 const AUTH_HEADER = 'Authorization';
 
 export default {
   setLocalStorageAuthData(data) {
-    localStorage.setItem('token', data.token || null);
-    localStorage.setItem('user_id', data.username ? data.username : null);
+    localStorage.setItem('token',null);  
+    localStorage.setItem('user', data ? data : null);
   },
 
   setAuthHeader(unset = false) {
@@ -56,7 +57,9 @@ export default {
 
   login(data) {
     return LoginApiService.login(data).then((response) => {
-      this.setLocalStorageAuthData(response.data);
+      var user = new User();
+      Object.assign(user, response.data);
+      this.setLocalStorageAuthData(JSON.stringify(user));
       this.setAuthHeader();
       store.commit('auth', response.data);
       Vue.prototype.router.push({ name: 'home'});
@@ -65,13 +68,13 @@ export default {
   },
 
   logout() {
-    LoginApiService.logout().then(() => {
+    //LoginApiService.logout().then(() => {
       this.setLocalStorageAuthData({
         token: null,
         user: null,
       });
       this.setAuthHeader(true);
-    });
+    //});
     store.commit('deauth');
     Vue.prototype.router.push( { name: 'login' });
   },

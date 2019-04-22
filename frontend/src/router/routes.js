@@ -12,12 +12,18 @@ export const routes = [
     {
       path: "/airline-company/:id",
       name: "airline-company",
-      component: AirlineCompany
+      component: AirlineCompany,
+      meta: {
+        airlineadmin: true,
+      }
     },
     {
       path: "/rentacar-service/:id",
       name: "rentacar-service",
-      component: () => import("../views/RentACarService.vue")
+      component: () => import("../views/RentACarService.vue"),
+      meta: {
+        rentacaradmin: true,
+      }
     },
     {
       path: "/home",
@@ -30,7 +36,10 @@ export const routes = [
     {
       path: "/sys-admin",
       name: "sys-admin",
-      component: SystemAdmin
+      component: SystemAdmin,
+      meta: {
+        sysadmin: true,
+      }
     },
     {
       path: "/flight-reservation",

@@ -7,8 +7,11 @@ const state = {
 
 const getters = {
     activeUser: (state) => state.activeUser,
-    isLogged: (state) => state.activeUser ? true : false,
-    isAdmin: (state,getters) => getters.isLogged && state.activeUser.isAdmin(),
+    isLogged: (state) => !_.isEmpty(state.activeUser),
+    isSysAdmin: (state,getters) => getters.isLogged && state.activeUser.isSysAdmin(),
+    isAirlineAdmin: (state,getters) => getters.isLogged && state.activeUser.isAirlineAdmin(),
+    isHotelAdmin: (state,getters) => getters.isLogged && state.activeUser.isHotelAdmin(),
+    isRentacarAdmin: (state,getters) => getters.isLogged && state.activeUser.isRentacarAdmin(),
     activeUserRole: (state) => state.activeUser ? state.activeUserRole : 'guest'
 };
 
@@ -19,7 +22,6 @@ const mutations = {
     },
     auth(state, activeUser) {
         state.activeUser = new User(activeUser);
-        console.log(state.activeUser);
     }
 };
 

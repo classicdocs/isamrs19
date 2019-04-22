@@ -17,18 +17,36 @@ router.isCurrentRoute = (routeName) => {
 };
 
 router.beforeEach((to, from, next) => {
-    //console.log(store.activeUser);
+    if (localStorage.user) {
+        store.commit('auth', JSON.parse(localStorage.user));
+    }
+    else {
+        store.commit('auth', null);
+    }
+
     if (to.meta.guest && store.getters.isLogged) {
         return next({ name: 'home' });
     }
 
     /*if (!to.meta.guest && !store.getters.isLogged) {
         return next({ name: 'login' });
+    }*/
+
+    if (to.meta.sysadmin && !store.getters.isSysAdmin) {
+        return next({ name: 'home' });
     }
 
-    if (to.meta.admin && !store.getters.isAdmin) {
+    if (to.meta.airlineadmin && !store.getters.isAirlineAdmin) {
         return next({ name: 'home' });
-    }*/
+    }
+
+    if (to.meta.hoteladmin && !store.getters.isHotelAdmin) {
+        return next({ name: 'home' });
+    }
+
+    if (to.meta.rentacaradmin && !store.getters.isRentacarAdmin) {
+        return next({ name: 'home' });
+    }
 
     return next();
 });

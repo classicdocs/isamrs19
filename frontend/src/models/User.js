@@ -1,40 +1,35 @@
 import * as _ from 'lodash';
 
 const USER_ROLES = {
-    ADMIN: 'admin',
+    SYSADMIN: 'syadmin',
     USER: 'user',
+    AIRLINEADMIN: 'airlineadmin',
+    HOTELADMIN: 'hoteladmin',
+    RENTACARADMIN: 'rentacaradmin',
 };
 
 export class User {
-    /*constructor() {
-        this.username = null;
-        this.password = null;
-        this.firstname = null;
-        this.lastname = null;
-        this.email = null;
-        this.address = null;
-        this.phone = null;
-    }*/
-
     constructor(data) {
         _.assignWith(this, data);
     }
     
-    /*reset() {
-        this.username = null;
-        this.password = null;
-        this.firstname = null;
-        this.lastname = null;
-        this.email = null;
-        this.address = null;
-        this.phone = null;
-    }*/
-
     static get USER_ROLES() {
         return USER_ROLES;
     }
 
-    isAdmin() {
-        return this.role === USER_ROLES.ADMIN;
+    isSysAdmin() {
+        return this.role === USER_ROLES.SYSADMIN;
+    }
+    
+    isAirlineAdmin() {
+        return this.role === USER_ROLES.AIRLINEADMIN;
+    }
+    
+    isHotelAdmin() {
+        return this.role === USER_ROLES.HOTELADMIN;
+    }
+    
+    isRentacarAdmin() {
+        return this.role === USER_ROLES.RENTACARADMIN;
     }
 }
