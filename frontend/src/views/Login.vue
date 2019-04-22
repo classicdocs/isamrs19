@@ -106,14 +106,13 @@ export default {
             }
         },
         onSubmit() {
-            LoginController.login(this.loginData)
-                .then((response) => {
+            LoginController.login(this.loginData);
+                /*.then((response) => {
                     this.showSnackbar("Successful login!", "success");
-                    //router.push({ name: ""});
                 })
                 .catch((error) => {
                     this.showSnackbar(error.response.data, "error")
-                })
+                })*/
         },
         showSnackbar(message,color) {
             this.snackbar.color = color;

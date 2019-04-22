@@ -1,6 +1,7 @@
 package com.project.project.controller;
 
 import com.project.project.dto.LoginDTO;
+import com.project.project.dto.LoginResponseDTO;
 import com.project.project.exceptions.UsernameNotFound;
 import com.project.project.model.User;
 import com.project.project.service.UserService;
@@ -25,7 +26,7 @@ public class LoginController {
         try {
             User user = userService.findOne(loginDTO.getUsername());
             if (user.getPassword().equals(loginDTO.getPassword())){
-                return new ResponseEntity<LoginDTO>(new LoginDTO(user), HttpStatus.OK);
+                return new ResponseEntity<LoginResponseDTO>(new LoginResponseDTO(user), HttpStatus.OK);
             } else {
                 String message = "Wrong password.";
                 return new ResponseEntity<String>(message,HttpStatus.BAD_REQUEST);
