@@ -130,7 +130,7 @@ export default {
 
 #logindiv {
     height: 100%;
-    background-color: #99bffc;
+    /* background-color: #99bffc; */
 }
 
 #loginform {

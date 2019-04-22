@@ -209,12 +209,12 @@ export default {
       return false;
     }
   },
-  created() {
+  beforeCreate() {
     let fr = store.getters.flightReservation;
     if (fr)
       this.flightReservation = fr;
     else
-      this.$router.push({name: "home"});
+      this.$router.push({name: "flights"});
   },
   methods: {
     showSnackBar(data) {
