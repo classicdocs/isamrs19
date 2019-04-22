@@ -3,6 +3,9 @@ import Router from "vue-router";
 import AirlineCompany from "./views/AirlineCompany.vue";
 import Home from "./views/Home.vue";
 import SystemAdmin from "./views/SystemAdmin.vue";
+import Registration from "./views/Registration.vue"
+import Login from "./views/Login.vue"
+import FlightReservation from "./views/FlightReservation.vue";
 
 Vue.use(Router);
 
@@ -29,5 +32,20 @@ export default new Router({
       name: "sys-admin",
       component: SystemAdmin
     },
+    {
+      path: "/flight-reservation",
+      name: "flight-reservation",
+      component: FlightReservation
+    },
+    {
+      path: "/registration",
+      name: "/registration",
+      component: Registration
+    },
+    {
+      path: "/login",
+      name: "/login",
+      component: Login
+    }
   ]
 });
