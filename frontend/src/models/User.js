@@ -1,21 +1,35 @@
-export default class User {
-    constructor() {
-        this.username = null;
-        this.password = null;
-        this.firstname = null;
-        this.lastname = null;
-        this.email = null;
-        this.address = null;
-        this.phone = null;
+import * as _ from 'lodash';
+
+const USER_ROLES = {
+    SYSADMIN: 'syadmin',
+    USER: 'user',
+    AIRLINEADMIN: 'airlineadmin',
+    HOTELADMIN: 'hoteladmin',
+    RENTACARADMIN: 'rentacaradmin',
+};
+
+export class User {
+    constructor(data) {
+        _.assignWith(this, data);
+    }
+    
+    static get USER_ROLES() {
+        return USER_ROLES;
     }
 
-    reset() {
-        this.username = null;
-        this.password = null;
-        this.firstname = null;
-        this.lastname = null;
-        this.email = null;
-        this.address = null;
-        this.phone = null;
+    isSysAdmin() {
+        return this.role === USER_ROLES.SYSADMIN;
+    }
+    
+    isAirlineAdmin() {
+        return this.role === USER_ROLES.AIRLINEADMIN;
+    }
+    
+    isHotelAdmin() {
+        return this.role === USER_ROLES.HOTELADMIN;
+    }
+    
+    isRentacarAdmin() {
+        return this.role === USER_ROLES.RENTACARADMIN;
     }
 }

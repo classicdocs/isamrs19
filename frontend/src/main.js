@@ -7,12 +7,17 @@ import Axios from 'axios';
 import Config from './config';
 Vue.config.productionTip = false;
 
+import LoginController from './controllers/login.controller';
+
 import VueNumberInput from '@chenfengyuan/vue-number-input';
 Vue.use(VueNumberInput);
 
 Vue.use(Vuetify);
+Vue.prototype.router = router;
 
 import 'vuetify/dist/vuetify.min.css'
+
+LoginController.initStoreAuth();
 
 // Axios.defaults.baseURL = Config.getApiUrl();
 Axios.defaults.baseURL = 'http://localhost:8088/api';

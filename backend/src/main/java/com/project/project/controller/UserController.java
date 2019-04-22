@@ -1,6 +1,8 @@
 package com.project.project.controller;
 
 import com.project.project.dto.UserRegistrationDTO;
+import com.project.project.exceptions.UserNotFound;
+import com.project.project.exceptions.UsernameNotFound;
 import com.project.project.exceptions.UsernameTaken;
 import com.project.project.model.User;
 import com.project.project.service.UserService;
@@ -25,6 +27,37 @@ public class UserController {
         } catch (UsernameTaken ex) {
             ex.printStackTrace();
             return new ResponseEntity<String>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping(
+            value = "/{id}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody UserRegistrationDTO userDTO) {
+
+        try {
+            UserRegistrationDTO response = userService.update(userDTO, id);
+            return new ResponseEntity<UserRegistrationDTO>(response, HttpStatus.OK);
+        } catch (UsernameNotFound | UsernameTaken e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(
+            value = "/{id}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity get(@PathVariable("id") Long id) {
+
+        try {
+            UserRegistrationDTO response = userService.getUser(id);
+            return new ResponseEntity<UserRegistrationDTO>(response, HttpStatus.OK);
+        } catch (UserNotFound userNotFound) {
+            userNotFound.printStackTrace();
+            return new ResponseEntity<String>(userNotFound.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }

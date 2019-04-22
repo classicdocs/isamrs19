@@ -10,5 +10,12 @@ export default {
   },
   get() {
     return Axios.get(ENDPOINTS.USERS);
+  },
+  getUser(id) {
+    return Axios.get(ENDPOINTS.USERS + id);
+  },
+  update(id,data) {
+    return Axios.put(ENDPOINTS.USERS + id, data);
   }
+
 };

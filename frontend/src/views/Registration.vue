@@ -14,28 +14,28 @@
             <v-container grid-list-md>
                 <v-layout wrap>
                 <v-flex xs12 sm6>
-                    <v-text-field label="First name*" v-model=user.firstname :rules="firstname_rules" required></v-text-field>
+                    <v-text-field label="First name*" v-model=registration.firstname :rules="firstname_rules" required></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6>
-                    <v-text-field label="Last name*" v-model=user.lastname :rules="lastname_rules" required></v-text-field>
+                    <v-text-field label="Last name*" v-model=registration.lastname :rules="lastname_rules" required></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                    <v-text-field label="Username*" v-model=user.username :rules="username_rules" required></v-text-field>
+                    <v-text-field label="Username*" v-model=registration.username :rules="username_rules" required></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6>
-                    <v-text-field label="Password*" v-model="user.password" :type="'password'" :rules="password_rules" required></v-text-field>
+                    <v-text-field label="Password*" v-model="registration.password" :type="'password'" :rules="password_rules" required></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6>
                     <v-text-field label="Confirm password*" v-model="passwordConfirmation" :error-messages='passwordMatchError()' :type="'password'" :rules="confirm_password_rules" required></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                    <v-text-field label="Email*" v-model=user.email :rules="email_rules" required></v-text-field>
+                    <v-text-field label="Email*" v-model=registration.email :rules="email_rules" required></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                    <v-text-field label="Phone number*" v-model=user.phone :rules="phone_rules" required></v-text-field>
+                    <v-text-field label="Phone number*" v-model=registration.phone :rules="phone_rules" required></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                    <v-text-field label="Address*" v-model=user.address :rules="address_rules" required></v-text-field>
+                    <v-text-field label="Address*" v-model=registration.address :rules="address_rules" required></v-text-field>
                 </v-flex>
                 </v-layout>
             </v-container>
@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import User from "@/models/User.js"
+import Registration from "@/models/Registration.js"
 import UserController from "@/controllers/user.controller";
 import router from '../router'
 
@@ -105,7 +105,7 @@ export default {
         confirm_password_rules:[
             v => !!v || 'Password confirmation is required'
         ],
-        user : new User(),
+        registration : new Registration(),
         snackbar: {
             show: false,
             color: "",
@@ -114,7 +114,7 @@ export default {
     }),
     methods: {
         passwordMatchError () {
-            return (this.user.password === this.passwordConfirmation) ? '' : 'Please enter a matching password'
+            return (this.registration.password === this.passwordConfirmation) ? '' : 'Please enter a matching password'
         },
         reset() {
             this.$refs.form.reset();
@@ -125,7 +125,7 @@ export default {
             }
         },
         onSubmit() {
-            UserController.create(this.user).
+            UserController.create(this.registration).
                 then((response) => {
                     this.showSnackbar("Successful registration", "success");
                     this.back();
@@ -135,7 +135,7 @@ export default {
                 })
         },
         back() {
-            router.push({ name: "/login"});
+            router.push({ name: "login"});
         },
         showSnackbar(message,color) {
             this.snackbar.color = color;
