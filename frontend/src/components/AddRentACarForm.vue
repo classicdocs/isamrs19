@@ -36,11 +36,6 @@
               v-model="rentACar.promotionalDescription" 
               hint="Say something good about rent-a-car services and prices" box>
             </v-textarea>
-<!--
-            <v-checkbox label="create default service administrator - (admin : admin)"
-             :rules="[v => !!v || 'you need to have admin for every rent-a-car service.']">
-              </v-checkbox>  
--->
 
           </v-container>
           <!-- DUGMAD -->
@@ -59,8 +54,8 @@
 <script>
 
 import RentACar from "@/models/RentACar";
-import RentACarController from "@/controllers/sysAdminRAC.controller.js"
 
+import SystemAdminController from "@/controllers/system-admin.controller.js"
 export default {
   name: "AddRentACarForm",
 
@@ -86,7 +81,7 @@ export default {
         // this.rentACarAdmin.password = "admin";
         // this.rentACarAdmin.rentACar = rentACar;
 
-        RentACarController.create(this.rentACar)
+        SystemAdminController.createRentACar(this.rentACar)
           .then((response) => {
             this.$emit("finished", {msg: "RentACar successfully added", color: "success"})
             console.log("Uspeh");
