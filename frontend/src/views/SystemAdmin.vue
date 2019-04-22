@@ -44,9 +44,9 @@
 
 <script>
 
-import AddHotelForm from "@/components/AddHotelForm.vue";
-import AddRentACarForm from "@/components/AddRentACarForm.vue";
-import AddAirlineForm from "@/components/AddAirlineForm.vue";
+import AddHotelForm from "@/components/SystemAdmin/AddHotelForm.vue";
+import AddRentACarForm from "@/components/SystemAdmin/AddRentACarForm.vue";
+import AddAirlineForm from "@/components/SystemAdmin/AddAirlineForm.vue";
 
 export default {
     name: "sys-admin",
