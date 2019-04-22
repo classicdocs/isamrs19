@@ -6,7 +6,7 @@ import SystemAdmin from "../views/SystemAdmin.vue";
 import Registration from "../views/Registration.vue"
 import Login from "../views/Login.vue"
 import FlightReservation from "../views/FlightReservation.vue";
-
+import Profil from "../views/Profil.vue";
 
 export const routes = [
     {
@@ -61,5 +61,10 @@ export const routes = [
       meta: {
         guest: true,
       },
+    },
+    {
+      path: "/users/:id/profil",
+      name: "user-profil",
+      component: Profil,
     }
   ];

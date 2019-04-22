@@ -5,5 +5,5 @@ import * as snackbar from "./snackbar.store";
 export {
   reservation,
   auth,
-  snackbar
+  snackbar,
 };

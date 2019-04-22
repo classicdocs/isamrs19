@@ -42,7 +42,9 @@
 
 import UserController from "@/controllers/user.controller.js";
 import store from "@/store";
-import User from "@/models/User";
+import {User} from "@/models/User";
+import * as _ from "lodash";
+import { mapMutations } from 'vuex';
 
 export default {
   name: "Profil",
@@ -56,36 +58,36 @@ export default {
   },
   created() {
     this.getUser();
-    console.log(this.user);
   },
   methods: {
     getUser() {
       this.id = this.$route.params.id;
       UserController.getUser(this.id)
         .then((response) => {
-          Object.assign(this.user, response.data);
+          this.user = new User(response.data);
         })
         .catch((error) => {
           alert(error.response.data);
           this.$router.push({name: "home"});
         })
+      console.log(this.user);
     },
     update() {
       UserController.update(this.id, this.user)
         .then((response) => {
           this.btn = false;
-          store.commit('message', "Successfully updated!");
-          store.commit('color', "success");
-          store.commit("showSnackbar");
+          store.commit('setSnack', {msg:'Successfully updated!', color:'success'});
           console.log("succ");
         })
         .catch((error) => {
+          store.commit('setSnack', {msg: error.response.data, color:'error'});
           console.log("error");
         })
     },
     enableBtn() {
       this.btn = true;
-    }
+    },
+
   }
 }
 </script>

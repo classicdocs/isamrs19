@@ -1,21 +1,6 @@
 <template>
   <v-app>
-    <v-snackbar
-        v-model="showSnackbar"
-        :timeout="5000"
-        :color="getSanckbarColor"
-        :top="true"
-    >
-      {{getSnackbarMsg}}
-      <v-btn
-          dark
-          flat
-          @click="closeSnackbar"
-      >
-      Close
-      </v-btn>
-    </v-snackbar>
-    <v-toolbar
+    <!-- <v-toolbar
      color="primary"
     >
       <v-toolbar-items>
@@ -48,20 +33,22 @@
           </v-list-tile-action>
           <v-list-tile-content>Logout</v-list-tile-content>
         </v-list-tile>
-      </v-list>
+      </v-list> -->
+      <snackbar/>
       <router-view/>
+
   </v-app>
 </template>
 
 <script>
 import LoginController from './controllers/login.controller.js';
 import { mapGetters } from 'vuex';
-
-import store from "@/store";
+import Snackbar from "@/components/Snackbar.vue";
 
 export default {
   name: 'App',
   components: {
+    'snackbar': Snackbar
   },
   data:() => ({
     navbar: {
@@ -89,24 +76,7 @@ export default {
       // const role = store.getters.activeUserRole;
       // this.role = role;
       // return this.navbar[role];
-    },
-    showSnackbar() {
-      return store.getters.snackbar;
-    },
-    
-    getSnackbarMsg() {
-      return store.getters.message;
-    },
-    getSanckbarColor() {
-      return store.getters.color;
     }
-  },
-  methods: {
-    closeSnackbar() {
-      store.commit('closeSnackbar');
-    },
-  }
-  
   },
   computed: {
     ...mapGetters([
