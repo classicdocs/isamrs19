@@ -138,22 +138,4 @@ public class AirlineCompanyService {
             throw  new AirlineCompanyNotFound(airlineCompany);
         }
     }
-
-//    /* JANKO DODAO KOD ZA DODAVANJE NOVE AVIOKOMPANIJE  |*/
-//    /*                                                  V*/
-//    public AirlineCompanyDTO save(AirlineCompanyDTO airlineCompanyDTO) throws AirlineCompanyAlreadyExist{
-//        Optional<AirlineCompany> airline = airlineCompanyRepository.findOneByName(airlineCompanyDTO.getName());
-//
-//        if(airline.isPresent()){
-//            throw new AirlineCompanyAlreadyExist(airlineCompanyDTO.getName());
-//        }
-//        AirlineCompany airlineCompany = new AirlineCompany();
-//
-//        airlineCompany.setName(airlineCompanyDTO.getName());
-//        airlineCompany.setAddress(airlineCompanyDTO.getAddress());
-//        airlineCompany.setDescription(airlineCompanyDTO.getDescription());
-//        airlineCompany = airlineCompanyRepository.save(airlineCompany);
-//
-//        return (new AirlineCompanyDTO(airlineCompany));
-//    }
 }

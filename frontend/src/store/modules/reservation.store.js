@@ -1,10 +1,11 @@
+import FlightReservation from "@/models/FlightReservation";
 
 const state = {
   flightReservation: null,
 };
 
 const getters = {
-  flightReservation: (state) => state.flightReservation,
+  flightReservation: (state) => new FlightReservation(),
   seatsPickedDeparture: (state) => state.flightReservation.seatsPickedDeparture,
   seatsPickedReturn: (state) => state.flightReservation.seatsPickedReturn,
 };
