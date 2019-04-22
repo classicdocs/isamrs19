@@ -14,10 +14,6 @@
 </template>
 <script>
 
-// import SearchForm from "@/components/Flights/SearchForm.vue";
-// import SearchResult from "@/components/Flights/SearchResult.vue";
-// import FilterForm from "@/components/Flights/FilterForm.vue";
-// import SearchParams from "@/models/SearchParams.js";
 import HotelsOverviewForm from "@/components/HotelsOverviewForm.vue";
 export default {
   name: "HotelsOverview",

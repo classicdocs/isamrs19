@@ -12,12 +12,8 @@
             {{ expand ? 'Close' : 'Keep' }} other rows
           </v-btn>
         </v-toolbar>
-        <v-data-table
-          :headers="headers"
-          :items="hotels"
-          class="elevation-1"
-          :expand="expand"
-          item-key="name"
+        <v-data-table :headers="headers" :items="hotels"
+          class="elevation-1" :expand="expand" item-key="name"
         >
           <template v-slot:items="props">
           <tr @click="props.expanded = !props.expanded">
@@ -43,21 +39,6 @@
         </v-card-text>
       </v-form>
     </v-card>
-    <v-snackbar
-        v-model="snackbar.show"
-        :timeout="5000"
-        :color="snackbar.color"
-        :top="true"
-    >
-      {{snackbar.msg}}
-      <v-btn
-          dark
-          flat
-          @click="snackbar.show = false"
-      >
-      Close
-      </v-btn>
-    </v-snackbar>
   </div>
 </template>
 
@@ -83,7 +64,6 @@ export default {
         ],
     hotels: [],
     form : true,
-    hotelNames: [],
     
     snackbar: {
       show: false,
@@ -91,33 +71,14 @@ export default {
       msg: "",
     },
   }),
-  computed: {
-  todos(){
-    return store.tasks
-  }
-  },
   created() {
     HotelsController.getHotels()
       .then((response) => {
         response.data.forEach(element => {
           this.hotels.push(element);
-          this.hotelNames.push(element.name);
         });
       });
   },
-  methods: {
-    oneWayBtnClicked() {
-      this.roundBtnColor = "default";
-      this.oneWayBtnColor = "primary";
-    },
-    roundBtnClicked() {
-      this.roundBtnColor = "primary";
-      this.oneWayBtnColor = "default";
-    },
-    
-    validate() {
-    }
-  }
 }
 </script>
 <style>
