@@ -127,4 +127,13 @@ public class AirlineCompanyController {
         }
     }
 
+    // OPCIJA NEREGISTROVANOG KORISNIKA ZA PREGLED SVIH AVIOKOMPANIJA ZAHTEVA METODU ZA
+    // DOBAVLJANJE SVIH AVIOKOMPANIJA
+    @GetMapping(
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity findAllAirlines() {
+        Set<AirlineCompanyDTO> airlineCompanies = airlineCompanyService.findAllAirlines();
+        return new ResponseEntity<Set<AirlineCompanyDTO>>(airlineCompanies, HttpStatus.OK);
+    }
 }

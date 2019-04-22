@@ -19,6 +19,9 @@ export default {
   },
   updateAirplane(airlineCompany, airplane, data) {
     return AirlineCompanyApiService.updateAirplane(airlineCompany, airplane, data);
+  },
+  findAllAirlines(){
+    return AirlineCompanyApiService.findAllAirlines();
   }
 
 };
