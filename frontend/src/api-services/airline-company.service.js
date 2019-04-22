@@ -3,6 +3,7 @@ import Axios from 'axios';
 const ENDPOINTS = {
   AIRLINE_COMPANY: 'airline-companies/',
   AIRPLANES: '/airplanes/',
+  AIRLINE_COMPANIES: 'airline-companies',
 };
 
 export default {
@@ -23,5 +24,8 @@ export default {
   },
   updateAirplane(airlineCompany, airplane, data) {
     return Axios.put(ENDPOINTS.AIRLINE_COMPANY + airlineCompany + ENDPOINTS.AIRPLANES + airplane, data);
+  },
+  findAllAirlines(){
+    return Axios.get(ENDPOINTS.AIRLINE_COMPANIES);
   }
 };

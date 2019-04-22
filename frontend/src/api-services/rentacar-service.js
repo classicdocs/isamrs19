@@ -15,6 +15,10 @@ export default {
 
     update(id, data) {
         return Axios.put(ENDPOINTS.RENTACAR_SERVICE + id, data);
+    },
+
+    get(){
+        return Axios.get(ENDPOINTS.RENTACAR_SERVICE);
     }
 }
 

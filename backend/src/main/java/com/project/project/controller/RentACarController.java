@@ -1,6 +1,7 @@
 package com.project.project.controller;
 
 
+import com.project.project.dto.RentACarDTO;
 import com.project.project.dto.RentACarInfoDTO;
 import com.project.project.model.RentACar;
 import com.project.project.model.Vehicle;
@@ -36,5 +37,11 @@ public class RentACarController {
     public ResponseEntity update(@RequestBody RentACarInfoDTO rentACarInfoDTO, @PathVariable("id") Long id) {
         RentACarInfoDTO rentACar = rentACarService.update(id, rentACarInfoDTO);
         return new ResponseEntity<RentACarInfoDTO>(rentACar, HttpStatus.OK);
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity get(){
+        Set<RentACarDTO> rentACarDTOS = rentACarService.findAllRentACars();
+        return new ResponseEntity<Set<RentACarDTO>>(rentACarDTOS,HttpStatus.OK);
     }
 }

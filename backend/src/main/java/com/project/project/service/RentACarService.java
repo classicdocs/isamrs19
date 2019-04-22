@@ -58,4 +58,9 @@ public class RentACarService {
         oldRentACar = rentACarRepository.save(oldRentACar);
         return (new RentACarInfoDTO(oldRentACar));
     }
+
+    public Set<RentACarDTO> findAllRentACars(){
+        return rentACarRepository.findAllRentACars();
+    }
+
 }

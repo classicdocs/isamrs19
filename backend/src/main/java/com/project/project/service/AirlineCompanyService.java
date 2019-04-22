@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -138,4 +139,14 @@ public class AirlineCompanyService {
             throw  new AirlineCompanyNotFound(airlineCompany);
         }
     }
+
+    // OPCIJA NEREGISTROVANOG KORISNIKA ZA PREGLED SVIH AVIOKOMPANIJA ZAHTEVA METODU ZA
+    // DOBAVLJANJE SVIH AVIOKOMPANIJA
+    public Set<AirlineCompanyDTO> findAllAirlines(){
+        Set<AirlineCompanyDTO> airlineCompanies = airlineCompanyRepository.findAllAirlines();
+        //Set<AirlineCompanyDTO> companies = new HashSet<AirlineCompanyDTO>(airlineCompanies);
+        return airlineCompanies;
+
+    }
+
 }
