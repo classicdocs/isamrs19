@@ -209,7 +209,7 @@ export default {
       return false;
     }
   },
-  beforeCreate() {
+  created() {
     let fr = store.getters.flightReservation;
     if (fr)
       this.flightReservation = fr;

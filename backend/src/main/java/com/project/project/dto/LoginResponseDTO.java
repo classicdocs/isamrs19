@@ -17,6 +17,8 @@ public class LoginResponseDTO {
 
     private Long idAdminOf;
 
+    private boolean loggedFirstTime;
+
     public LoginResponseDTO() {
     }
 
@@ -25,6 +27,7 @@ public class LoginResponseDTO {
         this.username = user.getUsername();
         this.role = user.getRole().getRole();
         this.idAdminOf = idAdminOf;
+        this.loggedFirstTime = user.getLoggedFirstTime();
     }
 
     public String getUsername() {
@@ -57,6 +60,14 @@ public class LoginResponseDTO {
 
     public void setIdAdminOf(Long idAdminOf) {
         this.idAdminOf = idAdminOf;
+    }
+
+    public boolean isLoggedFirstTime() {
+        return loggedFirstTime;
+    }
+
+    public void setLoggedFirstTime(boolean loggedFirstTime) {
+        this.loggedFirstTime = loggedFirstTime;
     }
 }
 

@@ -11,7 +11,6 @@ export default {
   login(data) {
     return Axios.post(ENDPOINTS.LOGIN, data);
   },
-
   changePassword(data) {
     return Axios.put(ENDPOINTS.CHANGE_PASSWORD, data);
   },
