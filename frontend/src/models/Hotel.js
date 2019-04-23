@@ -1,5 +1,6 @@
 export default class Hotel {
     constructor() {
+      this.id = null,
       this.name = null,
       this.address = null,
       this.description = null,
@@ -9,6 +10,7 @@ export default class Hotel {
     }
   
     reset() {
+      this.id = null,
       this.name = null;
       this.address = null;
       this.description = null;

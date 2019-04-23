@@ -26,8 +26,8 @@
 
               <v-dialog v-model="addRentACarDialog" max-width="500px">
                 <add-rentacar-form
-                  v-on:finished="closeAddRentACar($event)"
-                  v-on:cancel  ="cancel">
+                v-on:finished="closeAddRentACar($event)"
+                v-on:cancel  ="cancel">
                 </add-rentacar-form>
               </v-dialog>
 
@@ -68,6 +68,10 @@ export default {
   methods: {
     closeAddHotel(data){
       this.addHotelDialog = false;
+      this.showSnackbar(data);
+    },
+    closeAddRentACar(data){
+      this.addRentACarDialog = false;
       this.showSnackbar(data);
     },
     closeAddAirline(data){

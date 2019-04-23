@@ -2,6 +2,7 @@ package com.project.project.model;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -18,9 +19,9 @@ public class Room {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "room_booked",
-            joinColumns = { @JoinColumn(name = "room_id", referencedColumnName = "Id" )},
-            inverseJoinColumns = { @JoinColumn(name = "room_taken_id", referencedColumnName = "Id" ) })
-    private List<RoomTaken> roomTaken;
+            joinColumns = { @JoinColumn(name = "room_id", referencedColumnName = "id" )},
+            inverseJoinColumns = { @JoinColumn(name = "room_taken_id", referencedColumnName = "id" ) })
+    private Set<RoomTaken> roomTaken;
 
     //FIXME proveri ovu referencu V
     @ManyToOne(fetch = FetchType.EAGER)
@@ -52,11 +53,11 @@ public class Room {
         this.numberOfBeds = numberOfBeds;
     }
 
-    public List<RoomTaken> getRoomTaken() {
+    public Set<RoomTaken> getRoomTaken() {
         return roomTaken;
     }
 
-    public void setRoomTaken(List<RoomTaken> roomTaken) {
+    public void setRoomTaken(Set<RoomTaken> roomTaken) {
         this.roomTaken = roomTaken;
     }
 
