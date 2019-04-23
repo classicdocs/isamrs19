@@ -35,6 +35,14 @@ export const routes = [
       }
     },
     {
+      path: "/hotel-service/:id",
+      name: "hotel-service",
+      component: () => import("../views/HotelService.vue"),
+      meta: {
+        hoteladmin: true,
+      }
+    },
+    {
       path: "/sys-admin",
       name: "sys-admin",
       component: SystemAdmin,
