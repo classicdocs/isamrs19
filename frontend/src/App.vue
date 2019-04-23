@@ -136,7 +136,7 @@ export default {
           break;
         }
         case 'Hotel Admin': {
-          path = '' // TREBA DODATI
+          path = '/hotel-service/' // TREBA DODATI
           break;
         }
         case 'RentACar Admin': {
