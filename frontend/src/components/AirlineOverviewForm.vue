@@ -60,7 +60,7 @@ export default {
           },
           { text: 'Address', value: 'address' , align: 'center'},
           // { text: 'Description', value: 'description' , align: 'center', sortable: false},
-          //{ text: 'Average rate', value: 'avgRate' , align: 'center'}
+          { text: 'Average rate', value: 'avgRate' , align: 'center'}
         ],
     airlineCompanies: [],
     form : true,

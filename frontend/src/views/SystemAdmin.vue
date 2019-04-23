@@ -1,8 +1,5 @@
 <template>
     <div>
-        <v-toolbar dark>
-          <v-toolbar-title> SYSTEM ADMIN PAGE</v-toolbar-title>
-        </v-toolbar>
         <v-container grid-list-md text-xs-center>
 
               <v-btn color="info" @click="openHotelDialog">
@@ -28,7 +25,9 @@
               </v-dialog>
 
               <v-dialog v-model="addRentACarDialog" max-width="500px">
-                <add-rentacar-form>
+                <add-rentacar-form
+                  v-on:finished="closeAddRentACar($event)"
+                  v-on:cancel  ="cancel">
                 </add-rentacar-form>
               </v-dialog>
 
@@ -75,8 +74,14 @@ export default {
       this.addAirlineDialog = false;
       this.showSnackbar(data);
     },
+    closeAddRentACar(data){
+      this.addRentACarDialog = false;
+      this.showSnackbar(data);
+    },
     cancel(){
       this.addHotelDialog = false;
+      this.addRentACarDialog = false;
+      this.addAirlineDialog = false;
     },
     openHotelDialog(){
       this.addRentACarDialog = false;

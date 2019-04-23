@@ -72,7 +72,7 @@ export default {
     },
   }),
   created() {
-    RentACarController.get()
+    RentACarController.getAll()
       .then((response) => {
         response.data.forEach(element => {
           this.rentACars.push(element);

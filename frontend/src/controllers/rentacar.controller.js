@@ -12,9 +12,8 @@ export default {
     update(id, data){
         return RentACarService.update(id, data);
     },
-
-    get() {
-        return RentACarService.get();
+    getAll() {
+        return RentACarService.getAll();
     }
 }
 

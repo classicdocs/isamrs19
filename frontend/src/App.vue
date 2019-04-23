@@ -1,4 +1,5 @@
 <template>
+  <!-- <v-app id="app" v-bind:style="{'backgroundImage': image}"> -->
   <v-app id="app">
     <v-toolbar
      color="primary"
@@ -41,6 +42,7 @@ export default {
   data:() => ({
     role: 'guest',
     navbar : null,
+    image: "url('@/assets/wallpaper.jpg')",
   }),
   created() {
     let user = store.getters.activeUser;
@@ -60,7 +62,7 @@ export default {
         right: [
         {name:'My Reservations', path:'/'},
         {name:'Friends', path:'/friends'},
-        {name:'Profil', path:() => this.getProfilPath , computed: true},
+        {name:'Profile', path:() => this.getProfilPath , computed: true},
         {name:'Log out', path:'/logout'},
         ],
         left : [
@@ -70,15 +72,16 @@ export default {
       },
       'System Admin': { 
         right: [
-        {name:'Profil', path:() => this.getProfilPath , computed: true},
+        {name:'Profile', path:() => this.getProfilPath , computed: true},
         {name:'Log out', path:'/logout'},
         ],
         left : [
+        {name: 'System admin panel', path: '/sys-admin'}
           ]
       },
       'Airline Company Admin': { 
         right: [
-        {name:'Profil', path:() => this.getProfilPath , computed: true},
+        {name:'Profile', path:() => this.getProfilPath , computed: true},
         {name:'Log out', path:'/logout'},
         ],
         left : [
@@ -87,7 +90,7 @@ export default {
       },
       'RentACar Admin': { 
         right: [
-        {name:'Profil', path:() => this.getProfilPath , computed: true},
+        {name:'Profile', path:() => this.getProfilPath , computed: true},
         {name:'Log out', path:'/logout'},
         ],
         left : [
@@ -96,7 +99,7 @@ export default {
       },
       'Hotel Admin': { 
         right: [
-        {name:'Profil', path:() => this.getProfilPath , computed: true},
+        {name:'Profile', path:() => this.getProfilPath , computed: true},
         {name:'Log out', path:'/logout'},
         ],
         left : [
@@ -155,6 +158,8 @@ export default {
 #app {
   /* background-image: url("http://citaonica.com/wp-content/uploads/2018/11/travel-health.jpg"); */
   /* background-size: 100% ; */
+  background-image: url('~@/assets/wallpaper.jpg');
+  background-size: 100%  100%;
   background-color: lavender;
 }
 </style>

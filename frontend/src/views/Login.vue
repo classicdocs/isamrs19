@@ -45,12 +45,15 @@
                     v-model="isValid"
                     lazy-validation>
                     <v-text-field prepend-icon="person" v-model=loginData.username :rules="username_rules" name="login" label="Username" type="text"></v-text-field>
-                    <v-text-field prepend-icon="lock" v-model=loginData.password :rules="password_rules" name="password" label="Password" id="password" type="password"></v-text-field>
+                    <v-text-field prepend-icon="lock" 
+                    v-model=loginData.password 
+                    :rules="password_rules" 
+                    name="password" label="Password" id="password" type="password" v-on:keyup.enter="validateLogin"></v-text-field>
                     </v-form>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn :disabled="!isValid" color="primary" @click="validateLogin">Login</v-btn>
+                    <v-btn :disabled="!isValid" color="primary" @click="validateLogin" >Login</v-btn>
                     <v-btn color="warning" @click="signup">Sign up</v-btn>
                 </v-card-actions>
                 </v-card>
@@ -107,12 +110,6 @@ export default {
         },
         onSubmit() {
             LoginController.login(this.loginData);
-                /*.then((response) => {
-                    this.showSnackbar("Successful login!", "success");
-                })
-                .catch((error) => {
-                    this.showSnackbar(error.response.data, "error")
-                })*/
         },
         showSnackbar(message,color) {
             this.snackbar.color = color;
@@ -121,6 +118,9 @@ export default {
         },
         signup() {
             router.push({ name: "/registration"});
+        },
+        logf() {
+            console.log("FDS");
         }
     }
 }
