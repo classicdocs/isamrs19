@@ -48,7 +48,6 @@ public class UserService {
             newUser.setEmail(userRegistrationDTO.getEmail());
             newUser.setAddress(userRegistrationDTO.getAddress());
             newUser.setPhone(userRegistrationDTO.getPhone());
-
             Role role = roleRepository.findOneById(1L);
             newUser.setRole(role);
 

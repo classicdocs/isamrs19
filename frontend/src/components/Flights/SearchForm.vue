@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="card">
+    <v-card >
       <v-form
           ref="form"
           v-model="form"
@@ -236,4 +236,5 @@ export default {
   }
 }
 </script>
+
 
