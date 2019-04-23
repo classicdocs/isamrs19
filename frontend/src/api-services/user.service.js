@@ -1,7 +1,8 @@
 import Axios from 'axios';
 
 const ENDPOINTS = {
-  USERS: 'users/'
+  USERS: 'users/',
+  FRIENDS: '/friends',
 };
 
 export default {
@@ -16,6 +17,9 @@ export default {
   },
   update(id,data) {
     return Axios.put(ENDPOINTS.USERS + id, data);
+  },
+  searchFriends(id, data) {
+    return Axios.get(ENDPOINTS.USERS + id + ENDPOINTS.FRIENDS, {params: data});
   }
 
 };

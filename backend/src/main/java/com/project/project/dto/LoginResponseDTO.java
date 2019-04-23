@@ -7,17 +7,24 @@ import javax.validation.constraints.NotNull;
 public class LoginResponseDTO {
 
     @NotNull
+    private Long id;
+
+    @NotNull
     private String username;
 
     @NotNull
     private String role;
 
+    private Long idAdminOf;
+
     public LoginResponseDTO() {
     }
 
-    public LoginResponseDTO(User user) {
+    public LoginResponseDTO(User user, Long idAdminOf) {
+        this.id = user.getId();
         this.username = user.getUsername();
         this.role = user.getRole().getRole();
+        this.idAdminOf = idAdminOf;
     }
 
     public String getUsername() {
@@ -34,6 +41,22 @@ public class LoginResponseDTO {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getIdAdminOf() {
+        return idAdminOf;
+    }
+
+    public void setIdAdminOf(Long idAdminOf) {
+        this.idAdminOf = idAdminOf;
     }
 }
 

@@ -1,5 +1,6 @@
 package com.project.project.controller;
 
+import com.project.project.dto.FriendDTO;
 import com.project.project.dto.UserRegistrationDTO;
 import com.project.project.exceptions.UserNotFound;
 import com.project.project.exceptions.UsernameNotFound;
@@ -11,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 @RestController
 @RequestMapping(value="api/users")
@@ -59,5 +62,15 @@ public class UserController {
             userNotFound.printStackTrace();
             return new ResponseEntity<String>(userNotFound.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping(
+            value = "/{id}/friends",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity searchFriends(@PathVariable("id") Long id, @RequestParam("friend") String friend) {
+
+        Set<FriendDTO> friends = userService.searchFriends(id, friend);
+        return new ResponseEntity<Set<FriendDTO>>(friends, HttpStatus.OK);
     }
 }

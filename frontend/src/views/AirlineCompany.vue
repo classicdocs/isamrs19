@@ -5,7 +5,7 @@
         <v-flex lg4 md6 sm6 xs12>
           <airline-company-info v-bind:airlineCompany="airlineCompany"/>
         </v-flex>
-        <v-flex lg8 md6 sm6 xs12>
+        <v-flex lg8 md6 sm6 xs12 v-if="admin">
           <v-container>
             <v-layout row wrap>
               <add-flight-dialog 
@@ -56,6 +56,7 @@ import AirlineCompany from "@/models/AirlineCompany";
 import EditAirlineCompanyDialog from "@/components/AirlineCompany/EditAirlineCompanyDialog.vue";
 import AddAirplaneDialog from "@/components/AirlineCompany/AddAirplaneDialog.vue";
 import ManageSeatsDialog from "@/components/AirlineCompany/ManageSeatsDialog.vue";
+import store from "@/store";
 
 export default {
   name: "AirlineCompany",
@@ -67,6 +68,7 @@ export default {
     'manage-seats-dialog': ManageSeatsDialog,
 },
   data: () => ({
+    admin: false,
     id: null,
     snackbar: {
       show: false,
@@ -94,6 +96,13 @@ export default {
           alert(error.response.data);
           this.$router.push({name: "home"});
         });
+      
+      if (store.getters.activeUserRole === 'Airline Company Admin')
+        if (this.id == store.getters.activeUser.idAdminOf)
+          this.admin = true;
+      else
+        this.admin = false;
+
     },
     infoUpdate(obj) {
       this.airlineCompany = obj;
