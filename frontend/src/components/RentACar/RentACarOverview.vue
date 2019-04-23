@@ -16,7 +16,7 @@
 
 import RentACarOverviewForm from "@/components/RentACarOverviewForm.vue";
 export default {
-  name: "HotelsOverview",
+  name: "RentACarOverview",
   components: {
     'rentacar-overview-form': RentACarOverviewForm,
   },

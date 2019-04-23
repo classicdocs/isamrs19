@@ -4,7 +4,7 @@
         <v-flex lg8 md8 sm6 xs12>
           <v-card>
             <v-card-title primary-title>
-               <span class="headline" v-if="!isGuest">My Profil</span>
+               <span class="headline" v-if="!isGuest">My Profile</span>
                <span class="headline" v-else>{{user.username}}</span>
             </v-card-title>
             <v-card-text>

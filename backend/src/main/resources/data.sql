@@ -1,12 +1,12 @@
 -- destinacije
-insert into destination (id,airport,country,name,zip) values (1,'Kenedi', 'SAD', 'New York', 'JFK');
-insert into destination (id,airport,country,name,zip) values (2,'Nikola Tesla', 'Srbija', 'Belgrade', 'BGD');
-insert into destination (id,airport,country,name,zip) values (3,'london', 'Velika britanija', 'London', 'LON');
+insert into destination (id,airport,country,name,zip) values (1,'John F. Kennedy', 'USA', 'New York', 'JFK');
+insert into destination (id,airport,country,name,zip) values (2,'Nikola Tesla', 'Serbia', 'Belgrade', 'BGD');
+insert into destination (id,airport,country,name,zip) values (3,'Heathrow', 'Velika britanija', 'London', 'LHR');
 
 
 -- aviokompanije
-insert into airline_company (id,description, address, name) values (1, 'Cheap flights', 'Kraljevica Marka 2', 'AirSerbia');
-insert into airline_company (id,description, address, name) values (2, '', 'Oslobodjenja 3', 'AirFrance');
+insert into airline_company (id,description, address, name) values (1, 'Cheap flights!', 'Serbia/Belgrade', 'AirSerbia');
+insert into airline_company (id,description, address, name) values (2, 'Air France is a french airline company', 'France/Paris', 'AirFrance');
 
 -- lista destinacija u aviokompaniji
 insert into airline_company_destinations(airline_company_id, destinations ) values (1, "New York");
@@ -22,9 +22,9 @@ insert into airline_company_airplanes(airline_company_id, airplanes_id) values (
 
 --let
 INSERT INTO flight (id,departure_date,departure_time,distance,flight_time_hours, flight_time_minutes,landing_date,landing_time,airline_company_id,final_destination_id,start_destination_id, airplane_id, ticket_price_first, ticket_price_business, ticket_price_economy)
- VALUES (1,'2019-03-16','11:02',100,3,50,'2019-03-20','11:11',1,2,3,1,500,400,300);
+ VALUES (1,'2019-04-28','22:00',1700,3,30,'2019-04-29','01:30',1,2,3,1,500,200,100);
 INSERT INTO flight (id,departure_date,departure_time,distance,flight_time_hours, flight_time_minutes,landing_date,landing_time,airline_company_id,final_destination_id,start_destination_id, airplane_id, ticket_price_first, ticket_price_business, ticket_price_economy)
- VALUES (2,'2019-03-16','15:02',100,2,0,'2019-07-20','11:11',1,3,2,1,500,400,300);
+ VALUES (2,'2019-05-03','15:00',1700,3,0,'2019-05-03','18:00',1,3,2,1,500,200,100);
 
 --lista letova u aviokompaniji
 insert into airline_company_flights(airline_company_id, flights_id) values (1, 1);
@@ -97,10 +97,10 @@ insert into flight_seats_business(flight_id, seats_business_id)  values (2,11);
 insert into flight_seats_business(flight_id, seats_business_id)  values (2,12);
 
 --hotel
-insert into hotel(id,name,address,description) values (1,'Moskva','Srbija/Beograd/Bulevar 55','Visok hotel');
-insert into hotel(id,name,address,description) values (2,'Seraton','Srbija/Novi Sad/Futoski put 76','Skup hotel');
-insert into hotel(id,name,address,description) values (3,'Kasina','Srbija/Beograd/bb','Poznat hotel');
-insert into hotel(id,name,address,description) values (4,'Parisjen','Francuska/Pariz/Ajfelovog Tornja 45','Z v z');
+insert into hotel(id,name,address,description) values (1,'Moscow','Serbia/Belgrade/Bulevar 55','Nice view from hotel');
+insert into hotel(id,name,address,description) values (2,'Sheraton','Serbia/Novi Sad/Futoski put 76','Known for good services');
+insert into hotel(id,name,address,description) values (3,'Kasina','Sebia/Belgrade/bb','Hotel with rich history');
+insert into hotel(id,name,address,description) values (4,'Parisjen','France/Paris/Old square 52','Best in Paris');
 ------------------------------------------------------------------------------------------------------------------------
 --rentacar servis 1
 insert into rentacar (id,name,address,promotional_description) values (1,'Drive X', 'North Road 7 London','DriveX has been continually growing ever since its foundation in 1989 in London, Great Britain, with branches all over the country.At all our locations we offer customers affordable and trusted rent a car services.');
@@ -120,21 +120,21 @@ insert into role (id,role) values (4,'Hotel Admin');
 insert into role (id,role) values (5,'System Admin');
 
 --obicni korisnici
-insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('RegisteredUser',1,'adresa','email','ime','prezime','obican korisnik','sifra','5154',1,null,null,null, FALSE);
-insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('RegisteredUser',2,'adresa1','email1','ime1','prezime1','obican korisnik 2','sifra1','51541',1,null,null,null, FALSE);
-insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('RegisteredUser',7,'adresa6','email6','ime6','prezime6','obican korisnik 3','sifra6','51546',1,null,null,null, FALSE);
+insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('RegisteredUser',1,'adresa','email','ime','prezime','user1','12345','5154',1,null,null,null, FALSE);
+insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('RegisteredUser',2,'adresa1','email1','ime1','prezime1','user2','12345','51541',1,null,null,null, FALSE);
+insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('RegisteredUser',7,'adresa6','email6','ime6','prezime6','user3','12345','51546',1,null,null,null, FALSE);
 
 --rentacar admini
-insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('RentACarAdmin',3,'adresa2','email2','ime2','prezime2','rentacar admin','sifra2','51542',2,1,null,null, FALSE);
+insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('RentACarAdmin',3,'adresa2','email2','ime2','prezime2','rentacaradmin','12345','51542',2,1,null,null, FALSE);
 
 --airline company admini
-insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('AirlineCompanyAdmin',4,'adresa3','email3','ime3','prezime3','airline company admin','sifra3','51543',3,null,1,null, FALSE);
+insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('AirlineCompanyAdmin',4,'adresa3','email3','ime3','prezime3','airlineadmin','12345','51543',3,null,1,null, FALSE);
 
 --hotel admini
-insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('HotelAdmin',5,'adresa4','email4','ime4','prezime4','hotel admin','sifra4','51544',4,null,null,1, FALSE);
+insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('HotelAdmin',5,'adresa4','email4','ime4','prezime4','hoteladmin','12345','51544',4,null,null,1, FALSE);
 
 --system admini
-insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('SystemAdmin',6,'adresa5','email5','ime5','prezime5','system admin','sifra5','51545',5,null,null,null, FALSE);
+insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('SystemAdmin',6,'adresa5','email5','ime5','prezime5','systemadmin','12345','51545',5,null,null,null, FALSE);
 
 --dodavanje prijatelja
 insert into user_friends (id, friends_id) values (1,2);

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <v-container>
-      <v-layout row wrap>
-        <v-flex lg11 md11 sm11 xs11>
+    <v-container fluid style="background-color: white">
+      <v-layout row wrap >
+        <v-flex lg11 md11 sm11 xs11 style="padding-bottom: 10px">
           <v-text-field
             v-model="searchParams"
             placeholder="Search friends"
@@ -11,7 +11,7 @@
             @keyup.enter="search"
           ></v-text-field>
         </v-flex>
-        <v-flex lg1 md1 sm1 xs1>
+        <v-flex lg1 md1 sm1 xs1 >
           <v-btn color="primary" round @click="search"><v-icon>search</v-icon></v-btn>
         </v-flex>
         <v-flex lg12 md12 sm12 xs12>

@@ -1,10 +1,9 @@
 <template>
     <div>
-        
-        <v-app id="inspire">
+        <!-- <v-app id="inspire"> -->
             <v-tabs
             centered
-            color="#2E7D32"
+            color="#2b77f2"
             dark
             icons-and-text
             >
@@ -54,9 +53,7 @@
                 </v-card>
             </v-tab-item>
             </v-tabs>
-        </v-app>
-        
-        
+        <!-- </v-app> -->
     </div>
 </template>
 
@@ -81,12 +78,16 @@ export default {
     created() {
         this.getData();
     },
+    watch: {
+    '$route': 'getData'
+    },
     methods: {
         getData() {
             this.id = this.$route.params.id;
 
             RentACarController.get(this.id)
                 .then((response) => {
+                    console.log(response.data);
                     this.rentacar = response.data;
                 })
         },

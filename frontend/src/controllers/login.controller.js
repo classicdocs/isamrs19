@@ -56,7 +56,8 @@ export default {
   },
 
   login(data) {
-    return LoginApiService.login(data).then((response) => {
+    return LoginApiService.login(data)
+    .then((response) => {
       var user = new User();
       Object.assign(user, response.data);
       this.setLocalStorageAuthData(JSON.stringify(user));
@@ -92,6 +93,9 @@ export default {
       }
       
       return response;
+    })
+    .catch((error) => {
+      store.commit('setSnack', {'msg': error.response.data, 'color': "error"})
     });
   },
 

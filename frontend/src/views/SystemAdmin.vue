@@ -1,8 +1,5 @@
 <template>
     <div>
-        <v-toolbar dark>
-          <v-toolbar-title> SYSTEM ADMIN PAGE</v-toolbar-title>
-        </v-toolbar>
         <v-container grid-list-md text-xs-center>
 
               <v-btn color="info" @click="openHotelDialog">
@@ -79,6 +76,10 @@ export default {
     },
     closeAddAirline(data){
       this.addAirlineDialog = false;
+      this.showSnackbar(data);
+    },
+    closeAddRentACar(data){
+      this.addRentACarDialog = false;
       this.showSnackbar(data);
     },
     cancel(){
