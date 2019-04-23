@@ -1,7 +1,10 @@
 package com.project.project.controller;
 
+import com.project.project.dto.ChangePasswordDTO;
 import com.project.project.dto.LoginDTO;
 import com.project.project.dto.LoginResponseDTO;
+import com.project.project.exceptions.UserNotFound;
+import com.project.project.exceptions.UserNotLoggedFirstTime;
 import com.project.project.exceptions.UsernameNotFound;
 import com.project.project.model.AirlineCompanyAdmin;
 import com.project.project.model.HotelAdmin;
@@ -12,19 +15,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value="api/login")
+@RequestMapping(value="api")
 public class LoginController {
 
     @Autowired
     private UserService userService;
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(
+            value = "/login",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity login(@RequestBody LoginDTO loginDTO) {
         try {
             User user = userService.findOne(loginDTO.getUsername());
@@ -55,6 +58,23 @@ public class LoginController {
         } catch (UsernameNotFound e){
             e.printStackTrace();
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping(
+            value = "/change-password",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
+        try {
+            boolean ok = userService.changePassword(changePasswordDTO);
+            if (ok)
+                return new ResponseEntity<String>("Successfully", HttpStatus.OK);
+            return  new ResponseEntity<String>("Failed", HttpStatus.BAD_REQUEST);
+        } catch (UserNotFound | UserNotLoggedFirstTime userNotFound) {
+            userNotFound.printStackTrace();
+            return new ResponseEntity<String>(userNotFound.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

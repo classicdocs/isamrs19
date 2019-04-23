@@ -11,7 +11,7 @@ import Hotels from "../views/Hotels.vue";
 import RentACars from "../views/RentACars.vue";
 import Logout from "../views/Logout.vue";
 import Friends from "../views/Friends.vue";
-
+import ChangePassword from "../views/ChangePassword.vue";
 
 export const routes = [
     {
@@ -104,6 +104,11 @@ export const routes = [
       name: "friends",
       component: Friends,
     },
+    {
+      path: "/change-password",
+      name: "change-password",
+      component: ChangePassword
+    }
     
     
   ];

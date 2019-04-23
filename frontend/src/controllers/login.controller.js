@@ -62,7 +62,35 @@ export default {
       this.setLocalStorageAuthData(JSON.stringify(user));
       this.setAuthHeader();
       store.commit('auth', response.data);
-      Vue.prototype.router.push({ name: 'flights'});
+      let path = 'flights';
+      let loggedFirstTime = store.getters.activeUser.loggedFirstTime;
+      let role = store.getters.activeUserRole;
+      console.log(role);
+      if (loggedFirstTime === false && role !== "User" && role !== "System Admin")
+        Vue.prototype.router.push("/change-password");
+      else {
+        switch(role) {
+          case 'Airline Company Admin': {
+            
+            path = '/airline-company/' + store.getters.activeUser.idAdminOf;
+            break;
+          }
+          case 'Hotel Admin': {
+            path = '' // TREBA DODATI ruta  + store.getters.activeUser.idAdminOf;
+            break;
+          }
+          case 'RentACar Admin': {
+            path = '/rentacar-service/' + store.getters.activeUser.idAdminOf;
+            break;
+          }
+          case 'System Admin': {
+            path = '/sys-admin/';
+            break;
+          }
+        }
+        Vue.prototype.router.push(path);
+      }
+      
       return response;
     });
   },
