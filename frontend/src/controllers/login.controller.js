@@ -62,7 +62,7 @@ export default {
       this.setLocalStorageAuthData(JSON.stringify(user));
       this.setAuthHeader();
       store.commit('auth', response.data);
-      Vue.prototype.router.push({ name: 'home'});
+      Vue.prototype.router.push({ name: 'flights'});
       return response;
     });
   },

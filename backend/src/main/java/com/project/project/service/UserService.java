@@ -1,6 +1,7 @@
 package com.project.project.service;
 
 import com.project.project.dto.UserRegistrationDTO;
+import com.project.project.exceptions.UserNotFound;
 import com.project.project.exceptions.UsernameNotFound;
 import com.project.project.exceptions.UsernameTaken;
 import com.project.project.model.RegisteredUser;
@@ -52,6 +53,41 @@ public class UserService {
             newUser.setFriends(new HashSet<RegisteredUser>());
 
             return userRepository.save(newUser);
+        }
+    }
+
+    public UserRegistrationDTO update(UserRegistrationDTO userDTO, Long id) throws UsernameNotFound, UsernameTaken {
+
+        Optional<User> user = userRepository.findOneById(id);
+
+        if (user.isPresent()) {
+            Optional<User> user2 = userRepository.findOneByUsernameAndIdNot(userDTO.getUsername(), id);
+            if (user2.isPresent()) {
+                throw new UsernameTaken();
+            } else {
+                user.get().setUsername(userDTO.getUsername());
+                user.get().setPassword(userDTO.getPassword());
+                user.get().setAddress(userDTO.getAddress());
+                user.get().setEmail(userDTO.getEmail());
+                user.get().setFirstname(userDTO.getFirstname());
+                user.get().setLastname(userDTO.getLastname());
+                user.get().setPhone(userDTO.getPhone());
+
+                userRepository.save(user.get());
+                return new UserRegistrationDTO(user.get());
+            }
+        } else {
+            throw new UsernameNotFound(userDTO.getUsername());
+        }
+    }
+
+    public UserRegistrationDTO getUser(Long id) throws UserNotFound {
+
+        Optional<User> user = userRepository.findOneById(id);
+        if (user.isPresent()) {
+            return new UserRegistrationDTO(user.get());
+        } else {
+            throw new UserNotFound(id);
         }
     }
 }

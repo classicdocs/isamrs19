@@ -12,7 +12,7 @@ const getters = {
     isAirlineAdmin: (state,getters) => getters.isLogged && state.activeUser.isAirlineAdmin(),
     isHotelAdmin: (state,getters) => getters.isLogged && state.activeUser.isHotelAdmin(),
     isRentacarAdmin: (state,getters) => getters.isLogged && state.activeUser.isRentacarAdmin(),
-    activeUserRole: (state) => state.activeUser ? state.activeUserRole : 'guest'
+    activeUserRole: (state) => state.activeUser ? state.activeUser.role : 'guest'
 };
 
 const mutations = {

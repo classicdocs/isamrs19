@@ -72,7 +72,7 @@ export default {
     },
   }),
   created() {
-      alert("tragam");
+      // alert("tragam");
     AirlineCompanyController.findAllAirlines()
       .then((response) => {
         response.data.forEach(element => {

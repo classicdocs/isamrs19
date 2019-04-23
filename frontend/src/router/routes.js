@@ -1,14 +1,21 @@
 import Vue from "vue";
 import Router from "vue-router";
 import AirlineCompany from "../views/AirlineCompany.vue";
-import Home from "../views/Home.vue";
 import SystemAdmin from "../views/SystemAdmin.vue";
 import Registration from "../views/Registration.vue"
 import Login from "../views/Login.vue"
 import FlightReservation from "../views/FlightReservation.vue";
-
+import Profil from "../views/Profil.vue";
+import Flights from "../views/Flights.vue";
+import Hotels from "../views/Hotels.vue";
+import RentACars from "../views/RentACars.vue";
+import Logout from "../views/Logout.vue";
 
 export const routes = [
+    {
+      path: "*",
+      redirect: '/flights'
+    },
     {
       path: "/airline-company/:id",
       name: "airline-company",
@@ -26,14 +33,6 @@ export const routes = [
       }
     },
     {
-      path: "/home",
-      name: "home",
-      component: Home,
-      meta: {
-        logged: true,
-      },
-    },
-    {
       path: "/sys-admin",
       name: "sys-admin",
       component: SystemAdmin,
@@ -48,7 +47,7 @@ export const routes = [
     },
     {
       path: "/registration",
-      name: "/registration",
+      name: "registration",
       component: Registration,
       meta: {
         guest: true,
@@ -61,5 +60,35 @@ export const routes = [
       meta: {
         guest: true,
       },
-    }
+    },
+    {
+      path: "/logout",
+      name: "logout",
+      component: Logout,
+    },
+    {
+      path: "/users/:id/profil",
+      name: "user-profil",
+      component: Profil,
+      meta: {
+        guest: true,
+      },
+    },
+    {
+      path: "/flights",
+      name: "flights",
+      component: Flights,
+    },
+    {
+      path: "/hotels",
+      name: "hotels",
+      component: Hotels,
+    },
+    {
+      path: "/rent-a-cars",
+      name: "rent-a-cars",
+      component: RentACars,
+    },
+    
+    
   ];

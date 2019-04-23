@@ -150,7 +150,7 @@ export default {
 
 #registrationdiv {
     height: 100%;
-    background-color: #99bffc;
+    /* background-color: #99bffc; */
 }
 
 #registrationform {

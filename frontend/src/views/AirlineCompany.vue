@@ -91,8 +91,8 @@ export default {
           this.airlineCompany = response.data;
         })
         .catch(() => {
-          console.log("redirect");
-          // redirect
+          alert(error.response.data);
+          this.$router.push({name: "home"});
         });
     },
     infoUpdate(obj) {
