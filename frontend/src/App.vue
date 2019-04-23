@@ -7,7 +7,7 @@
         <v-btn 
           v-for="(item,index) in getNavBarLinksLeft"
           :key="index"
-          @click="$router.push({name: item.path})"
+          @click="$router.push(item.computed ? item.path() : item.path)"
           color="primary"
         >{{item.name}}</v-btn>
       </v-toolbar-items>
@@ -16,7 +16,7 @@
         <v-btn 
           v-for="(item,index) in getNavBarLinksRight"
           :key="index"
-          @click="$router.push({name: item.path})"
+          @click="$router.push(item.computed ?  item.path() : item.path)"
           color="primary"
         >{{item.name}}</v-btn>
       </v-toolbar-items>
@@ -40,35 +40,71 @@ export default {
   },
   data:() => ({
     role: 'guest',
-    navbar: {
+    navbar : null,
+  }),
+  created() {
+    let user = store.getters.activeUser;
+    this.navbar =  {
       guest: {
         right : [
-          {name:'Log in', path:'login'},
-          {name:'Sign up', path:'registration'}
+          {name:'Log in', path:'/login'},
+          {name:'Sign up', path:'/registration'}
         ],
         left : [
-          {name: 'Flights', path:'flights'},
-          {name: 'Hotels', path: 'hotels'},
-          {name: 'Rent-a-cars', path: 'rent-a-cars'},
+          {name: 'Flights', path:'/flights'},
+          {name: 'Hotels', path: '/hotels'},
+          {name: 'Rent-a-cars', path: '/rent-a-cars'},
         ]
       },
-      admin: {
+      'User': { 
         right: [
-        {name:'Log out', path:'logout'},
-        ],
-        left: []
-      },
-      User: { 
-        right: [
-        {name:'Log out', path:'logout'},
+        {name:'My Reservations', path:'/'},
+        {name:'Friends', path:'/friends'},
+        {name:'Profil', path:() => this.getProfilPath , computed: true},
+        {name:'Log out', path:'/logout'},
         ],
         left : [
-          {name: 'Flights', path:'flights'},
-          {name: 'Hotels', path: 'hotels'},
-          {name: 'Rent-a-cars', path: 'rent-a-cars'},]
+          {name: 'Flights', path:'/flights'},
+          {name: 'Hotels', path: '/hotels'},
+          {name: 'Rent-a-cars', path: '/rent-a-cars'},]
       },
-    },
-  }),
+      'System Admin': { 
+        right: [
+        {name:'Profil', path:() => this.getProfilPath , computed: true},
+        {name:'Log out', path:'/logout'},
+        ],
+        left : [
+          ]
+      },
+      'Airline Company Admin': { 
+        right: [
+        {name:'Profil', path:() => this.getProfilPath , computed: true},
+        {name:'Log out', path:'/logout'},
+        ],
+        left : [
+        {name: 'My Airline company', path:() => this.getIdAdminOf, computed:true}
+          ]
+      },
+      'RentACar Admin': { 
+        right: [
+        {name:'Profil', path:() => this.getProfilPath , computed: true},
+        {name:'Log out', path:'/logout'},
+        ],
+        left : [
+        {name: 'My Rent-A-Car Service', path:() => this.getIdAdminOf, computed:true}
+          ]
+      },
+      'Hotel Admin': { 
+        right: [
+        {name:'Profil', path:() => this.getProfilPath , computed: true},
+        {name:'Log out', path:'/logout'},
+        ],
+        left : [
+        {name: 'My Hotel', path:() => this.getIdAdminOf, computed:true}
+          ]
+      }
+    };
+  },
   computed: {
     getNavBarLinksRight() {
       const role = store.getters.activeUserRole;
@@ -89,6 +125,28 @@ export default {
       'isLogged',
       'activeUserRole',
     ]),
+    getProfilPath() {
+      return '/users/' + (this.activeUser ? this.activeUser.id : -1) +  '/profil';
+    },
+    getIdAdminOf() {
+      let path = '';
+      switch(this.activeUserRole) {
+        case 'Airline Company Admin': {
+          path = '/airline-company/';
+          break;
+        }
+        case 'Hotel Admin': {
+          path = '' // TREBA DODATI
+          break;
+        }
+        case 'RentACar Admin': {
+          path = '/rentacar-service/';
+          break;
+        }
+      }
+      console.log(path);
+      return path + (this.activeUser ? this.activeUser.idAdminOf : -1);
+    }
   },
 }
 </script>

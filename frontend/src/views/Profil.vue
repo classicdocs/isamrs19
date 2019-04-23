@@ -4,11 +4,12 @@
         <v-flex lg8 md8 sm6 xs12>
           <v-card>
             <v-card-title primary-title>
-               <span class="headline">Profil</span>
+               <span class="headline" v-if="!isGuest">My Profil</span>
+               <span class="headline" v-else>{{user.username}}</span>
             </v-card-title>
             <v-card-text>
-              <v-layout justify-center justify-space-around>
-                <v-flex lg5 md5 sm12 xs12>
+              <v-layout justify-center justify-space-around  >
+                <v-flex lg5 md5 sm12 xs12 v-if="!isGuest">
                   <span>Username: </span>
                   <v-text-field solo label="label" v-model="user.username"  prepend-icon="assignment_ind" @input="enableBtn"></v-text-field>
                   <span>Password: </span>
@@ -30,7 +31,7 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="primary" :disabled="!btn" @click="update">Update</v-btn>
+              <v-btn color="primary" :disabled="!btn" v-if="!isGuest" @click="update">Update</v-btn>
             </v-card-actions>
           </v-card>
         </v-flex>
@@ -52,12 +53,14 @@ export default {
     id: null,
     user: new User(),
     btn: false,
+    isGuest: true,
   }),
   watch: {
     '$route': 'getUser',
   },
-  created() {
+  beforeMount() {
     this.getUser();
+    
   },
   methods: {
     getUser() {
@@ -70,7 +73,10 @@ export default {
           alert(error.response.data);
           this.$router.push({name: "home"});
         })
-      console.log(this.user);
+      if (this.id == store.getters.activeUser.id)
+        this.isGuest = false;
+      else
+        this.isGuest = true;
     },
     update() {
       UserController.update(this.id, this.user)

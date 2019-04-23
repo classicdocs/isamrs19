@@ -13,4 +13,7 @@ export default {
   update(id, data) {
     return UserApiService.update(id,data);
   },
+  searchFriends(id, data) {
+    return UserApiService.searchFriends(id,data);
+  }
 };

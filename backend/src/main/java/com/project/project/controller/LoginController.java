@@ -3,6 +3,9 @@ package com.project.project.controller;
 import com.project.project.dto.LoginDTO;
 import com.project.project.dto.LoginResponseDTO;
 import com.project.project.exceptions.UsernameNotFound;
+import com.project.project.model.AirlineCompanyAdmin;
+import com.project.project.model.HotelAdmin;
+import com.project.project.model.RentACarAdmin;
 import com.project.project.model.User;
 import com.project.project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +28,26 @@ public class LoginController {
     public ResponseEntity login(@RequestBody LoginDTO loginDTO) {
         try {
             User user = userService.findOne(loginDTO.getUsername());
+            Long idAdminOf = null;
+            switch (user.getRole().getRole()) {
+                case "Airline Company Admin": {
+                    AirlineCompanyAdmin a = (AirlineCompanyAdmin) user;
+                    idAdminOf = a.getAirlineCompany().getId();
+                    break;
+                }
+                case "Hotel Admin": {
+                    HotelAdmin h = (HotelAdmin) user;
+                    idAdminOf = h.getHotel().getId();
+                    break;
+                }
+                case "RentACar Admin": {
+                    RentACarAdmin r = (RentACarAdmin) user;
+                    idAdminOf = r.getRentACar().getId();
+                    break;
+                }
+            }
             if (user.getPassword().equals(loginDTO.getPassword())){
-                return new ResponseEntity<LoginResponseDTO>(new LoginResponseDTO(user), HttpStatus.OK);
+                return new ResponseEntity<LoginResponseDTO>(new LoginResponseDTO(user, idAdminOf), HttpStatus.OK);
             } else {
                 String message = "Wrong password.";
                 return new ResponseEntity<String>(message,HttpStatus.BAD_REQUEST);

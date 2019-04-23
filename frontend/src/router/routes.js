@@ -10,6 +10,8 @@ import Flights from "../views/Flights.vue";
 import Hotels from "../views/Hotels.vue";
 import RentACars from "../views/RentACars.vue";
 import Logout from "../views/Logout.vue";
+import Friends from "../views/Friends.vue";
+
 
 export const routes = [
     {
@@ -88,6 +90,11 @@ export const routes = [
       path: "/rent-a-cars",
       name: "rent-a-cars",
       component: RentACars,
+    },
+    {
+      path: "/friends",
+      name: "friends",
+      component: Friends,
     },
     
     
