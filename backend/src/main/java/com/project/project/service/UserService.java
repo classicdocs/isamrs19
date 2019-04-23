@@ -1,8 +1,10 @@
 package com.project.project.service;
 
+import com.project.project.dto.ChangePasswordDTO;
 import com.project.project.dto.FriendDTO;
 import com.project.project.dto.UserRegistrationDTO;
 import com.project.project.exceptions.UserNotFound;
+import com.project.project.exceptions.UserNotLoggedFirstTime;
 import com.project.project.exceptions.UsernameNotFound;
 import com.project.project.exceptions.UsernameTaken;
 import com.project.project.model.RegisteredUser;
@@ -104,5 +106,21 @@ public class UserService {
         }
 
         return friends;
+    }
+
+    public boolean changePassword(ChangePasswordDTO changePasswordDTO) throws UserNotFound, UserNotLoggedFirstTime {
+
+        Optional<User> user = userRepository.findOneById(changePasswordDTO.getId());
+        if (user.isPresent()) {
+            if (!user.get().getLoggedFirstTime()) {
+                user.get().setPassword(changePasswordDTO.getPassword());
+                user.get().setLoggedFirstTime(true);
+                userRepository.save(user.get());
+                return true;
+            }
+            throw new UserNotLoggedFirstTime(changePasswordDTO.getId());
+        } else {
+            throw new UserNotFound(changePasswordDTO.getId());
+        }
     }
 }

@@ -38,6 +38,9 @@ public abstract class User {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Role role;
 
+    @Column(name = "logged_first_time", nullable = false)
+    private Boolean loggedFirstTime = false;
+
     public User() {
     }
 
@@ -111,5 +114,13 @@ public abstract class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Boolean getLoggedFirstTime() {
+        return loggedFirstTime;
+    }
+
+    public void setLoggedFirstTime(Boolean loggedFirstTime) {
+        this.loggedFirstTime = loggedFirstTime;
     }
 }
