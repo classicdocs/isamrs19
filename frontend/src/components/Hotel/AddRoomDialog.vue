@@ -18,9 +18,17 @@
         <span class="headline">Add room</span>
       </v-card-title>
         <v-card-text>
-              <v-flex xs4>
-                <v-input-number :value="1" :min="1" :max="5" v-model="room.numberOfBeds">Num of beds</v-input-number>
+          <v-layout > <!--v-bind="binding"-->
+              <v-flex>
+                Number of beds in room:
+                <number-input v-model="room.numberOfBeds" :min="1" :max="5" inline center controls></number-input>
               </v-flex>
+              <v-flex>
+                <v-text-field label="room number" v-model="room.roomNumber"
+                :rules="[v => !!v || 'room number is required']">
+                </v-text-field> 
+              </v-flex>
+            </v-layout>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -49,24 +57,23 @@ export default {
     form: true,
     addFormDialog: false,
 
-    room: new Room(),   // <----------------
+    room: new Room(),  
     hotel: new Hotel(),
     rooms: [],
-    roomNumbers: [],
+    id: 0,
   }),
   created() {
+    this.room.hotel.id = this.$route.params.id;
 
-    HotelController.getRooms()
+    HotelController.getRooms(this.room.hotel.id)
     .then((response) => {
       response.data.forEach(element => {
         this.rooms.push(element);
-        this.roomNumbers.push(element.roomNumber);
       });
     })
     .catch((error) => {
-      alert(error.response.data);
+      alert(error);
     })
-
   },
   methods: {
     validate() {
@@ -90,8 +97,8 @@ export default {
       this.$refs.form.reset();
     },
     validateRoomNumber(){
-      this.roomNumbers.forEach(number => {
-        if(this.room.roomNumber === number){
+      this.rooms.forEach(singleRoom => {
+        if(this.room.roomNumber == singleRoom.roomNumber){
           return false;
         }
       });

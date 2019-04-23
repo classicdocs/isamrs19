@@ -76,7 +76,7 @@ export default {
             break;
           }
           case 'Hotel Admin': {
-            path = '' // TREBA DODATI ruta  + store.getters.activeUser.idAdminOf;
+            path = '/hotel-service/' +  store.getters.activeUser.idAdminOf; // TREBA DODATI ruta  + store.getters.activeUser.idAdminOf;
             break;
           }
           case 'RentACar Admin': {
