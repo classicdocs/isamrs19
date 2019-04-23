@@ -67,6 +67,35 @@ export default {
           {name: 'Hotels', path: 'hotels'},
           {name: 'Rent-a-cars', path: 'rent-a-cars'},]
       },
+      'System Admin': { 
+        right: [
+        {name:'Log out', path:'logout'},
+        ],
+        left : [
+          ]
+      },
+      'Airline Company Admin': { 
+        right: [
+        {name:'Log out', path:'logout'},
+        ],
+        left : [
+          ]
+      },
+      'RentACar Admin': { 
+        right: [
+        {name:'Log out', path:'logout'},
+        ],
+        left : [
+          ]
+      },
+      'Hotel Admin': { 
+        right: [
+        {name:'Log out', path:'logout'},
+        ],
+        left : [
+          ]
+      },
+     
     },
   }),
   computed: {

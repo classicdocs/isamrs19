@@ -1,5 +1,6 @@
 package com.project.project.service;
 
+import com.project.project.dto.FriendDTO;
 import com.project.project.dto.UserRegistrationDTO;
 import com.project.project.exceptions.UserNotFound;
 import com.project.project.exceptions.UsernameNotFound;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -89,5 +91,19 @@ public class UserService {
         } else {
             throw new UserNotFound(id);
         }
+    }
+
+    public Set<FriendDTO> searchFriends(Long id, String friend) {
+
+        Set<User> users = userRepository.searchFriends(id, friend);
+
+        Set<FriendDTO> friends = new HashSet<>();
+
+        for (User user :  users) {
+            FriendDTO f = new FriendDTO(user);
+            friends.add(f);
+        }
+
+        return friends;
     }
 }
