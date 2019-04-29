@@ -7,20 +7,18 @@ import java.util.Set;
 @Entity
 public class RegisteredUser extends User {
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "user_friends", joinColumns = @JoinColumn(name = "id"))
-    @Column(name = "friends")
-    private Set<RegisteredUser> friends;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<Friendship> friends;
 
     public RegisteredUser() {
 
     }
 
-    public Set<RegisteredUser> getFriends() {
+    public Set<Friendship> getFriends() {
         return friends;
     }
 
-    public void setFriends(Set<RegisteredUser> friends) {
+    public void setFriends(Set<Friendship> friends) {
         this.friends = friends;
     }
 }

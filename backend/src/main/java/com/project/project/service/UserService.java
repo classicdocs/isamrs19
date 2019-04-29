@@ -7,6 +7,7 @@ import com.project.project.exceptions.UserNotFound;
 import com.project.project.exceptions.UserNotLoggedFirstTime;
 import com.project.project.exceptions.UsernameNotFound;
 import com.project.project.exceptions.UsernameTaken;
+import com.project.project.model.Friendship;
 import com.project.project.model.RegisteredUser;
 import com.project.project.model.Role;
 import com.project.project.model.User;
@@ -53,7 +54,7 @@ public class UserService {
             Role role = roleRepository.findOneById(1L);
             newUser.setRole(role);
 
-            newUser.setFriends(new HashSet<RegisteredUser>());
+            newUser.setFriends(new HashSet<Friendship>());
 
             return userRepository.save(newUser);
         }
