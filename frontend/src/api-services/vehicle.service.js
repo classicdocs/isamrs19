@@ -10,5 +10,8 @@ export default {
   },
   get() {
     return Axios.get(ENDPOINTS.VEHICLES);
-  }
+  },
+  getSpecific(data) {
+    return Axios.get(ENDPOINTS.VEHICLES + '/specific', data);
+  },
 };
