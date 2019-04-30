@@ -12,6 +12,7 @@ public interface HotelRepository extends JpaRepository<Hotel, String> {
 
     Hotel save(Hotel hotel);
 
+    @Query("SELECT h FROM Hotel h WHERE h.name = name")
     Optional<Hotel> findOneByName(String name);
 
     Optional<Hotel> findOneById(Long id);

@@ -6,6 +6,7 @@ import com.project.project.dto.Hotel_DTOs.HotelFloorDTO;
 import com.project.project.dto.Hotel_DTOs.RoomDTO;
 import com.project.project.exceptions.FloorNotFound;
 import com.project.project.exceptions.HotelNotFound;
+import com.project.project.exceptions.HotelWithNameNotFound;
 import com.project.project.model.Hotel_Model.Hotel;
 import com.project.project.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,6 +95,22 @@ public class HotelController {
             return new ResponseEntity<String>(hnf.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping(
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            value = "/searchByName"
+    )
+    public ResponseEntity findByName(@RequestParam("name") String name){
+        try{
+            HotelDTO hotel = hotelService.findByName(name);
+            return new ResponseEntity<HotelDTO>(hotel, HttpStatus.OK);
+        }catch (HotelWithNameNotFound hnf){
+            hnf.printStackTrace();
+            return new ResponseEntity<String>(hnf.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
 //
 //    @GetMapping(
 //            produces = MediaType.APPLICATION_JSON_VALUE

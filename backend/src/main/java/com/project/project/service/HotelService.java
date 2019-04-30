@@ -8,6 +8,7 @@ import com.project.project.dto.Hotel_DTOs.RoomDTO;
 import com.project.project.exceptions.FloorNotFound;
 import com.project.project.exceptions.HotelAlreadyExists;
 import com.project.project.exceptions.HotelNotFound;
+import com.project.project.exceptions.HotelWithNameNotFound;
 import com.project.project.model.Hotel_Model.Hotel;
 import com.project.project.model.Hotel_Model.HotelFloor;
 import com.project.project.model.Hotel_Model.HotelsOffer;
@@ -228,6 +229,25 @@ public class HotelService {
         } else {
             throw new FloorNotFound(roomDTO.getHotelFloor().getId());
         }
+    }
+
+    public HotelDTO findByName(String name) throws HotelWithNameNotFound {
+
+        Set<HotelDTO> hotels = hotelRepository.findAllHotels();
+        for (HotelDTO hotel: hotels) {
+            if(hotel.getName().equals(name)){
+                return hotel;
+            }
+        }
+        throw new HotelWithNameNotFound(name);
+//        Optional<Hotel> hotel = hotelRepository.findOneByName(name);
+//
+//
+//        if(hotel.isPresent()){
+//            return new HotelDTO(hotel.get());
+//        }else{
+//            throw new HotelWithNameNotFound(name);
+//        }
     }
 
     public Set<HotelDTO> findAll() {
