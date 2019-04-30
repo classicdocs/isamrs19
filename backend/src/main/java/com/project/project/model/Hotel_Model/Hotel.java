@@ -1,57 +1,57 @@
-package com.project.project.dto;
+package com.project.project.model.Hotel_Model;
 
+
+import com.project.project.model.HotelAdmin;
+
+import javax.persistence.*;
 import java.util.Set;
 
-import com.project.project.model.Hotel_Model.Hotel;
-import com.project.project.model.HotelAdmin;
-import com.project.project.model.Hotel_Model.HotelFloor;
-import com.project.project.model.Hotel_Model.HotelsOffer;
-import com.project.project.model.Hotel_Model.Room;
-
-import javax.validation.constraints.NotNull;
-
-public class HotelDTO {
-
+@Entity
+public class Hotel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @NotNull
+    @Column(name = "address", nullable = false)
     private String address;
 
-    @NotNull
+    @Column(name = "description")
     private String description;
 
-    @NotNull
+    @Column(name = "numOfFloors", nullable = false)
     private int numOfFloors;
 
-    @NotNull
+    @Column(name = "roomsByFloor", nullable = false)
     private int roomsByFloor;
 
-    @NotNull
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<HotelsOffer> priceList;
 
-    @NotNull
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<HotelFloor> floors;
 
-    @NotNull
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<HotelAdmin> admins;
 
+    public Hotel(){}
 
+    public int getNumOfFloors() {
+        return numOfFloors;
+    }
 
-    public HotelDTO(){}
+    public void setNumOfFloors(int numOfFloors) {
+        this.numOfFloors = numOfFloors;
+    }
 
-    public HotelDTO(Hotel hotel) {
-        this.id = hotel.getId();
-        this.name = hotel.getName();
-        this.address = hotel.getAddress();
-        this.description = hotel.getDescription();
-        this.priceList = hotel.getPriceList();
-        this.floors = hotel.getFloors();
-        this.admins = hotel.getAdmins();
-        this.numOfFloors = hotel.getNumOfFloors();
-        this.roomsByFloor = hotel.getRoomsByFloor();
+    public int getRoomsByFloor() {
+        return roomsByFloor;
+    }
+
+    public void setRoomsByFloor(int roomsByFloor) {
+        this.roomsByFloor = roomsByFloor;
     }
 
     public Set<HotelAdmin> getAdmins() {
@@ -102,27 +102,12 @@ public class HotelDTO {
         this.priceList = priceList;
     }
 
+
     public Set<HotelFloor> getFloors() {
         return floors;
     }
 
     public void setFloors(Set<HotelFloor> floors) {
         this.floors = floors;
-    }
-
-    public int getNumOfFloors() {
-        return numOfFloors;
-    }
-
-    public void setNumOfFloors(int numOfFloors) {
-        this.numOfFloors = numOfFloors;
-    }
-
-    public int getRoomsByFloor() {
-        return roomsByFloor;
-    }
-
-    public void setRoomsByFloor(int roomsByFloor) {
-        this.roomsByFloor = roomsByFloor;
     }
 }

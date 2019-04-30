@@ -6,9 +6,8 @@ import com.project.project.dto.RentACarDTO;
 import com.project.project.exceptions.AirlineCompanyAlreadyExist;
 import com.project.project.exceptions.HotelAlreadyExists;
 import com.project.project.exceptions.RentACarAlreadyExist;
-import com.project.project.exceptions.RentACarNotFound;
 import com.project.project.model.AirlineCompany;
-import com.project.project.model.Hotel;
+import com.project.project.model.Hotel_Model.Hotel;
 import com.project.project.model.RentACar;
 import com.project.project.repository.AirlineCompanyRepository;
 import com.project.project.repository.HotelAdminRepository;
@@ -47,7 +46,8 @@ public class SystemAdminService {
         h.setDescription(hotelDTO.getDescription());
         h.setName(hotelDTO.getName());
         h.setPriceList(hotelDTO.getPriceList());
-        h.setRoomConfiguration(hotelDTO.getRoomConfiguration());
+        h.setFloors(hotelDTO.getFloors());
+        //h.setRoomConfiguration(hotelDTO.getRoomConfiguration());
 
         /*Save hotel admins. Not trough for loop because every iteration forms
         * new pool connection.*/

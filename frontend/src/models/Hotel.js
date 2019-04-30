@@ -4,8 +4,10 @@ export default class Hotel {
       this.name = null,
       this.address = null,
       this.description = null,
+      this.numOfFloors = null,
+      this.roomsByFloor = null,
       this.priceList = [],
-      this.roomConfiguration = [],
+      this.floors = [],
       this.admins = []
     }
   
@@ -14,8 +16,10 @@ export default class Hotel {
       this.name = null;
       this.address = null;
       this.description = null;
+      this.numOfFloors = null,
+      this.roomsByFloor = null,
       this.priceList = [];
-      this.roomConfiguration = [];
+      this.floors = [];
       this.admins = [];
     }
   }

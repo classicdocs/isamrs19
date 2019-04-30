@@ -38,6 +38,21 @@
                 </add-airline-form>
               </v-dialog>
       </v-container>
+      <v-snackbar
+        v-model="snackbar.show"
+        :timeout="5000"
+        :color="snackbar.color"
+        :top="true"
+    >
+      {{snackbar.msg}}
+      <v-btn
+          dark
+          flat
+          @click="snackbar.show = false"
+      >
+      Close
+      </v-btn>
+    </v-snackbar>
     </div>   
 </template>
 
@@ -103,6 +118,7 @@ export default {
       this.addAirlineDialog = true;
     },
     showSnackbar(obj) {
+      alert("Snackbar");
       this.snackbar.color = obj.color;
       this.snackbar.msg = obj.msg;
       this.snackbar.show = true;

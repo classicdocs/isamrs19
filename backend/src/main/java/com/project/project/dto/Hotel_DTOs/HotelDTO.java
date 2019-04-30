@@ -1,34 +1,48 @@
-package com.project.project.model;
+package com.project.project.dto.Hotel_DTOs;
 
+import com.project.project.model.HotelAdmin;
+import com.project.project.model.Hotel_Model.Hotel;
+import com.project.project.model.Hotel_Model.HotelFloor;
+import com.project.project.model.Hotel_Model.HotelsOffer;
 
-import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
-@Entity
-public class Hotel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class HotelDTO {
+
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @NotNull
     private String name;
 
-    @Column(name = "address", nullable = false)
+    @NotNull
     private String address;
 
-    @Column(name = "description")
+    @NotNull
     private String description;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @NotNull
     private Set<HotelsOffer> priceList;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)   // to one - EAGER, to many - LAZY
-    private Set<Room> roomConfiguration;
+    @NotNull
+    private Set<HotelFloor> floors;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @NotNull
     private Set<HotelAdmin> admins;
 
-    public Hotel(){}
+
+
+    public HotelDTO(){}
+
+    public HotelDTO(Hotel hotel) {
+        this.id = hotel.getId();
+        this.name = hotel.getName();
+        this.address = hotel.getAddress();
+        this.description = hotel.getDescription();
+        this.priceList = hotel.getPriceList();
+        this.floors = hotel.getFloors();
+        this.admins = hotel.getAdmins();
+    }
 
     public Set<HotelAdmin> getAdmins() {
         return admins;
@@ -78,12 +92,11 @@ public class Hotel {
         this.priceList = priceList;
     }
 
-    public Set<Room> getRoomConfiguration() {
-        return roomConfiguration;
+    public Set<HotelFloor> getFloors() {
+        return floors;
     }
 
-    public void setRoomConfiguration(Set<Room> roomConfiguration) {
-        this.roomConfiguration = roomConfiguration;
+    public void setFloors(Set<HotelFloor> floors) {
+        this.floors = floors;
     }
-
 }

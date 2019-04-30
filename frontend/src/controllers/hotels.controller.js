@@ -7,9 +7,9 @@ export default {
     addRoom(id, data){
         return HotelsService.addRoom(id, data);
     },
-    getRooms(id){
-        return HotelsService.getRooms(id);
-    },
+    // getRooms(id){
+    //     return HotelsService.getRooms(id);
+    // },
     getHotel(id){
         return HotelsService.getHotel(id);
     }

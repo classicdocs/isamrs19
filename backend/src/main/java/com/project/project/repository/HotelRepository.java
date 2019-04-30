@@ -1,11 +1,10 @@
 package com.project.project.repository;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import com.project.project.dto.HotelDTO;
-import com.project.project.model.Hotel;
+import com.project.project.model.Hotel_Model.Hotel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

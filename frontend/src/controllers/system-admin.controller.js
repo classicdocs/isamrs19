@@ -7,7 +7,7 @@ export default {
   createRentACar(data){
     return systemAdminService.createRentACar(data);
   },
-createAirline(data) {
+  createAirline(data) {
     return systemAdminService.createAirline(data);
   }
 };
