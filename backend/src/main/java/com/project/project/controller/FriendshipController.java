@@ -1,5 +1,6 @@
 package com.project.project.controller;
 
+import com.project.project.dto.FriendDTO;
 import com.project.project.dto.FriendshipDTO;
 import com.project.project.exceptions.AlreadyFriend;
 import com.project.project.exceptions.FriendshipWrongRole;
@@ -31,11 +32,30 @@ public class FriendshipController {
         FriendshipDTO f = null;
         try {
             f = friendshipService.add(friendshipDTO);
+            if (f == null) {
+                return new ResponseEntity<String>("You accepted friend request", HttpStatus.OK);
+            }
             return new ResponseEntity<FriendshipDTO>(f, HttpStatus.OK);
         } catch (UserNotFound | AlreadyFriend | FriendshipWrongRole e) {
             e.printStackTrace();
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
+    }
+
+    @PostMapping(
+            value = "/accept",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity accept(@RequestBody FriendshipDTO friendshipDTO) {
+
+        try {
+            FriendDTO f =  friendshipService.accept(friendshipDTO);
+            return new ResponseEntity<FriendDTO>(f, HttpStatus.OK);
+        } catch (UserNotFound e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

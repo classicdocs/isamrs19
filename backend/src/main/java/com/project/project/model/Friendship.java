@@ -9,17 +9,15 @@ public class Friendship {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private RegisteredUser friend;
-
-    @Column(name = "confirmed")
-    private boolean confirmed;
-
-    @Column(name = "pending")
-    private boolean pending;
 
     public Friendship() {
 
+    }
+
+    public Friendship(RegisteredUser r) {
+        this.friend = r;
     }
 
     public Long getId() {
@@ -36,21 +34,5 @@ public class Friendship {
 
     public void setFriend(RegisteredUser friend) {
         this.friend = friend;
-    }
-
-    public boolean isConfirmed() {
-        return confirmed;
-    }
-
-    public void setConfirmed(boolean confirmed) {
-        this.confirmed = confirmed;
-    }
-
-    public boolean isPending() {
-        return pending;
-    }
-
-    public void setPending(boolean pending) {
-        this.pending = pending;
     }
 }

@@ -32,6 +32,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="primary" :disabled="!btn" v-if="!isGuest" @click="update">Update</v-btn>
+              <v-btn color="primary" v-if="isGuest" @click="addFriend">Send friend request</v-btn>
             </v-card-actions>
           </v-card>
         </v-flex>
@@ -42,6 +43,7 @@
 <script>
 
 import UserController from "@/controllers/user.controller.js";
+import FriendshipController from "@/controllers/friendship.controller.js";
 import store from "@/store";
 import {User} from "@/models/User";
 import * as _ from "lodash";
@@ -93,6 +95,19 @@ export default {
     enableBtn() {
       this.btn = true;
     },
+    addFriend() {
+      let data = {
+        "from": store.getters.activeUser.id,
+        "to": this.id
+      }
+      FriendshipController.addFriend(data)
+        .then((response) => {
+          store.commit("setSnack", {msg: "You successfully sent friend request", color: "success"});
+        })
+        .catch((error) => {
+          store.commit("setSnack", {msg: error.response.data, color: "error"});
+        })
+    }
 
   }
 }

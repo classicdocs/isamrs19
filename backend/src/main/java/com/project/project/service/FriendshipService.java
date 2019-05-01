@@ -1,12 +1,15 @@
 package com.project.project.service;
 
+import com.project.project.dto.FriendDTO;
 import com.project.project.dto.FriendshipDTO;
 import com.project.project.exceptions.AlreadyFriend;
 import com.project.project.exceptions.FriendshipWrongRole;
 import com.project.project.exceptions.UserNotFound;
+import com.project.project.model.FriendRequest;
 import com.project.project.model.Friendship;
 import com.project.project.model.RegisteredUser;
 import com.project.project.model.User;
+import com.project.project.repository.FriendRequestRepository;
 import com.project.project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +23,8 @@ public class FriendshipService {
     private UserRepository userRepository;
 
     @Autowired
-    private EmailService emailService;
+    private FriendRequestRepository friendRequestRepository;
+
 
     public FriendshipDTO add(FriendshipDTO friendshipDTO) throws UserNotFound, AlreadyFriend, FriendshipWrongRole {
 
@@ -36,28 +40,44 @@ public class FriendshipService {
                 }
                 RegisteredUser r1 = (RegisteredUser) user.get();
                 RegisteredUser r2 = (RegisteredUser) user2.get();
-                for (Friendship friendship : r1.getFriends()) {
-                    if (friendship.getFriend().equals(r2))
+                for (Friendship friend : r1.getFriends()) {
+                    if (friend.getFriend() == r2)
                         throw new AlreadyFriend(r2.getUsername());
                 }
+                FriendRequest objToRemove1 = null;
+                FriendRequest objToRemove2 = null;
+                for (FriendRequest request : r1.getFriendRequests()) {
+                    if (request.getFrom() == r2.getId())  {
+                        r1.getFriends().add(new Friendship(r2));
+                        r2.getFriends().add(new Friendship(r1));
+                        objToRemove1 = request;
+                        for (FriendRequest request2 : r2.getFriendRequests()) {
+                            if (request2.getTo() == r1.getId())
+                                objToRemove2 = request2;
+                        }
 
-                Friendship f = new Friendship();
-                f.setFriend(r2);
-                f.setPending(true);
-                f.setConfirmed(false);
-                r1.getFriends().add(f);
+                    }
+                }
+                if (objToRemove1 != null) {
+                    r1.getFriendRequests().remove(objToRemove1);
+                    r2.getFriendRequests().remove(objToRemove2);
+
+                    friendRequestRepository.delete(objToRemove1);
+                    friendRequestRepository.delete(objToRemove2);
+                    userRepository.save(r1);
+                    userRepository.save(r2);
+                    return null;
+                }
+                FriendRequest fr = new FriendRequest();
+                fr.setTo(r2.getId());
+                r1.getFriendRequests().add(fr);
                 userRepository.save(r1);
 
-                // poslati mail
-                String subject = "Friend request";
-                String message = "";
-                message += "<html><body>";
-                message += "<head><p> Email of user: " + r2.getUsername() + "</p></head>";
-                message += "<p> You have new friend request from " + r1.getUsername() + " </p>";
-                message += "<a href='http://localhost:8080/users/" + r1.getId() + "/profil'>Click on this link to see his profile</a><br>";
-                message += "<a href='http://localhost:8088/api/hello'>Click on this link to accept friend request</a>";
-                message += "</body></html>";
-                emailService.prepareAndSend(subject, message);
+                fr = new FriendRequest();
+                fr.setFrom(r1.getId());
+                r2.getFriendRequests().add(fr);
+                userRepository.save(r2);
+
                 return friendshipDTO;
             } else {
                 throw  new UserNotFound(friendshipDTO.getTo());
@@ -65,8 +85,48 @@ public class FriendshipService {
         } else {
             throw new UserNotFound(friendshipDTO.getFrom());
         }
+    }
 
+    public FriendDTO accept(FriendshipDTO friendshipDTO) throws UserNotFound {
+        Optional<User> user = userRepository.findOneById(friendshipDTO.getFrom());
+        Optional<User> user2 = userRepository.findOneById(friendshipDTO.getTo());
+        if (user.isPresent()) {
+            if (user2.isPresent()) {
+                RegisteredUser r1 = (RegisteredUser) user.get();
+                RegisteredUser r2 = (RegisteredUser) user2.get();
 
+                r1.getFriends().add(new Friendship(r2));
+                r2.getFriends().add(new Friendship(r1));
 
+                FriendRequest objToRemove1 = null;
+                FriendRequest objToRemove2 = null;
+                for (FriendRequest request : r1.getFriendRequests()) {
+                    if (request.getTo() == r2.getId())  {
+
+                        objToRemove1 = request;
+                        for (FriendRequest request2 : r2.getFriendRequests()) {
+                            if (request2.getFrom() == r1.getId())
+                                objToRemove2 = request2;
+                        }
+
+                    }
+                }
+                if (objToRemove1 != null) {
+                    r1.getFriendRequests().remove(objToRemove1);
+                    r2.getFriendRequests().remove(objToRemove2);
+
+                    friendRequestRepository.delete(objToRemove1);
+                    friendRequestRepository.delete(objToRemove2);
+                    userRepository.save(r1);
+                    userRepository.save(r2);
+                }
+                return new FriendDTO(user.get());
+
+            } else {
+                throw new UserNotFound(friendshipDTO.getFrom());
+            }
+        } else {
+            throw new UserNotFound(friendshipDTO.getFrom());
+        }
     }
 }
