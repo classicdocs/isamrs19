@@ -228,44 +228,7 @@ public class HotelService {
         }
     }
 
-    public Set<HotelDTO> findByCity(String cityName) throws HotelWithAddressNotFound{
-        Set<HotelDTO> hotels = hotelRepository.findAllHotels();
-        HotelDTO firstHotel = new HotelDTO();
-        Set<HotelDTO> foundHotels = new HashSet<HotelDTO>(){{
-            add(firstHotel);
-        }};
 
-        for (HotelDTO h: hotels) {
-            if(h.getAddress().contains(cityName)){
-                foundHotels.add(h);
-            }
-        }
-        foundHotels.remove(firstHotel);
-        if(!foundHotels.isEmpty()){
-            return foundHotels;
-        }else{
-            throw new HotelWithAddressNotFound(cityName);
-        }
-    }
-
-    public HotelDTO findByName(String name) throws HotelWithNameNotFound {
-
-        Set<HotelDTO> hotels = hotelRepository.findAllHotels();
-        for (HotelDTO hotel: hotels) {
-            if(hotel.getName().equals(name)){
-                return hotel;
-            }
-        }
-        throw new HotelWithNameNotFound(name);
-//        Optional<Hotel> hotel = hotelRepository.findOneByName(name);
-//
-//
-//        if(hotel.isPresent()){
-//            return new HotelDTO(hotel.get());
-//        }else{
-//            throw new HotelWithNameNotFound(name);
-//        }
-    }
 
     public Set<HotelDTO> findAll() {
         return hotelRepository.findAllHotels();

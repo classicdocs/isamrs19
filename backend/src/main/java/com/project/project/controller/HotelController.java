@@ -98,35 +98,6 @@ public class HotelController {
         }
     }
 
-    @GetMapping(
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            value = "/searchByName"
-    )
-    public ResponseEntity findByName(@RequestParam("name") String name){
-        try{
-            HotelDTO hotel = hotelService.findByName(name);
-            return new ResponseEntity<HotelDTO>(hotel, HttpStatus.OK);
-        }catch (HotelWithNameNotFound hnf){
-            hnf.printStackTrace();
-            return new ResponseEntity<String>(hnf.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @GetMapping(
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            value = "/searchByCity"
-    )
-    public ResponseEntity findByCity(@RequestParam("city") String cityName){
-        try{
-            Set<HotelDTO> hotels = hotelService.findByCity(cityName);
-            return new ResponseEntity<Set<HotelDTO>>(hotels, HttpStatus.OK);
-
-        }catch (HotelWithAddressNotFound hnf){
-            hnf.printStackTrace();
-            return new ResponseEntity<String>(hnf.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
 //
 //    @GetMapping(
 //            produces = MediaType.APPLICATION_JSON_VALUE
