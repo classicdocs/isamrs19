@@ -1,5 +1,6 @@
 package com.project.project.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -17,7 +18,8 @@ public interface HotelRepository extends JpaRepository<Hotel, String> {
 
     Optional<Hotel> findOneById(Long id);
 
-    //List<Hotel> findAll();
+    List<Hotel> findAll();
+
     @Query("SELECT new com.project.project.dto.HotelDTO(h) FROM Hotel h WHERE h.name IS NOT NULL")
     Set<HotelDTO> findAllHotels();
 }

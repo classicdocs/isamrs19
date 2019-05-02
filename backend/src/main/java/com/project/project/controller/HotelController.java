@@ -6,6 +6,7 @@ import com.project.project.dto.Hotel_DTOs.HotelFloorDTO;
 import com.project.project.dto.Hotel_DTOs.RoomDTO;
 import com.project.project.exceptions.FloorNotFound;
 import com.project.project.exceptions.HotelNotFound;
+import com.project.project.exceptions.HotelWithAddressNotFound;
 import com.project.project.exceptions.HotelWithNameNotFound;
 import com.project.project.model.Hotel_Model.Hotel;
 import com.project.project.service.HotelService;
@@ -15,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -110,6 +112,20 @@ public class HotelController {
         }
     }
 
+    @GetMapping(
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            value = "/searchByCity"
+    )
+    public ResponseEntity findByCity(@RequestParam("city") String cityName){
+        try{
+            Set<HotelDTO> hotels = hotelService.findByCity(cityName);
+            return new ResponseEntity<Set<HotelDTO>>(hotels, HttpStatus.OK);
+
+        }catch (HotelWithAddressNotFound hnf){
+            hnf.printStackTrace();
+            return new ResponseEntity<String>(hnf.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 
 //
 //    @GetMapping(
