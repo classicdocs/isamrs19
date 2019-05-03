@@ -1,7 +1,6 @@
 package com.project.project.controller;
 
-import com.project.project.dto.Floor_RoomDTO;
-import com.project.project.dto.HotelDTO;
+import com.project.project.dto.Hotel_DTOs.HotelDTO;
 import com.project.project.dto.Hotel_DTOs.HotelFloorDTO;
 import com.project.project.dto.Hotel_DTOs.RoomDTO;
 import com.project.project.exceptions.FloorNotFound;

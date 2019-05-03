@@ -18,6 +18,7 @@ public class HotelFloorDTO {
 
     private Set<Room> roomsOnFloor;
 
+    @NotNull
     private Hotel hotel;
 
     public HotelFloorDTO(){}
