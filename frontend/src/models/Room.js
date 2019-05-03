@@ -1,16 +1,16 @@
 
-import Hotel from "./Hotel";
+import HotelFloor from "./HotelFloor";
 
 export default class Room {
     constructor() {
       this.roomNumber = null,
       this.numberOfBeds = null,
-      this.hotel = new Hotel()
+      this.hotelFloor = new HotelFloor()
     }
   
     reset() {
       this.roomNumber = null;
       this.numberOfBeds = null;
-      this.hotel.reset();
+      this.hotelFloor.reset();
     }
   }

@@ -12,9 +12,6 @@ export default {
   addRoom(id, data){
     return Axios.post(ENDPOINTS.HOTELS + id + ENDPOINTS.ROOMS, data);
   },
-  getRooms(id){
-    return Axios.get(ENDPOINTS.HOTELS + id + ENDPOINTS.ROOMS);
-  },
   getHotel(id){
     return Axios.get(ENDPOINTS.HOTELS + id);
   }
