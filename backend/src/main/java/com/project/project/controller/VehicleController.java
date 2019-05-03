@@ -1,6 +1,7 @@
 package com.project.project.controller;
 
 import com.project.project.dto.VehicleDTO;
+import com.project.project.dto.VehicleSearchDTO;
 import com.project.project.model.RentACar;
 import com.project.project.model.Vehicle;
 import com.project.project.service.RentACarService;
@@ -11,8 +12,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Set;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 @RestController
@@ -41,4 +44,22 @@ public class VehicleController {
         rentACarService.save(rentACar);
         return new ResponseEntity<Vehicle>(vehicle, HttpStatus.CREATED);
     }
+
+//    @GetMapping(value="/specific", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity getSpecific(@RequestBody VehicleSearchDTO vehicleSearchDTO) throws ParseException {
+//        List<Vehicle> vehicles = vehicleService.findAll();
+//        List<Vehicle> vehiclesToReturn = new ArrayList<Vehicle>();
+//        for (Vehicle v : vehicles) {
+//            String pickupDateString = vehicleSearchDTO.getPickupDate();
+//            String pickupTimeString = vehicleSearchDTO.getPickupTime();
+//            String returnDateString = vehicleSearchDTO.getReturnDate();
+//            String returnTimeString = vehicleSearchDTO.getReturnDate();
+//
+//            SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+//            Date pickupDate = format.parse(pickupDateString);
+//            Date returnDate = format.parse(returnDateString);
+//
+//
+//        }
+//    }
 }
