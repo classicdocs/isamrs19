@@ -85,8 +85,8 @@ export default {
         });
       
       if (store.getters.activeUserRole === 'Hotel Admin')
-        if (this.id == store.getters.activeUser.idAdminOf)
-          this.admin = true;
+      if (this.id == store.getters.activeUser.idAdminOf)
+        this.admin = true;
       else
         this.admin = false;
 

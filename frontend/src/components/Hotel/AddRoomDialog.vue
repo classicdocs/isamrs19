@@ -24,8 +24,7 @@
               <v-layout row wrap>
 
 
-                <v-flex lg12 md12 sm12 xs12 v-for="floor in hotel.numOfFloors" :key="floor"
-                  v-bind="currentFloor">
+                <v-flex lg12 md12 sm12 xs12 v-for="floor in hotel.numOfFloors" :key="floor">
                   
                   <v-btn flat>Floor {{floor}}</v-btn>
                   
@@ -87,19 +86,12 @@ export default {
     form: true,
     addFormDialog: false,
     room: new Room(),  
-    positions: [],
   
     pickedPosition: new RoomPosition(),
     numberOfBeds: 0,
 
+
     hotel: new Hotel(),
-    counter: 0,
-    isDisabled: false,
-
-    currentFloor: 0,
-    rooms: [],
-
-
 
     hfp: new Hotel_Floor_Position(),
     fp: new Floor_Position()
@@ -119,21 +111,35 @@ export default {
       if(this.$refs.form.validate()) {
         var room = new Room();
         room.roomNumber = this.pickedPosition.number;
+        room.numberOfBeds = this.numberOfBeds;
+
+        var floorLVL = 0;
 
         this.hotel.floors.forEach(floor => {
           if(floor.level == this.pickedPosition.level){
             room.hotelFloor = floor;
+            floorLVL = floor.level;
+            // floor.roomsOnFloor.push(room);
           }
         });
+        
 
-        room.numberOfBeds = this.numberOfBeds;
+        
 
         HotelController.addRoom(this.$route.params.id, room)
           .then((response) => {
-            // dodaj spratu sobu 
+            this.hotel.floors.forEach(floor => {
+              if(floor.level == floorLVL){
+                floor.roomsOnFloor.push(room);
+              }
+            });
+
+            this.setPositions();
             this.$emit("finished", {msg: "Room successfully added", color: "success"})
+            this.addFormDialog = false;
           })
           .catch((response) => {
+            alert(response.data);
             this.$emit("finished", {msg: "Error! Something went wrong...", color: "error"})
           })
 
@@ -166,7 +172,10 @@ export default {
             if (floor.level == floorNUM){
               floor.roomsOnFloor.forEach(room => {
                 // Ukoliko tu postoji soba, pozicija postaje true
-                if(room.roomNumber == roomNUM){   position.exists = true;   }
+                if(room.roomNumber == roomNUM){   
+                  console.log(position.level + "/" + position.number);
+                  position.exists = true;   
+                  }
               }); 
             }
           });
