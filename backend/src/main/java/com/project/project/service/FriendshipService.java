@@ -8,6 +8,7 @@ import com.project.project.model.Friendship;
 import com.project.project.model.RegisteredUser;
 import com.project.project.model.User;
 import com.project.project.repository.FriendRequestRepository;
+import com.project.project.repository.FriendshipRepository;
 import com.project.project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,9 @@ public class FriendshipService {
 
     @Autowired
     private FriendRequestRepository friendRequestRepository;
+
+    @Autowired
+    private FriendshipRepository friendshipRepository;
 
 
     public FriendDTO add(FriendshipDTO friendshipDTO) throws UserNotFound, AlreadyFriend, FriendshipWrongRole, FriendRequestAlreadySent {
@@ -87,13 +91,22 @@ public class FriendshipService {
         }
     }
 
-    public FriendDTO accept(FriendshipDTO friendshipDTO) throws UserNotFound {
+    public FriendDTO accept(FriendshipDTO friendshipDTO) throws UserNotFound, FriendshipWrongRole {
         Optional<User> user = userRepository.findOneById(friendshipDTO.getFrom());
         Optional<User> user2 = userRepository.findOneById(friendshipDTO.getTo());
         if (user.isPresent()) {
             if (user2.isPresent()) {
+                if (!user.get().getRole().getRole().equals("User")) {
+                    throw new FriendshipWrongRole(user.get().getRole().getRole());
+                }
+                else if (!user2.get().getRole().getRole().equals("User")) {
+                    throw new FriendshipWrongRole(user2.get().getRole().getRole());
+                }
+
                 RegisteredUser r1 = (RegisteredUser) user.get();
                 RegisteredUser r2 = (RegisteredUser) user2.get();
+
+
 
                 r1.getFriends().add(new Friendship(r2));
                 r2.getFriends().add(new Friendship(r1));
@@ -130,10 +143,14 @@ public class FriendshipService {
         }
     }
 
-    public boolean checkRequest(Long from, Long to) throws UserNotFound {
+    public boolean checkRequest(Long from, Long to) throws UserNotFound, FriendshipWrongRole {
         Optional<User> user = userRepository.findOneById(from);
         if (user.isPresent()) {
+            if (!user.get().getRole().getRole().equals("User")) {
+                throw new FriendshipWrongRole(user.get().getRole().getRole());
+            }
             RegisteredUser registeredUser = (RegisteredUser) user.get();
+
             for (FriendRequest request: registeredUser.getFriendRequests()) {
                 if (request.getTo() == to) {
                     return true;
@@ -145,11 +162,18 @@ public class FriendshipService {
         }
     }
 
-    public FriendDTO cancel(FriendshipDTO friendshipDTO) throws UserNotFound, FriendRequestDoesntExist {
+    public FriendDTO cancel(FriendshipDTO friendshipDTO) throws UserNotFound, FriendRequestDoesntExist, FriendshipWrongRole {
         Optional<User> user = userRepository.findOneById(friendshipDTO.getFrom());
         Optional<User> user2 = userRepository.findOneById(friendshipDTO.getTo());
         if (user.isPresent()) {
             if (user2.isPresent()) {
+                if (!user.get().getRole().getRole().equals("User")) {
+                    throw new FriendshipWrongRole(user.get().getRole().getRole());
+                }
+                else if (!user2.get().getRole().getRole().equals("User")) {
+                    throw new FriendshipWrongRole(user2.get().getRole().getRole());
+                }
+
                 RegisteredUser r1 = (RegisteredUser) user.get();
                 RegisteredUser r2 = (RegisteredUser) user2.get();
 
@@ -187,4 +211,76 @@ public class FriendshipService {
         }
     }
 
+    public FriendDTO remove(FriendshipDTO friendshipDTO) throws FriendRequestDoesntExist, UserNotFound, FriendshipWrongRole {
+        Optional<User> user = userRepository.findOneById(friendshipDTO.getFrom());
+        Optional<User> user2 = userRepository.findOneById(friendshipDTO.getTo());
+        if (user.isPresent()) {
+            if (user2.isPresent()) {
+                if (!user.get().getRole().getRole().equals("User")) {
+                    throw new FriendshipWrongRole(user.get().getRole().getRole());
+                }
+                else if (!user2.get().getRole().getRole().equals("User")) {
+                    throw new FriendshipWrongRole(user2.get().getRole().getRole());
+                }
+                RegisteredUser r1 = (RegisteredUser) user.get();
+                RegisteredUser r2 = (RegisteredUser) user2.get();
+
+                Friendship f1 = null;
+                Friendship f2 = null;
+
+                for(Friendship friendship : r1.getFriends()) {
+                    if (friendship.getFriend().getId() == r2.getId())
+                        f1 = friendship;
+                }
+
+                for (Friendship friendship : r2.getFriends()) {
+                    if (friendship.getFriend().getId() == r1.getId())
+                        f2 = friendship;
+                }
+
+                if (f1 != null && f2 != null) {
+
+                    r1.getFriends().remove(f1);
+                    r2.getFriends().remove(f2);
+
+                    friendshipRepository.delete(f1);
+                    friendshipRepository.delete(f2);
+
+                    userRepository.save(r1);
+                    userRepository.save(r2);
+
+
+                    return new FriendDTO(r2);
+
+                } else {
+                    throw new FriendRequestDoesntExist(friendshipDTO.getTo());
+                }
+
+            } else {
+                throw new UserNotFound(friendshipDTO.getFrom());
+            }
+        } else {
+            throw new UserNotFound(friendshipDTO.getFrom());
+        }
+
+    }
+
+    public boolean checkFriend(Long from, Long to) throws FriendshipWrongRole, UserNotFound {
+        Optional<User> user = userRepository.findOneById(from);
+        if (user.isPresent()) {
+            if (!user.get().getRole().getRole().equals("User")) {
+                throw new FriendshipWrongRole(user.get().getRole().getRole());
+            }
+            RegisteredUser registeredUser = (RegisteredUser) user.get();
+
+            for (Friendship friendship: registeredUser.getFriends()) {
+                if (friendship.getFriend().getId() == to) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            throw new UserNotFound(from);
+        }
+    }
 }
