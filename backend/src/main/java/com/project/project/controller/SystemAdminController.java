@@ -4,10 +4,7 @@ package com.project.project.controller;
 import com.project.project.dto.AirlineCompanyDTO;
 import com.project.project.dto.Hotel_DTOs.HotelDTO;
 import com.project.project.dto.RentACarDTO;
-import com.project.project.exceptions.AirlineCompanyAlreadyExist;
-import com.project.project.exceptions.HotelAlreadyExists;
-import com.project.project.exceptions.HotelNotFound;
-import com.project.project.exceptions.RentACarNotFound;
+import com.project.project.exceptions.*;
 import com.project.project.model.RentACar;
 import com.project.project.service.AirlineCompanyService;
 import com.project.project.service.HotelService;
@@ -67,13 +64,13 @@ public class SystemAdminController {
     public ResponseEntity createRentACar(@RequestBody RentACarDTO rentACarDTO) {
         try {
 
-            RentACar rentACar = rentACarService.save(rentACarDTO);
+            RentACar rentACar = systemAdminService.createRentACar(rentACarDTO);
             return new ResponseEntity<RentACarDTO>(new RentACarDTO(rentACar), HttpStatus.CREATED);
 
-        } catch (RentACarNotFound rentACarNotFound) {
+        } catch (RentACarAlreadyExist rentACarAlreadyExist) {
 
-            rentACarNotFound.printStackTrace();
-            return new ResponseEntity<String>(rentACarNotFound.getMessage(),HttpStatus.BAD_REQUEST);
+            rentACarAlreadyExist.printStackTrace();
+            return new ResponseEntity<String>(rentACarAlreadyExist.getMessage(),HttpStatus.BAD_REQUEST);
 
         }
     }

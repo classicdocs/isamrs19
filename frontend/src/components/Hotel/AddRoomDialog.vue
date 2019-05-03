@@ -81,7 +81,6 @@ import { returnStatement } from '@babel/types';
 
 export default {
   name: "AddRoomDialog",
-  //props: ['hotel'],
   data: () => ({
     form: true,
     addFormDialog: false,

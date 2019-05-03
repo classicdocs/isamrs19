@@ -9,7 +9,6 @@
           <v-container>
             <v-layout row wrap> 
                 <add-room-dialog 
-                  v-bind:hotel="this.hotel"
                   v-on:finished="closeAddRoom($event)"
                   v-on:cancel  ="cancel"
                   ></add-room-dialog><!-- v-bind:hotel="this.hotel" -->

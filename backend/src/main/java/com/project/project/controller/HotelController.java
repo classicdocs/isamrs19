@@ -38,22 +38,6 @@ public class HotelController {
             return new ResponseEntity<String>(hnf.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-//
-//    @GetMapping(
-//            value = "/{id}/rooms",
-//            produces = MediaType.APPLICATION_JSON_VALUE
-//    )
-//    public ResponseEntity getRooms(@PathVariable("id") Long id) {
-//        Set<Room> rooms = null;
-//        try {
-//            rooms = hotelService.getRooms(id);
-//            return new ResponseEntity<Set<Room>>(rooms, HttpStatus.OK);
-//        } catch (HotelNotFound hnf) {
-//            hnf.printStackTrace();
-//            return new ResponseEntity<String>(hnf.getMessage(), HttpStatus.BAD_REQUEST);
-//        }
-//    }
-//
     @PostMapping(
             value = "/{id}/rooms",
             consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -97,14 +81,4 @@ public class HotelController {
         }
     }
 
-//
-//    @GetMapping(
-//            produces = MediaType.APPLICATION_JSON_VALUE
-//    )
-//    public ResponseEntity getFloor(@RequestBody int floorLevel){
-//
-//        HotelFloorDTO floorDTO = hotelService.findFloorByLevel()
-//        Set<HotelDTO> hotels = hotelService.findAll();
-//        return new ResponseEntity<Set<HotelDTO>>(hotels, HttpStatus.OK);
-//    }
 }

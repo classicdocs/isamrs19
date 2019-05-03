@@ -69,7 +69,6 @@ public class HotelService {
 //        }
 //    }
 
-    // FIXME mozda nepotrebno?
     public HotelDTO save(HotelDTO hotelDTO) throws HotelAlreadyExists, HotelNotFound {
 
         Optional<Hotel> hotel = hotelRepository.findOneByName(hotelDTO.getName());
@@ -102,7 +101,6 @@ public class HotelService {
         return (new HotelDTO(h));
     }
 
-    // FIXME mozda nepotrebno?
     public HotelFloorDTO addFloor(Long hotelID, HotelFloorDTO hotelFloorDTO) throws HotelNotFound {
 
         Optional<Hotel> hotel = hotelRepository.findOneById(hotelID);

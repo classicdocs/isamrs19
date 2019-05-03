@@ -139,7 +139,7 @@ insert into user (dtype,id,address,email,firstname,lastname,username,password,ph
 insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('SystemAdmin',6,'adresa5','email5','ime5','prezime5','systemadmin','12345','51545',5,null,null,null, FALSE);
 
 --dodavanje prijatelja
-insert into user_friends (id, friends_id) values (1,2);
+--insert into user_friends (registered_user_id, friends_id) values (1,2);
 
 
 
