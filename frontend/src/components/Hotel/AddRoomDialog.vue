@@ -119,13 +119,9 @@ export default {
           if(floor.level == this.pickedPosition.level){
             room.hotelFloor = floor;
             floorLVL = floor.level;
-            // floor.roomsOnFloor.push(room);
           }
         });
         
-
-        
-
         HotelController.addRoom(this.$route.params.id, room)
           .then((response) => {
             this.hotel.floors.forEach(floor => {
@@ -133,13 +129,11 @@ export default {
                 floor.roomsOnFloor.push(room);
               }
             });
-
             this.setPositions();
             this.$emit("finished", {msg: "Room successfully added", color: "success"})
             this.addFormDialog = false;
           })
           .catch((response) => {
-            alert(response.data);
             this.$emit("finished", {msg: "Error! Something went wrong...", color: "error"})
           })
 
@@ -173,7 +167,6 @@ export default {
               floor.roomsOnFloor.forEach(room => {
                 // Ukoliko tu postoji soba, pozicija postaje true
                 if(room.roomNumber == roomNUM){   
-                  console.log(position.level + "/" + position.number);
                   position.exists = true;   
                   }
               }); 
