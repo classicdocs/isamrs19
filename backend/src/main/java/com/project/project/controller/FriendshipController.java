@@ -48,7 +48,7 @@ public class FriendshipController {
         try {
             FriendDTO f =  friendshipService.accept(friendshipDTO);
             return new ResponseEntity<FriendDTO>(f, HttpStatus.OK);
-        } catch (UserNotFound e) {
+        } catch (UserNotFound | FriendshipWrongRole e) {
             e.printStackTrace();
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -64,7 +64,22 @@ public class FriendshipController {
         try {
             FriendDTO f =  friendshipService.cancel(friendshipDTO);
             return new ResponseEntity<FriendDTO>(f, HttpStatus.OK);
-        } catch (UserNotFound | FriendRequestDoesntExist e) {
+        } catch (UserNotFound | FriendRequestDoesntExist | FriendshipWrongRole e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(
+            value = "/remove",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity remove(@RequestBody FriendshipDTO friendshipDTO) {
+        try {
+            FriendDTO friendDTO1 = friendshipService.remove(friendshipDTO);
+            return new ResponseEntity<FriendDTO>(friendDTO1, HttpStatus.OK);
+        } catch (FriendRequestDoesntExist | UserNotFound | FriendshipWrongRole e) {
             e.printStackTrace();
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -78,7 +93,21 @@ public class FriendshipController {
         try {
             boolean response = friendshipService.checkRequest(from, to);
             return new ResponseEntity<String>(response ? "true" : "false", HttpStatus.OK);
-        } catch (UserNotFound userNotFound) {
+        } catch (UserNotFound | FriendshipWrongRole userNotFound) {
+            userNotFound.printStackTrace();
+            return  new ResponseEntity<String>(userNotFound.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(
+            value = "/check-friend",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity checkFriend(@RequestParam("from") Long from, @RequestParam("to") Long to) {
+        try {
+            boolean response = friendshipService.checkFriend(from, to);
+            return new ResponseEntity<String>(response ? "true" : "false", HttpStatus.OK);
+        } catch (UserNotFound | FriendshipWrongRole userNotFound) {
             userNotFound.printStackTrace();
             return  new ResponseEntity<String>(userNotFound.getMessage(), HttpStatus.BAD_REQUEST);
         }

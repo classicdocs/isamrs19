@@ -10,10 +10,13 @@ export default {
   isRequestAlreadySent(data) {
     return FriendshipApiService.isRequestAlreadySent(data);
   },
-  withdrawFriendRequest(data) {
-    return FriendshipApiService.withdrawFriendRequest(data);
-  },
   cancelFriendRequest(data) {
     return FriendshipApiService.cancelFriendRequest(data);
+  },
+  removeFriend(data) {
+    return FriendshipApiService.removeFriend(data);
+  },
+  isFriend(data) {
+    return FriendshipApiService.isFriend(data);
   }
 };
