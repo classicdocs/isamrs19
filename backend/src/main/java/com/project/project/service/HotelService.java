@@ -5,9 +5,7 @@ import java.util.*;
 import com.project.project.dto.Hotel_DTOs.HotelDTO;
 import com.project.project.dto.Hotel_DTOs.HotelFloorDTO;
 import com.project.project.dto.Hotel_DTOs.RoomDTO;
-import com.project.project.exceptions.FloorNotFound;
-import com.project.project.exceptions.HotelAlreadyExists;
-import com.project.project.exceptions.HotelNotFound;
+import com.project.project.exceptions.*;
 import com.project.project.model.Hotel_Model.Hotel;
 import com.project.project.model.Hotel_Model.HotelFloor;
 import com.project.project.model.Hotel_Model.HotelsOffer;
@@ -148,6 +146,8 @@ public class HotelService {
             throw new FloorNotFound(roomDTO.getHotelFloor().getId());
         }
     }
+
+
 
     public Set<HotelDTO> findAll() {
         return hotelRepository.findAllHotels();
