@@ -6,5 +6,14 @@ export default {
   },
   addFriend(data) {
     return FriendshipApiService.addFriend(data);
+  },
+  isRequestAlreadySent(data) {
+    return FriendshipApiService.isRequestAlreadySent(data);
+  },
+  withdrawFriendRequest(data) {
+    return FriendshipApiService.withdrawFriendRequest(data);
+  },
+  cancelFriendRequest(data) {
+    return FriendshipApiService.cancelFriendRequest(data);
   }
 };

@@ -11,12 +11,12 @@
         class="elevation-1"
       >
       <template v-slot:items="props">
-        <td class="text-xs-left">{{ props.item.username }}</td>
+        <td class="text-xs-left"><a :href="getLink(props.item.id)">{{ props.item.username }}</a></td>
         <td class="text-xs-left">{{ props.item.firstName }}</td>
         <td class="text-xs-left">{{ props.item.lastName }}</td>
         <td>
         <v-btn color="primary" @click="accept(props.item.id)">Accept</v-btn>
-        <v-btn color="primary" >Cancel</v-btn>
+        <v-btn color="primary" @click="cancel(props.item.id)">Cancel</v-btn>
         </td>
       </template>
       </v-data-table>
@@ -32,17 +32,13 @@
         class="elevation-1"
       >
       <template v-slot:items="props">
-        <td class="text-xs-left">{{ props.item.username }}</td>
+        <td class="text-xs-left"><a :href="getLink(props.item.id)">{{ props.item.username }}</a></td>
         <td class="text-xs-left">{{ props.item.firstName }}</td>
         <td class="text-xs-left">{{ props.item.lastName }}</td>
-        <v-btn color="primary" >Cancel</v-btn>
+        <v-btn color="primary" @click="withdraw(props.item.id)">Withdraw</v-btn>
       </template>
       </v-data-table>
     </v-card>
-   
-   
-    
-    
   </div>
 </template>
 
@@ -65,6 +61,16 @@ export default {
     requestsFrom: [],
     id: null,
   }),
+  computed: {
+    newRequest() {
+      return store.getters.newRequest;
+    }
+  },
+  watch: {
+    newRequest(request) {
+      this.requestsTo.push(request);
+    }
+  },
   beforeMount() {
       this.id = store.getters.activeUser.id;
       UserController.getFriendRequests(this.id)
@@ -90,10 +96,54 @@ export default {
             if (element.id === from)
               ind = this.requestsFrom.indexOf(element);
           });
-          this.requestsFrom.splice(ind,1);
+          if (ind != -1)
+            this.requestsFrom.splice(ind,1);
           store.commit("newFriend", response.data);
           store.commit("setSnack", {"msg": "Successfully accepted friend request", "color": "success"});
         });
+    },
+    cancel(from) {
+       var data = {
+        "from": from,
+        "to": this.id
+      };
+      FriendshipController.cancelFriendRequest(data)
+        .then((response) => {
+          store.commit("setSnack", {msg: "You have successfully cancel friendship request", color:"success"});
+          let ind = -1;
+          this.requestsFrom.forEach(element => {
+            if (element.id === from)
+              ind = this.requestsFrom.indexOf(element);
+          });
+          if (ind != -1)
+            this.requestsFrom.splice(ind,1);
+        })
+        .catch((error) => {
+          store.commit("setSnack", {msg: error.response.data, color:"error"});
+        })
+    },
+    withdraw(toId) {
+       var data = {
+        "from": this.id,
+        "to": toId
+      };
+      FriendshipController.cancelFriendRequest(data)
+        .then((response) => {
+          store.commit("setSnack", {msg: "You have successfully withdrawn your friendship request", color:"success"});
+          let ind = -1;
+          this.requestsTo.forEach(element => {
+            if (element.id === toId)
+              ind = this.requestsTo.indexOf(element);
+          });
+          if (ind != -1)
+            this.requestsTo.splice(ind,1);
+        })
+        .catch((error) => {
+          store.commit("setSnack", {msg: error.response.data, color:"error"});
+        })
+    },
+    getLink(id) {
+      return "http://localhost:8080/users/" + id + "/profil";
     }
   }
   

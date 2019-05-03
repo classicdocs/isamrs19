@@ -2,9 +2,7 @@ package com.project.project.service;
 
 import com.project.project.dto.FriendDTO;
 import com.project.project.dto.FriendshipDTO;
-import com.project.project.exceptions.AlreadyFriend;
-import com.project.project.exceptions.FriendshipWrongRole;
-import com.project.project.exceptions.UserNotFound;
+import com.project.project.exceptions.*;
 import com.project.project.model.FriendRequest;
 import com.project.project.model.Friendship;
 import com.project.project.model.RegisteredUser;
@@ -26,7 +24,7 @@ public class FriendshipService {
     private FriendRequestRepository friendRequestRepository;
 
 
-    public FriendshipDTO add(FriendshipDTO friendshipDTO) throws UserNotFound, AlreadyFriend, FriendshipWrongRole {
+    public FriendDTO add(FriendshipDTO friendshipDTO) throws UserNotFound, AlreadyFriend, FriendshipWrongRole, FriendRequestAlreadySent {
 
         Optional<User> user = userRepository.findOneById(friendshipDTO.getFrom());
         if (user.isPresent()) {
@@ -56,6 +54,8 @@ public class FriendshipService {
                                 objToRemove2 = request2;
                         }
 
+                    } else if (request.getTo() == r2.getId()) {
+                        throw new FriendRequestAlreadySent(r2.getUsername());
                     }
                 }
                 if (objToRemove1 != null) {
@@ -78,7 +78,7 @@ public class FriendshipService {
                 r2.getFriendRequests().add(fr);
                 userRepository.save(r2);
 
-                return friendshipDTO;
+                return new FriendDTO(r2);
             } else {
                 throw  new UserNotFound(friendshipDTO.getTo());
             }
@@ -129,4 +129,62 @@ public class FriendshipService {
             throw new UserNotFound(friendshipDTO.getFrom());
         }
     }
+
+    public boolean checkRequest(Long from, Long to) throws UserNotFound {
+        Optional<User> user = userRepository.findOneById(from);
+        if (user.isPresent()) {
+            RegisteredUser registeredUser = (RegisteredUser) user.get();
+            for (FriendRequest request: registeredUser.getFriendRequests()) {
+                if (request.getTo() == to) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            throw new UserNotFound(from);
+        }
+    }
+
+    public FriendDTO cancel(FriendshipDTO friendshipDTO) throws UserNotFound, FriendRequestDoesntExist {
+        Optional<User> user = userRepository.findOneById(friendshipDTO.getFrom());
+        Optional<User> user2 = userRepository.findOneById(friendshipDTO.getTo());
+        if (user.isPresent()) {
+            if (user2.isPresent()) {
+                RegisteredUser r1 = (RegisteredUser) user.get();
+                RegisteredUser r2 = (RegisteredUser) user2.get();
+
+                FriendRequest objToRemove1 = null;
+                FriendRequest objToRemove2 = null;
+                for (FriendRequest request : r1.getFriendRequests()) {
+                    if (request.getTo() == r2.getId())  {
+
+                        objToRemove1 = request;
+                        for (FriendRequest request2 : r2.getFriendRequests()) {
+                            if (request2.getFrom() == r1.getId())
+                                objToRemove2 = request2;
+                        }
+                    }
+                }
+                if (objToRemove1 != null && objToRemove2 != null) {
+                    r1.getFriendRequests().remove(objToRemove1);
+                    r2.getFriendRequests().remove(objToRemove2);
+
+                    friendRequestRepository.delete(objToRemove1);
+                    friendRequestRepository.delete(objToRemove2);
+                    userRepository.save(r1);
+                    userRepository.save(r2);
+                    return new FriendDTO(user.get());
+
+                } else {
+                    throw new  FriendRequestDoesntExist(friendshipDTO.getTo());
+                }
+
+            } else {
+                throw new UserNotFound(friendshipDTO.getFrom());
+            }
+        } else {
+            throw new UserNotFound(friendshipDTO.getFrom());
+        }
+    }
+
 }

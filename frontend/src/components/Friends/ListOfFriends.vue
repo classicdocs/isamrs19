@@ -11,7 +11,7 @@
         class="elevation-1"
       >
       <template v-slot:items="props">
-        <td class="text-xs-left">{{ props.item.username }}</td>
+        <td class="text-xs-left"><a :href="getLink(props.item.id)">{{ props.item.username }}</a></td>
         <td class="text-xs-left">{{ props.item.firstName }}</td>
         <td class="text-xs-left">{{ props.item.lastName }}</td>
         <v-btn color="primary" >Remove</v-btn>
@@ -56,6 +56,11 @@ export default {
   computed: {
     newFriend() {
       return store.getters.newFriend;
+    }
+  },
+  methods: {
+    getLink(id) {
+      return "http://localhost:8080/users/" + id + "/profil";
     }
   }
   

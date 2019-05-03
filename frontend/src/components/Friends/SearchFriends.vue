@@ -21,12 +21,11 @@
           hide-actions
           v-if="friends.length > 0"
         >
-          <template v-slot:items="props">
+          <template v-slot:items="props" >
             <td class="text-xs-left">{{ props.item.username }}</td>
             <td class="text-xs-left">{{ props.item.firstName }}</td>
             <td class="text-xs-left">{{ props.item.lastName }}</td>
             <v-btn color="primary" @click="viewProfil(props.item.id)">View profil</v-btn>
-            <v-btn color="primary" @click="addFriend(props.item.id)">Send friend request</v-btn>
           </template>
         </v-data-table>
       </v-flex>
@@ -65,7 +64,6 @@ export default {
           if (response.data.length === 0)
             store.commit('setSnack', {msg: 'There is no search result!', color:'info'});
           this.friends = response.data;
-          console.log(response.data);
         })
     },
     viewProfil(id) {
@@ -79,11 +77,13 @@ export default {
       FriendshipController.addFriend(data)
         .then((response) => {
           store.commit("setSnack", {msg: "You successfully sent friend request", color: "success"});
+          store.commit("newRequest", response.data);
         })
         .catch((error) => {
           store.commit("setSnack", {msg: error.response.data, color: "error"});
         })
-    }
+    },
+    
   },
   
   
