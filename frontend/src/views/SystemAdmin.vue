@@ -118,7 +118,6 @@ export default {
       this.addAirlineDialog = true;
     },
     showSnackbar(obj) {
-      alert("Snackbar");
       this.snackbar.color = obj.color;
       this.snackbar.msg = obj.msg;
       this.snackbar.show = true;
