@@ -7,7 +7,7 @@ import com.project.project.exceptions.FriendshipWrongRole;
 import com.project.project.exceptions.UserNotFound;
 import com.project.project.exceptions.UsernameNotFound;
 import com.project.project.exceptions.UsernameTaken;
-import com.project.project.model.FriendRequests;
+import com.project.project.model.FriendRequest;
 import com.project.project.model.User;
 import com.project.project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -45,21 +45,21 @@ public class VehicleController {
         return new ResponseEntity<Vehicle>(vehicle, HttpStatus.CREATED);
     }
 
-    @GetMapping(value="/specific", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getSpecific(@RequestBody VehicleSearchDTO vehicleSearchDTO) throws ParseException {
-        List<Vehicle> vehicles = vehicleService.findAll();
-        List<Vehicle> vehiclesToReturn = new ArrayList<Vehicle>();
-        for (Vehicle v : vehicles) {
-            String pickupDateString = vehicleSearchDTO.getPickupDate();
-            String pickupTimeString = vehicleSearchDTO.getPickupTime();
-            String returnDateString = vehicleSearchDTO.getReturnDate();
-            String returnTimeString = vehicleSearchDTO.getReturnDate();
-
-            SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-            Date pickupDate = format.parse(pickupDateString);
-            Date returnDate = format.parse(returnDateString);
-
-
-        }
-    }
+//    @GetMapping(value="/specific", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity getSpecific(@RequestBody VehicleSearchDTO vehicleSearchDTO) throws ParseException {
+//        List<Vehicle> vehicles = vehicleService.findAll();
+//        List<Vehicle> vehiclesToReturn = new ArrayList<Vehicle>();
+//        for (Vehicle v : vehicles) {
+//            String pickupDateString = vehicleSearchDTO.getPickupDate();
+//            String pickupTimeString = vehicleSearchDTO.getPickupTime();
+//            String returnDateString = vehicleSearchDTO.getReturnDate();
+//            String returnTimeString = vehicleSearchDTO.getReturnDate();
+//
+//            SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+//            Date pickupDate = format.parse(pickupDateString);
+//            Date returnDate = format.parse(returnDateString);
+//
+//
+//        }
+//    }
 }
