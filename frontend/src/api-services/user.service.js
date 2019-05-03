@@ -3,6 +3,9 @@ import Axios from 'axios';
 const ENDPOINTS = {
   USERS: 'users/',
   FRIENDS: '/friends',
+  SEARCH: "/search",
+  REQUESTS: "/requests",
+  FRIENDSHIP: "/friendship",
 };
 
 export default {
@@ -19,7 +22,13 @@ export default {
     return Axios.put(ENDPOINTS.USERS + id, data);
   },
   searchFriends(id, data) {
-    return Axios.get(ENDPOINTS.USERS + id + ENDPOINTS.FRIENDS, {params: data});
-  }
+    return Axios.get(ENDPOINTS.USERS + id + ENDPOINTS.FRIENDS + ENDPOINTS.SEARCH, {params: data});
+  },
+  getFriends(id) {  
+    return Axios.get(ENDPOINTS.USERS + id + ENDPOINTS.FRIENDS);
+  },
+  getFriendRequests(id) {
+    return Axios.get(ENDPOINTS.USERS + id + ENDPOINTS.FRIENDS + ENDPOINTS.REQUESTS );
+  },
 
 };

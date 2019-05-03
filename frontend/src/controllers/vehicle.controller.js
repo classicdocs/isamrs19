@@ -6,5 +6,8 @@ export default {
   },
   get(){
     return VehicleApiService.get();
+  },
+  getSpecific() {
+    return VehicleApiService.getSpecific(data);
   }
 };
