@@ -6,6 +6,7 @@ import com.project.project.model.Hotel_Model.HotelFloor;
 import com.project.project.model.Hotel_Model.HotelsOffer;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.Set;
 
 public class HotelDTO {
@@ -30,6 +31,11 @@ public class HotelDTO {
     @NotNull
     private Set<HotelAdmin> admins;
 
+    @NotNull
+    private int numOfFloors;
+
+    @NotNull
+    private int roomsByFloor;
 
 
     public HotelDTO(){}
@@ -42,6 +48,8 @@ public class HotelDTO {
         this.priceList = hotel.getPriceList();
         this.floors = hotel.getFloors();
         this.admins = hotel.getAdmins();
+        this.numOfFloors = hotel.getNumOfFloors();
+        this.roomsByFloor = hotel.getRoomsByFloor();
     }
 
     public Set<HotelAdmin> getAdmins() {
@@ -98,5 +106,21 @@ public class HotelDTO {
 
     public void setFloors(Set<HotelFloor> floors) {
         this.floors = floors;
+    }
+
+    public int getNumOfFloors() {
+        return numOfFloors;
+    }
+
+    public void setNumOfFloors(int numOfFloors) {
+        this.numOfFloors = numOfFloors;
+    }
+
+    public int getRoomsByFloor() {
+        return roomsByFloor;
+    }
+
+    public void setRoomsByFloor(int roomsByFloor) {
+        this.roomsByFloor = roomsByFloor;
     }
 }

@@ -2,7 +2,7 @@ package com.project.project.service;
 
 import java.util.*;
 
-import com.project.project.dto.HotelDTO;
+import com.project.project.dto.Hotel_DTOs.HotelDTO;
 import com.project.project.dto.Hotel_DTOs.HotelFloorDTO;
 import com.project.project.dto.Hotel_DTOs.RoomDTO;
 import com.project.project.exceptions.FloorNotFound;
@@ -36,19 +36,11 @@ public class HotelService {
     @Autowired
     private FloorRepository floorRepository;
 
-    public Hotel findOneById(Long id) throws HotelNotFound{  // FIXME, DODAJ EXCEPTION
+
+    public Hotel findOneById(Long id) throws HotelNotFound{
         return hotelRepository.findOneById(id).orElseThrow(() -> new HotelNotFound(id));
     }
 
-    /*Metoda koja za dati id pronadje hotel i vrati set njegovih soba*/
-//    public Set<Room> getRooms(Long id) throws HotelNotFound {
-//        Optional<Hotel> hotel = hotelRepository.findOneById(id);
-//        if (hotel.isPresent()) {
-//            return hotel.get().getRoomConfiguration();
-//        } else {
-//            throw new HotelNotFound(id);
-//        }
-//    }
     /*Metoda koja za dati id pronadje hotel i vrati set njegovih ponuda koje u stvari cine cenovnik*/
     public Set<HotelsOffer> getPriceList(Long id) throws HotelNotFound{
         Optional<Hotel> hotel = hotelRepository.findOneById(id);
@@ -79,7 +71,8 @@ public class HotelService {
 //        }
 //    }
 
-    public HotelDTO save(HotelDTO hotelDTO) throws HotelAlreadyExists {
+    // FIXME mozda nepotrebno?
+    public HotelDTO save(HotelDTO hotelDTO) throws HotelAlreadyExists, HotelNotFound {
 
         Optional<Hotel> hotel = hotelRepository.findOneByName(hotelDTO.getName());
 
@@ -96,96 +89,22 @@ public class HotelService {
         h.setNumOfFloors(hotelDTO.getNumOfFloors());
         h.setRoomsByFloor(hotelDTO.getRoomsByFloor());
 
-        h.setFloors(hotelDTO.getFloors());
-//        for(HotelAdmin admin : hotelDTO.getAdmins()){
-//            admin = hotelAdminRepository.save(admin);
-//            h.getAdmins().add(admin);
-//        }
-//
-//        for(HotelAdmin admin : h.getAdmins()){
-//            hotelAdminRepository.save(admin);
-//        }
-
+        //h.setFloors(hotelDTO.getFloors());
 
         h.setAdmins(hotelDTO.getAdmins());
         h = hotelRepository.save(h);
 
-//        Set<HotelFloor> setOfFloors = new Set<HotelFloor>() {
-//            @Override
-//            public int size() {
-//                return 0;
-//            }
-//
-//            @Override
-//            public boolean isEmpty() {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean contains(Object o) {
-//                return false;
-//            }
-//
-//            @Override
-//            public Iterator<HotelFloor> iterator() {
-//                return null;
-//            }
-//
-//            @Override
-//            public Object[] toArray() {
-//                return new Object[0];
-//            }
-//
-//            @Override
-//            public <T> T[] toArray(T[] a) {
-//                return null;
-//            }
-//
-//            @Override
-//            public boolean add(HotelFloor hotelFloor) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean remove(Object o) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean containsAll(Collection<?> c) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean addAll(Collection<? extends HotelFloor> c) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean retainAll(Collection<?> c) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean removeAll(Collection<?> c) {
-//                return false;
-//            }
-//
-//            @Override
-//            public void clear() {
-//
-//            }
-//        };
-//
-//        for (HotelFloor floor: hotelDTO.getFloors()) {
-//            HotelFloor f = floorRepository.save(floor);
-//            setOfFloors.add(f);
-//        }
-//
-//        h.setFloors(setOfFloors);
+        for(int i = 1; i <= h.getNumOfFloors(); i++){
+            HotelFloorDTO hf = new HotelFloorDTO();
+            hf.setLevel(i);
+            hf.setMaxRooms(h.getRoomsByFloor());
+            hf.setHotel(h);
+            addFloor(h.getId(), hf);
+        }
         return (new HotelDTO(h));
     }
 
+    // FIXME mozda nepotrebno?
     public HotelFloorDTO addFloor(Long hotelID, HotelFloorDTO hotelFloorDTO) throws HotelNotFound {
 
         Optional<Hotel> hotel = hotelRepository.findOneById(hotelID);

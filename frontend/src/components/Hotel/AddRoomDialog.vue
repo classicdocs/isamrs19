@@ -24,13 +24,18 @@
               <v-layout row wrap>
 
 
-                <v-flex lg12 md12 sm12 xs12 v-for="floor in hotel.numOfFloors" :key="floor">
+                <v-flex lg12 md12 sm12 xs12 v-for="floor in hotel.numOfFloors" :key="floor"
+                  v-bind="currentFloor">
+                  
                   <v-btn flat>Floor {{floor}}</v-btn>
-                  <v-btn small 
-                  v-for="roomNumber in hotel.roomsByFloor" :key="roomNumber"
-                  :disabled= "checkDisabled(floor,roomNumber)"
-                  @click="pickRoom(floor,roomNumber)" 
-                   >{{roomNumber}}</v-btn>
+                  
+                   <v-btn small 
+                      v-for="(roomPosition,index) in hfp.floors[floor-1].positions" :key="index"
+                      :disabled= "roomPosition.exists"
+                      @click="pickRoom(floor,roomPosition.number)" 
+                   >
+                   {{roomPosition.number}}</v-btn>
+                
                 </v-flex>
               </v-layout>
             </v-flex>
@@ -66,10 +71,13 @@
 
 import Room from "@/models/Room";
 import RoomPosition from "@/models/RoomPosition";
+import Hotel_Floor_Position from "@/models/Hotel_Floor_Position";
+import Floor_Position from "@/models/Floor_Position";
 
 import Hotel from "@/models/Hotel";
 import HotelFloor from "@/models/HotelFloor";
 import HotelController from "@/controllers/hotels.controller";
+import { returnStatement } from '@babel/types';
 
 
 export default {
@@ -86,7 +94,15 @@ export default {
 
     hotel: new Hotel(),
     counter: 0,
-    isDisabled: false
+    isDisabled: false,
+
+    currentFloor: 0,
+    rooms: [],
+
+
+
+    hfp: new Hotel_Floor_Position(),
+    fp: new Floor_Position()
   }),
   created() {
     HotelController.getHotel(this.$route.params.id)
@@ -95,7 +111,7 @@ export default {
           this.setPositions();
         })
         .catch(() => {
-          alert("Something went wrong with fetching hotel. AddRoomDialog");
+          alert(error.response.data);
         });
   },
   methods: {
@@ -114,6 +130,7 @@ export default {
 
         HotelController.addRoom(this.$route.params.id, room)
           .then((response) => {
+            // dodaj spratu sobu 
             this.$emit("finished", {msg: "Room successfully added", color: "success"})
           })
           .catch((response) => {
@@ -129,54 +146,40 @@ export default {
       this.numberOfBeds = 1;
     },
     setPositions(){
+      var floorNUM = 0;
 
-      this.pickedPosition.level = 0;
-      this.pickedPosition.number = 0;
-      // prodjem kroz sve spratove, pa kroz sve sobe, pa ako ima soba neka bice true, ako nema onda false
-      var floor = 1;
-      // console.log(this.hotel.numOfFloors + " : " + this.hotel.roomsByFloor);
-      for (floor = 1; floor <= this.hotel.numOfFloors; floor++) { 
-        var room = 1;
-        for(room = 1; room <= this.hotel.roomsByFloor; room++){
+      this.hfp = new Hotel_Floor_Position();
+      this.hfp.numOfFloors = this.hotel.numOfFloors;
 
-            var rp = new RoomPosition();
-            rp.level = floor;
-            rp.number = room;
+      // Iteriram kroz sve spratove hotela
+      this.hotel.floors.forEach(f => {   floorNUM++;
 
-            // FIXME - NIJE DOBRA PROVERA, NECE DA OPALI NA NULL
-            if(typeof this.hotel.floors[floor] !== 'undefined'){
-              if(typeof this.hotel.floors[floor].roomsOnFloor[room] !== 'undefined'){
-              //if(this.hotel.floors[floor].roomsOnFloor[room].id !== null){
-                rp.exists = true; // postoji soba na tom mestu, ne sme tu da doda, dugme mora da bude disable ili error
-              }else{
-                rp.exists = false;  // ne postoji soba na tom mestu, dugme mora da bude enable i success
-              }
-            }else{
-              rp.exists = false;  // ne postoji soba na tom mestu, dugme mora da bude enable i success
+        this.fp = new Floor_Position();
+
+        // Prolazim kroz sve moguce pozicije u hotelu
+        for(var roomNUM = 1; roomNUM <= this.hotel.roomsByFloor; roomNUM++){
+          var position = new RoomPosition();
+          // Inicijalno pozicija je false, odnosno prazna
+          position.level = floorNUM;   position.exists = false;    position.number = roomNUM
+
+          this.hotel.floors.forEach(floor =>{
+            if (floor.level == floorNUM){
+              floor.roomsOnFloor.forEach(room => {
+                // Ukoliko tu postoji soba, pozicija postaje true
+                if(room.roomNumber == roomNUM){   position.exists = true;   }
+              }); 
             }
-            this.positions.push(rp);
+          });
+          this.fp.positions.push(position);
         }
-      }
-
-    },
-    checkDisabled(floor, roomNumber){
-      this.positions.forEach(position => {
-        if(position.level == floor && position.number == roomNumber){
-          if(position.exists){
-            console.log("Room on level: " + position.level + " number: " + position.number + " should be disabled.");
-          }else{
-            console.log("Room on level: " + position.level + " number: " + position.number + " should NOT be disabled.");
-          }
-
-          //this.isDisabled = position.exists;
-          return position.exists;
-        }
+        this.hfp.floors.push(this.fp);
       });
     },
+
     pickRoom(floor,roomNumber){
       this.pickedPosition.level = floor;
       this.pickedPosition.number = roomNumber;
-    }
+    },
   }
 };
 </script>
