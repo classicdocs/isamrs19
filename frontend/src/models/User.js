@@ -5,7 +5,7 @@ const USER_ROLES = {
     USER: 'user',
     AIRLINEADMIN: 'airlineadmin',
     HOTELADMIN: 'hoteladmin',
-    RENTACARADMIN: 'rentacaradmin',
+    RENTACARADMIN: 'RentACar Admin',
 };
 
 export class User {

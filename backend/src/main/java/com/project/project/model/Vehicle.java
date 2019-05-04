@@ -1,6 +1,7 @@
 package com.project.project.model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Vehicle {
@@ -33,7 +34,18 @@ public class Vehicle {
     @Column(name = "average_rating")
     private double averageRating;
 
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<VehicleTaken> reservations;
+
     public Vehicle(){
+    }
+
+    public Set<VehicleTaken> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(Set<VehicleTaken> reservations) {
+        this.reservations = reservations;
     }
 
     public Long getId() {

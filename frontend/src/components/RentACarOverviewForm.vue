@@ -16,7 +16,8 @@
           class="elevation-1" :expand="expand" item-key="name"
         >
           <template v-slot:items="props">
-          <tr @click="props.expanded = !props.expanded">
+          <!-- <tr @click="props.expanded = !props.expanded"> -->
+          <tr @click="goToService(props.item.id)">
             <td class="text-xs-center">{{ props.item.name }}</td>
             <td class="text-xs-center">{{ props.item.address }}</td>
             <!-- <td class="text-xs-right">{{ props.item.promotionalDescription }}</td> -->
@@ -44,6 +45,7 @@
 
 <script>
 import RentACarController from "@/controllers/rentacar.controller.js"
+import router from '../router'
 
 export default {
   name: "RentACarOverviewForm",
@@ -79,6 +81,11 @@ export default {
         });
       });
   },
+  methods: {
+    goToService(id) {
+      router.push({ path: "rentacar-service/" + id});
+  },
+  }
 }
 </script>
 <style>
