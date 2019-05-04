@@ -22,6 +22,23 @@ public class VehicleSearchDTO {
     @NotNull
     private String passengers;
 
+    @NotNull
+    private String maxPrice;
+
+    @NotNull
+    private String minPrice;
+
+    @NotNull
+    private Long rentACar;
+
+    public Long getRentACar() {
+        return rentACar;
+    }
+
+    public void setRentACar(Long rentACar) {
+        this.rentACar = rentACar;
+    }
+
     public VehicleSearchDTO() {
     }
 
@@ -71,5 +88,21 @@ public class VehicleSearchDTO {
 
     public void setPassengers(String passengers) {
         this.passengers = passengers;
+    }
+
+    public String getMaxPrice() {
+        return maxPrice;
+    }
+
+    public void setMaxPrice(String maxPrice) {
+        this.maxPrice = maxPrice;
+    }
+
+    public String getMinPrice() {
+        return minPrice;
+    }
+
+    public void setMinPrice(String minPrice) {
+        this.minPrice = minPrice;
     }
 }
