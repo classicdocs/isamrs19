@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface DestinationRepository extends JpaRepository<Destination, Long> {
 
     Optional<Destination> findOneByName(String name);
+
+    Optional<Destination> findOneByNameAndZip(String name, String zip);
 }

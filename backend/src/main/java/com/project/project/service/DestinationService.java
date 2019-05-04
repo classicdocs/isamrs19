@@ -14,9 +14,14 @@ public class DestinationService {
     @Autowired
     private DestinationRepository destinationRepository;
 
-    public Destination findOne(String name) throws DestinationNotFound {
-        return  destinationRepository.findOneByName(name).orElseThrow(() -> new DestinationNotFound(name));
+    public Destination findOneByNameAndZip(String name, String zip) throws DestinationNotFound {
+        return  destinationRepository.findOneByNameAndZip(name, zip).orElseThrow(() -> new DestinationNotFound(name, zip));
     }
+
+    public Destination findOne(String name) throws DestinationNotFound {
+        return  destinationRepository.findOneByName(name).orElseThrow(() -> new DestinationNotFound(name, ""));
+    }
+
 
     public List<Destination> findAll() {
         return destinationRepository.findAll();

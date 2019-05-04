@@ -21,7 +21,7 @@
           
           <v-select
             :items="destinations"
-            v-model="flight.startDestination.name"
+            v-model="startDestination"
             label="Start destination"
             :rules="[v => !!v || 'Start destination is required']"
             required
@@ -29,7 +29,7 @@
           ></v-select>
           <v-select
             :items="destinations"
-            v-model="flight.finalDestination.name"
+            v-model="finalDestination"
             label="Final destination"
             :rules="[v => !!v || 'Final destination is required']"
             required
@@ -272,6 +272,9 @@ export default {
     menuLandingTime: false,
     menuFlightTime: false,
 
+    startDestination: "",
+    finalDestination: "",
+    
     value: true,
     rules: {
       distance: [v => !!v || 'Distance is required',
@@ -336,6 +339,16 @@ export default {
             'id': airplane.substring(space1 + 1, comma),
             'model' : airplane.substr(space2 + 2, airplane.length)
           }
+
+          let ind = this.startDestination.lastIndexOf(" ");
+          this.flight.startDestination.name = this.startDestination.substring(0, ind);
+          this.flight.startDestination.zip = this.startDestination.substring(ind+1, this.startDestination.length);
+
+          ind = this.finalDestination.lastIndexOf(" ");
+          this.flight.finalDestination.name = this.finalDestination.substring(0, ind);
+          this.flight.finalDestination.zip = this.finalDestination.substring(ind+1, this.finalDestination.length);
+
+          console.log(this.flight);
           FlightsController.create(this.flight)
           .then((response) => {
             this.addFormDialog = false;
@@ -357,14 +370,14 @@ export default {
       this.$refs.form.resetValidation();
     },
     validateDestinations() {
-      if (this.flight.startDestination.name === this.flight.finalDestination.name)
+      if (this.startDestination === this.finalDestination)
         return false;
       
       let retVal = true;
 
       this.flight.transferDestinations.forEach(e => {
        
-        if(e === this.flight.startDestination.name || e === this.flight.finalDestination.name)
+        if(e === this.startDestination || e === this.finalDestination)
           retVal = false;
       });
 
