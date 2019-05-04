@@ -38,7 +38,7 @@
             <td class="text-xs-center">{{ "NO DATA" }}</td>
             <td class="text-xs-center">
               <v-btn @click="goToPage(props.item.name)">
-              Go to page
+              hotel page
               <v-icon right>hotel</v-icon>
               </v-btn></td>
 
@@ -110,7 +110,14 @@ export default {
   },
   methods: {
     goToPage(hotelName){
-      alert("going to page for hotel: " + hotelName );
+      var id = 0;
+      this.hotels.forEach(hotel =>{
+        if(hotel.name == hotelName){
+          id = hotel.id;
+        }
+      });
+
+      this.$router.push('/hotel-service/' + id); 
     }
   },
 }
