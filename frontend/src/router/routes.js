@@ -109,4 +109,9 @@ export const routes = [
       name: "change-password",
       component: ChangePassword
     },
+    {
+      path: "/vehicle-reservation",
+      name: "vehicle-reservation",
+      component : VehicleReservation,
+    },
   ];

@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import { User } from '../../models/User';
+import { stat } from 'fs';
 
 const state = {
     activeUser: null
@@ -8,6 +9,9 @@ const state = {
 const getters = {
     activeUser: (state) => state.activeUser,
     isLogged: (state) => !_.isEmpty(state.activeUser),
+    isUser: (state, getters) => getters.isLogged && state.activeUser.isUser(),
+    isAdmin: (getters) => getters.isLogged && getters.isSysAdmin || getters.isAirlineAdmin 
+    || getters.isHotelAdmin || getters.isRentacarAdmin,
     isSysAdmin: (state,getters) => getters.isLogged && state.activeUser.isSysAdmin(),
     isAirlineAdmin: (state,getters) => getters.isLogged && state.activeUser.isAirlineAdmin(),
     isHotelAdmin: (state,getters) => getters.isLogged && state.activeUser.isHotelAdmin(),

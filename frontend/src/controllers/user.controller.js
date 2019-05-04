@@ -15,5 +15,11 @@ export default {
   },
   searchFriends(id, data) {
     return UserApiService.searchFriends(id,data);
-  }
+  },
+  getFriends(id) {
+    return UserApiService.getFriends(id);
+  },
+  getFriendRequests(id) {
+    return UserApiService.getFriendRequests(id);
+  },
 };

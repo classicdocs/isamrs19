@@ -1,4 +1,4 @@
-package com.project.project.model;
+package com.project.project.model.Hotel_Model;
 import javax.persistence.*;
 @Entity
 public class HotelsOffer {

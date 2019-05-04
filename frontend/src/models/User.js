@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 
 const USER_ROLES = {
     SYSADMIN: 'syadmin',
-    USER: 'user',
+    USER: 'User',
     AIRLINEADMIN: 'airlineadmin',
     HOTELADMIN: 'hoteladmin',
     RENTACARADMIN: 'RentACar Admin',
@@ -31,5 +31,9 @@ export class User {
     
     isRentacarAdmin() {
         return this.role === USER_ROLES.RENTACARADMIN;
+    }
+
+    isUser() {
+        return this.role === USER_ROLES.USER;
     }
 }
