@@ -1,8 +1,7 @@
-package com.project.project.model;
+package com.project.project.model.Hotel_Model;
 
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -14,12 +13,10 @@ public class RoomTaken {
     @Column(name = "startDate", nullable = false)
     private String startDate;
 
-    @Column(name = "endDaTe", nullable = false)
-    private String endDaTe;
+    @Column(name = "endDate", nullable = false)
+    private String endDate;
 
-    //@ManyToMany(fetch = FetchType.LAZY)
-    @ManyToMany(fetch = FetchType.LAZY,
-            mappedBy = "roomTaken")
+    @ManyToMany(fetch = FetchType.LAZY,  mappedBy = "roomTaken")
     private Set<Room> rooms;
 
 
@@ -42,12 +39,12 @@ public class RoomTaken {
         this.startDate = startDate;
     }
 
-    public String getEndDaTe() {
-        return this.endDaTe;
+    public String getEndDate() {
+        return this.endDate;
     }
 
-    public void setEndDaTe(String endDaTe) {
-        this.endDaTe = endDaTe;
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 
     public Set<Room> getRooms() {

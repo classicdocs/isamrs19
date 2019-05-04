@@ -1,14 +1,13 @@
-package com.project.project.dto;
+package com.project.project.dto.Hotel_DTOs;
 
-import java.util.List;
-import java.util.Set;
-
-import com.project.project.model.Hotel;
 import com.project.project.model.HotelAdmin;
-import com.project.project.model.HotelsOffer;
-import com.project.project.model.Room;
+import com.project.project.model.Hotel_Model.Hotel;
+import com.project.project.model.Hotel_Model.HotelFloor;
+import com.project.project.model.Hotel_Model.HotelsOffer;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import java.util.Set;
 
 public class HotelDTO {
 
@@ -27,10 +26,17 @@ public class HotelDTO {
     private Set<HotelsOffer> priceList;
 
     @NotNull
-    private Set<Room> roomConfiguration;
+    private Set<HotelFloor> floors;
 
     @NotNull
     private Set<HotelAdmin> admins;
+
+    @NotNull
+    private int numOfFloors;
+
+    @NotNull
+    private int roomsByFloor;
+
 
     public HotelDTO(){}
 
@@ -40,8 +46,10 @@ public class HotelDTO {
         this.address = hotel.getAddress();
         this.description = hotel.getDescription();
         this.priceList = hotel.getPriceList();
-        this.roomConfiguration = hotel.getRoomConfiguration();
+        this.floors = hotel.getFloors();
         this.admins = hotel.getAdmins();
+        this.numOfFloors = hotel.getNumOfFloors();
+        this.roomsByFloor = hotel.getRoomsByFloor();
     }
 
     public Set<HotelAdmin> getAdmins() {
@@ -92,11 +100,27 @@ public class HotelDTO {
         this.priceList = priceList;
     }
 
-    public Set<Room> getRoomConfiguration() {
-        return roomConfiguration;
+    public Set<HotelFloor> getFloors() {
+        return floors;
     }
 
-    public void setRoomConfiguration(Set<Room> roomConfiguration) {
-        this.roomConfiguration = roomConfiguration;
+    public void setFloors(Set<HotelFloor> floors) {
+        this.floors = floors;
+    }
+
+    public int getNumOfFloors() {
+        return numOfFloors;
+    }
+
+    public void setNumOfFloors(int numOfFloors) {
+        this.numOfFloors = numOfFloors;
+    }
+
+    public int getRoomsByFloor() {
+        return roomsByFloor;
+    }
+
+    public void setRoomsByFloor(int roomsByFloor) {
+        this.roomsByFloor = roomsByFloor;
     }
 }

@@ -7,8 +7,11 @@
         </v-flex>
         <v-flex lg8 md6 sm6 xs12 v-if="admin">
           <v-container>
-            <v-layout row wrap>
-                <add-room-dialog v-on:snack="showSnackbar($event)"></add-room-dialog>
+            <v-layout row wrap> 
+                <add-room-dialog 
+                  v-on:finished="closeAddRoom($event)"
+                  v-on:cancel  ="cancel"
+                  ></add-room-dialog><!-- v-bind:hotel="this.hotel" -->
             </v-layout>
           </v-container>
           
@@ -48,6 +51,9 @@ export default {
     'add-room-dialog':AddRoomDialog,
 },
   data: () => ({
+
+    AddRoomDialog: false,
+
     admin: false,
     id: null,
     snackbar: {
@@ -78,14 +84,21 @@ export default {
         });
       
       if (store.getters.activeUserRole === 'Hotel Admin')
-        if (this.id == store.getters.activeUser.idAdminOf)
-          this.admin = true;
+      if (this.id == store.getters.activeUser.idAdminOf)
+        this.admin = true;
       else
         this.admin = false;
 
     },
     infoUpdate(obj) {
       this.hotel = obj;
+    },
+    cancel(){
+      this.AddRoomDialog = false;
+    },
+    closeAddRoom(data){
+      this.AddRoomDialog = false;
+      this.showSnackbar(data);
     },
     showSnackbar(obj) {
       this.snackbar.color = obj.color;

@@ -15,20 +15,43 @@
         lazy-validation
       >
       <v-card-title primary-title>
-        <span class="headline">Add room</span>
+        <span class="headline">Pick position for new room</span>
       </v-card-title>
         <v-card-text>
-          <v-layout > <!--v-bind="binding"-->
-              <v-flex>
-                Number of beds in room:
-                <number-input v-model="room.numberOfBeds" :min="1" :max="5" inline center controls></number-input>
-              </v-flex>
-              <v-flex>
-                <v-text-field label="room number" v-model="room.roomNumber"
-                :rules="[v => !!v || 'room number is required']">
-                </v-text-field> 
+
+          <v-layout row wrap>
+            <v-flex lg10 md10 sm12 xs12>
+              <v-layout row wrap>
+
+
+                <v-flex lg12 md12 sm12 xs12 v-for="floor in hotel.numOfFloors" :key="floor">
+                  
+                  <v-btn flat>Floor {{floor}}</v-btn>
+                  
+                   <v-btn small 
+                      v-for="(roomPosition,index) in hfp.floors[floor-1].positions" :key="index"
+                      :disabled= "roomPosition.exists"
+                      @click="pickRoom(floor,roomPosition.number)" 
+                   >
+                   {{roomPosition.number}}</v-btn>
+                
+                </v-flex>
+              </v-layout>
+            </v-flex>
+            <v-flex row wrap>
+              <h2>New room will be in place:</h2>
+                <h3> Floor: {{pickedPosition.level}}, Room number: {{pickedPosition.number}} </h3>
+            </v-flex>
+
+            <v-layout row wrap> 
+               <v-flex>
+                <h2>Number of beds in room:</h2>
+                <number-input v-model="numberOfBeds" :min="1" :max="5" inline center controls></number-input>
               </v-flex>
             </v-layout>
+
+
+          </v-layout>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -46,64 +69,118 @@
 <script>
 
 import Room from "@/models/Room";
-import Hotel from "@/models/Hotel";
-import HotelController from "@/controllers/hotels.controller";
+import RoomPosition from "@/models/RoomPosition";
+import Hotel_Floor_Position from "@/models/Hotel_Floor_Position";
+import Floor_Position from "@/models/Floor_Position";
 
-import { resolve } from 'url';
+import Hotel from "@/models/Hotel";
+import HotelFloor from "@/models/HotelFloor";
+import HotelController from "@/controllers/hotels.controller";
+import { returnStatement } from '@babel/types';
+
 
 export default {
   name: "AddRoomDialog",
   data: () => ({
     form: true,
     addFormDialog: false,
-
     room: new Room(),  
+  
+    pickedPosition: new RoomPosition(),
+    numberOfBeds: 0,
+
+
     hotel: new Hotel(),
-    rooms: [],
-    id: 0,
+
+    hfp: new Hotel_Floor_Position(),
+    fp: new Floor_Position()
   }),
   created() {
-    this.room.hotel.id = this.$route.params.id;
-
-    HotelController.getRooms(this.room.hotel.id)
-    .then((response) => {
-      response.data.forEach(element => {
-        this.rooms.push(element);
-      });
-    })
-    .catch((error) => {
-      alert(error);
-    })
+    HotelController.getHotel(this.$route.params.id)
+        .then((response) => {
+          this.hotel = response.data;
+          this.setPositions();
+        })
+        .catch(() => {
+          alert(error.response.data);
+        });
   },
   methods: {
     validate() {
       if(this.$refs.form.validate()) {
-        if (this.validateRoomNumber()) {
-        HotelController.addRoom(this.$route.params.id, this.room)
-        .then((response) => {
-          this.addFormDialog = false;
-          this.$emit("snack", {msg: "Room successfully added", color: "success"})
-        })
-        .catch((error) => {
-          this.addFormDialog = false;
-          this.$emit("snack", {msg: error.response.data, color: "error"})
-        })
-      } else {
-          this.$emit("snack", {msg: "Room with same number already exists!", color: "error"})
-        }
+        var room = new Room();
+        room.roomNumber = this.pickedPosition.number;
+        room.numberOfBeds = this.numberOfBeds;
+
+        var floorLVL = 0;
+
+        this.hotel.floors.forEach(floor => {
+          if(floor.level == this.pickedPosition.level){
+            room.hotelFloor = floor;
+            floorLVL = floor.level;
+          }
+        });
+        
+        HotelController.addRoom(this.$route.params.id, room)
+          .then((response) => {
+            this.hotel.floors.forEach(floor => {
+              if(floor.level == floorLVL){
+                floor.roomsOnFloor.push(room);
+              }
+            });
+            this.setPositions();
+            this.$emit("finished", {msg: "Room successfully added", color: "success"})
+            this.addFormDialog = false;
+          })
+          .catch((response) => {
+            this.$emit("finished", {msg: "Error! Something went wrong...", color: "error"})
+          })
+
       }
     },
     reset() {
       this.$refs.form.reset();
+      this.pickedPosition.level = 0;
+      this.pickedPosition.number = 0;
+      this.numberOfBeds = 1;
     },
-    validateRoomNumber(){
-      this.rooms.forEach(singleRoom => {
-        if(this.room.roomNumber == singleRoom.roomNumber){
-          return false;
+    setPositions(){
+      var floorNUM = 0;
+
+      this.hfp = new Hotel_Floor_Position();
+      this.hfp.numOfFloors = this.hotel.numOfFloors;
+
+      // Iteriram kroz sve spratove hotela
+      this.hotel.floors.forEach(f => {   floorNUM++;
+
+        this.fp = new Floor_Position();
+
+        // Prolazim kroz sve moguce pozicije u hotelu
+        for(var roomNUM = 1; roomNUM <= this.hotel.roomsByFloor; roomNUM++){
+          var position = new RoomPosition();
+          // Inicijalno pozicija je false, odnosno prazna
+          position.level = floorNUM;   position.exists = false;    position.number = roomNUM
+
+          this.hotel.floors.forEach(floor =>{
+            if (floor.level == floorNUM){
+              floor.roomsOnFloor.forEach(room => {
+                // Ukoliko tu postoji soba, pozicija postaje true
+                if(room.roomNumber == roomNUM){   
+                  position.exists = true;   
+                  }
+              }); 
+            }
+          });
+          this.fp.positions.push(position);
         }
+        this.hfp.floors.push(this.fp);
       });
-      return true;
-    }
+    },
+
+    pickRoom(floor,roomNumber){
+      this.pickedPosition.level = floor;
+      this.pickedPosition.number = roomNumber;
+    },
   }
 };
 </script>

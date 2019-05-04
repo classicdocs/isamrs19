@@ -1,7 +1,6 @@
-package com.project.project.model;
+package com.project.project.model.Hotel_Model;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 
@@ -25,7 +24,10 @@ public class Room {
 
     //FIXME proveri ovu referencu V
     @ManyToOne(fetch = FetchType.EAGER)
-    private Hotel hotel;
+    private HotelFloor hotelFloor;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private Set<SpecialPrice> specialPrices;
 
     public Room(){}
 
@@ -61,11 +63,20 @@ public class Room {
         this.roomTaken = roomTaken;
     }
 
-    public Hotel getHotel() {
-        return hotel;
+    public HotelFloor getHotelFloor() {
+        return hotelFloor;
     }
 
-    public void setHotel(Hotel hotel) {
-        this.hotel = hotel;
+    public void setHotelFloor(HotelFloor hotelFloor) {
+        this.hotelFloor = hotelFloor;
+    }
+
+
+    public Set<SpecialPrice> getSpecialPrices() {
+        return specialPrices;
+    }
+
+    public void setSpecialPrices(Set<SpecialPrice> specialPrices) {
+        this.specialPrices = specialPrices;
     }
 }

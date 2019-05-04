@@ -96,11 +96,13 @@ insert into flight_seats_economy(flight_id, seats_economy_id)  values (2,10);
 insert into flight_seats_business(flight_id, seats_business_id)  values (2,11);
 insert into flight_seats_business(flight_id, seats_business_id)  values (2,12);
 
---hotel
-insert into hotel(id,name,address,description) values (1,'Moscow','Serbia/Belgrade/Bulevar 55','Nice view from hotel');
-insert into hotel(id,name,address,description) values (2,'Sheraton','Serbia/Novi Sad/Futoski put 76','Known for good services');
-insert into hotel(id,name,address,description) values (3,'Kasina','Sebia/Belgrade/bb','Hotel with rich history');
-insert into hotel(id,name,address,description) values (4,'Parisjen','France/Paris/Old square 52','Best in Paris');
+-- hotel
+insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor) values (1,'Moscow','Serbia/Belgrade/Bulevar 55','Nice view from hotel',4,15);
+insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor) values (3,'Kasina','Sebia/Belgrade/bb','Hotel with rich history',2,15);
+insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor) values (4,'Parisjen','France/Paris/Old square 52','Best in Paris',4,30);
+insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor) values (2,'Sheraton','Serbia/Novi Sad/Futoski put 76','Known for good services',3,8);
+
+
 ------------------------------------------------------------------------------------------------------------------------
 --rentacar servis 1
 insert into rentacar (id,name,address,promotional_description) values (1,'Drive X', 'North Road 7 London','DriveX has been continually growing ever since its foundation in 1989 in London, Great Britain, with branches all over the country.At all our locations we offer customers affordable and trusted rent a car services.');
@@ -136,3 +138,64 @@ insert into user (dtype,id,address,email,firstname,lastname,username,password,ph
 --system admini
 insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('SystemAdmin',6,'adresa5','email5','ime5','prezime5','systemadmin','12345','51545',5,null,null,null, FALSE);
 
+--dodavanje prijatelja
+--insert into user_friends (registered_user_id, friends_id) values (1,2);
+
+
+
+-- spratovi
+insert into hotel_floor(id,level,max_rooms) values (1,1,15);
+insert into hotel_floor(id,level,max_rooms) values (2,2,15);
+insert into hotel_floor(id,level,max_rooms) values (3,3,15);
+insert into hotel_floor(id,level,max_rooms) values (4,4,15);
+--
+--insert into hotel_floor(id,level,max_rooms) values (5,1,15);
+--insert into hotel_floor(id,level,max_rooms) values (6,2,15);
+--
+--insert into hotel_floor(id,level,max_rooms) values (7,1,30);
+--insert into hotel_floor(id,level,max_rooms) values (8,2,30);
+
+-- hoteli_spratovi
+insert into hotel_floors(hotel_id,floors_id) values (1,1);
+insert into hotel_floors(hotel_id,floors_id) values (1,2);
+insert into hotel_floors(hotel_id,floors_id) values (1,3);
+insert into hotel_floors(hotel_id,floors_id) values (1,4);
+
+--insert into hotel_floors(hotel_id,floors_id) values (2,5);
+--insert into hotel_floors(hotel_id,floors_id) values (2,6);
+--
+--insert into hotel_floors(hotel_id,floors_id) values (3,7);
+--insert into hotel_floors(hotel_id,floors_id) values (3,8);
+
+-- sobe
+-- PRVI SPRAT
+insert into room(id,number_of_beds,room_number) values (1, 2, 1);
+insert into room(id,number_of_beds,room_number) values (2, 2, 2);
+insert into room(id,number_of_beds,room_number) values (3, 3, 3);
+insert into room(id,number_of_beds,room_number) values (4, 4, 4);
+-- DRUGI SPRAT
+insert into room(id,number_of_beds,room_number) values (5, 1, 1);
+insert into room(id,number_of_beds,room_number) values (6, 4, 2);
+insert into room(id,number_of_beds,room_number) values (7, 3, 5);
+insert into room(id,number_of_beds,room_number) values (8, 4, 10);
+
+--insert into room(id,number_of_beds,room_number,hotel_floor_id) values (9, 1, 1, 5);
+--insert into room(id,number_of_beds,room_number,hotel_floor_id) values (10, 4, 2, 5);
+--insert into room(id,number_of_beds,room_number,hotel_floor_id) values (11, 1, 3, 6);
+--insert into room(id,number_of_beds,room_number,hotel_floor_id) values (12, 4, 9, 6);
+
+--spratovi sobe
+insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (1,1);
+insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (1,2);
+insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (1,3);
+insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (1,4);
+
+insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (2,5);
+insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (2,6);
+insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (2,7);
+insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (2,8);
+
+--insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (5,9);
+--insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (5,10);
+--insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (6,11);
+--insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (6,12);

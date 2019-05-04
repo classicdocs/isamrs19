@@ -1,5 +1,7 @@
-package com.project.project.model;
+package com.project.project.model.Hotel_Model;
 
+
+import com.project.project.model.HotelAdmin;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -19,16 +21,38 @@ public class Hotel {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "numOfFloors", nullable = false)
+    private int numOfFloors;
+
+    @Column(name = "roomsByFloor", nullable = false)
+    private int roomsByFloor;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<HotelsOffer> priceList;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)   // to one - EAGER, to many - LAZY
-    private Set<Room> roomConfiguration;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<HotelFloor> floors;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<HotelAdmin> admins;
 
     public Hotel(){}
+
+    public int getNumOfFloors() {
+        return numOfFloors;
+    }
+
+    public void setNumOfFloors(int numOfFloors) {
+        this.numOfFloors = numOfFloors;
+    }
+
+    public int getRoomsByFloor() {
+        return roomsByFloor;
+    }
+
+    public void setRoomsByFloor(int roomsByFloor) {
+        this.roomsByFloor = roomsByFloor;
+    }
 
     public Set<HotelAdmin> getAdmins() {
         return admins;
@@ -78,12 +102,12 @@ public class Hotel {
         this.priceList = priceList;
     }
 
-    public Set<Room> getRoomConfiguration() {
-        return roomConfiguration;
+
+    public Set<HotelFloor> getFloors() {
+        return floors;
     }
 
-    public void setRoomConfiguration(Set<Room> roomConfiguration) {
-        this.roomConfiguration = roomConfiguration;
+    public void setFloors(Set<HotelFloor> floors) {
+        this.floors = floors;
     }
-
 }
