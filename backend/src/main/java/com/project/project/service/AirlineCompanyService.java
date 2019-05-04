@@ -2,13 +2,14 @@ package com.project.project.service;
 
 import com.project.project.dto.AirlineCompanyDTO;
 import com.project.project.dto.AirplaneDTO;
-import com.project.project.exceptions.AirlineCompanyAlreadyExist;
-import com.project.project.exceptions.AirlineCompanyNotFound;
-import com.project.project.exceptions.AirplaneNotExist;
+import com.project.project.dto.NewDestination;
+import com.project.project.exceptions.*;
 import com.project.project.model.AirlineCompany;
 import com.project.project.model.Airplane;
+import com.project.project.model.Destination;
 import com.project.project.repository.AirlineCompanyRepository;
 import com.project.project.repository.AirplaneRepository;
+import com.project.project.repository.DestinationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,12 @@ public class AirlineCompanyService {
 
     @Autowired
     private AirplaneRepository airplaneRepository;
+
+    @Autowired
+    private DestinationService destnationService;
+
+    @Autowired
+    private DestinationRepository destinationRepository;
 
     public AirlineCompany findOneById(Long id) throws AirlineCompanyNotFound {
         return airlineCompanyRepository.findOneById(id).orElseThrow(() -> new AirlineCompanyNotFound(id));
@@ -149,4 +156,40 @@ public class AirlineCompanyService {
 
     }
 
+    public Destination addDestination(Long id, NewDestination newDestination) throws AirlineCompanyNotFound, DestinationAlreadyExist {
+
+        Optional<AirlineCompany> airlineCompany = airlineCompanyRepository.findOneById(id);
+        Optional<Destination> destination = destinationRepository.findOneByNameAndZip(newDestination.getName(), newDestination.getZip());
+        if (airlineCompany.isPresent()) {
+
+            Destination returnDest;
+
+            if (destination.isPresent()) {
+                for(String dest : airlineCompany.get().getDestinations()) {
+                    int ind = dest.lastIndexOf(" ");
+                    String name = dest.substring(0, ind);
+                    String zip = dest.substring(ind +1 );
+                    if (name.equals(newDestination.getName()) && zip.equals(newDestination.getZip())) {
+                        throw new DestinationAlreadyExist(name, zip);
+                    }
+                }
+                returnDest = destination.get();
+            } else {
+                Destination d = new Destination();
+                d.setName(newDestination.getName());
+                d.setZip(newDestination.getZip());
+                d.setAirport(newDestination.getAirport());
+                d.setCountry(newDestination.getCountry());
+                destinationRepository.save(d);
+                returnDest = d;
+            }
+
+            airlineCompany.get().getDestinations().add(newDestination.getName() + " " + newDestination.getZip());
+            airlineCompanyRepository.save(airlineCompany.get());
+            return returnDest;
+
+        } else {
+            throw new AirlineCompanyNotFound(id);
+        }
+    }
 }

@@ -4,11 +4,14 @@ package com.project.project.controller;
 import com.project.project.dto.AirlineCompanyDTO;
 import com.project.project.dto.AirplaneDTO;
 import com.project.project.dto.DestinationDTO;
+import com.project.project.dto.NewDestination;
 import com.project.project.exceptions.AirlineCompanyAlreadyExist;
 import com.project.project.exceptions.AirlineCompanyNotFound;
 import com.project.project.exceptions.AirplaneNotExist;
+import com.project.project.exceptions.DestinationAlreadyExist;
 import com.project.project.model.AirlineCompany;
 import com.project.project.model.Airplane;
+import com.project.project.model.Destination;
 import com.project.project.service.AirlineCompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -107,6 +110,22 @@ public class AirlineCompanyController {
             return new ResponseEntity<String>(airlineCompanyNotFound.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
+    }
+
+    @PostMapping(
+            value = "/{id}/destinations",
+            consumes =  MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity addDestination(@PathVariable("id") Long id, @RequestBody NewDestination newDestination) {
+
+        try {
+            Destination response = airlineCompanyService.addDestination(id, newDestination);
+            return new ResponseEntity<Destination>(response, HttpStatus.OK);
+        } catch (AirlineCompanyNotFound | DestinationAlreadyExist e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping(

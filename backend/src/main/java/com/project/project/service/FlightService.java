@@ -43,8 +43,8 @@ public class FlightService {
 
     public FlightDTO save(FlightDTO flightDTO) throws DestinationNotFound, AirlineCompanyNotFound, ParseException, DateException, AirplaneNotExist {
 
-        Destination startDestination = destinationService.findOne(flightDTO.getStartDestination().getName());
-        Destination finalDestination = destinationService.findOne(flightDTO.getFinalDestination().getName());
+        Destination startDestination = destinationService.findOneByNameAndZip(flightDTO.getStartDestination().getName(), flightDTO.getStartDestination().getZip());
+        Destination finalDestination = destinationService.findOneByNameAndZip(flightDTO.getFinalDestination().getName(), flightDTO.getFinalDestination().getZip());
 
         AirlineCompany airlineCompany = airlineCompanyService.findOneById(flightDTO.getAirlineCompany().getId());
 

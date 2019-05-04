@@ -22,6 +22,9 @@ export default {
   },
   findAllAirlines(){
     return AirlineCompanyApiService.findAllAirlines();
+  },
+  addDestination(id,data) {
+    return AirlineCompanyApiService.addDestination(id, data);
   }
 
 };
