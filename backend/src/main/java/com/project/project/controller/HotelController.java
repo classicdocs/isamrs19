@@ -82,15 +82,17 @@ public class HotelController {
     }
 
     @PutMapping(
-            value = "/{id}/rooms/{room_id}",
+            value = "/{id}/rooms/{floorID}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity update(@PathVariable("id") Long hotelID, @RequestBody RoomDTO roomDTO) {
+    public ResponseEntity update(@PathVariable("id") Long hotelID,
+                                 @RequestBody RoomDTO roomDTO,
+                                 @PathVariable("floorID") Long floorID) {
 
         RoomDTO roomDTO1 = null;
         try {
-            roomDTO1 = hotelService.updateRoom(hotelID, roomDTO);
+            roomDTO1 = hotelService.updateRoom(hotelID, roomDTO, floorID);
             return new ResponseEntity<RoomDTO>(roomDTO1, HttpStatus.OK);
         }catch (FloorNotFound | HotelNotFound notFound){
             notFound.printStackTrace();

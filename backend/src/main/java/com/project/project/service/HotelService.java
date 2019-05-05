@@ -125,15 +125,16 @@ public class HotelService {
         }
     }
 
-    public RoomDTO updateRoom(Long hotelID, RoomDTO roomDTO) throws FloorNotFound, HotelNotFound{
+    public RoomDTO updateRoom(Long hotelID, RoomDTO roomDTO, Long floorID) throws FloorNotFound, HotelNotFound{
 
-        Optional<HotelFloor> floor = floorRepository.findOneById(roomDTO.getHotelFloor().getId());
+        Optional<HotelFloor> floor = floorRepository.findOneById(floorID);
         Optional<Hotel> hotel = hotelRepository.findOneById(hotelID);
 
         if(hotel.isPresent()){
             if (floor.isPresent()) {
                 for (Room room: floor.get().getRoomsOnFloor()) {
                     if(room.getRoomNumber() == roomDTO.getRoomNumber()){
+
                         room.setSpecialPrices(roomDTO.getSpecialPrices());
                         room.setRoomTaken(roomDTO.getRoomTaken());
                         room.setNumberOfBeds(roomDTO.getNumberOfBeds());
@@ -144,7 +145,7 @@ public class HotelService {
                 }
                 return (new RoomDTO());
             } else {
-                throw new FloorNotFound(roomDTO.getHotelFloor().getId());
+                throw new FloorNotFound(floorID);
             }
         }else {
             throw new HotelNotFound(hotelID);
