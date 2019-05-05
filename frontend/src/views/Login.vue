@@ -117,7 +117,7 @@ export default {
             this.snackbar.show = true;
         },
         signup() {
-            router.push({ name: "/registration"});
+            router.push({ name: "registration"});
         },
         logf() {
             console.log("FDS");

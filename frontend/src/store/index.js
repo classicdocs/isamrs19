@@ -5,6 +5,7 @@ import { reservation } from "./modules";
 import { auth } from './modules';
 import { snackbar} from "./modules";
 import { friendship} from "./modules";
+import { destination } from "./modules";
 
 Vue.use(Vuex);
 
@@ -13,7 +14,8 @@ const storeData = {
     reservation,
     auth,
     snackbar,
-    friendship
+    friendship,
+    destination,
   }
 }
 

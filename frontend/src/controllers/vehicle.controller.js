@@ -7,7 +7,7 @@ export default {
   get(){
     return VehicleApiService.get();
   },
-  getSpecific() {
+  getSpecific(data) {
     return VehicleApiService.getSpecific(data);
   }
 };

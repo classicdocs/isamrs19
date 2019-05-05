@@ -23,8 +23,16 @@
               <manage-seats-dialog
                 v-on:snack="showSnackbar($event)"
               ></manage-seats-dialog>
+              <add-destination v-bind:airlineCompany="airlineCompany"></add-destination>
             </v-layout>
           </v-container>
+        </v-flex>
+      </v-layout>
+      <v-layout row wrap>
+        <v-flex lg4 md4 sm6 xs12>
+          <list-of-destinations ></list-of-destinations>
+        </v-flex>
+        <v-flex lg2 md4 sm6 xs12>
           
         </v-flex>
       </v-layout>
@@ -56,6 +64,8 @@ import AirlineCompany from "@/models/AirlineCompany";
 import EditAirlineCompanyDialog from "@/components/AirlineCompany/EditAirlineCompanyDialog.vue";
 import AddAirplaneDialog from "@/components/AirlineCompany/AddAirplaneDialog.vue";
 import ManageSeatsDialog from "@/components/AirlineCompany/ManageSeatsDialog.vue";
+import AddDestination from "@/components/AirlineCompany/AddDestination.vue";
+import ListOfDestinations from "@/components/AirlineCompany/ListOfDestinations.vue";
 import store from "@/store";
 
 export default {
@@ -66,6 +76,8 @@ export default {
     'edit-airline-company-dialog': EditAirlineCompanyDialog,
     'add-airplane-dialog': AddAirplaneDialog,
     'manage-seats-dialog': ManageSeatsDialog,
+    'add-destination': AddDestination,
+    'list-of-destinations': ListOfDestinations,
 },
   data: () => ({
     admin: false,

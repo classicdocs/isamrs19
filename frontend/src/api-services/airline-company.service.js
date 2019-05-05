@@ -4,11 +4,12 @@ const ENDPOINTS = {
   AIRLINE_COMPANY: 'airline-companies/',
   AIRPLANES: '/airplanes/',
   AIRLINE_COMPANIES: 'airline-companies',
+  DESTINATIONS: "/destinations"
 };
 
 export default {
   getDestinations(id) {
-    return Axios.get(ENDPOINTS.AIRLINE_COMPANY + id + "/destinations");
+    return Axios.get(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.DESTINATIONS);
   },
   get(id) {
     return Axios.get(ENDPOINTS.AIRLINE_COMPANY + id);
@@ -27,5 +28,8 @@ export default {
   },
   findAllAirlines(){
     return Axios.get(ENDPOINTS.AIRLINE_COMPANIES);
+  },
+  addDestination(id,data) {
+    return Axios.post(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.DESTINATIONS, data)
   }
 };

@@ -1,7 +1,7 @@
 -- destinacije
 insert into destination (id,airport,country,name,zip) values (1,'John F. Kennedy', 'USA', 'New York', 'JFK');
 insert into destination (id,airport,country,name,zip) values (2,'Nikola Tesla', 'Serbia', 'Belgrade', 'BGD');
-insert into destination (id,airport,country,name,zip) values (3,'Heathrow', 'Velika britanija', 'London', 'LHR');
+insert into destination (id,airport,country,name,zip) values (3,'Heathrow', 'Englend', 'London', 'LHR');
 
 
 -- aviokompanije
@@ -9,9 +9,9 @@ insert into airline_company (id,description, address, name) values (1, 'Cheap fl
 insert into airline_company (id,description, address, name) values (2, 'Air France is a french airline company', 'France/Paris', 'AirFrance');
 
 -- lista destinacija u aviokompaniji
-insert into airline_company_destinations(airline_company_id, destinations ) values (1, "New York");
-insert into airline_company_destinations(airline_company_id, destinations ) values (1, "Belgrade");
-insert into airline_company_destinations(airline_company_id, destinations ) values (1, "London");
+insert into airline_company_destinations(airline_company_id, destinations ) values (1, "New York JFK");
+insert into airline_company_destinations(airline_company_id, destinations ) values (1, "Belgrade BGD");
+insert into airline_company_destinations(airline_company_id, destinations ) values (1, "London LHR");
 
 --avion
 insert into airplane(id, model, seats_first_rows, seats_first_cols, seats_business_rows, seats_business_cols, seats_economy_rows, seats_economy_cols)
@@ -138,10 +138,10 @@ insert into user (dtype,id,address,email,firstname,lastname,username,password,ph
 --system admini
 insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('SystemAdmin',6,'adresa5','email5','ime5','prezime5','systemadmin','12345','51545',5,null,null,null, FALSE);
 
---dodavanje prijatelja
---insert into user_friends (registered_user_id, friends_id) values (1,2);
-
-
+--dodavanje filijala
+insert into branch_offices (id, branches) values (1,'Belgrade');
+insert into branch_offices (id, branches) values (1,'Paris');
+insert into branch_offices (id, branches) values (1,'London');
 
 -- spratovi
 insert into hotel_floor(id,level,max_rooms) values (1,1,15);

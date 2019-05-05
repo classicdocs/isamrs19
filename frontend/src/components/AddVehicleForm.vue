@@ -60,7 +60,7 @@
                   <span>Price per day (in Euros):</span>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                  <number-input :disabled="!passengers_enabled"  v-model="passengers" :min="1" :max="max_passengers" inline center controls></number-input>
+                  <number-input :disabled="!passengers_enabled" v-model="passengers" :min="1" :max="max_passengers" inline center controls></number-input>
               </v-flex>
               <v-flex xs12 sm6 md4>
                   <number-input v-model="production" :min="1990" :max="2019" inline center controls></number-input>
@@ -84,7 +84,7 @@
     </v-layout>
     
 
-    <v-list two-line>
+    <!-- <v-list two-line>
         <v-list-tile id="listitem" v-for="vehicle in vehicle_list" v-bind:key="vehicle">
         <v-list-tile-content>
             <v-list-tile-title v-html="vehicle.vehicleManufacturer + ' ' + vehicle.vehicleModel "></v-list-tile-title>
@@ -93,7 +93,29 @@
             + vehicle.pricePerDay + ' euros'"></v-list-tile-title>
         </v-list-tile-content>
         </v-list-tile>
-    </v-list>
+    </v-list> -->
+
+    <v-card id="listcard">
+        <v-list two-line>
+        <v-list-tile id="car" v-for="vehicle in vehicle_list" v-bind:key="vehicle">
+        <v-list-tile-content>
+            <v-list-tile-title id="cartitle" v-html="vehicle.vehicleManufacturer + ' ' + vehicle.vehicleModel "></v-list-tile-title>
+            <v-layout>
+            <v-flex>
+              <img id="pic" src="../assets/car.jpg">
+            </v-flex>
+            <v-flex id="carinfo">
+              Vehicle name: {{ vehicle.name }} <br/>
+              Vehicle type: {{ vehicle.vehicleType }} <br/>
+              Number of passengers: {{ vehicle.numberOfPassengers }} <br/>
+              Year of production: {{ vehicle.yearOfProduction }} <br/>
+              Price per day: {{ vehicle.pricePerDay }} euros <br/>
+            </v-flex>
+            </v-layout>
+        </v-list-tile-content>
+        </v-list-tile>
+        </v-list>
+        </v-card>
   </div>
 </template>
 
@@ -224,6 +246,30 @@ export default {
     padding-left: 2%;
     background-color: #f2f2f2;
     border: solid 0.1px  #dbdbdb;
+}
+
+#carinfo {
+    padding-left: 10px;
+}
+
+#car {
+    padding-left: 2%;
+    
+    border: solid 1px  #dbdbdb;
+    min-height: 160px;
+}
+
+#listcard {
+    width: 100%;
+}
+
+#cartitle {
+    padding-bottom: 25px;
+    padding-top: 5px;
+}
+
+#pic {
+  max-width: 200px;
 }
 
 </style>

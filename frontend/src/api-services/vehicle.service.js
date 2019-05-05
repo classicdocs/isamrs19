@@ -6,12 +6,12 @@ const ENDPOINTS = {
 
 export default {
   create(data) {
-    return Axios.post(ENDPOINTS.VEHICLES, data);
+    return Axios.post(ENDPOINTS.VEHICLES + 'create', data);
   },
   get() {
     return Axios.get(ENDPOINTS.VEHICLES);
   },
   getSpecific(data) {
-    return Axios.get(ENDPOINTS.VEHICLES + '/specific', data);
+    return Axios.post(ENDPOINTS.VEHICLES + 'specific', data);
   },
 };
