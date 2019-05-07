@@ -49,26 +49,6 @@ public class HotelService {
         }
     }
 
-    /*Metoda koja za dati hotelID pronadje hotel i doda mu sobu na osnovu roomDTO, sacuva sobu pa hotel*/
-//    public RoomDTO addRoom(Long hotelID, RoomDTO roomDTO) throws HotelNotFound {
-//
-//        Optional<Hotel> hotel = hotelRepository.findOneById(hotelID);
-//
-//        if (hotel.isPresent()) {
-//            Room r = new Room();
-//            r.setNumberOfBeds(roomDTO.getNumberOfBeds());
-//            r.setRoomNumber(roomDTO.getRoomNumber());
-//
-//            r = roomRepository.save(r);
-//            hotel.get().getRoomConfiguration().add(r);
-//            hotelRepository.save(hotel.get());
-//
-//            return (new RoomDTO(r));
-//        } else {
-//            throw new HotelNotFound(hotelID);
-//        }
-//    }
-
     public HotelDTO save(HotelDTO hotelDTO) throws HotelAlreadyExists, HotelNotFound {
 
         Optional<Hotel> hotel = hotelRepository.findOneByName(hotelDTO.getName());
@@ -145,7 +125,33 @@ public class HotelService {
         }
     }
 
+    public RoomDTO updateRoom(Long hotelID, RoomDTO roomDTO, Long floorID) throws FloorNotFound, HotelNotFound{
 
+        Optional<HotelFloor> floor = floorRepository.findOneById(floorID);
+        Optional<Hotel> hotel = hotelRepository.findOneById(hotelID);
+
+        if(hotel.isPresent()){
+            if (floor.isPresent()) {
+                for (Room room: floor.get().getRoomsOnFloor()) {
+                    if(room.getRoomNumber() == roomDTO.getRoomNumber()){
+
+                        room.setSpecialPrices(roomDTO.getSpecialPrices());
+                        room.setRoomTaken(roomDTO.getRoomTaken());
+                        room.setNumberOfBeds(roomDTO.getNumberOfBeds());
+
+                        Hotel h = hotelRepository.save(hotel.get());
+                        return (new RoomDTO(room));
+                    }
+                }
+                return (new RoomDTO());
+            } else {
+                throw new FloorNotFound(floorID);
+            }
+        }else {
+            throw new HotelNotFound(hotelID);
+        }
+
+    }
 
     public Set<HotelDTO> findAll() {
         return hotelRepository.findAllHotels();

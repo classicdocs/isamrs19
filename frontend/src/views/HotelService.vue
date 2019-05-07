@@ -12,6 +12,11 @@
                   v-on:finished="closeAddRoom($event)"
                   v-on:cancel  ="cancel"
                   ></add-room-dialog><!-- v-bind:hotel="this.hotel" -->
+                  
+                <change-room-dialog
+                  v-on:finished="closeChangeRoom($event)"
+                  v-on:cancel="cancel"
+                ></change-room-dialog>
             </v-layout>
           </v-container>
           
@@ -40,6 +45,9 @@
 
 import HotelServiceInfo from "@/components/Hotel/HotelServiceInfo.vue"; 
 import AddRoomDialog from "@/components/Hotel/AddRoomDialog.vue"; 
+import ChangeRoomDialog from "@/components/Hotel/ChangeRoomDialog.vue"; 
+
+
 import HotelController from "@/controllers/hotels.controller"; 
 import Hotel from "@/models/Hotel"; 
 import store from "@/store";
@@ -49,10 +57,12 @@ export default {
   components: {
     'hotel-service-info': HotelServiceInfo,
     'add-room-dialog':AddRoomDialog,
+    'change-room-dialog':ChangeRoomDialog,
 },
   data: () => ({
 
     AddRoomDialog: false,
+    ChangeRoomDialog: false,
 
     admin: false,
     id: null,
@@ -95,9 +105,14 @@ export default {
     },
     cancel(){
       this.AddRoomDialog = false;
+      this.ChangeRoomDialog = false;
     },
     closeAddRoom(data){
       this.AddRoomDialog = false;
+      this.showSnackbar(data);
+    },
+    closeChangeRoom(data){
+      this.ChangeRoomDialog = false;
       this.showSnackbar(data);
     },
     showSnackbar(obj) {

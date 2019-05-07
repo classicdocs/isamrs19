@@ -9,6 +9,9 @@ export default {
     },
     getHotel(id){
         return HotelsService.getHotel(id);
+    },
+    update(hotelID, room, floorID){
+        return HotelsService.update(hotelID,room,floorID);
     }
 }
 

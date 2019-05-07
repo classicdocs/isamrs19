@@ -14,5 +14,8 @@ export default {
   },
   getHotel(id){
     return Axios.get(ENDPOINTS.HOTELS + id);
+  },
+  update(hotelID, room, floorID){
+    return Axios.put(ENDPOINTS.HOTELS + hotelID + ENDPOINTS.ROOMS + "/" + floorID, room);
   }
 };

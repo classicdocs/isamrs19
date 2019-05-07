@@ -2,7 +2,7 @@
   <div>
     <v-dialog
       v-model="addFormDialog"
-      max-width="500px"
+      max-width="auto"
       persistent
     >
     <template v-slot:activator="{ on }">
@@ -23,8 +23,9 @@
             <v-flex lg10 md10 sm12 xs12>
               <v-layout row wrap>
 
-
-                <v-flex lg12 md12 sm12 xs12 v-for="floor in hotel.numOfFloors" :key="floor">
+                Hotel {{hotel.name}} configuration
+                <v-flex lg12 md12 sm12 xs12 
+                v-for="floor in hotel.numOfFloors" :key="floor">
                   
                   <v-btn flat>Floor {{floor}}</v-btn>
                   
@@ -35,6 +36,7 @@
                    >
                    {{roomPosition.number}}</v-btn>
                 
+                <v-divider v-if="floor <= hotel.numOfFloors" :key="`divider-${floor}`"></v-divider>
                 </v-flex>
               </v-layout>
             </v-flex>
@@ -58,7 +60,7 @@
           <v-btn color="blue darken" flat @click="addFormDialog = false">Close</v-btn> 
           <!-- <v-btn @click="resetValidation">Reset Validation</v-btn> -->
           <v-btn @click="reset">Reset Form</v-btn>
-          <v-btn :disabled="!form" color="success" @click="validate">Add</v-btn>
+          <v-btn :disabled="!selected" color="success" @click="validate">Add</v-btn>
         </v-card-actions>
       </v-form>
     </v-card>
@@ -83,6 +85,7 @@ export default {
   name: "AddRoomDialog",
   data: () => ({
     form: true,
+    selected: false,
     addFormDialog: false,
     room: new Room(),  
   
@@ -129,6 +132,7 @@ export default {
               }
             });
             this.setPositions();
+            this.reset();
             this.$emit("finished", {msg: "Room successfully added", color: "success"})
             this.addFormDialog = false;
           })
@@ -143,6 +147,7 @@ export default {
       this.pickedPosition.level = 0;
       this.pickedPosition.number = 0;
       this.numberOfBeds = 1;
+      this.selected = false;
     },
     setPositions(){
       var floorNUM = 0;
@@ -180,6 +185,7 @@ export default {
     pickRoom(floor,roomNumber){
       this.pickedPosition.level = floor;
       this.pickedPosition.number = roomNumber;
+      this.selected = true;
     },
   }
 };
