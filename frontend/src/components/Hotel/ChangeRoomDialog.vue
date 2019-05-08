@@ -82,8 +82,11 @@ import HotelFloor from "@/models/HotelFloor";
 import HotelController from "@/controllers/hotels.controller";
 import { returnStatement } from '@babel/types';
 
+import store from "@/store";
+
 export default {
   name: "ChangeRoomDialog",
+  props: ['hotel'],
   data: () => ({
     form: true,
     selected: false,
@@ -93,22 +96,28 @@ export default {
     pickedFloor: new HotelFloor(),
     numberOfBeds: 0,
 
-    hotel: new Hotel(),
   }),
-  created() {
-    HotelController.getHotel(this.$route.params.id)
-        .then((response) => {
-          this.hotel = response.data;
-          this.setDefault();
-        })
-        .catch(() => {
-          alert(error.response.data);
+  watch: {
+    hotel: function () {
+      this.hotel.floors.forEach(floor => {
+        floor.roomsOnFloor.forEach(room => {
+          room.hotelFloor = null;   // moram da ispraznim zbog json beskonacnog kruga
         });
+      });
+      this.hotel.floors.forEach(floor => {
+            floor.roomsOnFloor.sort(function(r1, r2){return r1.roomNumber - r2.roomNumber});
+        });
+      return this.hotel;
+    }
+  },
+  created() {
+    this.setDefault();
   },
   methods: {
     validate() {
       if(this.$refs.form.validate()) {
-
+        
+        
         
         HotelController.update(this.$route.params.id, this.pickedRoom, this.pickedRoom.hotelFloor.id)
         .then((response) => {
@@ -116,8 +125,10 @@ export default {
             this.hotel.floors.forEach(floor => {
               if(floor.level == this.pickedRoom.hotelFloor.level){
                 this.pickedRoom.hotelFloor.roomsOnFloor = floor.roomsOnFloor;
+
                 floor.roomsOnFloor.forEach(roomOnFloor => {
                   if(roomOnFloor.id == this.pickedRoom.id){
+
                     roomOnFloor.numberOfBeds = this.pickedRoom.numberOfBeds;
                     this.numberOfBeds = this.pickedRoom.numberOfBeds;
                   }
@@ -153,8 +164,10 @@ export default {
     pickRoom(room, floor){
       this.numberOfBeds = room.numberOfBeds;
       this.pickedRoom = JSON.parse(JSON.stringify(room)); // deep copy sobe
+      console.log("Treba da je puno: " + floor.roomsOnFloor);
       this.pickedRoom.hotelFloor = JSON.parse(JSON.stringify(floor));  //deep copy sprata
       this.pickedRoom.hotelFloor.roomsOnFloor = []; // mora zbog Json circular 
+      console.log("Treba da je prazno: " + this.pickedRoom.hotelFloor.roomsOnFloor);
       this.selected = true;
     },
   }
