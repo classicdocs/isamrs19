@@ -38,6 +38,20 @@
                 </add-airline-form>
               </v-dialog>
       </v-container>
+      <v-container grid-list-md text-xs-center>
+      </v-container>
+              <v-btn color="info" @click="openAdminDialog">
+                <v-icon left>accessibility_new</v-icon>
+                  Add admin
+              </v-btn>
+
+              <v-dialog v-model="addAdminDialog" max-width="500px" persistent="true">
+                <add-admin-form  v-if="addAdminDialog"
+                  v-bind:hotels="hotels" v-bind:airlines="airlines" v-bind:rentACars="rentACars"
+                  v-on:finished="closeAddAdmin($event)"
+                  v-on:cancel  ="cancel">
+                </add-admin-form>
+              </v-dialog>
       <v-snackbar
         v-model="snackbar.show"
         :timeout="5000"
@@ -61,6 +75,12 @@
 import AddHotelForm from "@/components/SystemAdmin/AddHotelForm.vue";
 import AddRentACarForm from "@/components/SystemAdmin/AddRentACarForm.vue";
 import AddAirlineForm from "@/components/SystemAdmin/AddAirlineForm.vue";
+import AddAdminForm from '../components/SystemAdmin/AddAdminForm.vue';
+
+import HotelController from "@/controllers/hotels.controller"; 
+import AirlineController from "@/controllers/airline-company.controller"; 
+import RentACarController from "@/controllers/rentacar.controller"; 
+
 
 export default {
     name: "sys-admin",
@@ -68,11 +88,17 @@ export default {
     'add-hotel-form': AddHotelForm,
     'add-rentacar-form' : AddRentACarForm,
     'add-airline-form' : AddAirlineForm,
+    'add-admin-form' : AddAdminForm
   },
   data: () => ({
     addHotelDialog: false,
     addRentACarDialog: false,
     addAirlineDialog: false,
+    addAdminDialog: false,
+
+    hotels: [],
+    airlines: [],
+    rentACars: [],
 
     snackbar: {
       show: false,
@@ -80,6 +106,20 @@ export default {
       msg: "",
     },
   }),
+  created() {
+    HotelController.getHotels()
+    .then(response =>{
+      this.hotels = response.data;
+    });
+    AirlineController.findAllAirlines()
+    .then(response => {
+      this.airlines = response.data;
+    });
+    RentACarController.getAll()
+    .then(response => {
+      this.rentACars = response.data;
+    });
+  },
   methods: {
     closeAddHotel(data){
       this.addHotelDialog = false;
@@ -97,10 +137,15 @@ export default {
       this.addRentACarDialog = false;
       this.showSnackbar(data);
     },
+    closeAddAdmin(data){
+      this.addAdminDialog = false;
+      this.showSnackbar(data);
+    },
     cancel(){
       this.addHotelDialog = false;
       this.addRentACarDialog = false;
       this.addAirlineDialog = false;
+      this.addAdminDialog = false;
     },
     openHotelDialog(){
       this.addRentACarDialog = false;
@@ -116,6 +161,12 @@ export default {
       this.addHotelDialog = false;
       this.addRentACarDialog = false;
       this.addAirlineDialog = true;
+    },
+    openAdminDialog(){
+      this.addHotelDialog = false;
+      this.addRentACarDialog = false;
+      this.addAirlineDialog = false;
+      this.addAdminDialog = true;
     },
     showSnackbar(obj) {
       this.snackbar.color = obj.color;

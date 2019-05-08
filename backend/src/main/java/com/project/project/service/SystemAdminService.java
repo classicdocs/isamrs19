@@ -4,14 +4,10 @@ import com.project.project.dto.AirlineCompanyDTO;
 import com.project.project.dto.Hotel_DTOs.HotelDTO;
 import com.project.project.dto.Hotel_DTOs.HotelFloorDTO;
 import com.project.project.dto.RentACarDTO;
-import com.project.project.exceptions.AirlineCompanyAlreadyExist;
-import com.project.project.exceptions.HotelAlreadyExists;
-import com.project.project.exceptions.HotelNotFound;
-import com.project.project.exceptions.RentACarAlreadyExist;
-import com.project.project.model.AirlineCompany;
+import com.project.project.exceptions.*;
+import com.project.project.model.*;
 import com.project.project.model.Hotel_Model.Hotel;
 import com.project.project.model.Hotel_Model.HotelFloor;
-import com.project.project.model.RentACar;
 import com.project.project.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,6 +33,9 @@ public class SystemAdminService {
 
     @Autowired
     private FloorRepository floorRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public HotelDTO createHotel(HotelDTO hotelDTO) throws HotelAlreadyExists, HotelNotFound {
         Optional<Hotel> hotel = hotelRepository.findOneByName(hotelDTO.getName());
@@ -133,5 +132,42 @@ public class SystemAdminService {
         airlineCompany = airlineCompanyRepository.save(airlineCompany);
 
         return (new AirlineCompanyDTO(airlineCompany));
+    }
+
+    public HotelAdmin createHotelAdmin(HotelAdmin hotelAdmin) throws AdminAlreadyExists{
+
+        Optional<User> admin = userRepository.findOneByUsername(hotelAdmin.getUsername());
+
+        if(admin.isPresent()){
+            throw new AdminAlreadyExists(hotelAdmin.getUsername());
+        }
+
+        hotelAdmin = userRepository.save(hotelAdmin);
+        return hotelAdmin;
+    }
+
+
+    public AirlineCompanyAdmin createAirlineAdmin(AirlineCompanyAdmin airlineCompanyAdmin) throws AdminAlreadyExists{
+
+        Optional<User> admin = userRepository.findOneByUsername(airlineCompanyAdmin.getUsername());
+
+        if(admin.isPresent()){
+            throw new AdminAlreadyExists(airlineCompanyAdmin.getUsername());
+        }
+
+        airlineCompanyAdmin = userRepository.save(airlineCompanyAdmin);
+        return airlineCompanyAdmin;
+    }
+
+    public RentACarAdmin createRentACarAdmin(RentACarAdmin rentACarAdmin) throws AdminAlreadyExists{
+
+        Optional<User> admin = userRepository.findOneByUsername(rentACarAdmin.getUsername());
+
+        if(admin.isPresent()){
+            throw new AdminAlreadyExists(rentACarAdmin.getUsername());
+        }
+
+        rentACarAdmin = userRepository.save(rentACarAdmin);
+        return rentACarAdmin;
     }
 }
