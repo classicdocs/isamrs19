@@ -45,7 +45,7 @@
                   Add admin
               </v-btn>
 
-              <v-dialog v-model="addAdminDialog" max-width="500px" persistent="true">
+              <v-dialog v-model="addAdminDialog" max-width="500px" persistent>
                 <add-admin-form  v-if="addAdminDialog"
                   v-bind:hotels="hotels" v-bind:airlines="airlines" v-bind:rentACars="rentACars"
                   v-on:finished="closeAddAdmin($event)"
@@ -109,15 +109,21 @@ export default {
   created() {
     HotelController.getHotels()
     .then(response =>{
-      this.hotels = response.data;
+      response.data.forEach(element => {
+        this.hotels.push(element.name);
+      });
     });
     AirlineController.findAllAirlines()
     .then(response => {
-      this.airlines = response.data;
+      response.data.forEach(element => {
+        this.airlines.push(element.name);
+      });
     });
     RentACarController.getAll()
     .then(response => {
-      this.rentACars = response.data;
+      response.data.forEach(element => {
+        this.rentACars.push(element.name);
+      });
     });
   },
   methods: {

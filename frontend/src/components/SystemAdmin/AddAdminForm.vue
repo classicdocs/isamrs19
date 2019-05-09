@@ -46,9 +46,9 @@
                     </v-radio-group>
                 </v-flex>
                 <v-flex xs12>
-                    <v-select v-if="radioGroup == 1" :items="hotels" label="choose hotel" outline ></v-select>
-                    <v-select v-if="radioGroup == 2" :items="airlines" label="choose airline company" outline ></v-select>
-                    <v-select v-if="radioGroup == 3" :items="rentACars" label="choose rent-a-car" outline ></v-select>
+                    <v-select v-if="radioGroup == 1" :items="hotels" v-model="selected" label="choose hotel" outline ></v-select>
+                    <v-select v-if="radioGroup == 2" :items="airlines" v-model="selected" label="choose airline company" outline ></v-select>
+                    <v-select v-if="radioGroup == 3" :items="rentACars" v-model="selected" label="choose rent-a-car" outline ></v-select>
                 </v-flex>
                 </v-layout>
 
@@ -84,6 +84,19 @@
 
 <script>
 import Registration from "@/models/Registration.js";
+import HotelAdmin from "@/models/HotelAdmin.js";
+import AirlineAdmin from "@/models/AirlineAdmin";
+import RentACarAdmin from "@/models/RentACarAdmin";
+
+import HotelController from "@/controllers/hotels.controller"; 
+import AirlineController from "@/controllers/airline-company.controller"; 
+import RentACarController from "@/controllers/rentacar.controller"; 
+import SysAdminController from "@/controllers/system-admin.controller"; 
+
+
+import Hotel from "@/models/Hotel";
+import AirlineCompany from "@/models/AirlineCompany";
+import RentACar from "@/models/RentACar";
 
 export default {
     name: "AddAdminForm",
@@ -91,6 +104,9 @@ export default {
     data: () => ({
         formValid:true,
         passwordConfirmation:null,
+
+        selected: "",
+
         firstname_rules:[
             v => !!v || 'First name is required'
         ],
@@ -124,6 +140,10 @@ export default {
         aAdminEnabled: false,
         racAdminEnabled: false,
 
+        hotel: new Hotel(),
+        airline: new AirlineCompany(),
+        rentACar: new RentACar(),
+
         radioGroup: 0,
 
         snackbar: {
@@ -137,19 +157,95 @@ export default {
             return (this.registration.password === this.passwordConfirmation) ? '' : 'Please enter a matching password'
         },
         validateUser() {
-            if(this.$refs.form.validate()){
+            console.log("validate user");
+            // if(this.$refs.form.validate()){
                 this.onSubmit();
-            }
+            // }
         },
         onSubmit() {
-            // UserController.create(this.registration).
-            //     then((response) => {
-            //         this.showSnackbar("Successful registration", "success");
-            //         this.back();
-            //     })
-            //     .catch((error) => {
-            //         this.showSnackbar(error.response.data, "error")
-            //     })
+            
+            if(this.radioGroup == 1){
+                
+                var hotelAdmin = new HotelAdmin();
+                hotelAdmin.username = this.registration.username;
+                hotelAdmin.password = this.registration.password;
+                hotelAdmin.firstname = this.registration.firstname;
+                hotelAdmin.lastname = this.registration.lastname;
+                hotelAdmin.email = this.registration.email;
+                hotelAdmin.address = this.registration.address;
+                hotelAdmin.phone = this.registration.phone;
+                hotelAdmin.hotel = new Hotel();
+
+                HotelController.getHotels()
+                .then(response =>{
+                    response.data.forEach(element => {
+                        if(element.name == this.selected){
+                            hotelAdmin.hotel = element;
+                            SysAdminController.createHotelAdmin(hotelAdmin)
+                            .then(response => {
+                                console.log(response.data);
+                            })
+                            .catch((error) => {
+                                this.showSnackbar(error.response.data, "error")
+                            })
+                        }
+                    });
+                });
+                
+            }else if(this.radioGroup == 2){
+                var airlineAdmin = new AirlineAdmin();
+
+                airlineAdmin.username = this.registration.username;
+                airlineAdmin.password = this.registration.password;
+                airlineAdmin.firstname = this.registration.firstname;
+                airlineAdmin.lastname = this.registration.lastname;
+                airlineAdmin.email = this.registration.email;
+                airlineAdmin.address = this.registration.address;
+                airlineAdmin.phone = this.registration.phone;
+                airlineAdmin.airlineCompany = new AirlineCompany();
+                AirlineController.findAllAirlines()
+                .then(response => {
+                    response.data.forEach(element => {
+                        if(element.name == this.selected){
+                            airlineAdmin.airlineCompany = element;
+                            SysAdminController.createAirlineAdmin(airlineAdmin)
+                            .then(response => {
+                                console.log(response.data);
+                            })
+                            .catch((error) => {
+                                this.showSnackbar(error.response.data, "error")
+                            })
+                        }
+                    })
+                });
+            }else{
+                var rentACarAdmin = new RentACarAdmin();
+
+                rentACarAdmin.username = this.registration.username;
+                rentACarAdmin.password = this.registration.password;
+                rentACarAdmin.firstname = this.registration.firstname;
+                rentACarAdmin.lastname = this.registration.lastname;
+                rentACarAdmin.email = this.registration.email;
+                rentACarAdmin.address = this.registration.address;
+                rentACarAdmin.phone = this.registration.phone;
+                rentACarAdmin.rentACar = new RentACar();
+
+                RentACarController.getAll()
+                .then(response => {
+                    response.data.forEach(element => {
+                        if(element.name == this.selected){
+                            rentACarAdmin.rentACar = element;
+                            SysAdminController.createRentACarAdmin(rentACarAdmin)
+                            .then(response => {
+                                console.log(response.data);
+                            })
+                            .catch((error) => {
+                                this.showSnackbar(error.response.data, "error")
+                            })
+                        }
+                    })
+                });
+            }
         },
         reset() {
             this.$refs.form.reset();

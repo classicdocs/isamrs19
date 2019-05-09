@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -141,8 +142,17 @@ public class SystemAdminService {
         if(admin.isPresent()){
             throw new AdminAlreadyExists(hotelAdmin.getUsername());
         }
+        Role role = new Role();
+        role.setRole("HotelAdmin");
+        hotelAdmin.setRole(role);
 
-        hotelAdmin = userRepository.save(hotelAdmin);
+        Optional<Hotel> hotel = hotelRepository.findOneById(hotelAdmin.getHotel().getId());
+        if(hotel.isPresent()){
+            hotel.get().getAdmins().add(hotelAdmin);
+            hotelRepository.save(hotel.get());
+        }
+
+        //hotelAdmin = userRepository.save(hotelAdmin);
         return hotelAdmin;
     }
 
