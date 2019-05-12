@@ -34,6 +34,9 @@ public class AirlineCompany {
     @OneToMany(fetch = FetchType.EAGER)
     private Set<Airplane> airplanes;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<AirlineCompanyAdmin> admins;
+
     public AirlineCompany() {}
 
     public Long getId() {
@@ -91,4 +94,13 @@ public class AirlineCompany {
     public void setAirplanes(Set<Airplane> airplanes) {
         this.airplanes = airplanes;
     }
+
+    public Set<AirlineCompanyAdmin> getAdmins() {
+        return admins;
+    }
+
+    public void setAdmins(Set<AirlineCompanyAdmin> admins) {
+        this.admins = admins;
+    }
+
 }

@@ -158,9 +158,9 @@ export default {
         },
         validateUser() {
             console.log("validate user");
-            // if(this.$refs.form.validate()){
+            if(this.$refs.form.validate()){
                 this.onSubmit();
-            // }
+            }
         },
         onSubmit() {
             

@@ -164,8 +164,13 @@ public class SystemAdminService {
         if(admin.isPresent()){
             throw new AdminAlreadyExists(airlineCompanyAdmin.getUsername());
         }
+        Optional<AirlineCompany> airlineCompany = airlineCompanyRepository.findOneById(airlineCompanyAdmin.getAirlineCompany().getId());
+        if(airlineCompany.isPresent()){
+            airlineCompany.get().getAdmins().add(airlineCompanyAdmin);
+            airlineCompanyRepository.save(airlineCompany.get());
+        }
 
-        airlineCompanyAdmin = userRepository.save(airlineCompanyAdmin);
+//        airlineCompanyAdmin = userRepository.save(airlineCompanyAdmin);
         return airlineCompanyAdmin;
     }
 
@@ -176,8 +181,11 @@ public class SystemAdminService {
         if(admin.isPresent()){
             throw new AdminAlreadyExists(rentACarAdmin.getUsername());
         }
-
-        rentACarAdmin = userRepository.save(rentACarAdmin);
+        // FIXME, TREBA DA BUDE OPTIONAL ALI IMA PREVISE KONFLIKATA SA LOSMIJEVIM KODOM
+        RentACar rentACar = rentACarRepository.findOneById(rentACarAdmin.getRentACar().getId());
+        rentACar.getAdmins().add(rentACarAdmin);
+        rentACarRepository.save(rentACar);
+//        rentACarAdmin = userRepository.save(rentACarAdmin);
         return rentACarAdmin;
     }
 }
