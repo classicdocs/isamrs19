@@ -1,6 +1,6 @@
-import RentACar from "./RentACar";
+import AirlineCompany from "./AirlineCompany";
 
-export default class RentACarAdmin {
+export default class AirlineAdmin {
     constructor() {
         this.username = null,
         this.password = null,
@@ -9,7 +9,7 @@ export default class RentACarAdmin {
         this.email = null,
         this.address = null,
         this.phone = null,
-        this.rentACar = new RentACar()
+        this.airlineCompany = new AirlineCompany()
     }
   
     reset() {
@@ -19,7 +19,7 @@ export default class RentACarAdmin {
         this.lastname = null,
         this.email = null,
         this.address = null,
-        this.phone = null,
-        this.rentACar.reset()
+        this.phone = null;
+        this.airlineCompany.reset();
     }
   }

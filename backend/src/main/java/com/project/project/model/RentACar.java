@@ -23,7 +23,7 @@ public class RentACar {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Vehicle> vehicles;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<RentACarAdmin> admins;
 
     @ElementCollection
@@ -37,7 +37,7 @@ public class RentACar {
         return id;
     }
 
-    public void setId(Long ID) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -36,7 +36,7 @@
                    >
                    {{roomPosition.number}}</v-btn>
                 
-                <v-divider v-if="floor <= hotel.numOfFloors" :key="`divider-${floor}`"></v-divider>
+                <v-divider v-if="floor <= hotel.numOfFloors" :key="`divider-${floor}`" class="divider"></v-divider>
                 </v-flex>
               </v-layout>
             </v-flex>
@@ -80,9 +80,12 @@ import HotelFloor from "@/models/HotelFloor";
 import HotelController from "@/controllers/hotels.controller";
 import { returnStatement } from '@babel/types';
 
+import store from "@/store";
+
 
 export default {
   name: "AddRoomDialog",
+  props: ['hotel'],
   data: () => ({
     form: true,
     selected: false,
@@ -93,20 +96,14 @@ export default {
     numberOfBeds: 0,
 
 
-    hotel: new Hotel(),
 
     hfp: new Hotel_Floor_Position(),
     fp: new Floor_Position()
   }),
-  created() {
-    HotelController.getHotel(this.$route.params.id)
-        .then((response) => {
-          this.hotel = response.data;
-          this.setPositions();
-        })
-        .catch(() => {
-          alert(error.response.data);
-        });
+  watch: {
+    hotel : function(){
+      this.setDefault();
+    }
   },
   methods: {
     validate() {
@@ -131,8 +128,12 @@ export default {
                 floor.roomsOnFloor.push(room);
               }
             });
+
             this.setPositions();
             this.reset();
+
+            store.commit("newHotel", this.hotel);
+
             this.$emit("finished", {msg: "Room successfully added", color: "success"})
             this.addFormDialog = false;
           })
@@ -149,6 +150,15 @@ export default {
       this.numberOfBeds = 1;
       this.selected = false;
     },
+    setDefault(){
+      this.hfp = new Hotel_Floor_Position();
+      this.hfp.numOfFloors = this.hotel.numOfFloors;
+      this.hotel.floors.sort(function(a, b){return a.level - b.level});
+        this.hotel.floors.forEach(floor => {
+            floor.roomsOnFloor.sort(function(r1, r2){return r1.roomNumber - r2.roomNumber});
+        });
+      this.setPositions();
+    },
     setPositions(){
       var floorNUM = 0;
 
@@ -159,7 +169,7 @@ export default {
       this.hotel.floors.forEach(f => {   floorNUM++;
 
         this.fp = new Floor_Position();
-
+        this.fp.level = f.level;
         // Prolazim kroz sve moguce pozicije u hotelu
         for(var roomNUM = 1; roomNUM <= this.hotel.roomsByFloor; roomNUM++){
           var position = new RoomPosition();
@@ -191,5 +201,10 @@ export default {
 };
 </script>
 <style>
+
+.divider {
+  border-width: 7px;
+  border-color: dodgerblue;
+}
 
 </style>

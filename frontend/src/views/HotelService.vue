@@ -9,11 +9,13 @@
           <v-container>
             <v-layout row wrap> 
                 <add-room-dialog 
+                  v-bind:hotel="this.hotel"
                   v-on:finished="closeAddRoom($event)"
                   v-on:cancel  ="cancel"
-                  ></add-room-dialog><!-- v-bind:hotel="this.hotel" -->
+                  ></add-room-dialog><!--  -->
                   
                 <change-room-dialog
+                  v-bind:hotel="this.hotel"
                   v-on:finished="closeChangeRoom($event)"
                   v-on:cancel="cancel"
                 ></change-room-dialog>
@@ -87,6 +89,7 @@ export default {
       HotelController.getHotel(this.id)
         .then((response) => {
           this.hotel = response.data;
+          store.commit("newHotel", this.hotel);
         })
         .catch(() => {
           alert(error.response.data);

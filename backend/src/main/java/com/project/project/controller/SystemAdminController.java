@@ -5,7 +5,10 @@ import com.project.project.dto.AirlineCompanyDTO;
 import com.project.project.dto.Hotel_DTOs.HotelDTO;
 import com.project.project.dto.RentACarDTO;
 import com.project.project.exceptions.*;
+import com.project.project.model.AirlineCompanyAdmin;
+import com.project.project.model.HotelAdmin;
 import com.project.project.model.RentACar;
+import com.project.project.model.RentACarAdmin;
 import com.project.project.service.AirlineCompanyService;
 import com.project.project.service.HotelService;
 import com.project.project.service.RentACarService;
@@ -46,14 +49,9 @@ public class SystemAdminController {
             HotelDTO hotel = systemAdminService.createHotel(hotelDTO);
             return new ResponseEntity<HotelDTO>(hotel, HttpStatus.CREATED);
 
-        } catch (HotelAlreadyExists hotelAlreadyExists) {
-
-            hotelAlreadyExists.printStackTrace();
-            return new ResponseEntity<String>(hotelAlreadyExists.getMessage(),HttpStatus.BAD_REQUEST);
-
-        } catch (HotelNotFound hnf){
-            hnf.printStackTrace();
-            return new ResponseEntity<String>(hnf.getMessage(),HttpStatus.BAD_REQUEST);
+        } catch (HotelNotFound | HotelAlreadyExists hotelException) {
+            hotelException.printStackTrace();
+            return new ResponseEntity<String>(hotelException.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
     @PostMapping(
@@ -90,5 +88,55 @@ public class SystemAdminController {
         }
     }
 
+    @PostMapping(
+            value = "/addHotelAdmin",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity createHotelAdmin(@RequestBody HotelAdmin hotelAdmin) throws AdminAlreadyExists {
+        try {
+            HotelAdmin admin = systemAdminService.createHotelAdmin(hotelAdmin);
 
+            return new ResponseEntity<>(admin, HttpStatus.CREATED);
+        }catch (AdminAlreadyExists hotelAdminAlreadyExists) {
+            hotelAdminAlreadyExists.printStackTrace();
+            return new ResponseEntity<String>(hotelAdminAlreadyExists.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(
+            value = "/addAirlineAdmin",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity createAirlineAdmin(@RequestBody AirlineCompanyAdmin airlineCompanyAdmin) throws AdminAlreadyExists {
+        try {
+            AirlineCompanyAdmin admin = systemAdminService.createAirlineAdmin(airlineCompanyAdmin);
+
+            return new ResponseEntity<>(admin, HttpStatus.CREATED);
+        }catch (AdminAlreadyExists airlineAdminAlreadyExists) {
+            airlineAdminAlreadyExists.printStackTrace();
+            return new ResponseEntity<String>(airlineAdminAlreadyExists.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    @PostMapping(
+            value = "/addRentACarAdmin",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity createRentACarAdmin(@RequestBody RentACarAdmin rentACarAdmin) throws AdminAlreadyExists {
+        try {
+
+            RentACarAdmin admin = systemAdminService.createRentACarAdmin(rentACarAdmin);
+            return new ResponseEntity<>(admin, HttpStatus.CREATED);
+
+        }catch (AdminAlreadyExists rentACarAdminAlreadyExists) {
+
+            rentACarAdminAlreadyExists.printStackTrace();
+            return new ResponseEntity<String>(rentACarAdminAlreadyExists.getMessage(), HttpStatus.BAD_REQUEST);
+
+        }
+    }
 }

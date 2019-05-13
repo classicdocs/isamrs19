@@ -46,9 +46,9 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-              <v-btn :disabled="!form" v-on:click="validate" color="success">NEXT</v-btn>
-              <v-btn v-on:click="reset" color="error">RESET</v-btn>
               <v-btn v-on:click="cancel" color="info">CANCEL</v-btn>
+              <v-btn v-on:click="reset" color="error">RESET</v-btn>
+              <v-btn :disabled="!form" v-on:click="validate" color="success">NEXT</v-btn>
            </v-card-actions>
       </v-form>
     </v-card>

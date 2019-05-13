@@ -6,6 +6,7 @@ import { auth } from './modules';
 import { snackbar} from "./modules";
 import { friendship} from "./modules";
 import { destination } from "./modules";
+import { hotel } from "./modules";
 
 Vue.use(Vuex);
 
@@ -16,6 +17,7 @@ const storeData = {
     snackbar,
     friendship,
     destination,
+    hotel,
   }
 }
 
