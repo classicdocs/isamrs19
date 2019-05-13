@@ -20,6 +20,10 @@
                   v-on:cancel="cancel"
                 ></change-room-dialog>
             </v-layout>
+            <v-layout col wrap>
+                <rooms-overview>
+                </rooms-overview>
+            </v-layout>
           </v-container>
           
         </v-flex>
@@ -48,7 +52,7 @@
 import HotelServiceInfo from "@/components/Hotel/HotelServiceInfo.vue"; 
 import AddRoomDialog from "@/components/Hotel/AddRoomDialog.vue"; 
 import ChangeRoomDialog from "@/components/Hotel/ChangeRoomDialog.vue"; 
-
+import RoomsOverview from "@/components/Hotel/RoomsOverview.vue"
 
 import HotelController from "@/controllers/hotels.controller"; 
 import Hotel from "@/models/Hotel"; 
@@ -60,6 +64,7 @@ export default {
     'hotel-service-info': HotelServiceInfo,
     'add-room-dialog':AddRoomDialog,
     'change-room-dialog':ChangeRoomDialog,
+    'rooms-overview':RoomsOverview
 },
   data: () => ({
 

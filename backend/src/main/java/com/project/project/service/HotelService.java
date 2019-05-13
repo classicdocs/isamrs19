@@ -172,4 +172,19 @@ public class HotelService {
         return hotels;
     }
 
+    public Set<Room> getRooms(Long id) throws HotelNotFound{
+        Optional<Hotel> hotel = hotelRepository.findOneById(id);
+        if (hotel.isPresent()) {
+            Set<Room> rooms = new HashSet<>();
+            for (HotelFloor floor: hotel.get().getFloors()) {
+                for (Room room: floor.getRoomsOnFloor()) {
+                    rooms.add(room);
+                }
+            }
+            return rooms;
+        } else {
+            throw new HotelNotFound(id);
+        }
+    }
+
 }

@@ -8,6 +8,7 @@ import com.project.project.exceptions.HotelNotFound;
 import com.project.project.exceptions.HotelWithAddressNotFound;
 import com.project.project.exceptions.HotelWithNameNotFound;
 import com.project.project.model.Hotel_Model.Hotel;
+import com.project.project.model.Hotel_Model.Room;
 import com.project.project.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -99,5 +100,19 @@ public class HotelController {
             return new ResponseEntity<String>(notFound.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
+    }
+
+    @GetMapping(
+            value = "/{id}/rooms",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity getRooms(@PathVariable("id") Long id) {
+        try {
+            Set<Room> rooms = hotelService.getRooms(id);
+            return new ResponseEntity<Set<Room>>(rooms, HttpStatus.OK);
+        } catch (HotelNotFound hnf) {
+            hnf.printStackTrace();
+            return new ResponseEntity<String>(hnf.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }
