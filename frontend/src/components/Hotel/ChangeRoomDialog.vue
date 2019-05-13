@@ -139,7 +139,6 @@ export default {
             this.$emit("finished", {msg: "Room successfully updated", color: "success"})
           })
           .catch((response) => {
-            console.log(response);
             this.$emit("finished", {msg: "Error! Something went wrong...", color: "error"})
           })
       }
@@ -164,10 +163,8 @@ export default {
     pickRoom(room, floor){
       this.numberOfBeds = room.numberOfBeds;
       this.pickedRoom = JSON.parse(JSON.stringify(room)); // deep copy sobe
-      console.log("Treba da je puno: " + floor.roomsOnFloor);
       this.pickedRoom.hotelFloor = JSON.parse(JSON.stringify(floor));  //deep copy sprata
       this.pickedRoom.hotelFloor.roomsOnFloor = []; // mora zbog Json circular 
-      console.log("Treba da je prazno: " + this.pickedRoom.hotelFloor.roomsOnFloor);
       this.selected = true;
     },
   }

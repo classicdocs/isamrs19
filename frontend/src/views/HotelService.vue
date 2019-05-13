@@ -89,7 +89,6 @@ export default {
       HotelController.getHotel(this.id)
         .then((response) => {
           this.hotel = response.data;
-          console.log("Commit na otvaranju strane: ");
           store.commit("newHotel", this.hotel);
         })
         .catch(() => {

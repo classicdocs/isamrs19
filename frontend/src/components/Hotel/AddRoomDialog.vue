@@ -96,23 +96,10 @@ export default {
     numberOfBeds: 0,
 
 
-    //hotel: new Hotel(),
 
     hfp: new Hotel_Floor_Position(),
     fp: new Floor_Position()
   }),
-  created() {
-    // HotelController.getHotel(this.$route.params.id)
-    //     .then((response) => {
-    //       this.hotel = response.data;
-    //       this.setPositions();
-    //       console.log("prvi commit");
-    //       store.commit("newHotel", this.hotel);
-    //     })
-    //     .catch(() => {
-    //       alert(error.response.data);
-    //     });
-  },
   watch: {
     hotel : function(){
       this.setDefault();
@@ -145,7 +132,6 @@ export default {
             this.setPositions();
             this.reset();
 
-            console.log("commit");
             store.commit("newHotel", this.hotel);
 
             this.$emit("finished", {msg: "Room successfully added", color: "success"})
