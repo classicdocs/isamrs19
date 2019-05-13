@@ -6,6 +6,7 @@ import com.project.project.dto.Hotel_DTOs.HotelDTO;
 import com.project.project.dto.Hotel_DTOs.HotelFloorDTO;
 import com.project.project.dto.Hotel_DTOs.RoomDTO;
 import com.project.project.exceptions.*;
+import com.project.project.model.HotelAdmin;
 import com.project.project.model.Hotel_Model.Hotel;
 import com.project.project.model.Hotel_Model.HotelFloor;
 import com.project.project.model.Hotel_Model.HotelsOffer;
@@ -36,7 +37,15 @@ public class HotelService {
 
 
     public Hotel findOneById(Long id) throws HotelNotFound{
-        return hotelRepository.findOneById(id).orElseThrow(() -> new HotelNotFound(id));
+        Optional<Hotel> h = hotelRepository.findOneById(id);
+        if(h.isPresent()){
+            for (HotelAdmin admin: h.get().getAdmins()) {
+                admin.setHotel(null);
+            }
+            return h.get();
+        }else{
+            throw new HotelNotFound(id);
+        }
     }
 
     /*Metoda koja za dati id pronadje hotel i vrati set njegovih ponuda koje u stvari cine cenovnik*/
@@ -154,7 +163,13 @@ public class HotelService {
     }
 
     public Set<HotelDTO> findAll() {
-        return hotelRepository.findAllHotels();
+        Set<HotelDTO> hotels = hotelRepository.findAllHotels();
+        for (HotelDTO hotelDTO: hotels) {
+            for (HotelAdmin admin: hotelDTO.getAdmins()) {
+                admin.setHotel(null);
+            }
+        }
+        return hotels;
     }
 
 }

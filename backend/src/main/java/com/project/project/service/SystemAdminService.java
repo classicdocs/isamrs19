@@ -13,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class SystemAdminService {
@@ -37,6 +35,9 @@ public class SystemAdminService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     public HotelDTO createHotel(HotelDTO hotelDTO) throws HotelAlreadyExists, HotelNotFound {
         Optional<Hotel> hotel = hotelRepository.findOneByName(hotelDTO.getName());
@@ -142,8 +143,7 @@ public class SystemAdminService {
         if(admin.isPresent()){
             throw new AdminAlreadyExists(hotelAdmin.getUsername());
         }
-        Role role = new Role();
-        role.setRole("HotelAdmin");
+        Role role = roleRepository.findOneById(4L);
         hotelAdmin.setRole(role);
 
         Optional<Hotel> hotel = hotelRepository.findOneById(hotelAdmin.getHotel().getId());
@@ -152,7 +152,6 @@ public class SystemAdminService {
             hotelRepository.save(hotel.get());
         }
 
-        //hotelAdmin = userRepository.save(hotelAdmin);
         return hotelAdmin;
     }
 
@@ -164,13 +163,15 @@ public class SystemAdminService {
         if(admin.isPresent()){
             throw new AdminAlreadyExists(airlineCompanyAdmin.getUsername());
         }
+        Role role = roleRepository.findOneById(3L);
+        airlineCompanyAdmin.setRole(role);
+
         Optional<AirlineCompany> airlineCompany = airlineCompanyRepository.findOneById(airlineCompanyAdmin.getAirlineCompany().getId());
         if(airlineCompany.isPresent()){
             airlineCompany.get().getAdmins().add(airlineCompanyAdmin);
             airlineCompanyRepository.save(airlineCompany.get());
         }
 
-//        airlineCompanyAdmin = userRepository.save(airlineCompanyAdmin);
         return airlineCompanyAdmin;
     }
 
@@ -181,11 +182,13 @@ public class SystemAdminService {
         if(admin.isPresent()){
             throw new AdminAlreadyExists(rentACarAdmin.getUsername());
         }
-        // FIXME, TREBA DA BUDE OPTIONAL ALI IMA PREVISE KONFLIKATA SA LOSMIJEVIM KODOM
+        Role role = roleRepository.findOneById(2L);
+        rentACarAdmin.setRole(role);
+
+        // FIXME, rentACar TREBA DA BUDE OPTIONAL ALI IMA PREVISE KONFLIKATA SA LOSMIJEVIM KODOM
         RentACar rentACar = rentACarRepository.findOneById(rentACarAdmin.getRentACar().getId());
         rentACar.getAdmins().add(rentACarAdmin);
         rentACarRepository.save(rentACar);
-//        rentACarAdmin = userRepository.save(rentACarAdmin);
         return rentACarAdmin;
     }
 }

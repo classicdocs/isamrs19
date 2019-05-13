@@ -199,3 +199,10 @@ insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values 
 --insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (5,10);
 --insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (6,11);
 --insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (6,12);
+
+--veza izmedju servisa i admina
+insert into hotel_admins(hotel_id, admins_id) values(1,5);
+
+insert into airline_company_admins(airline_company_id, admins_id) values (1,4);
+
+insert into rentacar_admins(rentacar_id,admins_id) values (1,3);

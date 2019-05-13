@@ -39,8 +39,7 @@
               </v-dialog>
       </v-container>
       <v-container grid-list-md text-xs-center>
-      </v-container>
-              <v-btn color="info" @click="openAdminDialog">
+        <v-btn color="info" @click="openAdminDialog">
                 <v-icon left>accessibility_new</v-icon>
                   Add admin
               </v-btn>
@@ -52,6 +51,8 @@
                   v-on:cancel  ="cancel">
                 </add-admin-form>
               </v-dialog>
+      </v-container>
+              
       <v-snackbar
         v-model="snackbar.show"
         :timeout="5000"

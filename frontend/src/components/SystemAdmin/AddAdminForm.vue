@@ -39,16 +39,16 @@
                 </v-flex>
                 <v-flex xs12>
                     <p>Choose which kind of admin you want to create</p>
-                    <v-radio-group v-model="radioGroup">
+                    <v-radio-group v-model="radioGroup" :rules="radio_rules" required>
                     <v-radio label="Hotel admin" value="1"></v-radio>
                     <v-radio label="Airline admin" value="2"></v-radio>
                     <v-radio label="Rent-a-car admin" value="3"></v-radio>
                     </v-radio-group>
                 </v-flex>
                 <v-flex xs12>
-                    <v-select v-if="radioGroup == 1" :items="hotels" v-model="selected" label="choose hotel" outline ></v-select>
-                    <v-select v-if="radioGroup == 2" :items="airlines" v-model="selected" label="choose airline company" outline ></v-select>
-                    <v-select v-if="radioGroup == 3" :items="rentACars" v-model="selected" label="choose rent-a-car" outline ></v-select>
+                    <v-select v-if="radioGroup == 1" :items="hotels" v-model="selected" label="choose hotel" outline :rules="hotel_rules" required></v-select>
+                    <v-select v-if="radioGroup == 2" :items="airlines" v-model="selected" label="choose airline company" outline :rules="airline_rules" required></v-select>
+                    <v-select v-if="radioGroup == 3" :items="rentACars" v-model="selected" label="choose rent-a-car" outline :rules="rentacar_rules" required></v-select>
                 </v-flex>
                 </v-layout>
 
@@ -64,21 +64,7 @@
             </v-form>
         </v-card>
     </v-layout>
-    <v-snackbar
-        v-model="snackbar.show"
-        :timeout="5000"
-        :color="snackbar.color"
-        :top="true"
-    >
-      {{snackbar.msg}}
-      <v-btn
-          dark
-          flat
-          @click="snackbar.show = false"
-      >
-      Close
-      </v-btn>
-    </v-snackbar>
+    
     </div>
 </template>
 
@@ -134,6 +120,18 @@ export default {
         confirm_password_rules:[
             v => !!v || 'Password confirmation is required'
         ],
+        radio_rules:[
+            v => !!v || 'You need to choose type of admin'
+        ],
+        hotel_rules:[
+            v => !!v || 'You need to choose existing hotel from list'
+        ],
+        airline_rules:[
+            v => !!v || 'You need to choose existing airline company from list'
+        ],
+        rentacar_rules:[
+            v => !!v || 'You need to choose existing rent-a-car from list'
+        ],
         registration : new Registration(),
 
         hAdminEnabled: false,
@@ -146,11 +144,6 @@ export default {
 
         radioGroup: 0,
 
-        snackbar: {
-            show: false,
-            color: "",
-            msg: "",
-        }
     }),
     methods: {
         passwordMatchError () {
@@ -183,10 +176,11 @@ export default {
                             hotelAdmin.hotel = element;
                             SysAdminController.createHotelAdmin(hotelAdmin)
                             .then(response => {
-                                console.log(response.data);
+                                this.$emit("finished", {msg: "Hotel administrator successfully added", color: "success"})
                             })
                             .catch((error) => {
-                                this.showSnackbar(error.response.data, "error")
+                                console.log(error);
+                                this.$emit("finished", {msg: "Error! Something went wrong...", color: "error"})
                             })
                         }
                     });
@@ -210,10 +204,10 @@ export default {
                             airlineAdmin.airlineCompany = element;
                             SysAdminController.createAirlineAdmin(airlineAdmin)
                             .then(response => {
-                                console.log(response.data);
+                                this.$emit("finished", {msg: "Airline company administrator successfully added", color: "success"})
                             })
                             .catch((error) => {
-                                this.showSnackbar(error.response.data, "error")
+                                this.$emit("finished", {msg: "Error! Something went wrong...", color: "error"})
                             })
                         }
                     })
@@ -237,10 +231,10 @@ export default {
                             rentACarAdmin.rentACar = element;
                             SysAdminController.createRentACarAdmin(rentACarAdmin)
                             .then(response => {
-                                console.log(response.data);
+                                this.$emit("finished", {msg: "Rent-a-car administrator successfully added", color: "success"})
                             })
                             .catch((error) => {
-                                this.showSnackbar(error.response.data, "error")
+                                this.$emit("finished", {msg: "Error! Something went wrong...", color: "error"})
                             })
                         }
                     })
@@ -252,11 +246,6 @@ export default {
         },
         cancel(){
             this.$emit("cancel")
-        },
-        showSnackbar(message,color) {
-            this.snackbar.color = color;
-            this.snackbar.msg = message;
-            this.snackbar.show = true;
         }
     }
 }
