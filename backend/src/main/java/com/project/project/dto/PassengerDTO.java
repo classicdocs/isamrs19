@@ -6,13 +6,13 @@ public class PassengerDTO {
 
     private Passenger passenger;
 
-    private int seatRowDeparture;
+    private Integer seatRowDeparture;
 
-    private int seatColDeparture;
+    private Integer seatColDeparture;
 
-    private int seatRowReturn;
+    private Integer seatRowReturn;
 
-    private int seatColReturn;
+    private Integer seatColReturn;
 
     private String seatClass;
 
@@ -29,6 +29,13 @@ public class PassengerDTO {
         this.seatClass = seatClass;
     }
 
+    public PassengerDTO(Passenger passenger, int seatRowDeparture, int seatColDeparture, String seatClass) {
+        this.passenger = passenger;
+        this.seatRowDeparture = seatRowDeparture;
+        this.seatColDeparture = seatColDeparture;
+        this.seatClass = seatClass;
+    }
+
     public Passenger getPassenger() {
         return passenger;
     }
@@ -38,6 +45,37 @@ public class PassengerDTO {
     }
 
 
+    public Integer getSeatRowDeparture() {
+        return seatRowDeparture;
+    }
+
+    public void setSeatRowDeparture(Integer seatRowDeparture) {
+        this.seatRowDeparture = seatRowDeparture;
+    }
+
+    public Integer getSeatColDeparture() {
+        return seatColDeparture;
+    }
+
+    public void setSeatColDeparture(Integer seatColDeparture) {
+        this.seatColDeparture = seatColDeparture;
+    }
+
+    public Integer getSeatRowReturn() {
+        return seatRowReturn;
+    }
+
+    public void setSeatRowReturn(Integer seatRowReturn) {
+        this.seatRowReturn = seatRowReturn;
+    }
+
+    public Integer getSeatColReturn() {
+        return seatColReturn;
+    }
+
+    public void setSeatColReturn(Integer seatColReturn) {
+        this.seatColReturn = seatColReturn;
+    }
 
     public String getSeatClass() {
         return seatClass;
@@ -45,37 +83,5 @@ public class PassengerDTO {
 
     public void setSeatClass(String seatClass) {
         this.seatClass = seatClass;
-    }
-
-    public int getSeatRowDeparture() {
-        return seatRowDeparture;
-    }
-
-    public void setSeatRowDeparture(int seatRowDeparture) {
-        this.seatRowDeparture = seatRowDeparture;
-    }
-
-    public int getSeatColDeparture() {
-        return seatColDeparture;
-    }
-
-    public void setSeatColDeparture(int seatColDeparture) {
-        this.seatColDeparture = seatColDeparture;
-    }
-
-    public int getSeatRowReturn() {
-        return seatRowReturn;
-    }
-
-    public void setSeatRowReturn(int seatRowReturn) {
-        this.seatRowReturn = seatRowReturn;
-    }
-
-    public int getSeatColReturn() {
-        return seatColReturn;
-    }
-
-    public void setSeatColReturn(int seatColReturn) {
-        this.seatColReturn = seatColReturn;
     }
 }

@@ -11,8 +11,10 @@ public class FlightInvitation {
 
     private Long invitationFrom;
 
-    @ManyToOne
+    @ManyToOne(fetch =  FetchType.EAGER, cascade = CascadeType.ALL)
     private FlightReservation flightReservation;
+
+    private String seatClass;
 
     public FlightInvitation() {
 
@@ -40,5 +42,13 @@ public class FlightInvitation {
 
     public void setFlightReservation(FlightReservation flightReservation) {
         this.flightReservation = flightReservation;
+    }
+
+    public String getSeatClass() {
+        return seatClass;
+    }
+
+    public void setSeatClass(String seatClass) {
+        this.seatClass = seatClass;
     }
 }

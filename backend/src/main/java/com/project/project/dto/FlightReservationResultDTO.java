@@ -21,11 +21,18 @@ public class FlightReservationResultDTO {
 
     private double pricePerPerson;
 
+    public  FlightReservationResultDTO() {
+
+    }
+
     public FlightReservationResultDTO(FlightReservation flightReservation, Set<PassengerDTO> passengers) {
         this.id = flightReservation.getId();
         this.date = flightReservation.getDate();
         this.departureFlight = new FlightDTO(flightReservation.getDepartureFlight());
-        this.returnFlight = new FlightDTO(flightReservation.getReturnFlight());
+        if (flightReservation.getReturnFlight() != null)
+            this.returnFlight = new FlightDTO(flightReservation.getReturnFlight());
+        else
+            this.returnFlight = null;
         this.passengers = passengers;
         this.pricePerPerson = flightReservation.getPricePerPerson();
     }

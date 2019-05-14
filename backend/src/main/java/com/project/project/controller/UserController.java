@@ -1,13 +1,11 @@
 package com.project.project.controller;
 
-import com.project.project.dto.FlightReservationResultDTO;
-import com.project.project.dto.FriendDTO;
-import com.project.project.dto.FriendRequestsDTO;
-import com.project.project.dto.UserRegistrationDTO;
+import com.project.project.dto.*;
 import com.project.project.exceptions.FriendshipWrongRole;
 import com.project.project.exceptions.UserNotFound;
 import com.project.project.exceptions.UsernameNotFound;
 import com.project.project.exceptions.UsernameTaken;
+import com.project.project.model.FlightInvitation;
 import com.project.project.model.FlightReservation;
 import com.project.project.model.FriendRequest;
 import com.project.project.model.User;
@@ -122,4 +120,28 @@ public class UserController {
             return new ResponseEntity<String>(userNotFound.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping(
+            value = "/{id}/flight/invitations",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity getFlightInvitations(@PathVariable("id") Long id) {
+        try {
+            Set<FlightInvitationDTO> flightInvitationDTOS = userService.getFlightInvitation(id);
+            return new ResponseEntity<Set<FlightInvitationDTO>>(flightInvitationDTOS, HttpStatus.OK);
+        } catch (UserNotFound userNotFound) {
+            userNotFound.printStackTrace();
+            return  new ResponseEntity<String>(userNotFound.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+//    @PostMapping(
+//            value = "/{id}/flight/invitations/accept",
+//            consumes = MediaType.APPLICATION_JSON_VALUE,
+//            produces = MediaType.APPLICATION_JSON_VALUE
+//    )
+//    public ResponseEntity acceptInvitation(@PathVariable("id") Long id, @RequestBody Long invitationId) {
+//
+//        userService.acceptInvitation(id, invitationId);
+//    }
 }

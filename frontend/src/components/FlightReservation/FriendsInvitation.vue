@@ -12,7 +12,7 @@
         class="elevation-1"
       >
       <template v-slot:items="props">
-        <tr :active="props.selected" @click="props.selected = !props.selected">
+        <tr :active="props.selected" @click=" check(props)">
           <td class="text-xs-left">{{ props.item.username}}</td>
           <td class="text-xs-left">{{ props.item.firstName}}</td>
           <td class="text-xs-left">{{ props.item.lastName }}</td>
@@ -28,6 +28,7 @@
         </tr>
       </template>
       </v-data-table>
+      {{selected}}
       </v-card-text>
     </v-card>
   </div>
@@ -61,6 +62,21 @@ export default {
   watch: {
     selected() {
       this.$emit("friendsInvited", this.selected);
+    }
+  },
+  methods: {
+    check(props) {
+
+      let passengersNumber = store.getters.flightReservation.searchParams.passengersNumber;
+      if (this.selected.length + 1 > passengersNumber) {
+        store.commit("setSnack", {msg: "Maximal number of friends you can invite is " + (passengersNumber - 1), color: "error"});
+        props.selected = false;
+        this.selected.splice(this.selected.length - 1, 1);
+      } else {
+        props.selected = !props.selected;      
+      }
+
+
     }
   }
 }

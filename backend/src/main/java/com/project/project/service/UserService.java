@@ -179,8 +179,13 @@ public class UserService {
                 Set<PassengerDTO> passengerDTOS = new HashSet<>();
                 for (Passenger passenger : flightReservation.getPassengers()) {
                     List<Seat> s  = seatRepository.findSeatsByPassengerId(passenger.getId());
-                    passengerDTOS.add(new PassengerDTO(passenger, s.get(0).getRowNum(), s.get(0).getColNum(),
-                            s.get(1).getRowNum(), s.get(1).getColNum(),s.get(0).getSeatClass()));
+                    if (flightReservation.getReturnFlight() != null) {
+                        passengerDTOS.add(new PassengerDTO(passenger, s.get(0).getRowNum(), s.get(0).getColNum(),
+                                s.get(1).getRowNum(), s.get(1).getColNum(),s.get(0).getSeatClass()));
+                    } else {
+                        passengerDTOS.add(new PassengerDTO(passenger, s.get(0).getRowNum(), s.get(0).getColNum(),s.get(0).getSeatClass()));
+                    }
+
                 }
                 FlightReservationResultDTO flightReservationResultDTO = new FlightReservationResultDTO(flightReservation, passengerDTOS);
                 result.add(flightReservationResultDTO);
@@ -188,6 +193,50 @@ public class UserService {
             return result;
         } else {
             throw new UserNotFound(id);
+        }
+    }
+
+    public Set<FlightInvitationDTO> getFlightInvitation(Long id) throws UserNotFound {
+
+        Optional<User> user = userRepository.findOneById(id);
+        if (user.isPresent()) {
+            RegisteredUser ru = (RegisteredUser) user.get();
+            Set<FlightInvitationDTO> flightInvitationDTOS = new HashSet<>();
+            for (FlightInvitation flightInvitation : ru.getFlightInvitations()) {
+                Optional<User> from = userRepository.findOneById(flightInvitation.getInvitationFrom());
+                if (from.isPresent()) {
+                    flightInvitationDTOS.add(new FlightInvitationDTO(flightInvitation, new UserRegistrationDTO(from.get())));
+                } else {
+                    throw new UserNotFound(flightInvitation.getInvitationFrom());
+                }
+
+            }
+            return flightInvitationDTOS;
+        } else {
+            throw  new UserNotFound(id);
+        }
+    }
+
+    public void acceptInvitation(Long userId, Long invitationId, Long invitationFrom) throws UserNotFound {
+
+        Optional<User> user = userRepository.findOneById(userId);
+        if (user.isPresent()) {
+
+            RegisteredUser ru = (RegisteredUser) user.get();
+            FlightInvitation invitationToRemove = null;
+
+            for(FlightInvitation flightInvitation : ru.getFlightInvitations()) {
+                if (flightInvitation.getId() == invitationId) {
+                    invitationToRemove = flightInvitation;
+                }
+            }
+            if (invitationToRemove != null) {
+                ru.getFlightInvitations().remove(invitationToRemove);
+                userRepository.save(ru);
+            }
+
+        } else {
+            throw new UserNotFound(userId);
         }
     }
 }

@@ -243,7 +243,7 @@ export default {
       this.snackbar.show = true;
     },
     goToFriendsInvitation() {
-      if (this.friends.length === 0) {
+      if (this.friends.length === 0 || this.flightReservation.searchParams.passengersNumber === 1) {
             this.friends = false;
             this.stepper = 3;
             return;
@@ -323,7 +323,6 @@ export default {
 
       FlightController.reserve(data)
         .then((response) => {
-           
           console.log(response.data);
           store.commit("setSnack", {msg: "You have successfully booked a flight!", color: "success"});
           this.$router.push({name: "my-reservations"});

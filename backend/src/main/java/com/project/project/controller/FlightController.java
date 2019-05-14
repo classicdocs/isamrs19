@@ -71,7 +71,7 @@ public class FlightController {
 
         try {
             FlightReservationResultDTO flightReservation1 = flightService.reserve(flightReservation);
-            return new ResponseEntity<FlightReservationResultDTO>(flightReservation1, HttpStatus.OK);
+            return new ResponseEntity<FlightReservationResultDTO>(flightReservation1, HttpStatus.CREATED);
         } catch (FlightNotFound flightNotFound) {
             flightNotFound.printStackTrace();
             return new ResponseEntity<String>(flightNotFound.getMessage(), HttpStatus.BAD_REQUEST);

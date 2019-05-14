@@ -18,6 +18,7 @@
           <v-btn
             style="float:right"
             color="primary"
+            v-if="passengersNumber > 1"
             @click="stepper = 2"
             :disabled="isDisabled(myInfo)"
           >
@@ -82,7 +83,7 @@ export default {
         return false;
       }
     }
-  }
+  },
 }
 </script>
 

@@ -24,5 +24,8 @@ export default {
   },
   getFlightReservations(id) {
     return UserApiService.getFlightReservations(id);
+  },
+  getFlightInvitations(id) {
+    return UserApiService.getFlightInvitations(id);
   }
 };

@@ -1,9 +1,6 @@
 <template>
   <div>
     <v-card>
-      <v-card-title primary-title>
-        <h2>Flight Reservations</h2>
-      </v-card-title>
       <v-card-text>
         <v-expansion-panel 
 			  >
@@ -40,8 +37,9 @@
                 </v-flex>
               </v-layout>
               <v-layout row wrap>
-                <v-data-table
-                  :headers="headers"
+                <v-flex lg12 md12 sm12 xs12>
+                  <v-data-table
+                  :headers="getHeaders(reservation)"
                   :items="reservation.passengers"
                   hide-actions
                   class="elevation-1"
@@ -52,14 +50,16 @@
                   <td class="text-xs-left">{{ props.item.passenger.passport }}</td>
                   <td class="text-xs-left">{{ props.item.seatRowDeparture }}</td>
                   <td class="text-xs-left">{{ props.item.seatColDeparture }}</td>
-                  <td class="text-xs-left">{{ props.item.seatRowReturn }}</td>
-                  <td class="text-xs-left">{{ props.item.seatColReturn }}</td>
+                  <td class="text-xs-left" v-if="reservation.returnFlight !== null">{{ props.item.seatRowReturn }}</td>
+                  <td class="text-xs-left" v-if="reservation.returnFlight !== null">{{ props.item.seatColReturn }}</td>
                   <td class="text-xs-left">{{ props.item.seatClass }}</td>
                   <td class="text-xs-left">{{ props.item.passenger.email }}</td>
                   <td class="text-xs-left">{{ props.item.passenger.phone }}</td> 
                   <td class="text-xs-left">{{ props.item.passenger.address }}</td>
                 </template>
                 </v-data-table>
+                </v-flex>
+                
                 <h3><br>{{"Date of reservation " + reservation.date}}</h3>
               </v-layout>
             </v-container>
@@ -86,7 +86,7 @@ export default {
   data:() => ({
     expansion: [true],
     reservations: [],
-    headers: [
+    headers1: [
       { text: 'First name', value: 'firstName' },
       { text: 'Last name', value: 'lastName' },
       { text: 'Passport number', value: 'passport' },
@@ -94,6 +94,17 @@ export default {
       { text: 'Seat column departure', value: 'colDept' },
       { text: 'Seat row return', value: 'rowRet' },
       { text: 'Seat column return', value: 'colRet' },
+      { text: 'Seat class', value: 'class' },
+      { text: 'Email', value: 'email' },
+      { text: 'Phone number', value: 'phone' },
+      { text: 'Address', value: 'address' },
+    ],
+    headers2: [
+      { text: 'First name', value: 'firstName' },
+      { text: 'Last name', value: 'lastName' },
+      { text: 'Passport number', value: 'passport' },
+      { text: 'Seat row departure', value: 'rowDept' },
+      { text: 'Seat column departure', value: 'colDept' },
       { text: 'Seat class', value: 'class' },
       { text: 'Email', value: 'email' },
       { text: 'Phone number', value: 'phone' },
@@ -113,9 +124,8 @@ export default {
   methods: {
     getParams(reservation) {
       let params = {
-        'flightClass' : reservation.passengers[0].seatClass,
+        'seatClass' : reservation.passengers[0].seatClass,
         'passengersNumber' : reservation.passengers.length,
-        'price' : reservation.pricePerPerson
       }
       return params;
     },
@@ -126,6 +136,12 @@ export default {
         title += " - "  + reservation.returnFlight.startDestination.name + " - " + reservation.returnFlight.finalDestination.name;
       }
       return title;
+    },
+    getHeaders(reservation) {
+      if (reservation.returnFlight !== null) {
+        return this.headers1;
+      }
+      return this.headers2;
     }
   }
 
