@@ -178,6 +178,9 @@ public class HotelService {
             Set<Room> rooms = new HashSet<>();
             for (HotelFloor floor: hotel.get().getFloors()) {
                 for (Room room: floor.getRoomsOnFloor()) {
+                    HotelFloor newFloor = floor;
+                    newFloor.setRoomsOnFloor(null);
+                    room.setHotelFloor(newFloor);
                     rooms.add(room);
                 }
             }

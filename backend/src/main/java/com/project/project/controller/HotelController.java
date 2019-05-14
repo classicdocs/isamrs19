@@ -103,7 +103,7 @@ public class HotelController {
     }
 
     @GetMapping(
-            value = "/{id}/rooms",
+            value = "/{id}/roomsConfiguration",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity getRooms(@PathVariable("id") Long id) {

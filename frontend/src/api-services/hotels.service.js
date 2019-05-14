@@ -2,7 +2,8 @@ import Axios, * as others from 'axios';
 
 const ENDPOINTS = {
   HOTELS: '/hotels/',
-  ROOMS: '/rooms'
+  ROOMS: '/rooms',
+  ROOMS_CONFIGURATION: '/roomsConfiguration'
 };
 
 export default {
@@ -17,5 +18,8 @@ export default {
   },
   update(hotelID, room, floorID){
     return Axios.put(ENDPOINTS.HOTELS + hotelID + ENDPOINTS.ROOMS + "/" + floorID, room);
+  },
+  getRooms(hotelID){
+    return Axios.get(ENDPOINTS.HOTELS + hotelID + ENDPOINTS.ROOMS_CONFIGURATION)
   }
 };
