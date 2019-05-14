@@ -1,5 +1,6 @@
 package com.project.project.controller;
 
+import com.project.project.dto.FlightReservationResultDTO;
 import com.project.project.dto.FriendDTO;
 import com.project.project.dto.FriendRequestsDTO;
 import com.project.project.dto.UserRegistrationDTO;
@@ -7,6 +8,7 @@ import com.project.project.exceptions.FriendshipWrongRole;
 import com.project.project.exceptions.UserNotFound;
 import com.project.project.exceptions.UsernameNotFound;
 import com.project.project.exceptions.UsernameTaken;
+import com.project.project.model.FlightReservation;
 import com.project.project.model.FriendRequest;
 import com.project.project.model.User;
 import com.project.project.service.UserService;
@@ -103,6 +105,21 @@ public class UserController {
         } catch (UserNotFound e) {
             e.printStackTrace();
             return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(
+            value = "/{id}/flight/reservations",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity getFlightReservations(@PathVariable("id") Long id) {
+
+        try {
+            Set<FlightReservationResultDTO> flightReservations = userService.getFlightReservations(id);
+            return new ResponseEntity<Set<FlightReservationResultDTO>>(flightReservations, HttpStatus.OK);
+        } catch (UserNotFound userNotFound) {
+            userNotFound.printStackTrace();
+            return new ResponseEntity<String>(userNotFound.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }

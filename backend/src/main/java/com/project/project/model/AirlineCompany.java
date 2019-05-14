@@ -34,6 +34,9 @@ public class AirlineCompany {
     @OneToMany(fetch = FetchType.EAGER)
     private Set<Airplane> airplanes;
 
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<FlightReservation> reservations = new HashSet<>();
+
     public AirlineCompany() {}
 
     public Long getId() {
@@ -90,5 +93,13 @@ public class AirlineCompany {
 
     public void setAirplanes(Set<Airplane> airplanes) {
         this.airplanes = airplanes;
+    }
+
+    public Set<FlightReservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(Set<FlightReservation> reservations) {
+        this.reservations = reservations;
     }
 }

@@ -60,7 +60,7 @@ export default {
       },
       'User': { 
         right: [
-        {name:'My Reservations', path:'/'},
+        {name:'My Reservations', path:'/my-reservations'},
         {name:'Friends', path:'/friends'},
         {name:'Profile', path:() => this.getProfilPath , computed: true},
         {name:'Log out', path:'/logout'},

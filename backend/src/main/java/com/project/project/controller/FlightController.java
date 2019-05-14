@@ -1,8 +1,11 @@
 package com.project.project.controller;
 
 import com.project.project.dto.FlightDTO;
+import com.project.project.dto.FlightReservationDTO;
+import com.project.project.dto.FlightReservationResultDTO;
 import com.project.project.dto.SearchFlightDTO;
 import com.project.project.exceptions.*;
+import com.project.project.model.FlightReservation;
 import com.project.project.service.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -56,6 +59,22 @@ public class FlightController {
         } catch (DestinationNotFound | ParseException destinationNotFound) {
             destinationNotFound.printStackTrace();
             return new ResponseEntity<String>(destinationNotFound.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(
+            value = "/reserve",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity reserve(@RequestBody FlightReservationDTO flightReservation) {
+
+        try {
+            FlightReservationResultDTO flightReservation1 = flightService.reserve(flightReservation);
+            return new ResponseEntity<FlightReservationResultDTO>(flightReservation1, HttpStatus.OK);
+        } catch (FlightNotFound flightNotFound) {
+            flightNotFound.printStackTrace();
+            return new ResponseEntity<String>(flightNotFound.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }

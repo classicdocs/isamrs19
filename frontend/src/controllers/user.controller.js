@@ -22,4 +22,7 @@ export default {
   getFriendRequests(id) {
     return UserApiService.getFriendRequests(id);
   },
+  getFlightReservations(id) {
+    return UserApiService.getFlightReservations(id);
+  }
 };

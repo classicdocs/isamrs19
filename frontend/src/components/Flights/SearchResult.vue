@@ -55,9 +55,7 @@ export default {
       f.flights = this.data;
       f.searchParams = this.searchParams;
       f.price = this.getPrice;
-      console.log(f);
       store.commit('flightReservation', f);
-      console.log(store.getters.flightReservation);
       this.$router.push({name: "flight-reservation"});
     },
     setPriceDeparture(price) {

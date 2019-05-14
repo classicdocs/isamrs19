@@ -2,7 +2,7 @@
   <div>
      <v-card>
       <v-card-title primary-title>
-        <h2>List of destinations where you can flight with us!</h2>
+        <h2>List of destinations</h2>
       </v-card-title>
       <v-data-table
         :items="destinations"

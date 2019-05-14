@@ -1,20 +1,15 @@
 package com.project.project.service;
 
-import com.project.project.dto.ChangePasswordDTO;
-import com.project.project.dto.FriendDTO;
-import com.project.project.dto.FriendRequestsDTO;
-import com.project.project.dto.UserRegistrationDTO;
+import com.project.project.dto.*;
 import com.project.project.exceptions.*;
 import com.project.project.model.*;
 import com.project.project.repository.RoleRepository;
+import com.project.project.repository.SeatRepository;
 import com.project.project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -24,6 +19,9 @@ public class UserService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private SeatRepository seatRepository;
 
     public User findOne(String username) throws UsernameNotFound {
 
@@ -169,6 +167,27 @@ public class UserService {
             return fr;
         } else {
             throw  new UserNotFound(id);
+        }
+    }
+
+    public Set<FlightReservationResultDTO> getFlightReservations(Long id) throws UserNotFound {
+        Optional<User> user = userRepository.findOneById(id);
+        if (user.isPresent()) {
+            RegisteredUser ru = (RegisteredUser) user.get();
+            Set<FlightReservationResultDTO> result = new HashSet<>();
+            for(FlightReservation flightReservation : ru.getFlightReservations()) {
+                Set<PassengerDTO> passengerDTOS = new HashSet<>();
+                for (Passenger passenger : flightReservation.getPassengers()) {
+                    List<Seat> s  = seatRepository.findSeatsByPassengerId(passenger.getId());
+                    passengerDTOS.add(new PassengerDTO(passenger, s.get(0).getRowNum(), s.get(0).getColNum(),
+                            s.get(1).getRowNum(), s.get(1).getColNum(),s.get(0).getSeatClass()));
+                }
+                FlightReservationResultDTO flightReservationResultDTO = new FlightReservationResultDTO(flightReservation, passengerDTOS);
+                result.add(flightReservationResultDTO);
+            }
+            return result;
+        } else {
+            throw new UserNotFound(id);
         }
     }
 }

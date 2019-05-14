@@ -1,22 +1,14 @@
 package com.project.project.service;
 
-import com.project.project.dto.FlightDTO;
+import com.project.project.dto.*;
 import com.project.project.exceptions.AirlineCompanyNotFound;
 import com.project.project.exceptions.AirplaneNotExist;
 import com.project.project.exceptions.DateException;
 import com.project.project.exceptions.DestinationNotFound;
 import com.project.project.model.*;
-import com.project.project.dto.SearchFlightDTO;
 import com.project.project.exceptions.*;
-import com.project.project.model.*;
-import com.project.project.repository.AirlineCompanyRepository;
-import com.project.project.repository.AirplaneRepository;
-import com.project.project.repository.FlightRepository;
+import com.project.project.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -40,6 +32,26 @@ public class FlightService {
 
     @Autowired
     private AirlineCompanyService airlineCompanyService;
+
+    @Autowired
+    private SeatRepository seatRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private FlightReservationRepository flightReservationRepository;
+
+    @Autowired
+    private PassengerRepository passengerRepository;
+
+    @Autowired
+    private FlightInvitationRepository flightInvitationRepository;
+
+
 
     public FlightDTO save(FlightDTO flightDTO) throws DestinationNotFound, AirlineCompanyNotFound, ParseException, DateException, AirplaneNotExist {
 
@@ -92,6 +104,7 @@ public class FlightService {
                 Seat s = new Seat();
                 s.setRowNum(i);
                 s.setColNum(j);
+                s.setSeatClass("First");
                 seatRow.getSeats().add(s);
             }
             seatsFirst.add(seatRow);
@@ -105,6 +118,7 @@ public class FlightService {
                 Seat s = new Seat();
                 s.setRowNum(i);
                 s.setColNum(j);
+                s.setSeatClass("Business");
                 seatRow.getSeats().add(s);
             }
             seatsBusiness.add(seatRow);
@@ -118,6 +132,7 @@ public class FlightService {
                 Seat s = new Seat();
                 s.setRowNum(i);
                 s.setColNum(j);
+                s.setSeatClass("Economy");
                 seatRow.getSeats().add(s);
             }
             seatsEconomy.add(seatRow);
@@ -146,14 +161,31 @@ public class FlightService {
             String seatClass, int passengersNumber
     ) throws DestinationNotFound, ParseException {
 
-        Long startDest = destinationService.findOne(startDestination).getId();
-        Long finalDest = destinationService.findOne(finalDestination).getId();
-        Set<Flight> departureFlights = flightRepository.search(startDest, finalDest, departureDate);
+        Set<Destination> startDestinations = destinationService.findAllByName(startDestination);
+        Set<Destination> finalDestinations = destinationService.findAllByName(finalDestination);
+
+
 
         Set<SearchFlightDTO> result = new HashSet<SearchFlightDTO>();
 
+        if (startDestinations.isEmpty() || finalDestinations.isEmpty()) {
+            return result;
+        }
+
+        Set<Long> startIds = new HashSet<>();
+        for (Destination d : startDestinations) {
+            startIds.add(d.getId());
+        }
+
+        Set<Long> finalIds = new HashSet<>();
+        for (Destination d : finalDestinations) {
+            finalIds.add(d.getId());
+        }
+
+        Set<Flight> departureFlights = flightRepository.search(startIds, finalIds, departureDate);
+
         if (returnDate.isPresent()) {
-            Set<Flight> returnFlights = flightRepository.search(finalDest, startDest, returnDate.get());
+            Set<Flight> returnFlights = flightRepository.search(finalIds, startIds, returnDate.get());
             for (Flight f: departureFlights) {
                 for (Flight f2 : returnFlights) {
                     boolean ok = false;
@@ -229,5 +261,113 @@ public class FlightService {
         }
 
         return result;
+    }
+
+    public FlightReservationResultDTO reserve(FlightReservationDTO flightReservationDTO) throws FlightNotFound {
+
+        FlightReservation flightReservation = new FlightReservation();
+
+        Optional<Flight> departureFlight = flightRepository.findById(flightReservationDTO.getFlights().getDepartureFlight().getId());
+        Optional<Flight> returnFlight = flightRepository.findById(flightReservationDTO.getFlights().getReturnFlight().getId());
+
+        if (departureFlight.isPresent()) {
+            if (returnFlight.isPresent()) {
+
+                flightReservation.setDepartureFlight(departureFlight.get());
+                flightReservation.setReturnFlight(returnFlight.get());
+                flightReservation.setPricePerPerson(flightReservationDTO.getPrice());
+
+                ArrayList<UserRegistrationDTO> passengers = flightReservationDTO.getPassengers();
+                ArrayList<SeatDTO> seatsDeparture = (ArrayList<SeatDTO>) flightReservationDTO.getSeatsPickedDeparture();
+                ArrayList<SeatDTO> seatsReturn = (ArrayList<SeatDTO>) flightReservationDTO.getSeatsPickedReturn();
+
+                List<FlightInvitation> invitations = new ArrayList<>();
+                Set<PassengerDTO> passengerDTOS = new HashSet<>();
+
+                for (int i = 0; i < passengers.size(); i++) {
+                    Passenger p = new Passenger(passengers.get(i));
+                    passengerRepository.save(p);
+
+                    flightReservation.getPassengers().add(p);
+                    Seat s = seatRepository.getOne(seatsDeparture.get(i).getId());
+                    Seat s2 = seatRepository.getOne(seatsReturn.get(i).getId());
+
+                    s.setPassenger(p);
+                    s.setTaken(true);
+                    s2.setPassenger(p);
+                    s2.setTaken(true);
+
+                    passengerDTOS.add(new PassengerDTO(p, s.getRowNum(), s.getColNum(), s2.getRowNum(), s2.getColNum(), s.getSeatClass()));
+
+                    seatRepository.save(s);
+                    seatRepository.save(s2);
+
+
+                    if (p.getPassengerId() != null) {
+                        Optional<User> user =  userRepository.findOneById(p.getPassengerId());
+                        if (user.isPresent() && user.get().getRole().getRole().equals("User")) {
+                            RegisteredUser ru = (RegisteredUser) user.get();
+                            FlightInvitation invitation = new FlightInvitation();
+                            invitations.add(invitation);
+                            invitation.setInvitationFrom(flightReservationDTO.getMyInfo().getId());
+                            ru.getFlightInvitations().add(invitation);
+                            userRepository.save(ru);
+                        }
+
+                    }
+                }
+                String date = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(Calendar.getInstance().getTime());
+                flightReservation.setDate(date);
+
+                Passenger p = new Passenger(flightReservationDTO.getMyInfo());
+                passengerRepository.save(p);
+                flightReservation.getPassengers().add(p);
+                flightReservationRepository.save(flightReservation);
+
+                for (FlightInvitation invitation : invitations) {
+                    invitation.setFlightReservation(flightReservation);
+                    flightInvitationRepository.save(invitation);
+                }
+
+
+                User user =  userRepository.getOne(flightReservationDTO.getMyInfo().getId());
+                if (user.getRole().getRole().equals("User")) {
+                    RegisteredUser ru = (RegisteredUser) user;
+                    ru.getFlightReservations().add(flightReservation);
+                    userRepository.save(ru);
+                }
+
+                Seat s = seatRepository.getOne(seatsDeparture.get(passengers.size()).getId());
+                Seat s2 = seatRepository.getOne(seatsReturn.get(passengers.size()).getId());
+
+                s.setPassenger(p);
+                s.setTaken(true);
+                s2.setPassenger(p);
+                s2.setTaken(true);
+
+                seatRepository.save(s);
+                seatRepository.save(s2);
+
+
+                AirlineCompany airlineCompanyDeparture = airlineCompanyRepository.getOne(flightReservation.getDepartureFlight().getAirlineCompany().getId());
+                AirlineCompany airlineCompanyReturn = airlineCompanyRepository.getOne(flightReservation.getReturnFlight().getAirlineCompany().getId());
+                if (airlineCompanyDeparture.getId() == airlineCompanyReturn.getId()) {
+                    airlineCompanyDeparture.getReservations().add(flightReservation);
+                    airlineCompanyRepository.save(airlineCompanyDeparture);
+                } else {
+                    airlineCompanyDeparture.getReservations().add(flightReservation);
+                    airlineCompanyReturn.getReservations().add(flightReservation);
+                    airlineCompanyRepository.save(airlineCompanyDeparture);
+                    airlineCompanyRepository.save(airlineCompanyReturn);
+                }
+
+                return new FlightReservationResultDTO(flightReservation, passengerDTOS);
+
+            } else {
+                throw new FlightNotFound(returnFlight.get().getId());
+            }
+        } else {
+            throw new FlightNotFound(departureFlight.get().getId());
+        }
     }
 }

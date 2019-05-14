@@ -6,6 +6,8 @@ const ENDPOINTS = {
   SEARCH: "/search",
   REQUESTS: "/requests",
   FRIENDSHIP: "/friendship",
+  FLIGHTS: "/flight",
+  RESERVATIONS: "/reservations",
 };
 
 export default {
@@ -30,5 +32,8 @@ export default {
   getFriendRequests(id) {
     return Axios.get(ENDPOINTS.USERS + id + ENDPOINTS.FRIENDS + ENDPOINTS.REQUESTS );
   },
+  getFlightReservations(id) {
+    return Axios.get(ENDPOINTS.USERS + id + ENDPOINTS.FLIGHTS + ENDPOINTS.RESERVATIONS);
+  }
 
 };
