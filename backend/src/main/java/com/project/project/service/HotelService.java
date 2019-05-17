@@ -162,6 +162,58 @@ public class HotelService {
 
     }
 
+    public Set<HotelsOffer> updatePriceList(Long id, Set<HotelsOffer> offers) throws HotelNotFound{
+        Optional<Hotel> hotel = hotelRepository.findOneById(id);
+
+        if(hotel.isPresent()){
+            for (HotelsOffer offer: offers) {
+                this.addHotelsOffer(id, offer);
+            }
+//            hotel.get().setPriceList(offers);
+//            hotelRepository.save(hotel.get());
+            return offers;
+        }else{
+            throw new HotelNotFound(id);
+        }
+    }
+
+
+    public HotelsOffer addHotelsOffer(Long id, HotelsOffer offer) throws HotelNotFound{
+        Optional<Hotel> hotel = hotelRepository.findOneById(id);
+
+        if(hotel.isPresent()){
+            Set<HotelsOffer> priceList = hotel.get().getPriceList();
+            if(priceList.isEmpty()){
+                priceList.add(offer);
+                hotelRepository.save(hotel.get());
+                return offer;
+            }else{
+
+                for (HotelsOffer hOffer : priceList) {
+                    /*ako je bilo koja usluga i vec postoji onda treba da se izmeni*/
+                    if(hOffer.getType() == offer.getType()){
+                        if(offer.getType().getValue() == 5){
+                            hotel.get().getPriceList().add(offer);
+                            hotelRepository.save(hotel.get());
+                            return offer;
+                        }
+
+                        hOffer.setPrice(offer.getPrice());
+                        hOffer.setDescription(offer.getDescription());
+                        hotelRepository.save(hotel.get());
+                        return offer;
+                    }
+                }
+
+                hotel.get().getPriceList().add(offer);
+                hotelRepository.save(hotel.get());
+                return offer;
+            }
+        }else{
+            throw new HotelNotFound(id);
+        }
+    }
+
     public Set<HotelDTO> findAll() {
         Set<HotelDTO> hotels = hotelRepository.findAllHotels();
         for (HotelDTO hotelDTO: hotels) {

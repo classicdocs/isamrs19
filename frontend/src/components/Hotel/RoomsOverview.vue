@@ -17,6 +17,7 @@
             hide-details
           ></v-text-field>
 
+
         </v-toolbar>
 
         <v-data-table :headers="headers" :items="rooms" :search="search"
@@ -84,7 +85,7 @@ export default {
           {
             text: 'Floor',
             align: 'center',
-            value: 'hotelFloor'
+            value: 'hotelFloor.level'
           },
           {
             text: 'Room number',
@@ -111,7 +112,6 @@ export default {
       .then((response) => {
         response.data.forEach(element => {
           this.rooms.push(element);
-          console.log(element.roomTaken.length);
         });
       });
   },
@@ -124,7 +124,8 @@ export default {
           }
       })
       //this.$router.push('/hotel-service/' + this.$route.params.id + '/roomConfiguration/' + roomID); 
-    }
+    },
+    
   }
 }
 </script>

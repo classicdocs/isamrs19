@@ -15,6 +15,12 @@ export default {
     },
     getRooms(hotelID){
       return HotelsService.getRooms(hotelID);
+    },
+    addOffer(hotelID, data){
+      return HotelsService.addOffer(hotelID, data);
+    },
+    updatePricelist(hotelID, data){
+      return HotelsService.updatePricelist(hotelID, data);
     }
 }
 

@@ -19,6 +19,14 @@
                   v-on:finished="closeChangeRoom($event)"
                   v-on:cancel="cancel"
                 ></change-room-dialog>
+
+                <add-additional-service
+                  v-bind:hotel="this.hotel"
+                  v-on:finished="closeAddAdditionalService($event)"
+                  v-on:serviceExists="showServiceExists($event)"
+                  v-on:cancel="cancel">
+
+                </add-additional-service>
             </v-layout>
             <v-layout col wrap>
                 <rooms-overview>
@@ -53,6 +61,7 @@ import HotelServiceInfo from "@/components/Hotel/HotelServiceInfo.vue";
 import AddRoomDialog from "@/components/Hotel/AddRoomDialog.vue"; 
 import ChangeRoomDialog from "@/components/Hotel/ChangeRoomDialog.vue"; 
 import RoomsOverview from "@/components/Hotel/RoomsOverview.vue"
+import AddAdditionalService from "@/components/Hotel/AddAdditionalService.vue";
 
 import HotelController from "@/controllers/hotels.controller"; 
 import Hotel from "@/models/Hotel"; 
@@ -64,12 +73,14 @@ export default {
     'hotel-service-info': HotelServiceInfo,
     'add-room-dialog':AddRoomDialog,
     'change-room-dialog':ChangeRoomDialog,
-    'rooms-overview':RoomsOverview
+    'rooms-overview':RoomsOverview,
+    'add-additional-service': AddAdditionalService
 },
   data: () => ({
 
     AddRoomDialog: false,
     ChangeRoomDialog: false,
+    AddAdditionalService: false,
 
     admin: false,
     id: null,
@@ -122,6 +133,13 @@ export default {
     closeChangeRoom(data){
       this.ChangeRoomDialog = false;
       this.showSnackbar(data);
+    },
+    closeAddAdditionalService(data){
+      this.AddAdditionalService = false;
+      this.showSnackbar(data);
+    },
+    showServiceExists(obj){
+      this.showSnackbar(obj);
     },
     showSnackbar(obj) {
       this.snackbar.color = obj.color;

@@ -6,9 +6,9 @@
           <v-card-title primary-title>
             <span class="headline">
               <h2>Room details <v-icon x-large>weekend</v-icon></h2><br>
-              <h3>Floor {{room.hotelFloor.level}}
-              Number{{room.roomNumber}} 
-              Beds: {{room.numberOfBeds}}</h3></span>
+              <h3>Floor {{room.hotelFloor.level}}|
+              Number {{room.roomNumber}}|
+              Beds {{room.numberOfBeds}}</h3></span>
           </v-card-title>
 
          <v-card-text>
