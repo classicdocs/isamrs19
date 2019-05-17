@@ -14,9 +14,6 @@
         v-model="form"
         lazy-validation
       >
-      <v-card-title primary-title>
-        <span class="headline">Additional services and prices</span>
-      </v-card-title>
 
       <v-card-text>
           
@@ -47,8 +44,7 @@
                             <v-subheader >Choose type of service</v-subheader>
                         </v-flex>
                         <v-flex xs6>
-                          <v-select :items="types" label="type" v-model="newOffer.type"></v-select>
-                            <!-- <v-text-field v-model="newOffer.type" label="type"></v-text-field> -->
+                          <v-select :items="freeTypes" label="type" v-model="newOffer.type" required :rules="typeRules"></v-select>
                         </v-flex>
 
 
@@ -56,7 +52,7 @@
                             <v-subheader >Describe this service</v-subheader>
                         </v-flex>
                         <v-flex xs6>
-                            <v-text-field v-model="newOffer.description" label="description"></v-text-field>
+                            <v-text-field v-model="newOffer.description" label="description" :rules="[v => !!v || 'Description is required']"></v-text-field>
                         </v-flex>
 
                         <v-flex xs6>
@@ -118,7 +114,6 @@
 <script>
 
 import Hotel from "@/models/Hotel";
-import Offers from "@/models/Offers";
 import HotelsOffer from "@/models/HotelsOffer";
 import HotelController from "@/controllers/hotels.controller";
 
@@ -145,9 +140,10 @@ export default {
           { text: 'Description', align: 'center', sortable: false, value: 'description' },
           { text: 'Price', align: 'center', sortable: false, value: 'price' }
      ],
+     typeRules: [
+            v => !!v || 'Service type is required'
+        ],
 
-
-    //listOfOffers: [],
     editedIndex: -1,
     newOffer: new HotelsOffer(),
     deffaultOffer: {
@@ -157,13 +153,6 @@ export default {
     }
   }),
   watch: {
-    // hotel: function(){
-    //   if (typeof this.hotel.priceList !== 'undefined'){
-    //     this.hotel.priceList.forEach(singleOffer => {
-    //       this.listOfOffers.push(singleOffer);
-    //     });
-    //   }
-    // },
     dialog (val) {
       val || this.close()
     }
@@ -171,69 +160,55 @@ export default {
   computed: {
     formTitle () {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+    },
+    freeTypes: function(){
+      var lista = [];
+      this.types.forEach(t => {
+        this.hotel.priceList.forEach(offer => {
+          if(offer.type == t){
+            lista.push(t);
+          }
+        })
+      })
+
+      var returnLista = [];
+      this.types.forEach(singleType => {
+        var idx = lista.indexOf(singleType);
+        if(idx == -1){
+          returnLista.push(singleType);
+        }
+      })
+
+      return returnLista;
     }
   },
   methods: {
-    // validate() {
-    //   if(this.$refs.form.validate()) {
-    //     for (let index = 0; index < this.offerNames.length; index++) {
-    //       if(this.select == this.offerNames[index]){
-    //         this.newOffer.type = index;
-    //         break;
-    //       }
-    //     }
-
-    //     HotelController.addOffer(this.$route.params.id,this.newOffer)
-    //     .then(response => {
-    //       this.reset();
-    //       this.$emit("finished", {msg: "Additional service successfully added", color: "success"})
-    //     })
-    //     .catch((response) => {
-    //       this.$emit("finished", {msg: "Error! Something went wrong...", color: "error"})
-    //     })
-
-    //   }
-    // },
     update(){
-      // if(addOrDelete){
-      //     this.listOfOffers.forEach(offer => {
-
-      //       if(this.hotel.priceList.indexOf(offer) == -1 ){
-      //             console.log("Dodajem: ")
-      //             console.log(offer)
-      //           HotelController.addOffer(this.$route.params.id, offer)
-      //           .then(response => {
-      //             // this.hotel.push(response.data);
-      //             this.$emit("finished", {msg: "Additional service successfully added", color: "success"})
-      //           })
-      //           .catch((response) => {
-      //             this.$emit("finished", {msg: "Error! Something with adding went wrong...", color: "error"})
-      //           })
-      //       }
-      //   })
-      // }else{
       HotelController.updatePricelist(this.$route.params.id, this.hotel.priceList)
       .then(response => {
-        this.hotel.priceList = response.data;
         console.log(response);
          this.$emit("finished", {msg: "Additional service successfully added", color: "success"})
       })
       .catch((response) => {
-            this.$emit("finished", {msg: "Error! Something with update went wrong...", color: "error"})
+          this.$emit("finished", {msg: "Error! Something with update went wrong...", color: "error"})
       })
-          
-      // }
-        
+    },
+    alreadyExists(){
+         this.$emit("serviceExists", {msg: "Service already exists", color: "error"})
     },
     save(){
+      if (this.$refs.form.validate()) {
+      
       if (this.editedIndex > -1) {
 
-        Object.assign(this.listOfOffers[this.editedIndex], this.newOffer)
+        Object.assign(this.hotel.priceList[this.editedIndex], this.newOffer)
       } else {
         var exists = false;
+        
         this.hotel.priceList.forEach(offer => {
-          if(offer.type == this.newOffer.type){
-            this.$emit("serviceExists", {msg: "Service already exists", color: "error"})
+          console.log(offer.type != "AdditionalService");
+          if(offer.type == this.newOffer.type && offer.type != "AdditionalService"){
+            this.alreadyExists();
             exists = true;
           }
         })
@@ -243,24 +218,29 @@ export default {
       }
       this.close();
       this.update();
+      }
     },
     isEmpty(str) {
       return (!str || 0 === str.length);
     },
     editItem (item) {
+      this.newOffer = new HotelsOffer();
       this.editedIndex = this.hotel.priceList.indexOf(item)
       this.newOffer = Object.assign({}, item)
       this.dialog = true
     },
     deleteItem (item) {
-      const index = this.hotel.priceList.indexOf(item);
-      confirm('Are you sure you want to delete this item?') &&  this.hotel.priceList.splice(index,1)
-      this.update();
+      alert("We are working on it");
+      // const index = this.hotel.priceList.indexOf(item);
+      // alert("Brisem " + index);
+      // confirm('Are you sure you want to delete this item?') &&  this.hotel.priceList.splice(index,1)
+      // this.update();
     },
     closeForm(){
       this.addFormDialog = false;
     },
     close () {
+      this.newOffer = new HotelsOffer();
       this.dialog = false
       setTimeout(() => {
         this.newOffer = Object.assign({}, this.deffaultOffer)

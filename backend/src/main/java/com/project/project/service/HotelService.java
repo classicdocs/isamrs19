@@ -165,13 +165,15 @@ public class HotelService {
     public Set<HotelsOffer> updatePriceList(Long id, Set<HotelsOffer> offers) throws HotelNotFound{
         Optional<Hotel> hotel = hotelRepository.findOneById(id);
 
+        Set<HotelsOffer> offersToReturn = new HashSet<>();
         if(hotel.isPresent()){
             for (HotelsOffer offer: offers) {
-                this.addHotelsOffer(id, offer);
+                if(!hotel.get().getPriceList().contains(offer)){
+                    offersToReturn.add(this.addHotelsOffer(id, offer));
+                }
             }
-//            hotel.get().setPriceList(offers);
-//            hotelRepository.save(hotel.get());
-            return offers;
+
+            return offersToReturn;
         }else{
             throw new HotelNotFound(id);
         }
