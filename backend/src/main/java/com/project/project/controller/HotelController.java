@@ -5,9 +5,9 @@ import com.project.project.dto.Hotel_DTOs.HotelFloorDTO;
 import com.project.project.dto.Hotel_DTOs.RoomDTO;
 import com.project.project.exceptions.FloorNotFound;
 import com.project.project.exceptions.HotelNotFound;
-import com.project.project.exceptions.HotelWithAddressNotFound;
-import com.project.project.exceptions.HotelWithNameNotFound;
 import com.project.project.model.Hotel_Model.Hotel;
+import com.project.project.model.Hotel_Model.HotelsOffer;
+import com.project.project.model.Hotel_Model.Room;
 import com.project.project.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -64,6 +63,22 @@ public class HotelController {
         return new ResponseEntity<Set<HotelDTO>>(hotels, HttpStatus.OK);
     }
 
+    @GetMapping(
+            value = "/{id}/getPriceList",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity getPriceList(@PathVariable("id") Long id){
+
+        try{
+            Set<HotelsOffer> hotels = hotelService.getPriceList(id);
+            return new ResponseEntity<Set<HotelsOffer>>(hotels, HttpStatus.OK);
+        }catch (HotelNotFound hnf){
+            hnf.printStackTrace();
+            return new ResponseEntity<String>(hnf.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
     @PostMapping(
             value = "/{id}/floors",
             consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -99,5 +114,57 @@ public class HotelController {
             return new ResponseEntity<String>(notFound.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
+    }
+
+    @PutMapping(
+            value = "/{id}/updatePriceList",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity updatePriceList(@PathVariable("id") Long hotelID,
+                                          @RequestBody Set<HotelsOffer> offers) {
+
+        Set<HotelsOffer> hotelsOffers = null;
+        try {
+            hotelsOffers = hotelService.updatePriceList(hotelID, offers);
+            return new ResponseEntity<Set<HotelsOffer>>(hotelsOffers, HttpStatus.OK);
+        }catch (HotelNotFound notFound){
+            notFound.printStackTrace();
+            return new ResponseEntity<String>(notFound.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+    @PutMapping(
+            value = "/{id}/addHotelsOffer",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity addHotelsOffer(@PathVariable("id") Long hotelID,
+                                 @RequestBody HotelsOffer offer) {
+
+        HotelsOffer hotelsOffer = null;
+        try {
+            hotelsOffer = hotelService.addHotelsOffer(hotelID, offer);
+            return new ResponseEntity<HotelsOffer>(hotelsOffer, HttpStatus.OK);
+        }catch (HotelNotFound notFound){
+            notFound.printStackTrace();
+            return new ResponseEntity<String>(notFound.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+    @GetMapping(
+            value = "/{id}/roomsConfiguration",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity getRooms(@PathVariable("id") Long id) {
+        try {
+            Set<Room> rooms = hotelService.getRooms(id);
+            return new ResponseEntity<Set<Room>>(rooms, HttpStatus.OK);
+        } catch (HotelNotFound hnf) {
+            hnf.printStackTrace();
+            return new ResponseEntity<String>(hnf.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

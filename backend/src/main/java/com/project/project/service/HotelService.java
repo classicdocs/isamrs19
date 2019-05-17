@@ -162,6 +162,60 @@ public class HotelService {
 
     }
 
+    public Set<HotelsOffer> updatePriceList(Long id, Set<HotelsOffer> offers) throws HotelNotFound{
+        Optional<Hotel> hotel = hotelRepository.findOneById(id);
+
+        Set<HotelsOffer> offersToReturn = new HashSet<>();
+        if(hotel.isPresent()){
+            for (HotelsOffer offer: offers) {
+                if(!hotel.get().getPriceList().contains(offer)){
+                    offersToReturn.add(this.addHotelsOffer(id, offer));
+                }
+            }
+
+            return offersToReturn;
+        }else{
+            throw new HotelNotFound(id);
+        }
+    }
+
+
+    public HotelsOffer addHotelsOffer(Long id, HotelsOffer offer) throws HotelNotFound{
+        Optional<Hotel> hotel = hotelRepository.findOneById(id);
+
+        if(hotel.isPresent()){
+            Set<HotelsOffer> priceList = hotel.get().getPriceList();
+            if(priceList.isEmpty()){
+                priceList.add(offer);
+                hotelRepository.save(hotel.get());
+                return offer;
+            }else{
+
+                for (HotelsOffer hOffer : priceList) {
+                    /*ako je bilo koja usluga i vec postoji onda treba da se izmeni*/
+                    if(hOffer.getType() == offer.getType()){
+                        if(offer.getType().getValue() == 5){
+                            hotel.get().getPriceList().add(offer);
+                            hotelRepository.save(hotel.get());
+                            return offer;
+                        }
+
+                        hOffer.setPrice(offer.getPrice());
+                        hOffer.setDescription(offer.getDescription());
+                        hotelRepository.save(hotel.get());
+                        return offer;
+                    }
+                }
+
+                hotel.get().getPriceList().add(offer);
+                hotelRepository.save(hotel.get());
+                return offer;
+            }
+        }else{
+            throw new HotelNotFound(id);
+        }
+    }
+
     public Set<HotelDTO> findAll() {
         Set<HotelDTO> hotels = hotelRepository.findAllHotels();
         for (HotelDTO hotelDTO: hotels) {
@@ -170,6 +224,24 @@ public class HotelService {
             }
         }
         return hotels;
+    }
+
+    public Set<Room> getRooms(Long id) throws HotelNotFound{
+        Optional<Hotel> hotel = hotelRepository.findOneById(id);
+        if (hotel.isPresent()) {
+            Set<Room> rooms = new HashSet<>();
+            for (HotelFloor floor: hotel.get().getFloors()) {
+                for (Room room: floor.getRoomsOnFloor()) {
+                    HotelFloor newFloor = floor;
+                    newFloor.setRoomsOnFloor(null);
+                    room.setHotelFloor(newFloor);
+                    rooms.add(room);
+                }
+            }
+            return rooms;
+        } else {
+            throw new HotelNotFound(id);
+        }
     }
 
 }

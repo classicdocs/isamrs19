@@ -40,16 +40,16 @@
                 </v-flex>
               </v-layout>
             </v-flex>
+            <v-layout row wrap>
             <v-flex row wrap>
               <h2>New room will be in place:</h2>
                 <h3> Floor: {{pickedPosition.level}}, Room number: {{pickedPosition.number}} </h3>
             </v-flex>
 
-            <v-layout row wrap> 
-               <v-flex>
-                <h2>Number of beds in room:</h2>
-                <number-input v-model="numberOfBeds" :min="1" :max="5" inline center controls></number-input>
-              </v-flex>
+            <v-flex row wrap>
+              <h2>Number of beds in room:</h2>
+              <number-input v-model="numberOfBeds" :min="1" :max="5" inline center controls></number-input>
+            </v-flex>
             </v-layout>
 
 
