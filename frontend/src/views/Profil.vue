@@ -53,6 +53,7 @@ import { mapMutations } from 'vuex';
 
 export default {
   name: "Profil",
+
   data:() => ({
     id: null,
     user: new User(),
@@ -61,6 +62,7 @@ export default {
     isUser: false,
     show: false,
     isFriend: false,
+    progress: false,
   }),
   watch: {
     '$route': 'getUser',
@@ -71,8 +73,10 @@ export default {
   methods: {
     getUser() {
       this.id = this.$route.params.id;
+      let loader = this.$loading.show()
       UserController.getUser(this.id)
         .then((response) => {
+          loader.hide();
           this.user = new User(response.data);
         })
         .catch((error) => {

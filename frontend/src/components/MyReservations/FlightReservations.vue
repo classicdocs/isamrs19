@@ -6,7 +6,7 @@
 			  >
           <v-expansion-panel-content
             v-for="(reservation,index) in reservations" :key="index">
-            <div slot='header'><h1>Reservation {{index + 1}} - {{getTitle(reservation)}}</h1></div>
+            <div slot='header'><h3>Reservation {{index + 1}} - {{getTitle(reservation)}}</h3></div>
             <v-container>
               <v-layout row wrap>
                 <v-flex lg6 md6 >

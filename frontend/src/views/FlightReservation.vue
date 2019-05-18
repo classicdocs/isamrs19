@@ -159,7 +159,7 @@ export default {
     'seats':  Seats,
     'friends-invitation' : FriendsInvitationVue,
     'fill-passengers-info' : FillPassengersInfoVue,
-    'review' : ReviewVue
+    'review' : ReviewVue,
   },
   data:() => ({
     flightReservation: null,
@@ -311,19 +311,14 @@ export default {
           return;
         }
       }
-
-      // reserve
-      console.log(store.getters.flightReservation);
-      console.log(store.getters.passengers);
-      console.log(store.getters.myInfo);
-
       let data = store.getters.flightReservation;
       data.passengers = store.getters.passengers;
       data.myInfo = store.getters.myInfo;
 
+      let loader = this.$loading.show()
       FlightController.reserve(data)
         .then((response) => {
-          console.log(response.data);
+          loader.hide();
           store.commit("setSnack", {msg: "You have successfully booked a flight!", color: "success"});
           this.$router.push({name: "my-reservations"});
         })

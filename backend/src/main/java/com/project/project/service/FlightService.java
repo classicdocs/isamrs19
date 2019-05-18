@@ -9,9 +9,11 @@ import com.project.project.model.*;
 import com.project.project.exceptions.*;
 import com.project.project.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.validation.Valid;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -53,6 +55,11 @@ public class FlightService {
     @Autowired
     private FlightInvitationRepository flightInvitationRepository;
 
+    @Autowired
+    private EmailService emailService;
+
+    @Value("${frontend}")
+    private String frontend;
 
 
     public FlightDTO save(FlightDTO flightDTO) throws DestinationNotFound, AirlineCompanyNotFound, ParseException, DateException, AirplaneNotExist {
@@ -331,9 +338,9 @@ public class FlightService {
                             ru.getFlightInvitations().add(invitation);
                             invitation.setFlightReservation(flightReservation);
                             flightInvitationRepository.save(invitation);
+                            sendInvitationMail(ru.getUsername(), pa.getFirstname(), pa.getLastname());
                             userRepository.save(ru);
                         }
-
                     }
                 }
 
@@ -368,7 +375,9 @@ public class FlightService {
                     airlineCompanyRepository.save(airlineCompanyReturn);
                 }
 
-                return new FlightReservationResultDTO(flightReservation, passengerDTOS);
+                FlightReservationResultDTO ret = new FlightReservationResultDTO(flightReservation, passengerDTOS);
+                sendReservationMail(pa, ret);
+                return ret;
 
             } else {
                 flightReservation.setDepartureFlight(departureFlight.get());
@@ -412,14 +421,12 @@ public class FlightService {
                             invitation.setInvitationFrom(flightReservationDTO.getMyInfo().getId());
                             invitation.setFlightReservation(flightReservation);
                             flightInvitationRepository.save(invitation);
+                            sendInvitationMail(ru.getUsername(), pa.getFirstname(),pa.getLastname());
                             ru.getFlightInvitations().add(invitation);
                             userRepository.save(ru);
                         }
-
                     }
                 }
-
-
                 Optional<User> user =  userRepository.findOneById(flightReservationDTO.getMyInfo().getId());
                 if (user.isPresent() && user.get().getRole().getRole().equals("User")) {
                     RegisteredUser ru = (RegisteredUser) user.get();
@@ -434,15 +441,65 @@ public class FlightService {
 
                 seatRepository.save(s);
 
-
                 AirlineCompany airlineCompanyDeparture = airlineCompanyRepository.getOne(flightReservation.getDepartureFlight().getAirlineCompany().getId());
                 airlineCompanyDeparture.getReservations().add(flightReservation);
                 airlineCompanyRepository.save(airlineCompanyDeparture);
 
-                return new FlightReservationResultDTO(flightReservation, passengerDTOS);
+                FlightReservationResultDTO ret = new FlightReservationResultDTO(flightReservation, passengerDTOS);
+                sendReservationMail(pa, ret);
+                return ret;
             }
         } else {
             throw new FlightNotFound(departureFlight.get().getId());
         }
+    }
+
+    private void sendInvitationMail(String username, String firstname, String lastname) {
+
+        String subject = "Flight invitation [" + username + "]";
+        String msg = "";
+        msg += "<html><body>";
+        msg += "<p>You have flight invitation from " + firstname + " " + lastname + "</p>";
+        msg += "<p>You can accept or decline this invitation on this ";
+        msg += "<a href='" + frontend + "/my-reservations'>link</a></p>";
+        msg += "</body></html>";
+
+        emailService.prepareAndSend(subject, msg);
+    }
+
+    private void sendReservationMail(Passenger me, FlightReservationResultDTO flightReservation) {
+
+        String subject = "Flight reservation [" + me.getUsername() + "]";
+        String msg = "";
+        msg += "<html><body>";
+        msg += "<p> Hi" + me.getFirstname() + " " + me.getLastname() + "</p>";
+        msg += "<p> You have successfully reserved flight!</p>";
+        msg += "<p> The time when the reservation was made: " + flightReservation.getDate() + "<p>";
+        msg += "<p> Departure flight:" + flightReservation.getDepartureFlight().getStartDestination() + " - "
+                + flightReservation.getDepartureFlight().getFinalDestination().getName() + "</p>";
+        if (flightReservation.getReturnFlight() != null) {
+            msg += "<p> Return flight:" + flightReservation.getReturnFlight().getStartDestination() + " - "
+                    + flightReservation.getReturnFlight().getFinalDestination().getName() + "</p>";
+        }
+        if (!flightReservation.getPassengers().isEmpty()) {
+            msg += "<p>People who fly with you: </p>";
+            msg += "<ul>";
+            StringBuilder builder = new StringBuilder();
+            for (PassengerDTO passengerDTO : flightReservation.getPassengers()) {
+                builder.append("<li>");
+                builder.append(passengerDTO.getPassenger().getFirstname());
+                builder.append(" ");
+                builder.append(passengerDTO.getPassenger().getLastname());
+                builder.append("</li>");
+            }
+            msg += builder.toString();
+            msg += "</ul>";
+        }
+
+        msg += "<p> More information about the flight and passengers you can find on this " +
+                "<a href='" + frontend + "/my-reservations'>link</a></p>";
+        msg += "</body></html>";
+
+        emailService.prepareAndSend(subject, msg);
     }
 }
