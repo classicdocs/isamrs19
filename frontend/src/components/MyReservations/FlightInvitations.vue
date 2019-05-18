@@ -6,7 +6,7 @@
 			  >
           <v-expansion-panel-content
             v-for="(invitation,index) in invitations" :key="index">
-            <div slot='header'><h1>Invitation {{index + 1}} - {{getTitle(invitation.flightReservation, invitation.invitationFrom.username)}}</h1></div>
+            <div slot='header'><h3>Invitation {{index + 1}} - {{getTitle(invitation.flightReservation, invitation.invitationFrom.username)}}</h3></div>
             <v-container>
               <v-layout row wrap>
                 <v-flex lg12 md12 sm12 xs12>
@@ -96,13 +96,12 @@ export default {
         title += " - "  + reservation.returnFlight.startDestination.name + " - " + reservation.returnFlight.finalDestination.name;
       }
       title += " [" + user + "] ";
-      title += "- " + reservation.date;
       return title;
     },
     getParams(invitation) {
       let params = {
         'seatClass' : invitation.seatClass,
-        'passengersNumber' : null,
+        'passengerNumber' : null,
       }
       return params;
     },
