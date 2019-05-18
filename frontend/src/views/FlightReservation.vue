@@ -137,6 +137,7 @@
         </v-layout>
       </v-layout>
     </v-container>
+    <optional-reservation-dialog v-if="optional"></optional-reservation-dialog>
   </div>
 </template>
 
@@ -151,7 +152,7 @@ import FillPassengersInfoVue from '../components/FlightReservation/FillPassenger
 import Friend from "@/models/Friend.js";
 import ReviewVue from '../components/FlightReservation/Review.vue';
 import FlightController from "@/controllers/flights.controller.js";
-
+import OptionalReservationDialogVue from '../components/FlightReservation/OptionalReservationDialog.vue';
 export default {
   name: "FlightReservation",
   components: {
@@ -160,6 +161,7 @@ export default {
     'friends-invitation' : FriendsInvitationVue,
     'fill-passengers-info' : FillPassengersInfoVue,
     'review' : ReviewVue,
+    'optional-reservation-dialog' : OptionalReservationDialogVue,
   },
   data:() => ({
     flightReservation: null,
@@ -172,6 +174,7 @@ export default {
     friends: false,
     invitedFriends: [],
     passengers: [],
+    optional: false
   }),
   computed: {
     getDepartureSeats() {
@@ -320,7 +323,7 @@ export default {
         .then((response) => {
           loader.hide();
           store.commit("setSnack", {msg: "You have successfully booked a flight!", color: "success"});
-          this.$router.push({name: "my-reservations"});
+          this.optional = true;
         })
         .catch((error) => {
           store.commit("setSnack", {msg: error.response.data, color: "error"});
