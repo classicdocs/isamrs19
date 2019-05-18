@@ -139,7 +139,7 @@ export default {
           break;
         }
         case 'Hotel Admin': {
-          path = '/hotel-service/' // TREBA DODATI
+          path = '/hotel-service/'
           break;
         }
         case 'RentACar Admin': {

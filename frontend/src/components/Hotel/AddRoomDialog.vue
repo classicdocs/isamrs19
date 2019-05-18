@@ -2,7 +2,7 @@
   <div>
     <v-dialog
       v-model="addFormDialog"
-      max-width="500px"
+      max-width="auto"
       persistent
     >
     <template v-slot:activator="{ on }">
@@ -23,8 +23,9 @@
             <v-flex lg10 md10 sm12 xs12>
               <v-layout row wrap>
 
-
-                <v-flex lg12 md12 sm12 xs12 v-for="floor in hotel.numOfFloors" :key="floor">
+                Hotel {{hotel.name}} configuration
+                <v-flex lg12 md12 sm12 xs12 
+                v-for="floor in hotel.numOfFloors" :key="floor">
                   
                   <v-btn flat>Floor {{floor}}</v-btn>
                   
@@ -35,19 +36,20 @@
                    >
                    {{roomPosition.number}}</v-btn>
                 
+                <v-divider v-if="floor <= hotel.numOfFloors" :key="`divider-${floor}`" class="divider"></v-divider>
                 </v-flex>
               </v-layout>
             </v-flex>
+            <v-layout row wrap>
             <v-flex row wrap>
               <h2>New room will be in place:</h2>
                 <h3> Floor: {{pickedPosition.level}}, Room number: {{pickedPosition.number}} </h3>
             </v-flex>
 
-            <v-layout row wrap> 
-               <v-flex>
-                <h2>Number of beds in room:</h2>
-                <number-input v-model="numberOfBeds" :min="1" :max="5" inline center controls></number-input>
-              </v-flex>
+            <v-flex row wrap>
+              <h2>Number of beds in room:</h2>
+              <number-input v-model="numberOfBeds" :min="1" :max="5" inline center controls></number-input>
+            </v-flex>
             </v-layout>
 
 
@@ -58,7 +60,7 @@
           <v-btn color="blue darken" flat @click="addFormDialog = false">Close</v-btn> 
           <!-- <v-btn @click="resetValidation">Reset Validation</v-btn> -->
           <v-btn @click="reset">Reset Form</v-btn>
-          <v-btn :disabled="!form" color="success" @click="validate">Add</v-btn>
+          <v-btn :disabled="!selected" color="success" @click="validate">Add</v-btn>
         </v-card-actions>
       </v-form>
     </v-card>
@@ -78,11 +80,15 @@ import HotelFloor from "@/models/HotelFloor";
 import HotelController from "@/controllers/hotels.controller";
 import { returnStatement } from '@babel/types';
 
+import store from "@/store";
+
 
 export default {
   name: "AddRoomDialog",
+  props: ['hotel'],
   data: () => ({
     form: true,
+    selected: false,
     addFormDialog: false,
     room: new Room(),  
   
@@ -90,20 +96,14 @@ export default {
     numberOfBeds: 0,
 
 
-    hotel: new Hotel(),
 
     hfp: new Hotel_Floor_Position(),
     fp: new Floor_Position()
   }),
-  created() {
-    HotelController.getHotel(this.$route.params.id)
-        .then((response) => {
-          this.hotel = response.data;
-          this.setPositions();
-        })
-        .catch(() => {
-          alert(error.response.data);
-        });
+  watch: {
+    hotel : function(){
+      this.setDefault();
+    }
   },
   methods: {
     validate() {
@@ -128,7 +128,12 @@ export default {
                 floor.roomsOnFloor.push(room);
               }
             });
+
             this.setPositions();
+            this.reset();
+
+            store.commit("newHotel", this.hotel);
+
             this.$emit("finished", {msg: "Room successfully added", color: "success"})
             this.addFormDialog = false;
           })
@@ -143,6 +148,16 @@ export default {
       this.pickedPosition.level = 0;
       this.pickedPosition.number = 0;
       this.numberOfBeds = 1;
+      this.selected = false;
+    },
+    setDefault(){
+      this.hfp = new Hotel_Floor_Position();
+      this.hfp.numOfFloors = this.hotel.numOfFloors;
+      this.hotel.floors.sort(function(a, b){return a.level - b.level});
+        this.hotel.floors.forEach(floor => {
+            floor.roomsOnFloor.sort(function(r1, r2){return r1.roomNumber - r2.roomNumber});
+        });
+      this.setPositions();
     },
     setPositions(){
       var floorNUM = 0;
@@ -154,7 +169,7 @@ export default {
       this.hotel.floors.forEach(f => {   floorNUM++;
 
         this.fp = new Floor_Position();
-
+        this.fp.level = f.level;
         // Prolazim kroz sve moguce pozicije u hotelu
         for(var roomNUM = 1; roomNUM <= this.hotel.roomsByFloor; roomNUM++){
           var position = new RoomPosition();
@@ -180,10 +195,16 @@ export default {
     pickRoom(floor,roomNumber){
       this.pickedPosition.level = floor;
       this.pickedPosition.number = roomNumber;
+      this.selected = true;
     },
   }
 };
 </script>
 <style>
+
+.divider {
+  border-width: 7px;
+  border-color: dodgerblue;
+}
 
 </style>

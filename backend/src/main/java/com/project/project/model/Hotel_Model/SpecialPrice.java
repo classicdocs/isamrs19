@@ -18,19 +18,19 @@ public class SpecialPrice {
     @Column(name = "price", nullable = false)
     private double price;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Room room;
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    private Room room;
 
     public SpecialPrice() {
     }
 
-    public Room getRoom() {
-        return room;
-    }
-
-    public void setRoom(Room room) {
-        this.room = room;
-    }
+//    public Room getRoom() {
+//        return room;
+//    }
+//
+//    public void setRoom(Room room) {
+//        this.room = room;
+//    }
 
     public Long getId() {
         return id;

@@ -4,6 +4,7 @@ package com.project.project.controller;
 import com.project.project.dto.RentACarDTO;
 import com.project.project.dto.RentACarInfoDTO;
 import com.project.project.model.RentACar;
+import com.project.project.model.RentACarAdmin;
 import com.project.project.model.Vehicle;
 import com.project.project.service.RentACarService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,11 @@ public class RentACarController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity get(){
         Set<RentACarDTO> rentACarDTOS = rentACarService.findAllRentACars();
+        for (RentACarDTO rent: rentACarDTOS) {
+            for (RentACarAdmin admin: rent.getAdmins()) {
+                admin.setRentACar(null);
+            }
+        }
         return new ResponseEntity<Set<RentACarDTO>>(rentACarDTOS,HttpStatus.OK);
     }
 }

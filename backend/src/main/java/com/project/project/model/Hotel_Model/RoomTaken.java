@@ -16,8 +16,8 @@ public class RoomTaken {
     @Column(name = "endDate", nullable = false)
     private String endDate;
 
-    @ManyToMany(fetch = FetchType.LAZY,  mappedBy = "roomTaken")
-    private Set<Room> rooms;
+//    @ManyToMany(fetch = FetchType.LAZY,  mappedBy = "roomTaken")
+//    private Set<Room> rooms;
 
 
     public RoomTaken() {
@@ -47,11 +47,11 @@ public class RoomTaken {
         this.endDate = endDate;
     }
 
-    public Set<Room> getRooms() {
-        return rooms;
-    }
-
-    public void setRooms(Set<Room> rooms) {
-        this.rooms = rooms;
-    }
+//    public Set<Room> getRooms() {
+//        return rooms;
+//    }
+//
+//    public void setRooms(Set<Room> rooms) {
+//        this.rooms = rooms;
+//    }
 }

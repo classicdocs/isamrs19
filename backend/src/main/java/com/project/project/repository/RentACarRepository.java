@@ -13,7 +13,8 @@ public interface RentACarRepository extends JpaRepository<RentACar, Long> {
 
     RentACar save(RentACar rentACar);
     RentACar findOneById(Long id);
-
     @Query("SELECT new com.project.project.dto.RentACarDTO(r) FROM RentACar r WHERE r.name IS NOT NULL")
     Set<RentACarDTO> findAllRentACars();
+
+
 }
