@@ -12,6 +12,10 @@ import LoginController from './controllers/login.controller';
 import VueNumberInput from '@chenfengyuan/vue-number-input';
 Vue.use(VueNumberInput);
 
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
+Vue.use(Loading);
+
 Vue.use(Vuetify);
 Vue.prototype.router = router;
 

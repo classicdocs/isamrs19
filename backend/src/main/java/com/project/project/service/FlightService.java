@@ -9,9 +9,11 @@ import com.project.project.model.*;
 import com.project.project.exceptions.*;
 import com.project.project.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.validation.Valid;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -53,6 +55,11 @@ public class FlightService {
     @Autowired
     private FlightInvitationRepository flightInvitationRepository;
 
+    @Autowired
+    private EmailService emailService;
+
+    @Value("${frontend}")
+    private String frontend;
 
 
     public FlightDTO save(FlightDTO flightDTO) throws DestinationNotFound, AirlineCompanyNotFound, ParseException, DateException, AirplaneNotExist {
@@ -331,9 +338,9 @@ public class FlightService {
                             ru.getFlightInvitations().add(invitation);
                             invitation.setFlightReservation(flightReservation);
                             flightInvitationRepository.save(invitation);
+                            sendInvitationMail(ru.getUsername(), pa.getFirstname(), pa.getLastname());
                             userRepository.save(ru);
                         }
-
                     }
                 }
 
@@ -412,14 +419,12 @@ public class FlightService {
                             invitation.setInvitationFrom(flightReservationDTO.getMyInfo().getId());
                             invitation.setFlightReservation(flightReservation);
                             flightInvitationRepository.save(invitation);
+                            sendInvitationMail(ru.getUsername(), pa.getFirstname(),pa.getLastname());
                             ru.getFlightInvitations().add(invitation);
                             userRepository.save(ru);
                         }
-
                     }
                 }
-
-
                 Optional<User> user =  userRepository.findOneById(flightReservationDTO.getMyInfo().getId());
                 if (user.isPresent() && user.get().getRole().getRole().equals("User")) {
                     RegisteredUser ru = (RegisteredUser) user.get();
@@ -434,7 +439,6 @@ public class FlightService {
 
                 seatRepository.save(s);
 
-
                 AirlineCompany airlineCompanyDeparture = airlineCompanyRepository.getOne(flightReservation.getDepartureFlight().getAirlineCompany().getId());
                 airlineCompanyDeparture.getReservations().add(flightReservation);
                 airlineCompanyRepository.save(airlineCompanyDeparture);
@@ -444,5 +448,18 @@ public class FlightService {
         } else {
             throw new FlightNotFound(departureFlight.get().getId());
         }
+    }
+
+    private void sendInvitationMail(String username, String firstname, String lastname) {
+
+        String subject = "Flight invitation [" + username + "]";
+        String msg = "";
+        msg += "<html><body>";
+        msg += "<p>You have flight invitation from " + firstname + " " + lastname + "</p>";
+        msg += "<p>You can accept or decline this invitation on this ";
+        msg += "<a href='" + frontend + "/my-reservations'>link</a></p>";
+        msg += "</body></html>";
+
+        emailService.prepareAndSend(subject, msg);
     }
 }

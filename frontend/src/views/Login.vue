@@ -1,5 +1,6 @@
 <template>
     <div id="logindiv">
+        <loading :active:sync="visible" :can-cancel="false"></loading>
         <!--<v-layout id="loginform" row justify-center>
             <v-card max-width="500px">
                 <v-form
