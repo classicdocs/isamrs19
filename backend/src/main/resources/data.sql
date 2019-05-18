@@ -37,12 +37,12 @@ insert into airplane_flight(airplane_id,flight_id) values(1,2);
 
 
 --sedista
-insert into seat(id, col_num, row_num,taken) values (1, 1, 1, FALSE);
-insert into seat(id, col_num, row_num,taken) values (2, 1, 2, FALSE);
-insert into seat(id, col_num, row_num,taken) values (3, 1, 1, FALSE);
-insert into seat(id, col_num, row_num,taken) values (4, 1, 2, FALSE);
-insert into seat(id, col_num, row_num,taken) values (5, 1, 1, FALSE);
-insert into seat(id, col_num, row_num,taken) values (6, 1, 2, FALSE);
+insert into seat(id, col_num, row_num,taken, class) values (1, 1, 1, FALSE, "First");
+insert into seat(id, col_num, row_num,taken, class) values (2, 1, 2, FALSE, "First");
+insert into seat(id, col_num, row_num,taken, class) values (3, 1, 1, FALSE, "Business");
+insert into seat(id, col_num, row_num,taken, class) values (4, 1, 2, FALSE, "Business");
+insert into seat(id, col_num, row_num,taken, class) values (5, 1, 1, FALSE, "Economy");
+insert into seat(id, col_num, row_num,taken, class) values (6, 1, 2, FALSE, "Economy");
 
 insert into seat_row(id) values (1);
 insert into seat_row(id) values (2);
@@ -67,12 +67,12 @@ insert into flight_seats_business(flight_id, seats_business_id)  values (1,5);
 insert into flight_seats_business(flight_id, seats_business_id)  values (1,6);
 
 --sedista
-insert into seat(id, col_num, row_num, taken) values (7, 1, 1, FALSE);
-insert into seat(id, col_num, row_num, taken) values (8, 1, 2, FALSE);
-insert into seat(id, col_num, row_num, taken) values (9, 1, 1, FALSE);
-insert into seat(id, col_num, row_num, taken) values (10, 1, 2, FALSE);
-insert into seat(id, col_num, row_num, taken) values (11, 1, 1, FALSE);
-insert into seat(id, col_num, row_num, taken) values (12, 1, 2, FALSE);
+insert into seat(id, col_num, row_num, taken, class) values (7, 1, 1, FALSE, "First");
+insert into seat(id, col_num, row_num, taken, class) values (8, 1, 2, FALSE, "First");
+insert into seat(id, col_num, row_num, taken, class) values (9, 1, 1, FALSE, "Business");
+insert into seat(id, col_num, row_num, taken, class) values (10, 1, 2, FALSE, "Business");
+insert into seat(id, col_num, row_num, taken, class) values (11, 1, 1, FALSE, "Economy");
+insert into seat(id, col_num, row_num, taken, class) values (12, 1, 2, FALSE, "Economy");
 
 insert into seat_row(id) values (7);
 insert into seat_row(id) values (8);

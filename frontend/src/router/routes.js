@@ -13,6 +13,7 @@ import Logout from "../views/Logout.vue";
 import Friends from "../views/Friends.vue";
 import ChangePassword from "../views/ChangePassword.vue";
 import VehicleReservation from "../components/RentACar/VehicleReservation.vue";
+import MyReservations from "../views/MyReservations.vue";
 
 export const routes = [
     {
@@ -115,4 +116,9 @@ export const routes = [
       name: "vehicle-reservation",
       component : VehicleReservation,
     },
+    {
+      path: "/my-reservations",
+      name: "my-reservations",
+      component : MyReservations,
+    }
   ];
