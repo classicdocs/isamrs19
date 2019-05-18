@@ -13,8 +13,15 @@
                   <p>You have invitation from the user <b> {{invitation.invitationFrom.username}} </b>[{{invitation.invitationFrom.firstname}}
                     {{invitation.invitationFrom.lastname}}] 
                   </p>
-                  <v-btn color="success" @click="accept(invitation)">Accept</v-btn>
-                  <v-btn color="error" @click="decline(invitation)">Decline</v-btn>
+                  <div v-if="invitation.accepted === false">
+                    <v-btn color="success" @click="accept(invitation)">Accept</v-btn>
+                    <v-btn color="error" @click="decline(invitation)">Decline</v-btn>
+                  </div>
+                  <div v-else>
+                    <p>Invitation is ACCEPTED!</p>
+                    <p>You can cancel your reservation minimum three hours before flight!</p>
+                    <v-btn @click="cancel(invitation)">Cancel</v-btn>
+                  </div>
                 </v-flex>
               </v-layout>
               <v-layout row wrap>
@@ -89,6 +96,7 @@ export default {
         title += " - "  + reservation.returnFlight.startDestination.name + " - " + reservation.returnFlight.finalDestination.name;
       }
       title += " [" + user + "] ";
+      title += "- " + reservation.date;
       return title;
     },
     getParams(invitation) {
@@ -99,10 +107,36 @@ export default {
       return params;
     },
     accept(invitation) {
-
+      let data = {
+        "id" : invitation.id
+      }
+      UserController.acceptInvitation(store.getters.activeUser.id, data)
+        .then((response) => {
+          console.log(response.data);
+          store.commit("setSnack", {msg: "You have successfully accepted invitation", color:"success"})
+          invitation.accepted = true;
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+        })
     },
     decline(invitation) {
-      
+      let data = {
+        "id" : invitation.id
+      }
+      UserController.declineInvitation(store.getters.activeUser.id, data)
+        .then((response) => {
+          console.log(response.data);
+          store.commit("setSnack", {msg: "You have successfully declined invitation", color:"success"})
+          let idx = this.invitations.indexOf(invitation);
+          if (idx != -1)
+            this.invitations.splice(idx,1);
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+        })
+    },
+    cancel(invitation) {
     }
   }
 }

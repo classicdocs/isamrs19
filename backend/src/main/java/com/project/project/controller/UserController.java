@@ -1,10 +1,7 @@
 package com.project.project.controller;
 
 import com.project.project.dto.*;
-import com.project.project.exceptions.FriendshipWrongRole;
-import com.project.project.exceptions.UserNotFound;
-import com.project.project.exceptions.UsernameNotFound;
-import com.project.project.exceptions.UsernameTaken;
+import com.project.project.exceptions.*;
 import com.project.project.model.FlightInvitation;
 import com.project.project.model.FlightReservation;
 import com.project.project.model.FriendRequest;
@@ -135,13 +132,33 @@ public class UserController {
         }
     }
 
-//    @PostMapping(
-//            value = "/{id}/flight/invitations/accept",
-//            consumes = MediaType.APPLICATION_JSON_VALUE,
-//            produces = MediaType.APPLICATION_JSON_VALUE
-//    )
-//    public ResponseEntity acceptInvitation(@PathVariable("id") Long id, @RequestBody Long invitationId) {
-//
-//        userService.acceptInvitation(id, invitationId);
-//    }
+    @PostMapping(
+            value = "/{id}/flight/invitations/accept",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity acceptInvitation(@PathVariable("id") Long userId, @RequestBody FlightInvitationDTO flightInvitationDTO) {
+        try {
+            userService.acceptInvitation(userId,flightInvitationDTO.getId());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch ( UserNotFound e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(
+            value = "/{id}/flight/invitations/decline",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity declineInvitation(@PathVariable("id") Long userId, @RequestBody FlightInvitationDTO flightInvitationDTO) {
+        try {
+            userService.declineInvitation(userId,flightInvitationDTO.getId());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (UserNotFound | FlightInvitationNotFound | PassenerNotFound e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

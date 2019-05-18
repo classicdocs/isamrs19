@@ -11,6 +11,10 @@ import java.util.Set;
 
 @Entity
 public class Flight {
+
+    @Version
+    private Long version;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -268,6 +272,14 @@ public class Flight {
 
     public void setSeatsEconomy(List<SeatRow> seatsEconomy) {
         this.seatsEconomy = seatsEconomy;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }
 

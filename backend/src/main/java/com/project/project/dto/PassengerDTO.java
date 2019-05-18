@@ -16,6 +16,8 @@ public class PassengerDTO {
 
     private String seatClass;
 
+    private boolean accepted;
+
     public PassengerDTO() {
 
     }
@@ -27,6 +29,7 @@ public class PassengerDTO {
         this.seatRowReturn = seatRowReturn;
         this.seatColReturn = seatColReturn;
         this.seatClass = seatClass;
+        this.accepted = passenger.isAccepted();
     }
 
     public PassengerDTO(Passenger passenger, int seatRowDeparture, int seatColDeparture, String seatClass) {
@@ -34,6 +37,7 @@ public class PassengerDTO {
         this.seatRowDeparture = seatRowDeparture;
         this.seatColDeparture = seatColDeparture;
         this.seatClass = seatClass;
+        this.accepted = passenger.isAccepted();
     }
 
     public Passenger getPassenger() {
@@ -83,5 +87,13 @@ public class PassengerDTO {
 
     public void setSeatClass(String seatClass) {
         this.seatClass = seatClass;
+    }
+
+    public boolean isAccepted() {
+        return accepted;
+    }
+
+    public void setAccepted(boolean accepted) {
+        this.accepted = accepted;
     }
 }

@@ -10,12 +10,14 @@ import com.project.project.exceptions.*;
 import com.project.project.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
+@EnableTransactionManagement
 public class FlightService {
 
     @Autowired
@@ -293,6 +295,7 @@ public class FlightService {
                 flightReservation.setDate(date);
 
                 Passenger pa = new Passenger(flightReservationDTO.getMyInfo());
+                pa.setAccepted(true);
                 passengerRepository.save(pa);
                 flightReservation.getPassengers().add(pa);
                 flightReservationRepository.save(flightReservation);
@@ -380,6 +383,7 @@ public class FlightService {
                 flightReservation.setDate(date);
 
                 Passenger pa = new Passenger(flightReservationDTO.getMyInfo());
+                pa.setAccepted(true);
                 passengerRepository.save(pa);
                 flightReservation.getPassengers().add(pa);
                 flightReservationRepository.save(flightReservation);

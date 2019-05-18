@@ -3,9 +3,7 @@ package com.project.project.service;
 import com.project.project.dto.*;
 import com.project.project.exceptions.*;
 import com.project.project.model.*;
-import com.project.project.repository.RoleRepository;
-import com.project.project.repository.SeatRepository;
-import com.project.project.repository.UserRepository;
+import com.project.project.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +20,12 @@ public class UserService {
 
     @Autowired
     private SeatRepository seatRepository;
+
+    @Autowired
+    private FlightInvitationRepository flightInvitationRepository;
+
+    @Autowired
+    private PassengerRepository passengerRepository;
 
     public User findOne(String username) throws UsernameNotFound {
 
@@ -217,26 +221,70 @@ public class UserService {
         }
     }
 
-    public void acceptInvitation(Long userId, Long invitationId, Long invitationFrom) throws UserNotFound {
+    public void acceptInvitation(Long user_id, Long invitationId) throws  UserNotFound {
+
+        Optional<User> user = userRepository.findOneById(user_id);
+        if (user.isPresent()) {
+            RegisteredUser ru = (RegisteredUser) user.get();
+
+            for (FlightInvitation flightInvitation : ru.getFlightInvitations()) {
+                if (flightInvitation.getId() == invitationId) {
+                    flightInvitation.setAccepted(true);
+                    for (Passenger passenger : flightInvitation.getFlightReservation().getPassengers()) {
+                        if (passenger.getPassengerId() == user_id)
+                            passenger.setAccepted(true);
+                    }
+                    flightInvitationRepository.save(flightInvitation);
+                }
+            }
+        } else {
+            throw new UserNotFound(user_id);
+        }
+    }
+
+    public void declineInvitation(Long userId, Long invitationId) throws FlightInvitationNotFound, UserNotFound, PassenerNotFound {
 
         Optional<User> user = userRepository.findOneById(userId);
         if (user.isPresent()) {
-
             RegisteredUser ru = (RegisteredUser) user.get();
-            FlightInvitation invitationToRemove = null;
 
-            for(FlightInvitation flightInvitation : ru.getFlightInvitations()) {
+
+            FlightInvitation flightInvitationToRemove = null;
+            for (FlightInvitation flightInvitation : ru.getFlightInvitations()) {
                 if (flightInvitation.getId() == invitationId) {
-                    invitationToRemove = flightInvitation;
+                    flightInvitationToRemove = flightInvitation;
+                    break;
                 }
             }
-            if (invitationToRemove != null) {
-                ru.getFlightInvitations().remove(invitationToRemove);
-                userRepository.save(ru);
-            }
+            if (flightInvitationToRemove != null) {
+                Passenger passengerToRemove = null;
+                for (Passenger passenger : flightInvitationToRemove.getFlightReservation().getPassengers()) {
+                    if (passenger.getPassengerId() == userId) {
+                        passengerToRemove = passenger;
+                        break;
+                    }
+                }
+                if (passengerToRemove != null) {
+                    flightInvitationToRemove.getFlightReservation().getPassengers().remove(passengerToRemove);
 
+                    List<Seat> seats = seatRepository.findSeatsByPassengerId(passengerToRemove.getId());
+                    for(Seat s : seats) {
+                        s.setPassenger(null);
+                        s.setTaken(false);
+                    }
+                    seatRepository.saveAll(seats);
+                    flightInvitationRepository.save(flightInvitationToRemove);
+                    passengerRepository.deleteById(passengerToRemove.getId());
+                } else throw new PassenerNotFound(userId);
+
+                ru.getFlightInvitations().remove(flightInvitationToRemove);
+                userRepository.save(ru);
+
+                flightInvitationRepository.deleteById(invitationId);
+            } else throw new FlightInvitationNotFound(invitationId);
         } else {
             throw new UserNotFound(userId);
         }
+
     }
 }

@@ -50,7 +50,7 @@ export default {
     ],
     selected: [],
   }),
-  mounted() {
+  beforeMount() {
     this.selected = []
   },
   computed: {

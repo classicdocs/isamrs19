@@ -11,13 +11,15 @@ public class FlightInvitation {
 
     private Long invitationFrom;
 
-    @ManyToOne(fetch =  FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch =  FetchType.EAGER)
     private FlightReservation flightReservation;
+
+    private boolean accepted;
 
     private String seatClass;
 
     public FlightInvitation() {
-
+        this.accepted = false;
     }
 
     public Long getId() {
@@ -50,5 +52,13 @@ public class FlightInvitation {
 
     public void setSeatClass(String seatClass) {
         this.seatClass = seatClass;
+    }
+
+    public boolean isAccepted() {
+        return accepted;
+    }
+
+    public void setAccepted(boolean accepted) {
+        this.accepted = accepted;
     }
 }

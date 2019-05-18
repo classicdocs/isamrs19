@@ -35,10 +35,12 @@ public class Passenger {
     @Column(nullable = false)
     private String address;
 
+    @Column(nullable = false)
+    private boolean accepted;
+
     public Passenger() {
 
     }
-
 
     public Passenger(UserRegistrationDTO passenger) {
         this.passengerId = passenger.getId();
@@ -49,6 +51,7 @@ public class Passenger {
         this.email = passenger.getEmail();
         this.phone = passenger.getPhone();
         this.address = passenger.getAddress();
+        this.accepted = passenger.getId() == null;
     }
 
     public Long getId() {
@@ -121,5 +124,13 @@ public class Passenger {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public boolean isAccepted() {
+        return accepted;
+    }
+
+    public void setAccepted(boolean accepted) {
+        this.accepted = accepted;
     }
 }

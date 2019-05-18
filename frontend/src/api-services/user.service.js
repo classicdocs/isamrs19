@@ -9,6 +9,8 @@ const ENDPOINTS = {
   FLIGHTS: "/flight",
   RESERVATIONS: "/reservations",
   INVITATIONS: "/invitations",
+  ACCEPT: "/accept",
+  DECLINE: "/decline",
 };
 
 export default {
@@ -38,6 +40,12 @@ export default {
   },
   getFlightInvitations(id) {
     return Axios.get(ENDPOINTS.USERS + id + ENDPOINTS.FLIGHTS + ENDPOINTS.INVITATIONS);
+  },
+  acceptInvitation(id, data) {
+    return Axios.post(ENDPOINTS.USERS + id + ENDPOINTS.FLIGHTS + ENDPOINTS.INVITATIONS + ENDPOINTS.ACCEPT, data);
+  },
+  declineInvitation(id, data) {
+    return Axios.post(ENDPOINTS.USERS + id + ENDPOINTS.FLIGHTS + ENDPOINTS.INVITATIONS + ENDPOINTS.DECLINE, data);
   }
 
 };

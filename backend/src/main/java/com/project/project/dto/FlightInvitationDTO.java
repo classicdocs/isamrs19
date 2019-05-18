@@ -22,6 +22,8 @@ public class FlightInvitationDTO {
 
     private String seatClass;
 
+    private boolean accepted;
+
     public FlightInvitationDTO() {
 
     }
@@ -30,6 +32,7 @@ public class FlightInvitationDTO {
         this.invitationFrom = userRegistrationDTO;
         this.flightReservation = new FlightReservationResultDTO(flightInvitation.getFlightReservation(), new HashSet<>());
         this.seatClass = flightInvitation.getSeatClass();
+        this.accepted = flightInvitation.isAccepted();
     }
 
     public Long getId() {
@@ -63,5 +66,13 @@ public class FlightInvitationDTO {
 
     public void setSeatClass(String seatClass) {
         this.seatClass = seatClass;
+    }
+
+    public boolean isAccepted() {
+        return accepted;
+    }
+
+    public void setAccepted(boolean accepted) {
+        this.accepted = accepted;
     }
 }

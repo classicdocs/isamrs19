@@ -56,6 +56,7 @@
                   <td class="text-xs-left">{{ props.item.passenger.email }}</td>
                   <td class="text-xs-left">{{ props.item.passenger.phone }}</td> 
                   <td class="text-xs-left">{{ props.item.passenger.address }}</td>
+                  <td class="text-xs-left">{{ isAccepted(props.item.passenger.accepted) }}</td>
                 </template>
                 </v-data-table>
                 </v-flex>
@@ -98,6 +99,7 @@ export default {
       { text: 'Email', value: 'email' },
       { text: 'Phone number', value: 'phone' },
       { text: 'Address', value: 'address' },
+      { text: 'Accepted', value: 'accepted' },
     ],
     headers2: [
       { text: 'First name', value: 'firstName' },
@@ -109,6 +111,7 @@ export default {
       { text: 'Email', value: 'email' },
       { text: 'Phone number', value: 'phone' },
       { text: 'Address', value: 'address' },
+      { text: 'Accepted', value: 'accepted' },
     ],
   }),
   beforeMount() {
@@ -122,6 +125,14 @@ export default {
       })
   },
   methods: {
+    isAccepted(accepted) {
+      if (accepted == false) {
+        return "Pending";
+      } else {
+        return "Accepted";
+      } 
+    },
+
     getParams(reservation) {
       let params = {
         'seatClass' : reservation.passengers[0].seatClass,
