@@ -2,19 +2,16 @@ package com.project.project.service;
 
 import com.project.project.dto.ChangePasswordDTO;
 import com.project.project.dto.FriendDTO;
+import com.project.project.dto.FriendRequestsDTO;
 import com.project.project.dto.UserRegistrationDTO;
-import com.project.project.exceptions.UserNotFound;
-import com.project.project.exceptions.UserNotLoggedFirstTime;
-import com.project.project.exceptions.UsernameNotFound;
-import com.project.project.exceptions.UsernameTaken;
-import com.project.project.model.RegisteredUser;
-import com.project.project.model.Role;
-import com.project.project.model.User;
+import com.project.project.exceptions.*;
+import com.project.project.model.*;
 import com.project.project.repository.RoleRepository;
 import com.project.project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -53,7 +50,7 @@ public class UserService {
             Role role = roleRepository.findOneById(1L);
             newUser.setRole(role);
 
-            newUser.setFriends(new HashSet<RegisteredUser>());
+            newUser.setFriends(new HashSet<Friendship>());
 
             return userRepository.save(newUser);
         }
@@ -121,6 +118,57 @@ public class UserService {
             throw new UserNotLoggedFirstTime(changePasswordDTO.getId());
         } else {
             throw new UserNotFound(changePasswordDTO.getId());
+        }
+    }
+
+    public Set<FriendDTO> getFriends(Long id) throws UserNotFound, FriendshipWrongRole {
+
+        Optional<User> user = userRepository.findOneById(id);
+        if (user.isPresent()) {
+            if (!user.get().getRole().getRole().equals("User"))
+                throw new FriendshipWrongRole(user.get().getRole().getRole());
+            Set<FriendDTO> friends = new HashSet<>();
+            RegisteredUser r = (RegisteredUser) user.get();
+            for (Friendship friend : r.getFriends() ) {
+                FriendDTO f = new FriendDTO(friend.getFriend());
+                friends.add(f);
+            }
+            return friends;
+        } else {
+            throw new UserNotFound(id);
+        }
+    }
+
+    public FriendRequestsDTO getFriendRequests(Long id) throws UserNotFound {
+        Optional<User> user = userRepository.findOneById(id);
+        if (user.isPresent()) {
+            RegisteredUser r = (RegisteredUser) user.get();
+            FriendRequestsDTO fr = new FriendRequestsDTO();
+
+            for (FriendRequest request: r.getFriendRequests()) {
+
+                if (request.getFrom() != null) {
+                    Optional<User> friend = userRepository.findOneById(request.getFrom());
+                    if (friend.isPresent()) {
+                        FriendDTO f = new FriendDTO(friend.get());
+                        fr.getRequestsFrom().add(f);
+                    }
+                    else
+                        throw new UserNotFound(request.getFrom());
+                }
+                else {
+                    Optional<User> friend = userRepository.findOneById(request.getTo());
+                    if (friend.isPresent()) {
+                        FriendDTO f = new FriendDTO(friend.get());
+                        fr.getRequestsTo().add(f);
+                    }
+                    else
+                        throw new UserNotFound(request.getTo());
+                }
+            }
+            return fr;
+        } else {
+            throw  new UserNotFound(id);
         }
     }
 }

@@ -15,7 +15,7 @@ import java.util.Set;
 public class RentACarService {
 
     @Autowired
-    RentACarRepository rentACarRepository;
+    private RentACarRepository rentACarRepository;
 
     public RentACar save(RentACarDTO rentACarDTO) throws RentACarNotFound {
 

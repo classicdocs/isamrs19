@@ -35,6 +35,11 @@
               v-model="hotel.description" 
               hint="Say something good about hotel services and prices..." box>
             </v-textarea>
+
+            Number of floors
+            <number-input v-model="hotel.numOfFloors" :min="1" :max="5" inline center controls></number-input>
+            Number of rooms by floor
+            <number-input v-model="hotel.roomsByFloor" :min="1" :max="50" inline center controls></number-input>
           </v-container>
 
           <!-- DUGMAD -->
@@ -54,6 +59,7 @@
 
 import Hotel from "@/models/Hotel";
 
+
 import SystemAdminController from "@/controllers/system-admin.controller"
 import { thisExpression } from '@babel/types';
 
@@ -67,14 +73,13 @@ export default {
     street : "",
 
     hotel: new Hotel(),
-
   }),
   methods: {
     validate() {
       if(this.$refs.form.validate()) {
         this.hotel.address = this.country + '/' + this.city + '/' + this.street;
         this.hotel.priceList = [];
-        this.hotel.roomConfiguration = [];
+        this.hotel.floors = [];
         this.hotel.admins = [];
 
         SystemAdminController.createHotel(this.hotel)

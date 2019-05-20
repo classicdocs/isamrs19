@@ -1,5 +1,7 @@
 package com.project.project.model;
 
+import com.project.project.model.Hotel_Model.Hotel;
+
 import javax.persistence.*;
 
 @Entity

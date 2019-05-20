@@ -49,4 +49,5 @@ public class VehicleController {
 
         return new ResponseEntity<List<Vehicle>>(vehiclesToReturn, HttpStatus.OK);
     }
+
 }

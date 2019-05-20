@@ -1,7 +1,5 @@
 package com.project.project.repository;
 
-import com.project.project.dto.HotelAdminDTO;
-import com.project.project.model.Hotel;
 import com.project.project.model.HotelAdmin;
 import org.springframework.data.jpa.repository.JpaRepository;
 

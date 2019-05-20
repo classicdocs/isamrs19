@@ -1,6 +1,6 @@
 package com.project.project.dto;
 
-import com.project.project.model.Hotel;
+import com.project.project.model.Hotel_Model.Hotel;
 import com.project.project.model.HotelAdmin;
 
 import javax.validation.constraints.NotNull;

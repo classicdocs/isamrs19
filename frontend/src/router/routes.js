@@ -110,9 +110,4 @@ export const routes = [
       name: "change-password",
       component: ChangePassword
     },
-    {
-      path: "/my-reservations/:id",
-      name: "my-reservations",
-      component: MyReservations
-    }
   ];
