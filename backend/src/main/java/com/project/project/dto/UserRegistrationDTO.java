@@ -6,6 +6,8 @@ import javax.validation.constraints.NotNull;
 
 public class UserRegistrationDTO {
 
+    private Long id;
+
     @NotNull
     private String username;
 
@@ -27,10 +29,13 @@ public class UserRegistrationDTO {
     @NotNull
     private String phone;
 
+    private String passport;
+
     public UserRegistrationDTO() {
     }
 
     public UserRegistrationDTO(User user){
+        this.id = user.getId();
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.firstname = user.getFirstname();
@@ -38,6 +43,14 @@ public class UserRegistrationDTO {
         this.email = user.getEmail();
         this.address = user.getAddress();
         this.phone = user.getPhone();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -94,5 +107,13 @@ public class UserRegistrationDTO {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getPassport() {
+        return passport;
+    }
+
+    public void setPassport(String passport) {
+        this.passport = passport;
     }
 }

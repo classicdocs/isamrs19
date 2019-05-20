@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class DestinationService {
@@ -18,8 +19,8 @@ public class DestinationService {
         return  destinationRepository.findOneByNameAndZip(name, zip).orElseThrow(() -> new DestinationNotFound(name, zip));
     }
 
-    public Destination findOne(String name) throws DestinationNotFound {
-        return  destinationRepository.findOneByName(name).orElseThrow(() -> new DestinationNotFound(name, ""));
+    public Set<Destination> findAllByName(String name) throws DestinationNotFound {
+        return  destinationRepository.findAllByName(name);
     }
 
 

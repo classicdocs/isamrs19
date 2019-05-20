@@ -5,5 +5,7 @@ export default class FlightReservation {
     this.price = null;
     this.seatsPickedDeparture = [];
     this.seatsPickedReturn = [];
+    this.passengers = [];
+    this.myInfo = null;
   }
 }

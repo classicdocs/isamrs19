@@ -56,7 +56,7 @@
               <v-divider></v-divider>
               <v-stepper-step :complete="stepper > 3" step="3">Fill passengers information</v-stepper-step>
               <v-divider></v-divider>
-              <v-stepper-step step="4">Review</v-stepper-step>
+              <!-- <v-stepper-step step="4">Review</v-stepper-step> -->
             </v-stepper-header>
 
             <v-stepper-items>
@@ -71,7 +71,7 @@
                 <v-btn
                   style="float:right"
                   color="primary"
-                  @click="stepper = 2"
+                  @click="goToFriendsInvitation"
                   :disabled="!enableBtnStep1"
                 >
                   Next
@@ -79,59 +79,57 @@
               </v-stepper-content>
 
               <v-stepper-content step="2">
-                <v-card
-                  class="mb-5"
-                  color="grey lighten-1"
-                  height="200px"
-                ></v-card>
-
+                <friends-invitation
+                  v-on:friendsInvited="setInvitedFriends($event)"
+                ></friends-invitation>
                 <v-btn
                   color="primary"
-                  @click="stepper = 3"
+                  @click="goToStepThree"
+                  style="float:right"
                 >
                   Next
                 </v-btn>
 
                 <v-btn flat
                   @click="stepper = 1"
+                  style="float:right"
                 >Back</v-btn>
               </v-stepper-content>
 
               <v-stepper-content step="3">
-                <v-card
-                  class="mb-5"
-                  color="grey lighten-1"
-                  height="200px"
-                ></v-card>
+                <fill-passengers-info
+                  v-bind:passengersNumber="flightReservation.searchParams.passengersNumber"
+                ></fill-passengers-info>
 
                 <v-btn
                   color="primary"
-                  @click="stepper = 4"
+                  @click="reserve"
+                  style="float:right"
                 >
                   Next
                 </v-btn>
 
                 <v-btn flat
-                  @click="stepper = 2"
+                  @click="goToStepTwoOrOne"
+                  style="float:right"
                 >Back</v-btn>
               </v-stepper-content>
-              <v-stepper-content step="4">
-                <v-card
-                  class="mb-5"
-                  color="grey lighten-1"
-                  height="200px"
-                ></v-card>
+              <!-- <v-stepper-content step="4">
+                <review
+                ></review>
 
                 <v-btn
                   color="primary"
+                  style="float:right"
                 >
                   Reserve
                 </v-btn>
 
                 <v-btn flat
                   @click="stepper = 3"
+                  style="float:right"
                 >Back</v-btn>
-              </v-stepper-content>
+              </v-stepper-content> -->
 
             </v-stepper-items>
           </v-stepper>
@@ -139,6 +137,7 @@
         </v-layout>
       </v-layout>
     </v-container>
+    <optional-reservation-dialog v-if="optional"></optional-reservation-dialog>
   </div>
 </template>
 
@@ -147,12 +146,22 @@
 import store from '@/store';
 import FlightInfo from "@/components/Flights/FlightInfo.vue";
 import Seats from "@/components/FlightReservation/Seats.vue";
-
+import UserController from "@/controllers/user.controller.js";
+import FriendsInvitationVue from '../components/FlightReservation/FriendsInvitation.vue';
+import FillPassengersInfoVue from '../components/FlightReservation/FillPassengersInfo.vue';
+import Friend from "@/models/Friend.js";
+import ReviewVue from '../components/FlightReservation/Review.vue';
+import FlightController from "@/controllers/flights.controller.js";
+import OptionalReservationDialogVue from '../components/FlightReservation/OptionalReservationDialog.vue';
 export default {
   name: "FlightReservation",
   components: {
     'flight': FlightInfo,
     'seats':  Seats,
+    'friends-invitation' : FriendsInvitationVue,
+    'fill-passengers-info' : FillPassengersInfoVue,
+    'review' : ReviewVue,
+    'optional-reservation-dialog' : OptionalReservationDialogVue,
   },
   data:() => ({
     flightReservation: null,
@@ -162,6 +171,10 @@ export default {
       color: "",
       msg: "",
     },
+    friends: false,
+    invitedFriends: [],
+    passengers: [],
+    optional: false
   }),
   computed: {
     getDepartureSeats() {
@@ -207,22 +220,119 @@ export default {
             return true;
       }
       return false;
-    }
+    },
+    
   },
   created() {
     let fr = store.getters.flightReservation;
-    if (fr)
+    if (fr !== null)
       this.flightReservation = fr;
     else
+      
       this.$router.push({name: "flights"});
+
+    UserController.getFriends(store.getters.activeUser.id)
+        .then((response) => {
+          store.commit("setFriends", response.data);
+          
+        })
+    store.commit("setPassengersDefault", this.flightReservation.searchParams.passengersNumber);
+    this.getMyInfo();
   },
   methods: {
     showSnackBar(data) {
       this.snackbar.msg = data.msg;
       this.snackbar.color = data.color;
       this.snackbar.show = true;
-    }
-  }
+    },
+    goToFriendsInvitation() {
+      console.log(store.getters.friends);
+      if (store.getters.friends.length === 0 || this.flightReservation.searchParams.passengersNumber === 1) {
+        this.friends = false;
+        this.stepper = 3;
+      } else {
+        this.friends = true;
+        this.stepper = 2
+      }
+    },
+    goToStepTwoOrOne() {
+      if (this.friends)
+        this.stepper = 2;
+      else
+        this.stepper = 1;
+    },
+    getMyInfo() {
+      UserController.getUser(store.getters.activeUser.id)
+      .then((response) => {
+        let f = new Friend();
+        Object.assign(f,response.data)
+        store.commit("myInfo", f);
+      })
+      .catch((error) => {
+        alert(error.response.data);
+      })
+    },
+    setInvitedFriends(data) {
+      if (data.length === 0)
+        this.invitedFriends = []
+      else {
+        this.invitedFriends = []
+        Object.assign(this.invitedFriends, data);
+      }
+        
+    },
+    goToStepThree() {
+      this.passengers = [];
+      store.commit("setPassengersDefault", this.flightReservation.searchParams.passengersNumber);
+      
+      let promises = [];
+      for(let element of this.invitedFriends) {
+        promises.push(
+          UserController.getUser(element.id)
+        )
+      }
+
+      Promise.all(promises).then((values)=> {
+        for(let val of values) {
+          let f = new Friend();
+          Object.assign(f, val.data);
+          this.passengers.push(f);
+        }
+        store.commit("friendsInvited", this.passengers)
+        this.stepper = 3;
+      }).
+      catch((errors) => {
+        console.log(errors);
+      })
+    },
+    reserve() {
+      let passengers = store.getters.passengers;
+      for (let passenger of passengers) {
+        if (passenger.firstname === "" || passenger.lastname === "" || passenger.email === "" || passenger.address === "" || 
+            passenger.passport === "" || passenger.phone === "") {
+          store.commit("setSnack", {msg: "You must fill information about every passenger!", color: "primary"});
+          return;
+        }
+      }
+      let data = store.getters.flightReservation;
+      data.passengers = store.getters.passengers;
+      data.myInfo = store.getters.myInfo;
+
+      let loader = this.$loading.show()
+      FlightController.reserve(data)
+        .then((response) => {
+          loader.hide();
+          store.commit("setSnack", {msg: "You have successfully booked a flight!", color: "success"});
+          this.optional = true;
+        })
+        .catch((error) => {
+          store.commit("setSnack", {msg: error.response.data, color: "error"});
+          console.log(error.response.data);
+        })
+    },
+    
+  },
+  
 }
 </script>
 

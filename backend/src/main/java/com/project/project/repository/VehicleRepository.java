@@ -7,5 +7,6 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
 
     Vehicle findOneByName(String name);
 
+    Vehicle findOneById(Long id);
 }
 

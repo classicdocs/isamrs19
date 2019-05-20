@@ -228,6 +228,12 @@
               Year of production: {{ vehicle.yearOfProduction }} <br/>
               Price per day: {{ vehicle.pricePerDay }} <br/>
             </v-flex>
+            <v-flex id="rating">
+
+            </v-flex>
+            <v-flex id="reserve">
+              <v-btn  color="primary" @click="reserveVehicle(vehicle.id)"> Rent </v-btn>
+            </v-flex>
             </v-layout>
         </v-list-tile-content>
         </v-list-tile>
@@ -262,8 +268,12 @@
 import VehicleSearch from '@/models/VehicleSearch.js';
 import Vehicle from "@/models/Vehicle";
 import VehicleController from "@/controllers/vehicle.controller";
-import RentACarController from "@/controllers/rentacar.controller.js"
-import BranchesController from "@/controllers/branches.controller.js"
+import RentACarController from "@/controllers/rentacar.controller.js";
+import BranchesController from "@/controllers/branches.controller.js";
+import router from '../../router';
+import VehicleReservation from '@/models/VehicleReservation.js';  
+import store from "@/store";
+import VehicleReservationController from "@/controllers/vehicle.reservation.controller.js";
 
 export default {
     name: 'VehicleReservation',
@@ -274,6 +284,7 @@ export default {
         returnDateMenu : false,
         returnTimeMenu : false,
         vehicleSearch : new VehicleSearch(),
+        vr : new VehicleReservation(),
         vehicle_list : [],
         branches: [],
         noResults: false, 
@@ -286,12 +297,6 @@ export default {
     }),
     created() {
       this.vehicle_list = [];
-
-      RentACarController.getVehicles(this.$route.params.id).then((response) => {
-        response.data.forEach(element => {
-          this.vehicle_list.push(element);
-        });
-      })
 
       BranchesController.get(this.$route.params.id)
       .then((response) => {
@@ -330,6 +335,27 @@ export default {
         this.snackbar.msg = message;
         this.snackbar.show = true;
       },
+      reserveVehicle(id) {
+        if(!store.getters.isLogged){
+          router.push({ name: "login"});
+        }
+ 
+        this.vr.pickupDate = this.vehicleSearch.pickupDate;
+        this.vr.pickupTime = this.vehicleSearch.pickupTime;
+        this.vr.returnDate = this.vehicleSearch.returnDate;
+        this.vr.returnTime = this.vehicleSearch.returnTime;
+        this.vr.pickupLocation = this.vehicleSearch.pickupPlace;
+        this.vr.returnLocation = this.vehicleSearch.returnPlace;
+        this.vr.carId = id;
+        this.vr.user = store.getters.activeUser.username;
+        this.vr.rentACarId = this.$route.params.id;
+        
+        VehicleReservationController.reserve(this.vr);
+
+        this.vehicle_list = [];
+
+        store.commit('setSnack', {msg: "You have successfully reserved a vehicle!", color: "success"});
+      },
     }
 }
 </script>
@@ -351,8 +377,13 @@ export default {
     padding-bottom: 3%;
 }
 
+#reserve {
+    margin-top: 20px;
+}
+
 #carinfo {
     padding-left: 10px;
+    min-width: 500px;
 }
 
 #car {

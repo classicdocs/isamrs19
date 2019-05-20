@@ -61,7 +61,7 @@
                     <label class="class">Class: {{searchParams.seatClass}}</label>
                   </v-flex>
                   <v-flex lg12 md4 sm4 xs12>
-                    <label class="passengers">Number of passengers: {{searchParams.passengersNumber}}</label>
+                    <label class="passengers" v-if="searchParams.passengerNumber !== null">Number of passengers: {{searchParams.passengersNumber}}</label>
                   </v-flex>
                   <v-flex lg12 md4 sm4 xs12>
                     <label class="passengers">Price per person: {{getPrice}} EUR</label>
