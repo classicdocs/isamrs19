@@ -6,14 +6,13 @@
           <v-container>
           <v-stepper v-model="step" vertical>
             <v-stepper-header>
-              <v-stepper-step step="1" :complete="step > 1">Reservation data</v-stepper-step>
+              <v-stepper-step step="1" :complete="step > 1">Select rooms</v-stepper-step>
               <v-divider></v-divider>
-              <v-stepper-step step="2" :complete="step > 2">Select rooms</v-stepper-step>
+              <v-stepper-step step="2" :complete="step > 2">Overview</v-stepper-step>
               <v-divider></v-divider>
-              <v-stepper-step step="3">Overview</v-stepper-step>
             </v-stepper-header>
             <v-stepper-items>
-              <v-stepper-content step="1">
+              <!-- <v-stepper-content step="1">
                 <v-layout col span>
                   <v-flex>
                     <v-menu
@@ -56,8 +55,8 @@
 
 
                 <v-btn color="primary" @click.native="continueTo(2)">Continue</v-btn>
-              </v-stepper-content>
-              <v-stepper-content step="2">
+              </v-stepper-content> -->
+              <v-stepper-content step="1">
                   
                 <v-layout row wrap v-if=" myHotel != null">
 

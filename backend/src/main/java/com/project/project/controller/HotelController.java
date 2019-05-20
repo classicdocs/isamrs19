@@ -6,6 +6,7 @@ import com.project.project.dto.Hotel_DTOs.RoomDTO;
 import com.project.project.exceptions.FloorNotFound;
 import com.project.project.exceptions.HotelNotFound;
 import com.project.project.model.Hotel_Model.Hotel;
+import com.project.project.model.Hotel_Model.HotelDestination;
 import com.project.project.model.Hotel_Model.HotelsOffer;
 import com.project.project.model.Hotel_Model.Room;
 import com.project.project.service.HotelService;
@@ -162,6 +163,20 @@ public class HotelController {
         try {
             Set<Room> rooms = hotelService.getRooms(id);
             return new ResponseEntity<Set<Room>>(rooms, HttpStatus.OK);
+        } catch (HotelNotFound hnf) {
+            hnf.printStackTrace();
+            return new ResponseEntity<String>(hnf.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(
+            value = "/{id}/destination",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity getDestination(@PathVariable("id") Long id) {
+        try {
+            HotelDestination destination = hotelService.getDestination(id);
+            return new ResponseEntity<HotelDestination>(destination, HttpStatus.OK);
         } catch (HotelNotFound hnf) {
             hnf.printStackTrace();
             return new ResponseEntity<String>(hnf.getMessage(), HttpStatus.BAD_REQUEST);

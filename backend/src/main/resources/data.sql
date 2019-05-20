@@ -230,3 +230,21 @@ insert into room_special_prices(room_id,special_prices_id) values
 (1,2);
 insert into room_special_prices(room_id,special_prices_id) values
 (1,3);
+
+insert into hotel_destination(id, country, name, zip) values
+(1, 'Serbia', 'Vranje', 'VR');
+insert into hotel_destination(id, country, name, zip) values
+(2, 'Serbia', 'Novi Sad', 'NS');
+insert into hotel_destination(id, country, name, zip) values
+(3, 'Japan', 'Tokio', 'TOK');
+insert into hotel_destination(id, country, name, zip) values
+(4, 'Italia', 'Barri', 'BAR');
+--
+insert into hotel_destination_hotels(hotel_destination_id, hotels_id) values
+(1, 1);
+insert into hotel_destination_hotels(hotel_destination_id, hotels_id) values
+(1, 2);
+insert into hotel_destination_hotels(hotel_destination_id, hotels_id) values
+(2, 4);
+insert into hotel_destination_hotels(hotel_destination_id, hotels_id) values
+(3, 3);

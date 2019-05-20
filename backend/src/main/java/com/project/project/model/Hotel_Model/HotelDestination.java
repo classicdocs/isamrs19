@@ -16,10 +16,11 @@ public class HotelDestination {
     private String country;
 
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "hotels_destinations",
-            joinColumns = { @JoinColumn(name = "destination_id", referencedColumnName = "id" )},
-            inverseJoinColumns = { @JoinColumn(name = "hotel_id", referencedColumnName = "id" ) })
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    @JoinTable(name = "hotels_destinations",
+//            joinColumns = { @JoinColumn(name = "destination_id", referencedColumnName = "id" )},
+//            inverseJoinColumns = { @JoinColumn(name = "hotel_id", referencedColumnName = "id" ) })
+    @OneToMany(fetch = FetchType.LAZY)
     private Set<Hotel> hotels;
 
     @Column(name = "zip", nullable = false)

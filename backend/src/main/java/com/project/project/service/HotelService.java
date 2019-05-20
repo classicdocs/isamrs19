@@ -7,15 +7,9 @@ import com.project.project.dto.Hotel_DTOs.HotelFloorDTO;
 import com.project.project.dto.Hotel_DTOs.RoomDTO;
 import com.project.project.exceptions.*;
 import com.project.project.model.HotelAdmin;
-import com.project.project.model.Hotel_Model.Hotel;
-import com.project.project.model.Hotel_Model.HotelFloor;
-import com.project.project.model.Hotel_Model.HotelsOffer;
-import com.project.project.model.Hotel_Model.Room;
-import com.project.project.repository.FloorRepository;
-import com.project.project.repository.HotelAdminRepository;
-import com.project.project.repository.HotelRepository;
+import com.project.project.model.Hotel_Model.*;
+import com.project.project.repository.*;
 
-import com.project.project.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +29,8 @@ public class HotelService {
     @Autowired
     private FloorRepository floorRepository;
 
+    @Autowired
+    private HotelDestinationsRepository hotelDestinationsRepository;
 
     public Hotel findOneById(Long id) throws HotelNotFound{
         Optional<Hotel> h = hotelRepository.findOneById(id);
@@ -225,6 +221,27 @@ public class HotelService {
         }
         return hotels;
     }
+
+    public HotelDestination getDestination(Long id) throws HotelNotFound{
+        Optional<Hotel> hotel = hotelRepository.findOneById(id);
+        if(hotel.isPresent()){
+            Optional<HotelDestination> destination = hotelDestinationsRepository.findOneByHotels_id(id);
+            if(destination.isPresent()){
+                for(Hotel h: destination.get().getHotels()){
+                    for(HotelAdmin ha : h.getAdmins()){
+                        ha.setHotel(null);
+                    }
+                }
+                return destination.get();
+            }else{
+                // treba throw
+                return hotel.get().getDestination();
+            }
+        }else{
+            throw new HotelNotFound(id);
+        }
+    }
+
 
     public Set<Room> getRooms(Long id) throws HotelNotFound{
         Optional<Hotel> hotel = hotelRepository.findOneById(id);
