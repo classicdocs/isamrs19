@@ -35,11 +35,21 @@
               v-model="hotel.description" 
               hint="Say something good about hotel services and prices..." box>
             </v-textarea>
+            <v-layout row span>
+              
+              <v-flex>
+                Number of floors
+                <number-input v-model="hotel.numOfFloors" :min="1" :max="5" inline center controls></number-input>
+              </v-flex>
+              
+              <v-flex>
+                Number of rooms by floor
+                <number-input v-model="hotel.roomsByFloor" :min="1" :max="50" inline center controls></number-input>
+              </v-flex>
 
-            Number of floors
-            <number-input v-model="hotel.numOfFloors" :min="1" :max="5" inline center controls></number-input>
-            Number of rooms by floor
-            <number-input v-model="hotel.roomsByFloor" :min="1" :max="50" inline center controls></number-input>
+
+            </v-layout>
+            
           </v-container>
 
           <!-- DUGMAD -->

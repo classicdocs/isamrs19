@@ -61,6 +61,11 @@
             </v-flex>
             </v-layout>
         </v-card-text>
+        <v-card-actions>
+            <v-spacer></v-spacer>
+          <v-btn color="blue darken" flat @click="cancel">Cancel</v-btn> 
+          <v-btn color="success" @click="bookRoom">Book</v-btn>
+        </v-card-actions>
       </v-form>
     </v-card>
   </div>
@@ -73,22 +78,23 @@ import { returnStatement } from '@babel/types';
 
 
 export default {
-  name: "RoomInfo",
+  name: "ReserveRoom",
   props: ['room'],
 
 
   data: () => ({
     form: true,
     datesWhenTaken: [],
-    // headersSpecialPrices: [
-    //       { text: 'Start date', value: 'startDate' },
-    //       { text: 'End date', value: 'endDate' },
-    //       { text: 'Price', value: 'price' },
-    //     ],
   }),
   methods: {
     getDates(roomTaken){
       return roomTaken.startDate + "-" + roomTaken.endDate + "\n";
+    },
+    bookRoom(){
+        this.$emit("book", {msg: "Room successfully booked", color: "success"});
+    },
+    cancel(){
+        this.$emit("cancel");
     }
   },
   watch: {
