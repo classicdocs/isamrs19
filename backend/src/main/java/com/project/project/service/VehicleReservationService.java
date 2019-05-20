@@ -84,8 +84,16 @@ public class VehicleReservationService {
         return vr;
     }
 
-    public List<VehicleReservation> getReservations(Long id) {
-        return vehicleReservationRepository.findReservations(id);
+    public List<VehicleReservationDTO> getReservations(Long id) {
+        List<VehicleReservation> reservations = vehicleReservationRepository.findReservations(id);
+
+        ArrayList<VehicleReservationDTO> reservationDTOS = new ArrayList<VehicleReservationDTO>();
+
+        for (VehicleReservation vr : reservations) {
+            reservationDTOS.add(new VehicleReservationDTO(vr));
+        }
+
+        return reservationDTOS;
     }
 
     private int daysBetween(Date d1, Date d2){

@@ -30,7 +30,7 @@ public class VehicleReservationController {
 
     @GetMapping(value = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity get(@PathVariable("id") Long id){
-        List<VehicleReservation> reservations = vehicleReservationService.getReservations(id);
-        return new ResponseEntity<List<VehicleReservation>>(reservations, HttpStatus.OK);
+        List<VehicleReservationDTO> reservations = vehicleReservationService.getReservations(id);
+        return new ResponseEntity<List<VehicleReservationDTO>>(reservations, HttpStatus.OK);
     }
 }

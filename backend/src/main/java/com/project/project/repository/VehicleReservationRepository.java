@@ -1,5 +1,6 @@
 package com.project.project.repository;
 
+import com.project.project.dto.VehicleReservationDTO;
 import com.project.project.model.VehicleReservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

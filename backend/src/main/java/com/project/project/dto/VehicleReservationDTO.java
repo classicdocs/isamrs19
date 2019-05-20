@@ -1,20 +1,25 @@
 package com.project.project.dto;
 
+import com.project.project.model.VehicleReservation;
+
 import javax.validation.constraints.NotNull;
 
 public class VehicleReservationDTO {
 
-    @NotNull
+    private String carId;
+
+
     private String pickupDate;
 
-    @NotNull
     private String pickupTime;
 
-    @NotNull
     private String returnDate;
 
-    @NotNull
     private String returnTime;
+
+    private String reservedFrom;
+
+    private String reservedUntil;
 
     @NotNull
     private String pickupLocation;
@@ -22,16 +27,37 @@ public class VehicleReservationDTO {
     @NotNull
     private String returnLocation;
 
-    @NotNull
-    private String carId;
+    private VehicleDTO vehicle;
+
+    private String totalPrice;
 
     @NotNull
     private String user;
 
-    @NotNull
+
     private String rentACarId;
 
+    private RentACarDTO rentACar;
+
     public VehicleReservationDTO() {
+    }
+
+    public VehicleReservationDTO(VehicleReservation vr){
+
+        this.reservedFrom = vr.getReservedFrom().toString();
+        this.reservedUntil = vr.getReservedUntil().toString();
+
+        this.vehicle = new VehicleDTO(vr.getVehicle());
+
+        this.pickupLocation = vr.getPickupLocation();
+
+        this.returnLocation = vr.getReturnLocation();
+
+        this.rentACar = new RentACarDTO(vr.getRentACar());
+
+        this.user = vr.getUser().getUsername();
+
+        this.totalPrice = String.valueOf(vr.getTotalPrice());
     }
 
     public String getPickupDate() {
@@ -82,12 +108,12 @@ public class VehicleReservationDTO {
         this.returnTime = returnTime;
     }
 
-    public String getCarId() {
-        return carId;
+    public VehicleDTO getVehicle() {
+        return vehicle;
     }
 
-    public void setCarId(String carId) {
-        this.carId = carId;
+    public void setVehicle(VehicleDTO vehicleDTO) {
+        this.vehicle = vehicleDTO;
     }
 
     public String getUser() {
@@ -104,5 +130,45 @@ public class VehicleReservationDTO {
 
     public void setRentACarId(String rentACarId) {
         this.rentACarId = rentACarId;
+    }
+
+    public String getCarId() {
+        return carId;
+    }
+
+    public void setCarId(String carId) {
+        this.carId = carId;
+    }
+
+    public RentACarDTO getRentACar() {
+        return rentACar;
+    }
+
+    public void setRentACar(RentACarDTO rentACar) {
+        this.rentACar = rentACar;
+    }
+
+    public String getReservedFrom() {
+        return reservedFrom;
+    }
+
+    public void setReservedFrom(String reservedFrom) {
+        this.reservedFrom = reservedFrom;
+    }
+
+    public String getReservedUntil() {
+        return reservedUntil;
+    }
+
+    public void setReservedUntil(String reservedUntil) {
+        this.reservedUntil = reservedUntil;
+    }
+
+    public String getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(String totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }
