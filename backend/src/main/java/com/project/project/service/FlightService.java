@@ -472,13 +472,13 @@ public class FlightService {
         String subject = "Flight reservation [" + me.getUsername() + "]";
         String msg = "";
         msg += "<html><body>";
-        msg += "<p> Hi" + me.getFirstname() + " " + me.getLastname() + "</p>";
+        msg += "<p> Hi " + me.getFirstname() + " " + me.getLastname() + "</p>";
         msg += "<p> You have successfully reserved flight!</p>";
         msg += "<p> The time when the reservation was made: " + flightReservation.getDate() + "<p>";
-        msg += "<p> Departure flight:" + flightReservation.getDepartureFlight().getStartDestination() + " - "
+        msg += "<p> Departure flight:" + flightReservation.getDepartureFlight().getStartDestination().getName() + " - "
                 + flightReservation.getDepartureFlight().getFinalDestination().getName() + "</p>";
         if (flightReservation.getReturnFlight() != null) {
-            msg += "<p> Return flight:" + flightReservation.getReturnFlight().getStartDestination() + " - "
+            msg += "<p> Return flight:" + flightReservation.getReturnFlight().getStartDestination().getName() + " - "
                     + flightReservation.getReturnFlight().getFinalDestination().getName() + "</p>";
         }
         if (!flightReservation.getPassengers().isEmpty()) {
