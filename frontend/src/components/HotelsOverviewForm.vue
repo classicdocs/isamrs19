@@ -34,7 +34,7 @@
           <template v-slot:items="props">
           <tr @click="props.expanded = !props.expanded">
             <td class="text-xs-center">{{ props.item.name }}</td>
-            <td class="text-xs-center">{{ props.item.address }}</td>
+            <td class="text-xs-center">{{ props.item.destination.name }}</td>
             <td class="text-xs-center">{{ "NO DATA" }}</td>
             <td class="text-xs-center">
               <v-btn @click="goToPage(props.item.name)">
@@ -87,7 +87,7 @@ export default {
             align: 'center',
             value: 'name'
           },
-          { text: 'Address', value: 'address' , align: 'center'},
+          { text: 'Location', value: 'destination.name' , align: 'center'},
           { text: 'Average rate', value: 'avgRate' , align: 'center'}
         ],
     hotels: [],
@@ -105,6 +105,7 @@ export default {
       .then((response) => {
         response.data.forEach(element => {
           this.hotels.push(element);
+          console.log(element);
         });
       });
   },

@@ -3,6 +3,7 @@ package com.project.project.service;
 import java.util.*;
 
 import com.project.project.dto.Hotel_DTOs.HotelDTO;
+import com.project.project.dto.Hotel_DTOs.HotelDestinationDTO;
 import com.project.project.dto.Hotel_DTOs.HotelFloorDTO;
 import com.project.project.dto.Hotel_DTOs.RoomDTO;
 import com.project.project.exceptions.*;
@@ -71,8 +72,6 @@ public class HotelService {
         h.setNumOfFloors(hotelDTO.getNumOfFloors());
         h.setRoomsByFloor(hotelDTO.getRoomsByFloor());
 
-        //h.setFloors(hotelDTO.getFloors());
-
         h.setAdmins(hotelDTO.getAdmins());
         h = hotelRepository.save(h);
 
@@ -83,8 +82,20 @@ public class HotelService {
             hf.setHotel(h);
             addFloor(h.getId(), hf);
         }
+
+
+        Optional<HotelDestination> destination = hotelDestinationsRepository.findOneByName(hotelDTO.getDestination().getName());
+        if(destination.isPresent()){
+            destination.get().getHotels().add(h);
+
+            HotelDestination newDestination = hotelDestinationsRepository.save(destination.get());
+
+            h.setDestination(newDestination);
+            h = hotelRepository.save(h);
+        }
         return (new HotelDTO(h));
     }
+
 
     public HotelFloorDTO addFloor(Long hotelID, HotelFloorDTO hotelFloorDTO) throws HotelNotFound {
 
@@ -212,17 +223,21 @@ public class HotelService {
         }
     }
 
-    public Set<HotelDTO> findAll() {
+    public Set<HotelDTO> findAll() throws HotelNotFound, DestinationNotFound{
         Set<HotelDTO> hotels = hotelRepository.findAllHotels();
         for (HotelDTO hotelDTO: hotels) {
             for (HotelAdmin admin: hotelDTO.getAdmins()) {
                 admin.setHotel(null);
             }
+            HotelDestinationDTO destinationDTO = new HotelDestinationDTO(getDestination(hotelDTO.getId()));
+            HotelDestination destination = new HotelDestination();
+            destination.setName(destinationDTO.getName());
+            hotelDTO.setDestination(destination);
         }
         return hotels;
     }
 
-    public HotelDestination getDestination(Long id) throws HotelNotFound{
+    public HotelDestination getDestination(Long id) throws HotelNotFound, DestinationNotFound{
         Optional<Hotel> hotel = hotelRepository.findOneById(id);
         if(hotel.isPresent()){
             Optional<HotelDestination> destination = hotelDestinationsRepository.findOneByHotels_id(id);
@@ -234,8 +249,7 @@ public class HotelService {
                 }
                 return destination.get();
             }else{
-                // treba throw
-                return hotel.get().getDestination();
+                throw new DestinationNotFound(destination.get().getName(), "");
             }
         }else{
             throw new HotelNotFound(id);

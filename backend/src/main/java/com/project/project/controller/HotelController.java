@@ -3,6 +3,7 @@ package com.project.project.controller;
 import com.project.project.dto.Hotel_DTOs.HotelDTO;
 import com.project.project.dto.Hotel_DTOs.HotelFloorDTO;
 import com.project.project.dto.Hotel_DTOs.RoomDTO;
+import com.project.project.exceptions.DestinationNotFound;
 import com.project.project.exceptions.FloorNotFound;
 import com.project.project.exceptions.HotelNotFound;
 import com.project.project.model.Hotel_Model.Hotel;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sun.security.krb5.internal.crypto.Des;
 
 import java.util.Set;
 
@@ -59,9 +61,13 @@ public class HotelController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity get(){
-
-        Set<HotelDTO> hotels = hotelService.findAll();
-        return new ResponseEntity<Set<HotelDTO>>(hotels, HttpStatus.OK);
+        try{
+            Set<HotelDTO> hotels = hotelService.findAll();
+            return new ResponseEntity<Set<HotelDTO>>(hotels, HttpStatus.OK);
+        }catch (DestinationNotFound|HotelNotFound hnf){
+            hnf.printStackTrace();
+            return new ResponseEntity<String>(hnf.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping(
@@ -177,7 +183,7 @@ public class HotelController {
         try {
             HotelDestination destination = hotelService.getDestination(id);
             return new ResponseEntity<HotelDestination>(destination, HttpStatus.OK);
-        } catch (HotelNotFound hnf) {
+        } catch (DestinationNotFound|HotelNotFound hnf) {
             hnf.printStackTrace();
             return new ResponseEntity<String>(hnf.getMessage(), HttpStatus.BAD_REQUEST);
         }

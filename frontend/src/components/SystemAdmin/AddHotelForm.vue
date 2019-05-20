@@ -15,7 +15,7 @@
             </v-text-field> 
 
             <v-layout > <!--v-bind="binding"-->
-              <v-flex>
+              <!-- <v-flex>
                 <v-text-field label="country" v-model="country"
                 :rules="[v => !!v || 'country name is required']">
                 </v-text-field> 
@@ -24,13 +24,18 @@
                 <v-text-field label="city" v-model="city" 
                 :rules="[v => !!v || 'city name is required']">
                 </v-text-field> 
+              </v-flex> -->
+              <v-flex>
+                <v-select :items="hotelDestinations" v-model="hotel.destination" 
+                label="choose hotel location" :rules="destination_rules" 
+                required></v-select>
               </v-flex>
             </v-layout>
 
             <v-text-field label="street address" v-model="street"
             :rules="[v => !!v || 'street address is required']">
             </v-text-field> 
-
+            
             <v-textarea name="promotionalDescription" label="promotional description" 
               v-model="hotel.description" 
               hint="Say something good about hotel services and prices..." box>
@@ -71,6 +76,8 @@ import Hotel from "@/models/Hotel";
 
 
 import SystemAdminController from "@/controllers/system-admin.controller"
+import HotelDestinationsController from "@/controllers/hotelsDestinations.controller.js";
+
 import { thisExpression } from '@babel/types';
 
 export default {
@@ -81,16 +88,36 @@ export default {
     country : "",
     city : "",
     street : "",
-
+    hotelDestinations: [],
+    destinations: [],
     hotel: new Hotel(),
+
+    destination_rules:[
+        v => !!v || 'You need to choose existing location from list'
+    ],
   }),
+  created() {
+    HotelDestinationsController.get()
+      .then((response) => {
+        response.data.forEach(element => {
+          this.hotelDestinations.push(element.name);
+          this.destinations.push(element);
+        });
+      });
+  },
   methods: {
     validate() {
       if(this.$refs.form.validate()) {
-        this.hotel.address = this.country + '/' + this.city + '/' + this.street;
+        // this.hotel.address = this.country + '/' + this.city + '/' + this.street;
+        this.hotel.address = this.street;
         this.hotel.priceList = [];
         this.hotel.floors = [];
         this.hotel.admins = [];
+        this.destinations.forEach(dest => {
+          if(dest.name == this.hotel.destination){
+            this.hotel.destination = dest;
+          }
+        })
 
         SystemAdminController.createHotel(this.hotel)
           .then((response) => {

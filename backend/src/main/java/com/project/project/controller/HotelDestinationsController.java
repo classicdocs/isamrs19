@@ -27,4 +27,5 @@ public class HotelDestinationsController {
         List<HotelDestination> destinations = hotelDestinationService.findAll();
         return new ResponseEntity<List<HotelDestination>>(destinations, HttpStatus.OK);
     }
+
 }

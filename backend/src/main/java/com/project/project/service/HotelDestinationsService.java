@@ -29,6 +29,7 @@ public class HotelDestinationsService {
         return destinations;
     }
 
+
     public HotelDestination findOne(String name) throws DestinationNotFound {
         return  destinationRepository.findOneByName(name).orElseThrow(() -> new DestinationNotFound(name, ""));
     }
