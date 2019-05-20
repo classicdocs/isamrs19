@@ -32,7 +32,7 @@ public class VehicleReservationService {
     @Autowired
     private VehicleTakenRepository vehicleTakenRepository;
 
-    public VehicleReservation reserve(VehicleReservationDTO vehicleReservationDTO) throws ParseException, UserNotFound {
+    public VehicleReservationDTO reserve(VehicleReservationDTO vehicleReservationDTO) throws ParseException, UserNotFound {
 
         VehicleReservation vr = new VehicleReservation();
 
@@ -81,7 +81,7 @@ public class VehicleReservationService {
 
         vehicleReservationRepository.save(vr);
 
-        return vr;
+        return new VehicleReservationDTO(vr);
     }
 
     public List<VehicleReservationDTO> getReservations(Long id) {
