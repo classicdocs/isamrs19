@@ -92,6 +92,9 @@ public class VehicleService {
                 if(returnDate.after(vt.getTakenFrom()) && returnDate.before(vt.getTakenUntil())) {
                     free = false;
                 }
+                if(pickupDate.equals(vt.getTakenFrom()) && returnDate.equals(vt.getTakenUntil())) {
+                    free = false;
+                }
             }
 
             if (v.getPricePerDay() > Integer.parseInt(vehicleSearchDTO.getMaxPrice())){

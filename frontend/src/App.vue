@@ -131,6 +131,9 @@ export default {
     getProfilPath() {
       return '/users/' + (this.activeUser ? this.activeUser.id : -1) +  '/profil';
     },
+    getReservationsPath() {
+      return '/my-reservations/' +  (this.activeUser ? this.activeUser.id : -1);
+    },
     getIdAdminOf() {
       let path = '';
       switch(this.activeUserRole) {

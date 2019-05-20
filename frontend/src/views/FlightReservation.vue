@@ -246,14 +246,14 @@ export default {
       this.snackbar.show = true;
     },
     goToFriendsInvitation() {
-      if (this.friends.length === 0 || this.flightReservation.searchParams.passengersNumber === 1) {
-            this.friends = false;
-            this.stepper = 3;
-            return;
-          } else {
-            this.friends = true;
-            this.stepper = 2
-          }
+      console.log(store.getters.friends);
+      if (store.getters.friends.length === 0 || this.flightReservation.searchParams.passengersNumber === 1) {
+        this.friends = false;
+        this.stepper = 3;
+      } else {
+        this.friends = true;
+        this.stepper = 2
+      }
     },
     goToStepTwoOrOne() {
       if (this.friends)
