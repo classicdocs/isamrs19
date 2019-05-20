@@ -12,6 +12,8 @@ import LoginController from './controllers/login.controller';
 import VueNumberInput from '@chenfengyuan/vue-number-input';
 Vue.use(VueNumberInput);
 
+Vue.use(require('vue-moment'));
+
 Vue.use(Vuetify);
 Vue.prototype.router = router;
 

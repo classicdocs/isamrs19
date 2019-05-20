@@ -7,6 +7,7 @@ export default class Vehicle {
       this.vehicleType = type,
       this.numberOfPassengers = passengers,
       this.yearOfProduction = year,
-      this.pricePerDay = price
+      this.pricePerDay = price,
+      this.id = null
     }
 }

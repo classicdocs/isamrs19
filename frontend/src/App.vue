@@ -60,7 +60,7 @@ export default {
       },
       'User': { 
         right: [
-        {name:'My Reservations', path:'/'},
+        {name:'My Reservations', path:() => this.getReservationsPath, computed: true},
         {name:'Friends', path:'/friends'},
         {name:'Profile', path:() => this.getProfilPath , computed: true},
         {name:'Log out', path:'/logout'},
@@ -130,6 +130,9 @@ export default {
     ]),
     getProfilPath() {
       return '/users/' + (this.activeUser ? this.activeUser.id : -1) +  '/profil';
+    },
+    getReservationsPath() {
+      return '/my-reservations/' +  (this.activeUser ? this.activeUser.id : -1);
     },
     getIdAdminOf() {
       let path = '';
