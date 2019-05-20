@@ -1,7 +1,7 @@
 -- destinacije
 insert into destination (id,airport,country,name,zip) values (1,'John F. Kennedy', 'USA', 'New York', 'JFK');
 insert into destination (id,airport,country,name,zip) values (2,'Nikola Tesla', 'Serbia', 'Belgrade', 'BGD');
-insert into destination (id,airport,country,name,zip) values (3,'Heathrow', 'Velika britanija', 'London', 'LHR');
+insert into destination (id,airport,country,name,zip) values (3,'Heathrow', 'Englend', 'London', 'LHR');
 
 
 -- aviokompanije
@@ -9,9 +9,9 @@ insert into airline_company (id,description, address, name) values (1, 'Cheap fl
 insert into airline_company (id,description, address, name) values (2, 'Air France is a french airline company', 'France/Paris', 'AirFrance');
 
 -- lista destinacija u aviokompaniji
-insert into airline_company_destinations(airline_company_id, destinations ) values (1, "New York");
-insert into airline_company_destinations(airline_company_id, destinations ) values (1, "Belgrade");
-insert into airline_company_destinations(airline_company_id, destinations ) values (1, "London");
+insert into airline_company_destinations(airline_company_id, destinations ) values (1, "New York JFK");
+insert into airline_company_destinations(airline_company_id, destinations ) values (1, "Belgrade BGD");
+insert into airline_company_destinations(airline_company_id, destinations ) values (1, "London LHR");
 
 --avion
 insert into airplane(id, model, seats_first_rows, seats_first_cols, seats_business_rows, seats_business_cols, seats_economy_rows, seats_economy_cols)
@@ -37,12 +37,12 @@ insert into airplane_flight(airplane_id,flight_id) values(1,2);
 
 
 --sedista
-insert into seat(id, col_num, row_num,taken) values (1, 1, 1, FALSE);
-insert into seat(id, col_num, row_num,taken) values (2, 1, 2, FALSE);
-insert into seat(id, col_num, row_num,taken) values (3, 1, 1, FALSE);
-insert into seat(id, col_num, row_num,taken) values (4, 1, 2, FALSE);
-insert into seat(id, col_num, row_num,taken) values (5, 1, 1, FALSE);
-insert into seat(id, col_num, row_num,taken) values (6, 1, 2, FALSE);
+insert into seat(id, col_num, row_num,taken, class) values (1, 1, 1, FALSE, "First");
+insert into seat(id, col_num, row_num,taken, class) values (2, 1, 2, FALSE, "First");
+insert into seat(id, col_num, row_num,taken, class) values (3, 1, 1, FALSE, "Business");
+insert into seat(id, col_num, row_num,taken, class) values (4, 1, 2, FALSE, "Business");
+insert into seat(id, col_num, row_num,taken, class) values (5, 1, 1, FALSE, "Economy");
+insert into seat(id, col_num, row_num,taken, class) values (6, 1, 2, FALSE, "Economy");
 
 insert into seat_row(id) values (1);
 insert into seat_row(id) values (2);
@@ -67,12 +67,12 @@ insert into flight_seats_business(flight_id, seats_business_id)  values (1,5);
 insert into flight_seats_business(flight_id, seats_business_id)  values (1,6);
 
 --sedista
-insert into seat(id, col_num, row_num, taken) values (7, 1, 1, FALSE);
-insert into seat(id, col_num, row_num, taken) values (8, 1, 2, FALSE);
-insert into seat(id, col_num, row_num, taken) values (9, 1, 1, FALSE);
-insert into seat(id, col_num, row_num, taken) values (10, 1, 2, FALSE);
-insert into seat(id, col_num, row_num, taken) values (11, 1, 1, FALSE);
-insert into seat(id, col_num, row_num, taken) values (12, 1, 2, FALSE);
+insert into seat(id, col_num, row_num, taken, class) values (7, 1, 1, FALSE, "First");
+insert into seat(id, col_num, row_num, taken, class) values (8, 1, 2, FALSE, "First");
+insert into seat(id, col_num, row_num, taken, class) values (9, 1, 1, FALSE, "Business");
+insert into seat(id, col_num, row_num, taken, class) values (10, 1, 2, FALSE, "Business");
+insert into seat(id, col_num, row_num, taken, class) values (11, 1, 1, FALSE, "Economy");
+insert into seat(id, col_num, row_num, taken, class) values (12, 1, 2, FALSE, "Economy");
 
 insert into seat_row(id) values (7);
 insert into seat_row(id) values (8);
@@ -199,3 +199,34 @@ insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values 
 --insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (5,10);
 --insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (6,11);
 --insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (6,12);
+
+--veza izmedju servisa i admina
+insert into hotel_admins(hotel_id, admins_id) values(1,5);
+
+insert into airline_company_admins(airline_company_id, admins_id) values (1,4);
+
+insert into rentacar_admins(rentacar_id,admins_id) values (1,3);
+
+insert into room_taken(id,end_date,start_date) values
+(1,'19/05/2020','15/05/2020');
+
+insert into room_taken(id,end_date,start_date) values
+(2,'29/05/2020','25/05/2020');
+
+insert into room_booked(room_id,room_taken_id) values(1,1);
+insert into room_booked(room_id,room_taken_id) values(1,2);
+
+
+insert into special_price(id,end_date,price,start_date) values
+(1,'29/05/2020',150,'12/05/2020');
+insert into special_price(id,end_date,price,start_date) values
+(2,'3/05/2020',50,'1/05/2020');
+insert into special_price(id,end_date,price,start_date) values
+(3,'10/10/2020',350,'02/10/2020');
+
+insert into room_special_prices(room_id,special_prices_id) values
+(1,1);
+insert into room_special_prices(room_id,special_prices_id) values
+(1,2);
+insert into room_special_prices(room_id,special_prices_id) values
+(1,3);

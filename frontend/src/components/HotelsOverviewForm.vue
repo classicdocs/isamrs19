@@ -18,10 +18,11 @@
           <v-text-field
             v-model="search"
             append-icon="search"
-            label="Search hotels"
+            label="Search hotels" 
             single-line
             hide-details
           ></v-text-field>
+
         </v-toolbar>
         
         <!-- Forma koja se moze rasiriti u kojoj se prikazuje lista hotela -->
@@ -35,8 +36,15 @@
             <td class="text-xs-center">{{ props.item.name }}</td>
             <td class="text-xs-center">{{ props.item.address }}</td>
             <td class="text-xs-center">{{ "NO DATA" }}</td>
+            <td class="text-xs-center">
+              <v-btn @click="goToPage(props.item.name)">
+              hotel page
+              <v-icon right>hotel</v-icon>
+              </v-btn></td>
+
           </tr>
           </template>
+
           <template v-slot:expand="props">
             <v-card flat>
               <v-card-text>Hotel Description: {{props.item.description}}</v-card-text>
@@ -56,6 +64,7 @@
         </v-data-table>
         <v-card-text>
         </v-card-text>
+
       </v-form>
     </v-card>
   </div>
@@ -89,6 +98,7 @@ export default {
       color: "",
       msg: "",
     },
+
   }),
   created() {
     HotelsController.getHotels()
@@ -97,6 +107,18 @@ export default {
           this.hotels.push(element);
         });
       });
+  },
+  methods: {
+    goToPage(hotelName){
+      var id = 0;
+      this.hotels.forEach(hotel =>{
+        if(hotel.name == hotelName){
+          id = hotel.id;
+        }
+      });
+
+      this.$router.push('/hotel-service/' + id); 
+    }
   },
 }
 </script>

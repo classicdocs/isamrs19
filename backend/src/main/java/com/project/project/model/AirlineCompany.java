@@ -34,6 +34,12 @@ public class AirlineCompany {
     @OneToMany(fetch = FetchType.EAGER)
     private Set<Airplane> airplanes;
 
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<FlightReservation> reservations = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<AirlineCompanyAdmin> admins;
+
     public AirlineCompany() {}
 
     public Long getId() {
@@ -91,4 +97,21 @@ public class AirlineCompany {
     public void setAirplanes(Set<Airplane> airplanes) {
         this.airplanes = airplanes;
     }
+
+    public Set<FlightReservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(Set<FlightReservation> reservations) {
+        this.reservations = reservations;
+    }
+
+    public Set<AirlineCompanyAdmin> getAdmins() {
+        return admins;
+    }
+
+    public void setAdmins(Set<AirlineCompanyAdmin> admins) {
+        this.admins = admins;
+    }
+
 }

@@ -60,7 +60,7 @@ export default {
       },
       'User': { 
         right: [
-        {name:'My Reservations', path:() => this.getReservationsPath, computed: true},
+        {name:'My Reservations', path:'/my-reservations'},
         {name:'Friends', path:'/friends'},
         {name:'Profile', path:() => this.getProfilPath , computed: true},
         {name:'Log out', path:'/logout'},
@@ -142,7 +142,7 @@ export default {
           break;
         }
         case 'Hotel Admin': {
-          path = '/hotel-service/' // TREBA DODATI
+          path = '/hotel-service/'
           break;
         }
         case 'RentACar Admin': {

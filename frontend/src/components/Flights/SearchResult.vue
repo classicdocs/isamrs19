@@ -51,13 +51,17 @@ export default {
   },
   methods: {
     goToReservationView() {
+      let user = store.getters.isUser;
+      if (!user) {
+        store.commit("setSnack", {msg: "To reserve you must first sign up"});
+        return;
+      }
+
       let f = new FlightReservation();
       f.flights = this.data;
       f.searchParams = this.searchParams;
       f.price = this.getPrice;
-      console.log(f);
       store.commit('flightReservation', f);
-      console.log(store.getters.flightReservation);
       this.$router.push({name: "flight-reservation"});
     },
     setPriceDeparture(price) {

@@ -6,6 +6,7 @@ import com.project.project.dto.Hotel_DTOs.HotelDTO;
 import com.project.project.dto.Hotel_DTOs.HotelFloorDTO;
 import com.project.project.dto.Hotel_DTOs.RoomDTO;
 import com.project.project.exceptions.*;
+import com.project.project.model.HotelAdmin;
 import com.project.project.model.Hotel_Model.Hotel;
 import com.project.project.model.Hotel_Model.HotelFloor;
 import com.project.project.model.Hotel_Model.HotelsOffer;
@@ -36,7 +37,15 @@ public class HotelService {
 
 
     public Hotel findOneById(Long id) throws HotelNotFound{
-        return hotelRepository.findOneById(id).orElseThrow(() -> new HotelNotFound(id));
+        Optional<Hotel> h = hotelRepository.findOneById(id);
+        if(h.isPresent()){
+            for (HotelAdmin admin: h.get().getAdmins()) {
+                admin.setHotel(null);
+            }
+            return h.get();
+        }else{
+            throw new HotelNotFound(id);
+        }
     }
 
     /*Metoda koja za dati id pronadje hotel i vrati set njegovih ponuda koje u stvari cine cenovnik*/
@@ -48,26 +57,6 @@ public class HotelService {
             throw new HotelNotFound(id);
         }
     }
-
-    /*Metoda koja za dati hotelID pronadje hotel i doda mu sobu na osnovu roomDTO, sacuva sobu pa hotel*/
-//    public RoomDTO addRoom(Long hotelID, RoomDTO roomDTO) throws HotelNotFound {
-//
-//        Optional<Hotel> hotel = hotelRepository.findOneById(hotelID);
-//
-//        if (hotel.isPresent()) {
-//            Room r = new Room();
-//            r.setNumberOfBeds(roomDTO.getNumberOfBeds());
-//            r.setRoomNumber(roomDTO.getRoomNumber());
-//
-//            r = roomRepository.save(r);
-//            hotel.get().getRoomConfiguration().add(r);
-//            hotelRepository.save(hotel.get());
-//
-//            return (new RoomDTO(r));
-//        } else {
-//            throw new HotelNotFound(hotelID);
-//        }
-//    }
 
     public HotelDTO save(HotelDTO hotelDTO) throws HotelAlreadyExists, HotelNotFound {
 
@@ -145,10 +134,114 @@ public class HotelService {
         }
     }
 
+    public RoomDTO updateRoom(Long hotelID, RoomDTO roomDTO, Long floorID) throws FloorNotFound, HotelNotFound{
 
+        Optional<HotelFloor> floor = floorRepository.findOneById(floorID);
+        Optional<Hotel> hotel = hotelRepository.findOneById(hotelID);
+
+        if(hotel.isPresent()){
+            if (floor.isPresent()) {
+                for (Room room: floor.get().getRoomsOnFloor()) {
+                    if(room.getRoomNumber() == roomDTO.getRoomNumber()){
+
+                        room.setSpecialPrices(roomDTO.getSpecialPrices());
+                        room.setRoomTaken(roomDTO.getRoomTaken());
+                        room.setNumberOfBeds(roomDTO.getNumberOfBeds());
+
+                        Hotel h = hotelRepository.save(hotel.get());
+                        return (new RoomDTO(room));
+                    }
+                }
+                return (new RoomDTO());
+            } else {
+                throw new FloorNotFound(floorID);
+            }
+        }else {
+            throw new HotelNotFound(hotelID);
+        }
+
+    }
+
+    public Set<HotelsOffer> updatePriceList(Long id, Set<HotelsOffer> offers) throws HotelNotFound{
+        Optional<Hotel> hotel = hotelRepository.findOneById(id);
+
+        Set<HotelsOffer> offersToReturn = new HashSet<>();
+        if(hotel.isPresent()){
+            for (HotelsOffer offer: offers) {
+                if(!hotel.get().getPriceList().contains(offer)){
+                    offersToReturn.add(this.addHotelsOffer(id, offer));
+                }
+            }
+
+            return offersToReturn;
+        }else{
+            throw new HotelNotFound(id);
+        }
+    }
+
+
+    public HotelsOffer addHotelsOffer(Long id, HotelsOffer offer) throws HotelNotFound{
+        Optional<Hotel> hotel = hotelRepository.findOneById(id);
+
+        if(hotel.isPresent()){
+            Set<HotelsOffer> priceList = hotel.get().getPriceList();
+            if(priceList.isEmpty()){
+                priceList.add(offer);
+                hotelRepository.save(hotel.get());
+                return offer;
+            }else{
+
+                for (HotelsOffer hOffer : priceList) {
+                    /*ako je bilo koja usluga i vec postoji onda treba da se izmeni*/
+                    if(hOffer.getType() == offer.getType()){
+                        if(offer.getType().getValue() == 5){
+                            hotel.get().getPriceList().add(offer);
+                            hotelRepository.save(hotel.get());
+                            return offer;
+                        }
+
+                        hOffer.setPrice(offer.getPrice());
+                        hOffer.setDescription(offer.getDescription());
+                        hotelRepository.save(hotel.get());
+                        return offer;
+                    }
+                }
+
+                hotel.get().getPriceList().add(offer);
+                hotelRepository.save(hotel.get());
+                return offer;
+            }
+        }else{
+            throw new HotelNotFound(id);
+        }
+    }
 
     public Set<HotelDTO> findAll() {
-        return hotelRepository.findAllHotels();
+        Set<HotelDTO> hotels = hotelRepository.findAllHotels();
+        for (HotelDTO hotelDTO: hotels) {
+            for (HotelAdmin admin: hotelDTO.getAdmins()) {
+                admin.setHotel(null);
+            }
+        }
+        return hotels;
+    }
+
+    public Set<Room> getRooms(Long id) throws HotelNotFound{
+        Optional<Hotel> hotel = hotelRepository.findOneById(id);
+        if (hotel.isPresent()) {
+            Set<Room> rooms = new HashSet<>();
+            for (HotelFloor floor: hotel.get().getFloors()) {
+                for (Room room: floor.getRoomsOnFloor()) {
+                    HotelFloor newFloor = floor;
+                    newFloor.setRoomsOnFloor(null);
+                    room.setHotelFloor(newFloor);
+                    rooms.add(room);
+                }
+            }
+            return rooms;
+        } else {
+            throw new HotelNotFound(id);
+        }
     }
 
 }

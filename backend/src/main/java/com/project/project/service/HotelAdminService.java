@@ -1,7 +1,6 @@
 package com.project.project.service;
 
 import com.project.project.dto.HotelAdminDTO;
-import com.project.project.exceptions.HotelAdminAlreadyExists;
 import com.project.project.exceptions.HotelAdminNotFound;
 import com.project.project.model.Hotel_Model.Hotel;
 import com.project.project.model.HotelAdmin;
@@ -29,24 +28,5 @@ public class HotelAdminService {
         return hotelAdminRepository.findAll();
     }
 
-    public HotelAdminDTO save(HotelAdminDTO admin) throws HotelAdminAlreadyExists {
-
-        Optional<HotelAdmin> hAdmin = hotelAdminRepository.findOneByUsername(admin.getUsername());
-
-        if(hAdmin.isPresent()){
-            throw new HotelAdminAlreadyExists(admin.getUsername());
-        }
-
-        HotelAdmin hotelAdmin = new HotelAdmin();
-        hotelAdmin.setUsername(admin.getUsername());
-        hotelAdmin.setPassword(admin.getPassword());
-
-        Hotel hotel = hotelRepository.save(admin.getHotel());
-        hotelAdmin.setHotel(hotel);
-
-        //hotelAdmin.setHotel(admin.getHotel());
-        hotelAdmin = hotelAdminRepository.save(hotelAdmin);
-        return (new HotelAdminDTO(hotelAdmin));
-    }
 
 }

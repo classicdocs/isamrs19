@@ -1,20 +1,13 @@
 package com.project.project.service;
 
-import com.project.project.dto.ChangePasswordDTO;
-import com.project.project.dto.FriendDTO;
-import com.project.project.dto.FriendRequestsDTO;
-import com.project.project.dto.UserRegistrationDTO;
+import com.project.project.dto.*;
 import com.project.project.exceptions.*;
 import com.project.project.model.*;
-import com.project.project.repository.RoleRepository;
-import com.project.project.repository.UserRepository;
+import com.project.project.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -24,6 +17,15 @@ public class UserService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private SeatRepository seatRepository;
+
+    @Autowired
+    private FlightInvitationRepository flightInvitationRepository;
+
+    @Autowired
+    private PassengerRepository passengerRepository;
 
     public User findOne(String username) throws UsernameNotFound {
 
@@ -170,5 +172,119 @@ public class UserService {
         } else {
             throw  new UserNotFound(id);
         }
+    }
+
+    public Set<FlightReservationResultDTO> getFlightReservations(Long id) throws UserNotFound {
+        Optional<User> user = userRepository.findOneById(id);
+        if (user.isPresent()) {
+            RegisteredUser ru = (RegisteredUser) user.get();
+            Set<FlightReservationResultDTO> result = new HashSet<>();
+            for(FlightReservation flightReservation : ru.getFlightReservations()) {
+                Set<PassengerDTO> passengerDTOS = new HashSet<>();
+                for (Passenger passenger : flightReservation.getPassengers()) {
+                    List<Seat> s  = seatRepository.findSeatsByPassengerId(passenger.getId());
+                    if (flightReservation.getReturnFlight() != null) {
+                        passengerDTOS.add(new PassengerDTO(passenger, s.get(0).getRowNum(), s.get(0).getColNum(),
+                                s.get(1).getRowNum(), s.get(1).getColNum(),s.get(0).getSeatClass()));
+                    } else {
+                        passengerDTOS.add(new PassengerDTO(passenger, s.get(0).getRowNum(), s.get(0).getColNum(),s.get(0).getSeatClass()));
+                    }
+
+                }
+                FlightReservationResultDTO flightReservationResultDTO = new FlightReservationResultDTO(flightReservation, passengerDTOS);
+                result.add(flightReservationResultDTO);
+            }
+            return result;
+        } else {
+            throw new UserNotFound(id);
+        }
+    }
+
+    public Set<FlightInvitationDTO> getFlightInvitation(Long id) throws UserNotFound {
+
+        Optional<User> user = userRepository.findOneById(id);
+        if (user.isPresent()) {
+            RegisteredUser ru = (RegisteredUser) user.get();
+            Set<FlightInvitationDTO> flightInvitationDTOS = new HashSet<>();
+            for (FlightInvitation flightInvitation : ru.getFlightInvitations()) {
+                Optional<User> from = userRepository.findOneById(flightInvitation.getInvitationFrom());
+                if (from.isPresent()) {
+                    flightInvitationDTOS.add(new FlightInvitationDTO(flightInvitation, new UserRegistrationDTO(from.get())));
+                } else {
+                    throw new UserNotFound(flightInvitation.getInvitationFrom());
+                }
+
+            }
+            return flightInvitationDTOS;
+        } else {
+            throw  new UserNotFound(id);
+        }
+    }
+
+    public void acceptInvitation(Long user_id, Long invitationId) throws  UserNotFound {
+
+        Optional<User> user = userRepository.findOneById(user_id);
+        if (user.isPresent()) {
+            RegisteredUser ru = (RegisteredUser) user.get();
+
+            for (FlightInvitation flightInvitation : ru.getFlightInvitations()) {
+                if (flightInvitation.getId() == invitationId) {
+                    flightInvitation.setAccepted(true);
+                    for (Passenger passenger : flightInvitation.getFlightReservation().getPassengers()) {
+                        if (passenger.getPassengerId() == user_id)
+                            passenger.setAccepted(true);
+                    }
+                    flightInvitationRepository.save(flightInvitation);
+                }
+            }
+        } else {
+            throw new UserNotFound(user_id);
+        }
+    }
+
+    public void declineInvitation(Long userId, Long invitationId) throws FlightInvitationNotFound, UserNotFound, PassenerNotFound {
+
+        Optional<User> user = userRepository.findOneById(userId);
+        if (user.isPresent()) {
+            RegisteredUser ru = (RegisteredUser) user.get();
+
+
+            FlightInvitation flightInvitationToRemove = null;
+            for (FlightInvitation flightInvitation : ru.getFlightInvitations()) {
+                if (flightInvitation.getId() == invitationId) {
+                    flightInvitationToRemove = flightInvitation;
+                    break;
+                }
+            }
+            if (flightInvitationToRemove != null) {
+                Passenger passengerToRemove = null;
+                for (Passenger passenger : flightInvitationToRemove.getFlightReservation().getPassengers()) {
+                    if (passenger.getPassengerId() == userId) {
+                        passengerToRemove = passenger;
+                        break;
+                    }
+                }
+                if (passengerToRemove != null) {
+                    flightInvitationToRemove.getFlightReservation().getPassengers().remove(passengerToRemove);
+
+                    List<Seat> seats = seatRepository.findSeatsByPassengerId(passengerToRemove.getId());
+                    for(Seat s : seats) {
+                        s.setPassenger(null);
+                        s.setTaken(false);
+                    }
+                    seatRepository.saveAll(seats);
+                    flightInvitationRepository.save(flightInvitationToRemove);
+                    passengerRepository.deleteById(passengerToRemove.getId());
+                } else throw new PassenerNotFound(userId);
+
+                ru.getFlightInvitations().remove(flightInvitationToRemove);
+                userRepository.save(ru);
+
+                flightInvitationRepository.deleteById(invitationId);
+            } else throw new FlightInvitationNotFound(invitationId);
+        } else {
+            throw new UserNotFound(userId);
+        }
+
     }
 }

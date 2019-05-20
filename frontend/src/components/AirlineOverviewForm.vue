@@ -11,8 +11,16 @@
           <v-btn color="primary" dark @click="expand = !expand">
             {{ expand ? 'Close' : 'Keep' }} other rows
           </v-btn>
+
+          <v-text-field
+            v-model="search"
+            append-icon="search"
+            label="Search airlines" 
+            single-line
+            hide-details
+          ></v-text-field>
         </v-toolbar>
-        <v-data-table :headers="headers" :items="airlineCompanies"
+        <v-data-table :headers="headers" :items="airlineCompanies" 
           class="elevation-1" :expand="expand" item-key="name"
         >
           <template v-slot:items="props">
@@ -27,6 +35,11 @@
             <v-card flat>
               <v-card-text>Airline company description: {{props.item.description}}</v-card-text>
             </v-card>
+          </template>
+          <template v-slot:no-results>
+            <v-alert :value="true" color="error" icon="warning">
+              Your search for "{{ search }}" found no results.
+            </v-alert>
           </template>
           <template v-slot:no-data>
             <v-alert :value="true" color="error" icon="warning">
@@ -51,12 +64,13 @@ export default {
     
   },
   data:() => ({
+    search: '',
     expand: false,
     headers: [
           {
             text: 'Airline company name',
             align: 'center',
-            value: 'airlineName'
+            value: 'name'
           },
           { text: 'Address', value: 'address' , align: 'center'},
           // { text: 'Description', value: 'description' , align: 'center', sortable: false},

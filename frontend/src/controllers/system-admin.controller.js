@@ -9,5 +9,14 @@ export default {
   },
   createAirline(data) {
     return systemAdminService.createAirline(data);
+  },
+  createHotelAdmin(data){
+    return systemAdminService.createHotelAdmin(data);
+  },
+  createAirlineAdmin(data){
+    return systemAdminService.createAirlineAdmin(data);
+  },
+  createRentACarAdmin(data){
+    return systemAdminService.createRentACarAdmin(data);
   }
 };

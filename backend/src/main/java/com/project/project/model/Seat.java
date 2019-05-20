@@ -18,14 +18,21 @@ public class Seat {
     @Column(name = "taken", nullable = false)
     private boolean taken;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Passenger passenger;
+
+    @Column(name = "class", nullable = false)
+    private String seatClass;
+
     public Seat() {
         this.taken = false;
     }
 
-    public Seat(Integer rowNum, Integer colNum, boolean taken) {
+    public Seat(Integer rowNum, Integer colNum, boolean taken, String seatClass) {
         this.rowNum = rowNum;
         this.colNum = colNum;
         this.taken = taken;
+        this.seatClass = seatClass;
     }
 
     public Long getId() {
@@ -59,5 +66,21 @@ public class Seat {
 
     public void setTaken(boolean taken) {
         this.taken = taken;
+    }
+
+    public Passenger getPassenger() {
+        return passenger;
+    }
+
+    public void setPassenger(Passenger passenger) {
+        this.passenger = passenger;
+    }
+
+    public String getSeatClass() {
+        return seatClass;
+    }
+
+    public void setSeatClass(String seatClass) {
+        this.seatClass = seatClass;
     }
 }

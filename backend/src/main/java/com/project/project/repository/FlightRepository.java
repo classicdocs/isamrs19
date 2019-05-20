@@ -11,7 +11,7 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
 
     List<Flight> findAll();
 
-    @Query(value = "select * from flight f where f.start_destination_id = ?1 and f.final_destination_id = ?2 and f.departure_date = ?3", nativeQuery = true)
-    Set<Flight> search(Long startDestination, Long finalDestination, String departureDate);
+    @Query(value = "select * from flight f where f.start_destination_id in ?1 and f.final_destination_id in ?2 and f.departure_date = ?3", nativeQuery = true)
+    Set<Flight> search(Set<Long> startDestination, Set<Long> finalDestination, String departureDate);
 
 }

@@ -6,5 +6,8 @@ export default {
   },
   search(data) {
     return FlightsApiService.search(data);
+  },
+  reserve(data) {
+    return FlightsApiService.reserve(data);
   }
 };
