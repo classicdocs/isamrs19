@@ -28,7 +28,6 @@
         </tr>
       </template>
       </v-data-table>
-      {{selected}}
       </v-card-text>
     </v-card>
   </div>
