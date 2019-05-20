@@ -37,7 +37,7 @@ public class VehicleReservationDTO {
 
     private String rentACarId;
 
-    private RentACarDTO rentACar;
+    private RentACarDTO1 rentACar;
 
     public VehicleReservationDTO() {
     }
@@ -53,7 +53,7 @@ public class VehicleReservationDTO {
 
         this.returnLocation = vr.getReturnLocation();
 
-        this.rentACar = new RentACarDTO(vr.getRentACar());
+        this.rentACar = new RentACarDTO1(vr.getRentACar());
 
         this.user = vr.getUser().getUsername();
 
@@ -140,11 +140,11 @@ public class VehicleReservationDTO {
         this.carId = carId;
     }
 
-    public RentACarDTO getRentACar() {
+    public RentACarDTO1 getRentACar() {
         return rentACar;
     }
 
-    public void setRentACar(RentACarDTO rentACar) {
+    public void setRentACar(RentACarDTO1 rentACar) {
         this.rentACar = rentACar;
     }
 

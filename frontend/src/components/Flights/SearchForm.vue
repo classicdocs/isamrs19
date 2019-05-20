@@ -166,12 +166,12 @@ export default {
     },
   }),
   created() {
-    this.search.startDestination = "London",
-    this.search.finalDestination = "Belgrade",
-    this.search.departureDate = "2019-05-22",
-    this.search.returnDate = "2019-05-25",
-    this.search.seatClass = "First",
-    this.search.passengersNumber = 4
+    // this.search.startDestination = "London",
+    // this.search.finalDestination = "Belgrade",
+    // this.search.departureDate = "2019-05-22",
+    // this.search.returnDate = "2019-05-25",
+    // this.search.seatClass = "First",
+    // this.search.passengersNumber = 4
 
     DestinationController.get()
       .then((response) => {
