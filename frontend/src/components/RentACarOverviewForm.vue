@@ -11,8 +11,16 @@
           <v-btn color="primary" dark @click="expand = !expand">
             {{ expand ? 'Close' : 'Keep' }} other rows
           </v-btn>
+           <v-spacer></v-spacer>
+          <v-text-field
+            v-model="search"
+            append-icon="search"
+            label="Search rent a car companies" 
+            single-line
+            hide-details
+          ></v-text-field>
         </v-toolbar>
-        <v-data-table :headers="headers" :items="rentACars"
+        <v-data-table :headers="headers" :items="rentACars" :search="search"
           class="elevation-1" :expand="expand" item-key="name"
         >
           <template v-slot:items="props">
@@ -53,12 +61,13 @@ export default {
     
   },
   data:() => ({
+    search: '',
     expand: false,
     headers: [
           {
-            text: 'Airline company name',
+            text: 'Rent a car company name',
             align: 'center',
-            value: 'airlineName'
+            value: 'name'
           },
           { text: 'Address', value: 'address' , align: 'center'},
           // { text: 'Description', value: 'description' , align: 'center', sortable: false},
