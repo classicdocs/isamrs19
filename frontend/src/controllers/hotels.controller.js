@@ -21,6 +21,9 @@ export default {
     },
     updatePricelist(hotelID, data){
       return HotelsService.updatePricelist(hotelID, data);
+    },
+    search(data){
+      return HotelsService.search(data);
     }
 }
 

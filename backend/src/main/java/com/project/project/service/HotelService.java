@@ -1,11 +1,11 @@
 package com.project.project.service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
-import com.project.project.dto.Hotel_DTOs.HotelDTO;
-import com.project.project.dto.Hotel_DTOs.HotelDestinationDTO;
-import com.project.project.dto.Hotel_DTOs.HotelFloorDTO;
-import com.project.project.dto.Hotel_DTOs.RoomDTO;
+import com.project.project.dto.Hotel_DTOs.*;
 import com.project.project.exceptions.*;
 import com.project.project.model.HotelAdmin;
 import com.project.project.model.Hotel_Model.*;
@@ -267,4 +267,89 @@ public class HotelService {
         }
     }
 
+
+    public Set<SearchHotelDTO> search(
+            String destination,
+            String checkInDate,
+            String checkOutDate,
+            int numOfPeople
+    ) throws ParseException, HotelHasNoDestination {
+        Set<HotelDTO> hotels = hotelRepository.findAllHotels();
+        Set<SearchHotelDTO> searchResult = new HashSet<>();
+
+        for (HotelDTO hotel: hotels) {
+            // destination check
+            List<HotelDestination> destinations = hotelDestinationsRepository.findAll();
+            HotelDestination hotelDestination = getDestinationByHotel(destinations, hotel);
+            if (hotelDestination.getName().equals(destination)){
+                // date check
+                if(checkDate(hotel, checkInDate, checkOutDate, numOfPeople)){
+                    searchResult.add(new SearchHotelDTO(hotel));
+                }
+            }
+        }
+        return searchResult;
+    }
+
+    private HotelDestination getDestinationByHotel(List<HotelDestination> destinations, HotelDTO hotelDTO) throws HotelHasNoDestination {
+        for (HotelDestination destination: destinations) {
+            for(Hotel hotel : destination.getHotels()){
+                if(hotel.getName().equals(hotelDTO.getName())){
+                    return destination;
+                }
+            }
+        }
+        throw new HotelHasNoDestination(hotelDTO.getName());
+    }
+
+    private boolean checkDate(HotelDTO hotel, String checkIn, String CheckOut, int numOfPeople) throws ParseException {
+        int foundPlaces = 0;
+        // kroz svaki sprat
+        for (HotelFloor floor: hotel.getFloors()) {
+            // kroz svaku sobu
+            for(Room room: floor.getRoomsOnFloor()){
+                // ukoliko nema rezervacija
+                if(room.getRoomTaken().isEmpty()){
+                    foundPlaces += room.getNumberOfBeds();
+                    // ukoliko sam nasao dovoljno kreveta
+                    if(foundPlaces >= numOfPeople){
+                        return true;
+                    }
+                // ukoliko ima rezervacija
+                }else{
+                    //2019-05-22
+                    DateFormat format = new SimpleDateFormat("YYYY-mm-dd", Locale.ENGLISH);
+                    DateFormat format2 = new SimpleDateFormat("YYYY/mm/dd", Locale.ENGLISH);
+
+                    Date checkInDate = format.parse(checkIn);
+                    Date checkOutDate = format.parse(CheckOut);
+                    boolean timeIsPossible = true;
+
+                    // kroz svaku rezervaciju
+                    for (RoomTaken roomTaken: room.getRoomTaken()) {
+                        Date startRoomTaken = format2.parse(roomTaken.getStartDate());
+                        Date endRoomTaken = format2.parse(roomTaken.getEndDate());
+
+                        // ukoliko se neka preklapa sa datumom prijave i odjave
+                        if(overlap(checkInDate,checkOutDate,startRoomTaken,endRoomTaken)){
+                            timeIsPossible = false;
+                            break;
+                        }
+                    }
+                    // ukoliko se nijedna rezervacija ove sobe ne preklapa sa datumom prijave i odjave
+                    if(timeIsPossible){
+                        foundPlaces += room.getNumberOfBeds();
+                        if(foundPlaces >= numOfPeople){
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean overlap(Date start1, Date end1, Date start2, Date end2){
+        return start1.getTime() <= end2.getTime() && start2.getTime() <= end1.getTime();
+    }
 }

@@ -139,7 +139,6 @@ import Room from "@/models/Room";
 
 export default {
     name: "ReservationForm",
-    // props: ['hotel'],
     components: {
       'reserve-room' : ReserveRoom
     },
@@ -206,10 +205,10 @@ export default {
       },
       continueTo(number){
         if(number == 2){
-          if(this.checkInDate != null && this.numOfovernights != 0){
-            this.checkDates();
+          // if(this.checkInDate != null && this.numOfovernights != 0){
+          //   this.checkDates();
             this.step = 2;
-          }
+          // }
         }else if(number == 3){
             //TODO
         }
@@ -240,7 +239,6 @@ export default {
                     idx = 1;
                   }
                 })
-                // var idx = floor.roomsOnFloor.indexOf(room);
                 if(idx == 1){
                   idx = floor.roomsOnFloor.indexOf(room);
                   floor.roomsOnFloor.splice(idx,1);

@@ -3,8 +3,10 @@ package com.project.project.controller;
 import com.project.project.dto.Hotel_DTOs.HotelDTO;
 import com.project.project.dto.Hotel_DTOs.HotelFloorDTO;
 import com.project.project.dto.Hotel_DTOs.RoomDTO;
+import com.project.project.dto.Hotel_DTOs.SearchHotelDTO;
 import com.project.project.exceptions.DestinationNotFound;
 import com.project.project.exceptions.FloorNotFound;
+import com.project.project.exceptions.HotelHasNoDestination;
 import com.project.project.exceptions.HotelNotFound;
 import com.project.project.model.Hotel_Model.Hotel;
 import com.project.project.model.Hotel_Model.HotelDestination;
@@ -18,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sun.security.krb5.internal.crypto.Des;
 
+import java.text.ParseException;
 import java.util.Set;
 
 @RestController
@@ -40,6 +43,28 @@ public class HotelController {
             return new ResponseEntity<String>(hnf.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping(
+            value = "/search",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity get(
+            @RequestParam("destination") String destination,
+            @RequestParam("checkInDate") String checkInDate,
+            @RequestParam("checkOutDate") String checkOutDate,
+            @RequestParam("numOfPeople") int numOfPeople
+    ) {
+        Set<SearchHotelDTO> foundHotels = null;
+        try {
+            foundHotels = hotelService.search(destination, checkInDate, checkOutDate,numOfPeople);
+            return new ResponseEntity<Set<SearchHotelDTO>>(foundHotels, HttpStatus.OK);
+        } catch (HotelHasNoDestination| ParseException notFound) {
+            notFound.printStackTrace();
+            return new ResponseEntity<String>(notFound.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
     @PostMapping(
             value = "/{id}/rooms",
             consumes = MediaType.APPLICATION_JSON_VALUE,

@@ -149,11 +149,11 @@ insert into hotel_floor(id,level,max_rooms) values (2,2,15);
 insert into hotel_floor(id,level,max_rooms) values (3,3,15);
 insert into hotel_floor(id,level,max_rooms) values (4,4,15);
 --
---insert into hotel_floor(id,level,max_rooms) values (5,1,15);
---insert into hotel_floor(id,level,max_rooms) values (6,2,15);
---
---insert into hotel_floor(id,level,max_rooms) values (7,1,30);
---insert into hotel_floor(id,level,max_rooms) values (8,2,30);
+insert into hotel_floor(id,level,max_rooms) values (5,1,15);
+insert into hotel_floor(id,level,max_rooms) values (6,2,15);
+
+insert into hotel_floor(id,level,max_rooms) values (7,1,30);
+insert into hotel_floor(id,level,max_rooms) values (8,2,30);
 
 -- hoteli_spratovi
 insert into hotel_floors(hotel_id,floors_id) values (1,1);
@@ -161,11 +161,11 @@ insert into hotel_floors(hotel_id,floors_id) values (1,2);
 insert into hotel_floors(hotel_id,floors_id) values (1,3);
 insert into hotel_floors(hotel_id,floors_id) values (1,4);
 
---insert into hotel_floors(hotel_id,floors_id) values (2,5);
---insert into hotel_floors(hotel_id,floors_id) values (2,6);
---
---insert into hotel_floors(hotel_id,floors_id) values (3,7);
---insert into hotel_floors(hotel_id,floors_id) values (3,8);
+insert into hotel_floors(hotel_id,floors_id) values (2,5);
+insert into hotel_floors(hotel_id,floors_id) values (2,6);
+
+insert into hotel_floors(hotel_id,floors_id) values (3,7);
+insert into hotel_floors(hotel_id,floors_id) values (3,8);
 
 -- sobe
 -- PRVI SPRAT
@@ -179,10 +179,10 @@ insert into room(id,number_of_beds,room_number) values (6, 4, 2);
 insert into room(id,number_of_beds,room_number) values (7, 3, 5);
 insert into room(id,number_of_beds,room_number) values (8, 4, 10);
 
---insert into room(id,number_of_beds,room_number,hotel_floor_id) values (9, 1, 1, 5);
---insert into room(id,number_of_beds,room_number,hotel_floor_id) values (10, 4, 2, 5);
---insert into room(id,number_of_beds,room_number,hotel_floor_id) values (11, 1, 3, 6);
---insert into room(id,number_of_beds,room_number,hotel_floor_id) values (12, 4, 9, 6);
+insert into room(id,number_of_beds,room_number) values (9, 1, 1);
+insert into room(id,number_of_beds,room_number) values (10, 4, 2);
+insert into room(id,number_of_beds,room_number) values (11, 1, 3);
+insert into room(id,number_of_beds,room_number) values (12, 4, 9);
 
 --spratovi sobe
 insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (1,1);
@@ -195,10 +195,10 @@ insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values 
 insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (2,7);
 insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (2,8);
 
---insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (5,9);
---insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (5,10);
---insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (6,11);
---insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (6,12);
+insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (5,9);
+insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (5,10);
+insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (6,11);
+insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (6,12);
 
 --veza izmedju servisa i admina
 insert into hotel_admins(hotel_id, admins_id) values(1,5);

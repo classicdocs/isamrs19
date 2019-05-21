@@ -58,7 +58,6 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken" flat @click="addFormDialog = false">Close</v-btn> 
-          <!-- <v-btn @click="resetValidation">Reset Validation</v-btn> -->
           <v-btn @click="reset">Reset Form</v-btn>
           <v-btn :disabled="!selected" color="success" @click="validate">Add</v-btn>
         </v-card-actions>
@@ -124,18 +123,13 @@ export default {
             floorLVL = floor.level;
           }
         });
-        console.log("Dod")
         HotelController.addRoom(this.$route.params.id, room)
           .then((response) => {
-            console.log("Dodana soba je sada u hotelu i izgleda ovako: ");
-            console.log(response.data);
             this.hotel.floors.forEach(floor => {
               if(floor.level == floorLVL){
                 floor.roomsOnFloor.push(response.data);
               }
             });
-            console.log("a hotel ");
-            console.log(this.hotel);
             this.setPositions();
             this.reset();
 
@@ -145,7 +139,6 @@ export default {
             this.addFormDialog = false;
           })
           .catch((response) => {
-            console.log(response);
             this.$emit("finished", {msg: "Error! Something went wrong...", color: "error"})
           })
 

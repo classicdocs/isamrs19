@@ -141,7 +141,6 @@ export default {
               this.roomInfo = true;
           }
       })
-      //this.$router.push('/hotel-service/' + this.$route.params.id + '/roomConfiguration/' + roomID); 
     },
     
   }

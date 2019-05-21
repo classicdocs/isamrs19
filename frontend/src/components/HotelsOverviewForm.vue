@@ -105,7 +105,6 @@ export default {
       .then((response) => {
         response.data.forEach(element => {
           this.hotels.push(element);
-          console.log(element);
         });
       });
   },

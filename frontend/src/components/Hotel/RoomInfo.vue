@@ -80,11 +80,6 @@ export default {
   data: () => ({
     form: true,
     datesWhenTaken: [],
-    // headersSpecialPrices: [
-    //       { text: 'Start date', value: 'startDate' },
-    //       { text: 'End date', value: 'endDate' },
-    //       { text: 'Price', value: 'price' },
-    //     ],
   }),
   methods: {
     getDates(roomTaken){

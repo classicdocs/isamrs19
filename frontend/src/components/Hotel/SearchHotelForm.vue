@@ -10,7 +10,7 @@
             <v-layout row wrap>
               <v-flex lg2>
                 <v-autocomplete
-                v-model="hotelDestination"
+                v-model="search.destination"
                 :items="destinations"
                 label="Hotel Destination"
                 persistent-hint
@@ -23,7 +23,7 @@
                     v-model="menuCheckInDate"
                     :close-on-content-click="false"
                     :nudge-right="40"
-                    :return-value.sync="checkInDate"
+                    :return-value.sync="search.checkInDate"
                     lazy
                     transition="scale-transition"
                     offset-y
@@ -32,7 +32,7 @@
                 >
                 <template v-slot:activator="{ on }">
                     <v-text-field
-                    v-model="checkInDate"
+                    v-model="search.checkInDate"
                     label="Check-in date"
                     prepend-icon="event"
                     readonly
@@ -41,10 +41,10 @@
                     v-on="on"
                     ></v-text-field>
                 </template>
-                <v-date-picker v-model="checkInDate" no-title scrollable >
+                <v-date-picker v-model="search.checkInDate" no-title scrollable >
                     <v-btn flat color="primary" @click="menuCheckInDate = false" >Cancel</v-btn>
                     <v-spacer></v-spacer>
-                    <v-btn flat color="primary" @click="$refs.menuCheckInDate.save(checkInDate)">OK</v-btn>
+                    <v-btn flat color="primary" @click="$refs.menuCheckInDate.save(search.checkInDate)">OK</v-btn>
                 </v-date-picker>
                 </v-menu> 
               </v-flex>
@@ -54,7 +54,7 @@
                     v-model="menuCheckOutDate"
                     :close-on-content-click="false"
                     :nudge-right="40"
-                    :return-value.sync="checkOutDate"
+                    :return-value.sync="search.checkOutDate"
                     lazy
                     transition="scale-transition"
                     offset-y
@@ -63,7 +63,7 @@
                 >
                 <template v-slot:activator="{ on }">
                     <v-text-field
-                    v-model="checkOutDate"
+                    v-model="search.checkOutDate"
                     label="Check-out date"
                     prepend-icon="event"
                     readonly
@@ -72,10 +72,10 @@
                     v-on="on"
                     ></v-text-field>
                 </template>
-                <v-date-picker v-model="checkOutDate" no-title scrollable >
+                <v-date-picker v-model="search.checkOutDate" no-title scrollable >
                     <v-btn flat color="primary" @click="menuCheckOutDate = false" >Cancel</v-btn>
                     <v-spacer></v-spacer>
-                    <v-btn flat color="primary" @click="$refs.menuCheckOutDate.save(checkOutDate)">OK</v-btn>
+                    <v-btn flat color="primary" @click="$refs.menuCheckOutDate.save(search.checkOutDate)">OK</v-btn>
                 </v-date-picker>
                 </v-menu> 
               </v-flex>
@@ -83,7 +83,7 @@
                 <v-select
                 :items="people"
                 label="Number of people"
-                v-model="numOfPeople"
+                v-model="search.numOfPeople"
                 prepend-icon="people"
                 required
                 :rules="[v => !!v || 'Number of people is required']"
@@ -118,6 +118,8 @@
 
 <script>
 import HotelDestinationsController from "@/controllers/hotelsDestinations.controller.js";
+import HotelController from "@/controllers/hotels.controller.js";
+import SearchHotel from "@/models/SearchHotel.js";
 
 export default {
   name: "SearchHotelForm",
@@ -137,6 +139,7 @@ export default {
     people: [1,2,3,4,5,6],
     numOfPeople: 0,
 
+    search: new SearchHotel(),
     snackbar: {
       show: false,
       color: "",
@@ -153,7 +156,14 @@ export default {
   },
   methods: {
     searchHotels(){
-
+      console.log(this.search);
+      HotelController.search(this.search)
+      .then(response => {
+          this.$emit("search-result", response.data);
+      })
+      .catch((response) => {
+        this.$emit("error", {msg: "Error! Something went wrong...", color: "error"})
+      })
     },
     
     validate() {

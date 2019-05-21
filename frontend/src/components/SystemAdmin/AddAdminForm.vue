@@ -87,7 +87,6 @@ import RentACar from "@/models/RentACar";
 import store from "@/store";
 export default {
     name: "AddAdminForm",
-    // props: ['hotels', 'airlines', 'rentACars'],
     data: () => ({
         formValid:true,
         passwordConfirmation:null,
@@ -183,7 +182,6 @@ export default {
             return (this.registration.password === this.passwordConfirmation) ? '' : 'Please enter a matching password'
         },
         validateUser() {
-            console.log("validate user");
             if(this.$refs.form.validate()){
                 this.onSubmit();
             }

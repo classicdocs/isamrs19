@@ -86,7 +86,6 @@ import store from "@/store";
 
 export default {
   name: "ChangeRoomDialog",
-  // props: ['hotel'],
   data: () => ({
     form: true,
     selected: false,
@@ -104,33 +103,19 @@ export default {
         this.hotel = store.getters.newHotel;
         if(store.getters.newHotel != null){
           this.hotel.floors.sort(function(a, b){return a.level - b.level});
+
           this.hotel.floors.forEach(floor => {
+
             floor.roomsOnFloor.sort(function(r1, r2){return r1.roomNumber - r2.roomNumber});
             floor.roomsOnFloor.forEach(singleRoom => {
               singleRoom.hotelFloor = null;
-              console.log(singleRoom.id);
             })
           });
         }
-        console.log("this.hotel");
-        console.log(this.hotel);
 
         return this.hotel;
       },
   },
-  // watch: {
-  //   hotel: function () {
-  //     this.hotel.floors.forEach(floor => {
-  //       floor.roomsOnFloor.forEach(room => {
-  //         room.hotelFloor = null;   // moram da ispraznim zbog json beskonacnog kruga
-  //       });
-  //     });
-  //     this.hotel.floors.forEach(floor => {
-  //           floor.roomsOnFloor.sort(function(r1, r2){return r1.roomNumber - r2.roomNumber});
-  //       });
-  //     return this.hotel;
-  //   }
-  // },
   created() {
     this.setDefault();
   },
@@ -166,12 +151,6 @@ export default {
         this.pickedRoom.HotelFloor = new HotelFloor();
         this.pickedRoom.HotelFloor.level = 0;
         this.pickedRoom.numberOfBeds = 0;
-        // if(this.myHotel != null){
-        // this.myHotel.floors.sort(function(a, b){return a.level - b.level});
-        // this.myHotel.floors.forEach(floor => {
-        //     floor.roomsOnFloor.sort(function(r1, r2){return r1.roomNumber - r2.roomNumber});
-        // });
-        // }
     },
     reset() {
       this.$refs.form.reset();
@@ -184,9 +163,7 @@ export default {
     pickRoom(room, floor){
       this.numberOfBeds = room.numberOfBeds;
       this.pickedRoom = new Room();
-      
-      console.log("room.id: v");
-      console.log(room);
+
       this.pickedRoom.id = room.id;
       this.pickedRoom.roomNumber = room.roomNumber;
       this.pickedRoom.numberOfBeds = room.numberOfBeds;
@@ -194,23 +171,12 @@ export default {
       this.pickedRoom.specialPrices = room.specialPrices;
       
         
-    //   this.id = null,
-    //   this.level = null,
-    //   this.maxRooms = null,
-    //   this.roomsOnFloor = [],
-    //   this.hotel = new Hotel()
-    // }
-      // this.pickedRoom = JSON.parse(JSON.stringify(room)); // deep copy sobe
       this.pickedRoom.hotelFloor = new HotelFloor();
       this.pickedRoom.hotelFloor.id = floor.id;
       this.pickedRoom.hotelFloor.level = floor.level;
       this.pickedRoom.hotelFloor.maxRooms = floor.maxRooms;
       this.pickedRoom.hotelFloor.hotel = floor.hotel;
 
-      console.log("Picked room: v");
-      console.log(this.pickedRoom);
-      // this.pickedRoom.hotelFloor = JSON.parse(JSON.stringify(floor));  //deep copy sprata
-      // this.pickedRoom.hotelFloor.roomsOnFloor = []; // mora zbog Json circular 
       this.selected = true;
     },
   }
