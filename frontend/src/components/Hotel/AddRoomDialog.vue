@@ -116,19 +116,26 @@ export default {
 
         this.hotel.floors.forEach(floor => {
           if(floor.level == this.pickedPosition.level){
-            room.hotelFloor = floor;
+            room.hotelFloor = new HotelFloor();
+            room.hotelFloor.level = floor.level;
+            room.hotelFloor.maxRooms = floor.maxRooms;
+            room.hotelFloor.id = floor.id;
+            room.hotelFloor.hotel = floor.hotel;
             floorLVL = floor.level;
           }
         });
-        
+        console.log("Dod")
         HotelController.addRoom(this.$route.params.id, room)
           .then((response) => {
+            console.log("Dodana soba je sada u hotelu i izgleda ovako: ");
+            console.log(response.data);
             this.hotel.floors.forEach(floor => {
               if(floor.level == floorLVL){
-                floor.roomsOnFloor.push(room);
+                floor.roomsOnFloor.push(response.data);
               }
             });
-
+            console.log("a hotel ");
+            console.log(this.hotel);
             this.setPositions();
             this.reset();
 
@@ -138,6 +145,7 @@ export default {
             this.addFormDialog = false;
           })
           .catch((response) => {
+            console.log(response);
             this.$emit("finished", {msg: "Error! Something went wrong...", color: "error"})
           })
 

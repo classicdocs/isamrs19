@@ -82,17 +82,9 @@ public class HotelService {
             hf.setHotel(h);
             addFloor(h.getId(), hf);
         }
-
-
-        Optional<HotelDestination> destination = hotelDestinationsRepository.findOneByName(hotelDTO.getDestination().getName());
-        if(destination.isPresent()){
-            destination.get().getHotels().add(h);
-
-            HotelDestination newDestination = hotelDestinationsRepository.save(destination.get());
-
-            h.setDestination(newDestination);
-            h = hotelRepository.save(h);
-        }
+        h = hotelRepository.save(h);
+        h.setDestination(hotelDTO.getDestination());
+        h = hotelRepository.save(h);
         return (new HotelDTO(h));
     }
 

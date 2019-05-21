@@ -78,6 +78,7 @@ import Hotel from "@/models/Hotel";
 import SystemAdminController from "@/controllers/system-admin.controller"
 import HotelDestinationsController from "@/controllers/hotelsDestinations.controller.js";
 
+import store from "@/store";
 import { thisExpression } from '@babel/types';
 
 export default {
@@ -122,6 +123,12 @@ export default {
         SystemAdminController.createHotel(this.hotel)
           .then((response) => {
             this.$emit("finished", {msg: "Hotel successfully added", color: "success"})
+            store.commit("newHotel", response.data);
+            var hotels = store.getters.allHotels;
+            hotels.push(response.data);
+            console.log("Dodajem novi hotel v");
+            console.log(hotels);
+            store.commit("allHotels", hotels);
           })
           .catch((response) => {
             this.$emit("finished", {msg: "Error! Something went wrong...", color: "error"})

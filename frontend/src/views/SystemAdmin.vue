@@ -34,7 +34,7 @@
               <v-dialog v-model="addAirlineDialog" max-width="500px">
                 <add-airline-form  v-if="addAirlineDialog"
                   v-on:finished="closeAddAirline($event)"
-                  v-on:cancel  ="cancel">
+                  v-on:cancel  ="cancel"> 
                 </add-airline-form>
               </v-dialog>
       </v-container>
@@ -46,9 +46,8 @@
 
               <v-dialog v-model="addAdminDialog" max-width="500px" persistent>
                 <add-admin-form  v-if="addAdminDialog"
-                  v-bind:hotels="hotels" v-bind:airlines="airlines" v-bind:rentACars="rentACars"
                   v-on:finished="closeAddAdmin($event)"
-                  v-on:cancel  ="cancel">
+                   v-on:cancel  ="cancel"><!--v-bind:hotels="hotels" v-bind:rentACars="rentACars" v-bind:airlines="airlines" -->
                 </add-admin-form>
               </v-dialog>
       </v-container>
@@ -82,6 +81,7 @@ import HotelController from "@/controllers/hotels.controller";
 import AirlineController from "@/controllers/airline-company.controller"; 
 import RentACarController from "@/controllers/rentacar.controller"; 
 
+import store from "@/store";
 
 export default {
     name: "sys-admin",
@@ -97,9 +97,9 @@ export default {
     addAirlineDialog: false,
     addAdminDialog: false,
 
-    hotels: [],
-    airlines: [],
-    rentACars: [],
+    // hotels: [],
+    // airlines: [],
+    // rentACars: [],
 
     snackbar: {
       show: false,
@@ -110,21 +110,24 @@ export default {
   created() {
     HotelController.getHotels()
     .then(response =>{
-      response.data.forEach(element => {
-        this.hotels.push(element.name);
-      });
+      // response.data.forEach(element => {
+      //   this.hotels.push(element.name);
+      // });
+      store.commit("allHotels", response.data);
     });
     AirlineController.findAllAirlines()
     .then(response => {
-      response.data.forEach(element => {
-        this.airlines.push(element.name);
-      });
+      // response.data.forEach(element => {
+      //   this.airlines.push(element.name);
+      // });
+      store.commit("allAirlines", response.data);
     });
     RentACarController.getAll()
     .then(response => {
-      response.data.forEach(element => {
-        this.rentACars.push(element.name);
-      });
+      // response.data.forEach(element => {
+      //   this.rentACars.push(element.name);
+      // });
+      store.commit("allRentACars", response.data);
     });
   },
   methods: {

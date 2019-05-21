@@ -20,7 +20,7 @@
 
         </v-toolbar>
 
-        <v-data-table :headers="headers" :items="rooms" :search="search"
+        <v-data-table :headers="headers" :items="myRooms" :search="search"
           class="elevation-1" :expand="expand" item-key="roomNumber"
         >
           <template v-slot:items="props">
@@ -70,6 +70,7 @@
 import HotelsController from "@/controllers/hotels.controller.js";
 import RoomInfo from "@/components/Hotel/RoomInfo.vue";
 import Room from "@/models/Room";
+import store from"@/store";
 
 export default {
   name: "RoomsOverview",
@@ -115,9 +116,26 @@ export default {
         });
       });
   },
+  computed: {
+      myRooms: function() {
+        var hotel = store.getters.newHotel;
+        var storeRooms = [];
+        if(store.getters.newHotel != null){
+            hotel.floors.forEach(floor => {
+              floor.roomsOnFloor.forEach(storeRoom => {
+                storeRoom.hotelFloor = floor;
+                storeRoom.roomTaken = [];
+                storeRoom.specialPrices = [];
+                storeRooms.push(storeRoom);
+              })
+            })
+        }
+        return storeRooms;
+      },
+  },
   methods: {
     showRoom(roomID){
-      this.rooms.forEach(room => {
+      this.myRooms.forEach(room => {
           if(room.id == roomID){
               this.room = room;
               this.roomInfo = true;
