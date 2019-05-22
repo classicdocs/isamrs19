@@ -55,11 +55,6 @@
               Your search for "{{ search }}" found no results.
             </v-alert>
           </template>
-          <!-- <template v-slot:no-data>
-            <v-alert :value="true" color="error" icon="warning">
-              Sorry, nothing to display here :(
-            </v-alert>
-          </template> -->
           
         </v-data-table>
         <v-card-text>

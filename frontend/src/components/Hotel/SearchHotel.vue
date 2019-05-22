@@ -7,19 +7,25 @@
       </v-expansion-panel-content>
     </v-expansion-panel>
 
-
-    <!--  -->
-    
     <template>
-      <v-container fluid grid-list-md>
-        <v-data-iterator
-          :items="listOfHotels"
-          :pagination.sync="pagination"
-          content-tag="v-layout"
-          row
-          wrap
-          v-if="listOfHotels.length !== 0"
-        >
+      <v-container fluid grid-list-md v-if="listOfHotels.length !== 0">
+          <v-data-iterator
+            :items="listOfHotels"
+            :pagination.sync="pagination"
+            content-tag="v-layout"
+            row
+            wrap
+          >
+          <template v-slot:header>
+            <v-toolbar
+              class="mb-2"
+              color="indigo darken-5"
+              dark
+              flat
+            >
+              <v-toolbar-title><h1>Choose some of the listed hotels to continue reservation</h1></v-toolbar-title>
+            </v-toolbar>
+          </template>
           <template v-slot:item="props">
             <v-flex
               xs12
@@ -44,52 +50,56 @@
                     <v-list-tile-content class="align-end">{{ props.item.address }}</v-list-tile-content>
                   </v-list-tile>
                 </v-list>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="success" @click="goToPage(props.item)">MAKE RESERVATION
+                    <v-icon right>hotel</v-icon>
+                  </v-btn>
+                </v-card-actions>
               </v-card>
+              
             </v-flex>
           </template>
         </v-data-iterator>
       </v-container>
-    </template>
-    <!--  -->
-
-    <!-- <v-container grid-list-xl id="container" fluid>
+      <v-container grid-list-xl id="container" fluid v-else-if="listOfHotels.length == 0 && searchHapened">
       <v-layout row wrap >
-        <v-flex lg8 md8 sm12 xs12 v-if="listOfHotels.length !== 0">
-          <search-result v-for="(hotel, index) in listOfHotels"
-            :key="index" 
-            v-bind:data="hotel" 
-            >
-          </search-result>
-        </v-flex>
-        <v-flex v-else-if="listOfHotels.length == 0" lg8 md8 sm6 xs12>
+        <v-flex  lg8 md8 sm6 xs12>
           <h1>There are no hotels with rooms that can satisfy this parameters.</h1>
         </v-flex>
       </v-layout>
-    </v-container> -->
+
+    </v-container>
+    </template>
+    <!--  -->
+
+    <!--  -->
   </div>
 </template>
 <script>
 
 import SearchHotelForm from "@/components/Hotel/SearchHotelForm.vue";
-import SearchHotelResult from "@/components/Hotel/SearchHotelResult.vue";
 
 export default {
   name: "SearchHotel",
   components: {
     'search-hotel-form': SearchHotelForm,
-    'search-hotel-result': SearchHotelResult
   },
   data:() => ({
     expansion: [true],
     listOfHotels: [],
+    searchHapened: false,
     pagination: {
       rowsPerPage: 4
     },
   }),
   methods: {
     showSearchResult(data){
-      console.log(data);
       this.listOfHotels = data;
+      this.searchHapened= true;
+    },
+    goToPage(hotel){
+      this.$router.push('/hotel-service/' + hotel.id); 
     }
   },
 }

@@ -119,6 +119,9 @@ export default {
   computed: {
       myRooms: function() {
         var hotel = store.getters.newHotel;
+        
+        console.log("hotel u my rooms");
+        console.log(hotel);
         var storeRooms = [];
         if(store.getters.newHotel != null){
             hotel.floors.forEach(floor => {

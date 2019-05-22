@@ -8,6 +8,9 @@ public class HotelDestinationDTO {
     @NotNull
     private String name;
 
+    public HotelDestinationDTO() {
+    }
+
     public HotelDestinationDTO(HotelDestination d) {
         this.name = d.getName();
     }

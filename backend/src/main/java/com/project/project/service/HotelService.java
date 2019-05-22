@@ -284,7 +284,13 @@ public class HotelService {
             if (hotelDestination.getName().equals(destination)){
                 // date check
                 if(checkDate(hotel, checkInDate, checkOutDate, numOfPeople)){
-                    searchResult.add(new SearchHotelDTO(hotel));
+
+                    HotelDestinationDTO hotelDestinationDTO = new HotelDestinationDTO(hotelDestination);
+                    SearchHotelDTO searchHotelDTO = new SearchHotelDTO(hotel);
+                    searchHotelDTO.setDestination(hotelDestinationDTO);
+
+
+                    searchResult.add(searchHotelDTO);
                 }
             }
         }

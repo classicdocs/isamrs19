@@ -97,10 +97,10 @@ insert into flight_seats_business(flight_id, seats_business_id)  values (2,11);
 insert into flight_seats_business(flight_id, seats_business_id)  values (2,12);
 
 -- hotel
-insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor) values (1,'Moscow','Serbia/Belgrade/Bulevar 55','Nice view from hotel',4,15);
-insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor) values (3,'Kasina','Sebia/Belgrade/bb','Hotel with rich history',2,15);
-insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor) values (4,'Parisjen','France/Paris/Old square 52','Best in Paris',4,30);
-insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor) values (2,'Sheraton','Serbia/Novi Sad/Futoski put 76','Known for good services',3,8);
+insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor) values (1,'Moscow','Terazije 20','Nice view from hotel',4,15);
+insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor) values (3,'Kasina','Terazije 25','Hotel with rich history',2,15);
+insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor) values (4,'Parisjen','Old square 52','Best in Paris',4,30);
+insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor) values (2,'Sheraton','Futoski put 76','Known for good services',3,8);
 
 
 ------------------------------------------------------------------------------------------------------------------------

@@ -18,7 +18,7 @@ public class SearchHotelDTO {
     private String description;
 
     @NotNull
-    private HotelDestination destination;
+    private HotelDestinationDTO destination;
 
     public SearchHotelDTO() {
     }
@@ -28,7 +28,7 @@ public class SearchHotelDTO {
         this.name = hotel.getName();
         this.address = hotel.getAddress();
         this.description = hotel.getDescription();
-        this.destination = hotel.getDestination();
+        this.destination = new HotelDestinationDTO();
     }
 
     public Long getId() {
@@ -63,11 +63,11 @@ public class SearchHotelDTO {
         this.description = description;
     }
 
-    public HotelDestination getDestination() {
+    public HotelDestinationDTO getDestination() {
         return destination;
     }
 
-    public void setDestination(HotelDestination destination) {
+    public void setDestination(HotelDestinationDTO destination) {
         this.destination = destination;
     }
 }

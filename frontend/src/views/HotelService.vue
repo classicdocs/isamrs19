@@ -114,9 +114,12 @@ export default {
     fetchData() {
       this.id = this.$route.params.id;
 
+      console.log("Get hotel sa id: " + this.id);
       HotelController.getHotel(this.id)
         .then((response) => {
           this.hotel = response.data;
+          console.log("Dobavio hotel: ");
+          console.log(this.hotel);
           store.commit("newHotel", this.hotel);           // STORE COMMIT
         })
         .catch(() => {
