@@ -24,8 +24,8 @@ public class VehicleReservationController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity reserve(@RequestBody VehicleReservationDTO vehicleReservationDTO) throws ParseException, UserNotFound {
-        VehicleReservation vehicleReservation = vehicleReservationService.reserve(vehicleReservationDTO);
-        return new ResponseEntity<VehicleReservation>(vehicleReservation, HttpStatus.CREATED);
+        VehicleReservationDTO vehicleReservation = vehicleReservationService.reserve(vehicleReservationDTO);
+        return new ResponseEntity<VehicleReservationDTO>(vehicleReservation, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)

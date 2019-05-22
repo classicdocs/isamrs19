@@ -355,6 +355,7 @@ export default {
         this.vehicle_list = [];
 
         store.commit('setSnack', {msg: "You have successfully reserved a vehicle!", color: "success"});
+        this.$router.push({name: "my-reservations"});
       },
     }
 }
