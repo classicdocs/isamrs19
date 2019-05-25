@@ -113,7 +113,6 @@ public class Hotel {
         this.priceList = priceList;
     }
 
-
     public Set<HotelFloor> getFloors() {
         return floors;
     }

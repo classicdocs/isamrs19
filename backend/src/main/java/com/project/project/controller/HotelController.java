@@ -1,17 +1,8 @@
 package com.project.project.controller;
 
-import com.project.project.dto.Hotel_DTOs.HotelDTO;
-import com.project.project.dto.Hotel_DTOs.HotelFloorDTO;
-import com.project.project.dto.Hotel_DTOs.RoomDTO;
-import com.project.project.dto.Hotel_DTOs.SearchHotelDTO;
-import com.project.project.exceptions.DestinationNotFound;
-import com.project.project.exceptions.FloorNotFound;
-import com.project.project.exceptions.HotelHasNoDestination;
-import com.project.project.exceptions.HotelNotFound;
-import com.project.project.model.Hotel_Model.Hotel;
-import com.project.project.model.Hotel_Model.HotelDestination;
-import com.project.project.model.Hotel_Model.HotelsOffer;
-import com.project.project.model.Hotel_Model.Room;
+import com.project.project.dto.Hotel_DTOs.*;
+import com.project.project.exceptions.*;
+import com.project.project.model.Hotel_Model.*;
 import com.project.project.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import sun.security.krb5.internal.crypto.Des;
 
 import java.text.ParseException;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -29,6 +21,7 @@ public class HotelController {
 
     @Autowired
     private HotelService hotelService;
+
 
     @GetMapping(
             value = "/{id}",
@@ -212,5 +205,30 @@ public class HotelController {
             hnf.printStackTrace();
             return new ResponseEntity<String>(hnf.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PostMapping(
+            value = "/{id}/reserve",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity reserve(@PathVariable("id") Long id, @RequestBody HotelReservationDTO hotelReservation) {
+        try {
+            HotelReservation hotelReservation1 = hotelService.reserve(id, hotelReservation);
+            return new ResponseEntity<HotelReservation>(hotelReservation1, HttpStatus.CREATED);
+        } catch (UserNotFound |HotelNotFound hnf) {
+            hnf.printStackTrace();
+            return new ResponseEntity<String>(hnf.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(
+            value = "/reservations/{user_id}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity getReservations(@PathVariable("user_id") Long user_id) {
+        Set<HotelReservation> reservations = hotelService.getReservations(user_id);
+        return new ResponseEntity<Set<HotelReservation>>(reservations, HttpStatus.OK);
+
     }
 }

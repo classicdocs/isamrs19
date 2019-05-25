@@ -3,7 +3,7 @@
     <v-card>
       <v-card-title><h3 style="color: grey">Hotel: <br></h3><h1> {{hotel.name}}</h1></v-card-title>
       <v-card-text id="info">
-        <div><h3 style="color: gray;">Destination: <br></h3><h3> {{hotel.destination}}</h3></div>
+        <div v-if="hotel.destination != null"><h3 style="color: gray;">Destination: <br></h3><h3> {{hotel.destination.name}}</h3></div>
         <div><h3 style="color: gray;">Address: <br></h3><h3> {{hotel.address}}</h3></div>
         <div><h3 style="color: gray;">Description: <br></h3><h3> {{hotel.description}}</h3></div>
         <div><h3 style="color: gray;">Floors: <br></h3><h3> {{hotel.numOfFloors}}</h3></div>

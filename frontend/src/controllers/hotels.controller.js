@@ -24,6 +24,9 @@ export default {
     },
     search(data){
       return HotelsService.search(data);
+    },
+    reserve(hotelID, data){
+      return HotelsService.reserve(hotelID, data);
     }
 }
 

@@ -365,7 +365,7 @@
 
 
                     <v-btn flat @click.native="step = 3">Back</v-btn>
-                    <v-btn flat color="success">MAKE RESERVATION</v-btn>
+                    <v-btn flat color="success" @click="makeReservation">MAKE RESERVATION</v-btn>
               </v-stepper-content>
 
             </v-stepper-items>
@@ -407,7 +407,10 @@ import store from "@/store";
 
 import ReserveRoom from "@/components/HotelReservation/ReserveRoom.vue";
 import SearchHotelParameters from "@/models/SearchHotelParameters.js";
+import HotelReservation from "@/models/HotelReservation";
 import Room from "@/models/Room";
+
+import HotelController from "@/controllers/hotels.controller"; 
 
 export default {
     name: "ReservationForm",
@@ -477,6 +480,8 @@ export default {
           }
           ],
 
+
+      hotelReservation: new HotelReservation(),
 
       snackbar: {
         show: false,
@@ -684,7 +689,6 @@ export default {
           }
         }
       },
-      
       continueTo(number){
         if(number == 2){
           // if (this.$refs.form.validate()) {
@@ -768,7 +772,34 @@ export default {
           this.pagination2.sortBy = column
           this.pagination2.descending = false
         }
+      },
+      makeReservation(){
+        this.hotelReservation.checkInDate = this.checkInDate;
+        this.hotelReservation.checkOutDate = this.checkOutDate;
+        this.hotelReservation.totalPrice = this.totalWithAdditional;
+        this.hotelReservation.numberOfPeople = this.numOfPeople;
+        this.hotelReservation.user = store.getters.activeUser.username;
+        this.hotelReservation.additionalServices = this.selected;
+        this.hotelReservation.rooms = this.pickedRooms;
+
+
+        console.log("this is id");
+        console.log(this.$route.params.id);
+        HotelController.reserve(this.$route.params.id, this.hotelReservation)
+        .then(response => {
+          console.log("this is response");
+          console.log(response.data);
+        })
+        
+        
+      //   checkInDate = null;
+      // this.checkOutDate = null;
+      // this.totalPrice = null;
+      // this.number_of_people = null;
+      // this.user = null;
+      // this.additionalServices = [];
+      // this.rooms = [];
       }
-      }
+    }
 }
 </script>
