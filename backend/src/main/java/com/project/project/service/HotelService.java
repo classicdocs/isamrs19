@@ -418,7 +418,7 @@ public class HotelService {
                 }else{
                     //2019-05-22
                     DateFormat format = new SimpleDateFormat("YYYY-mm-dd", Locale.ENGLISH);
-                    DateFormat format2 = new SimpleDateFormat("YYYY/mm/dd", Locale.ENGLISH);
+//                    DateFormat format2 = new SimpleDateFormat("YYYY/mm/dd", Locale.ENGLISH);
 
                     Date checkInDate = format.parse(checkIn);
                     Date checkOutDate = format.parse(CheckOut);
@@ -426,8 +426,11 @@ public class HotelService {
 
                     // kroz svaku rezervaciju
                     for (RoomTaken roomTaken: room.getRoomTaken()) {
-                        Date startRoomTaken = format2.parse(roomTaken.getStartDate());
-                        Date endRoomTaken = format2.parse(roomTaken.getEndDate());
+//                        Date startRoomTaken = format2.parse(roomTaken.getStartDate());
+//                        Date endRoomTaken = format2.parse(roomTaken.getEndDate());
+
+                        Date startRoomTaken = format.parse(roomTaken.getStartDate());
+                        Date endRoomTaken = format.parse(roomTaken.getEndDate());
 
                         // ukoliko se neka preklapa sa datumom prijave i odjave
                         if(overlap(checkInDate,checkOutDate,startRoomTaken,endRoomTaken)){

@@ -27,6 +27,9 @@ export default {
     },
     reserve(hotelID, data){
       return HotelsService.reserve(hotelID, data);
+    },
+    getReservations(user_id){
+      return HotelsService.getReservations(user_id);
     }
 }
 

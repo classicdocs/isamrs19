@@ -7,7 +7,8 @@ const ENDPOINTS = {
   HOTELS_OFFER: '/addHotelsOffer',
   UPDATE_PRICELIST: '/updatePriceList',
   SEARCH: '/search',
-  RESERVE: '/reserve'
+  RESERVE: '/reserve',
+  RESERVATIONS: '/reservations/'
 };
 
 export default {
@@ -37,5 +38,8 @@ export default {
   },
   reserve(hotelID, data){
     return Axios.post(ENDPOINTS.HOTELS + hotelID + ENDPOINTS.RESERVE, data);
+  },
+  getReservations(user_id){
+    return Axios.get(ENDPOINTS.RESERVATIONS + user_id);
   }
 };

@@ -108,6 +108,11 @@ export default {
       this.searchHapened= true;
     },
     goToPage(hotel){
+      let user = store.getters.isUser;
+      if (!user) {
+        store.commit("setSnack", {msg: "To reserve you must first sign up"});
+        return;
+      }
       store.commit('searchHotelParams', this.searchParams);
       this.$router.push('/hotel-service/' + hotel.id); 
     }

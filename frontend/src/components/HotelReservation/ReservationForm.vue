@@ -773,6 +773,24 @@ export default {
           this.pagination2.descending = false
         }
       },
+      reset(){
+        this.checkInDate = null;
+        this.checkOutDate = null;
+        this.numOfPeople = 0;
+        this.searchHotelParams= null;
+        this.totalPrice = 0;
+        this.roomPrice = 0;
+        this.reserveRoom = false;
+        this.pickedRooms = [];
+        this.pickedRoom = new Room();
+        this.notAvailableRooms = [];
+        this.enough = false;
+        this.alreadyPicked = false;
+        this.selected = [];
+        this.totalWithAdditional = 0;
+        this.hotelReservation= new HotelReservation();
+        this.step = 1;
+      },
       makeReservation(){
         this.hotelReservation.checkInDate = this.checkInDate;
         this.hotelReservation.checkOutDate = this.checkOutDate;
@@ -783,22 +801,14 @@ export default {
         this.hotelReservation.rooms = this.pickedRooms;
 
 
-        console.log("this is id");
-        console.log(this.$route.params.id);
         HotelController.reserve(this.$route.params.id, this.hotelReservation)
         .then(response => {
-          console.log("this is response");
-          console.log(response.data);
+          // var reservations = store.getters.hotelReservations;
+          // reservations.push(response.data);
+          // store.commit('hotelReservations', reservations);
+          this.reset();
+          this.showSnackbar({msg: "Reservation is successfull", color: "success"});
         })
-        
-        
-      //   checkInDate = null;
-      // this.checkOutDate = null;
-      // this.totalPrice = null;
-      // this.number_of_people = null;
-      // this.user = null;
-      // this.additionalServices = [];
-      // this.rooms = [];
       }
     }
 }
