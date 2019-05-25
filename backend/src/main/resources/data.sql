@@ -248,3 +248,37 @@ insert into hotel_destination_hotels(hotel_destination_id, hotels_id) values
 (2, 4);
 insert into hotel_destination_hotels(hotel_destination_id, hotels_id) values
 (3, 3);
+
+insert into hotels_offer(id, description, price, type) values
+(1,'Room with one bed', 150, 0);
+insert into hotels_offer(id, description, price, type) values
+(2,'Room with two beds', 250, 1);
+insert into hotels_offer(id, description, price, type) values
+(3,'Room with three beds', 350, 2);
+insert into hotels_offer(id, description, price, type) values
+(4,'Room with four beds', 450, 3);
+insert into hotels_offer(id, description, price, type) values
+(5,'Room with five beds', 550, 4);
+insert into hotels_offer(id, description, price, type) values
+(6,'WiFi', 30, 5);
+insert into hotels_offer(id, description, price, type) values
+(7,'Air condition', 50, 5);
+insert into hotels_offer(id, description, price, type) values
+(8,'Horse riding', 40, 5);
+
+insert into hotel_price_list(hotel_id, price_list_id) values
+(1,1);
+insert into hotel_price_list(hotel_id, price_list_id) values
+(1,2);
+insert into hotel_price_list(hotel_id, price_list_id) values
+(1,3);
+insert into hotel_price_list(hotel_id, price_list_id) values
+(1,4);
+insert into hotel_price_list(hotel_id, price_list_id) values
+(1,5);
+insert into hotel_price_list(hotel_id, price_list_id) values
+(1,6);
+insert into hotel_price_list(hotel_id, price_list_id) values
+(1,7);
+insert into hotel_price_list(hotel_id, price_list_id) values
+(1,8);

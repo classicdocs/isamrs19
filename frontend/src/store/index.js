@@ -10,6 +10,8 @@ import { hotel } from "./modules";
 import { hotels } from "./modules";
 import { airlines } from "./modules";
 import { rentacars } from "./modules";
+import { rooms } from "./modules";
+import { searchHotelParams } from "./modules";
 Vue.use(Vuex);
 
 const storeData = {
@@ -23,6 +25,8 @@ const storeData = {
     hotels,
     airlines,
     rentacars,
+    rooms,
+    searchHotelParams,
   }
 }
 

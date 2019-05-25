@@ -119,7 +119,7 @@
 <script>
 import HotelDestinationsController from "@/controllers/hotelsDestinations.controller.js";
 import HotelController from "@/controllers/hotels.controller.js";
-import SearchHotel from "@/models/SearchHotel.js";
+import SearchHotelParameters from "@/models/SearchHotelParameters.js";
 
 export default {
   name: "SearchHotelForm",
@@ -139,7 +139,7 @@ export default {
     people: [1,2,3,4,5,6],
     numOfPeople: 0,
 
-    search: new SearchHotel(),
+    search: new SearchHotelParameters(),
     snackbar: {
       show: false,
       color: "",
@@ -156,10 +156,13 @@ export default {
   },
   methods: {
     searchHotels(){
-      console.log(this.search);
       HotelController.search(this.search)
       .then(response => {
-          this.$emit("search-result", response.data);
+          var result = {
+            'data': response.data,
+            'searchHotelParams': this.search
+          }
+          this.$emit("search-result", result);
       })
       .catch((response) => {
         this.$emit("error", {msg: "Error! Something went wrong...", color: "error"})

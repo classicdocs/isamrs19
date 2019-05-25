@@ -64,7 +64,8 @@
         <v-card-actions>
             <v-spacer></v-spacer>
           <v-btn color="blue darken" flat @click="cancel">Cancel</v-btn> 
-          <v-btn color="success" @click="bookRoom">Book</v-btn>
+          <v-btn color="success" @click="bookRoom" v-if="!picked">Book<v-icon right>card_travel</v-icon></v-btn>
+          <v-btn color="error" @click="removeRoom" v-if="picked">Remove<v-icon right>clear</v-icon></v-btn>
         </v-card-actions>
       </v-form>
     </v-card>
@@ -79,7 +80,7 @@ import { returnStatement } from '@babel/types';
 
 export default {
   name: "ReserveRoom",
-  props: ['room'],
+  props: ['room','picked'],
 
 
   data: () => ({
@@ -92,6 +93,9 @@ export default {
     },
     bookRoom(){
         this.$emit("book", {msg: "Room successfully booked", color: "success"});
+    },
+    removeRoom(){
+        this.$emit("remove", {msg: "Room is removed", color: "success"}, null);
     },
     cancel(){
         this.$emit("cancel");

@@ -79,6 +79,8 @@
 <script>
 
 import SearchHotelForm from "@/components/Hotel/SearchHotelForm.vue";
+import SearchHotelParameters from "@/models/SearchHotelParameters.js";
+import store from"@/store";
 
 export default {
   name: "SearchHotel",
@@ -89,16 +91,24 @@ export default {
     expansion: [true],
     listOfHotels: [],
     searchHapened: false,
+    searchParams: new SearchHotelParameters(),
+
     pagination: {
       rowsPerPage: 4
     },
   }),
+  created(){
+    store.commit('searchHotelParams', new SearchHotelParameters());
+  },
   methods: {
-    showSearchResult(data){
-      this.listOfHotels = data;
+    showSearchResult(result){
+      this.listOfHotels = result.data;
+      this.searchParams = result.searchHotelParams
+
       this.searchHapened= true;
     },
     goToPage(hotel){
+      store.commit('searchHotelParams', this.searchParams);
       this.$router.push('/hotel-service/' + hotel.id); 
     }
   },

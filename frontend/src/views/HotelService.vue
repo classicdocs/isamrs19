@@ -37,6 +37,7 @@
           </v-container>
           
         </v-flex>
+        <v-flex></v-flex>
         <v-flex lg8 md6 sm6 xs12 v-if="user"> 
             <reservation-form/>
         </v-flex>
@@ -114,13 +115,16 @@ export default {
     fetchData() {
       this.id = this.$route.params.id;
 
-      console.log("Get hotel sa id: " + this.id);
+      HotelController.getRooms(this.id)
+      .then((response) => {
+        store.commit('allRooms', response.data);
+      })
+
       HotelController.getHotel(this.id)
         .then((response) => {
           this.hotel = response.data;
-          console.log("Dobavio hotel: ");
-          console.log(this.hotel);
-          store.commit("newHotel", this.hotel);           // STORE COMMIT
+          store.commit('newHotel', this.hotel);
+          // console.log(this.hotel);
         })
         .catch(() => {
           alert(error.response.data);

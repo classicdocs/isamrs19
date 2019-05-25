@@ -108,32 +108,34 @@ export default {
     }
 
   }),
-  created() {
-    HotelsController.getRooms(this.$route.params.id)
-      .then((response) => {
-        response.data.forEach(element => {
-          this.rooms.push(element);
-        });
-      });
-  },
   computed: {
       myRooms: function() {
         var hotel = store.getters.newHotel;
-        
-        console.log("hotel u my rooms");
-        console.log(hotel);
-        var storeRooms = [];
+        // console.log("newHotel")
+        // console.log(hotel);
+        // var allRooms = store.getters.allRooms;
+        // if(allRooms == null){
+        //   allRooms = []
+        // }
+        // return allRooms;
+
+        this.rooms = [];
+
         if(store.getters.newHotel != null){
             hotel.floors.forEach(floor => {
               floor.roomsOnFloor.forEach(storeRoom => {
                 storeRoom.hotelFloor = floor;
-                storeRoom.roomTaken = [];
-                storeRoom.specialPrices = [];
-                storeRooms.push(storeRoom);
+                if(storeRoom.roomTaken == null){
+                  storeRoom.roomTaken = [];
+                }
+                if(storeRoom.specialPrices == null){
+                  storeRoom.specialPrices = [];
+                }
+                this.rooms.push(storeRoom);
               })
             })
         }
-        return storeRooms;
+        return this.rooms;
       },
   },
   methods: {

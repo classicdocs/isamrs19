@@ -1,4 +1,4 @@
-export default class SearchHotel {
+export default class SearchHotelParameters {
     constructor() {
       this.destination = null,
       this.checkInDate = null,
