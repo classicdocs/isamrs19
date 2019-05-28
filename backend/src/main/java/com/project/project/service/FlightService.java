@@ -338,7 +338,7 @@ public class FlightService {
                             ru.getFlightInvitations().add(invitation);
                             invitation.setFlightReservation(flightReservation);
                             flightInvitationRepository.save(invitation);
-                            sendInvitationMail(ru.getUsername(), pa.getFirstname(), pa.getLastname());
+                            sendInvitationMail(ru.getUsername(), pa.getFirstname(), pa.getLastname(), pa.getId());
                             userRepository.save(ru);
                         }
                     }
@@ -421,7 +421,7 @@ public class FlightService {
                             invitation.setInvitationFrom(flightReservationDTO.getMyInfo().getId());
                             invitation.setFlightReservation(flightReservation);
                             flightInvitationRepository.save(invitation);
-                            sendInvitationMail(ru.getUsername(), pa.getFirstname(),pa.getLastname());
+                            sendInvitationMail(ru.getUsername(), pa.getFirstname(),pa.getLastname(), ru.getId());
                             ru.getFlightInvitations().add(invitation);
                             userRepository.save(ru);
                         }
@@ -454,14 +454,14 @@ public class FlightService {
         }
     }
 
-    private void sendInvitationMail(String username, String firstname, String lastname) {
+    private void sendInvitationMail(String username, String firstname, String lastname, Long id) {
 
         String subject = "Flight invitation [" + username + "]";
         String msg = "";
         msg += "<html><body>";
         msg += "<p>You have flight invitation from " + firstname + " " + lastname + "</p>";
         msg += "<p>You can accept or decline this invitation on this ";
-        msg += "<a href='" + frontend + "/my-reservations'>link</a></p>";
+        msg += "<a href='" + frontend + "/" + id + "/my-reservations'>link</a></p>";
         msg += "</body></html>";
 
         emailService.prepareAndSend(subject, msg);
@@ -497,7 +497,7 @@ public class FlightService {
         }
 
         msg += "<p> More information about the flight and passengers you can find on this " +
-                "<a href='" + frontend + "/my-reservations'>link</a></p>";
+                "<a href='" + frontend + "/" + me.getPassengerId() + "/my-reservations'>link</a></p>";
         msg += "</body></html>";
 
         emailService.prepareAndSend(subject, msg);
