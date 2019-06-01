@@ -48,9 +48,20 @@ public class HotelReservation {
     @ManyToOne
     private User user;
 
+    @ManyToOne
+    private Hotel hotel;
 
     public HotelReservation() {
     }
+
+    public Hotel getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
+    }
+
 
     public Long getId() {
         return id;

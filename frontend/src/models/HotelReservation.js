@@ -7,5 +7,6 @@ export default class HotelReservation {
       this.user = null;
       this.additionalServices = [];
       this.rooms = [];
+      this.hotel = null;
     }
   }

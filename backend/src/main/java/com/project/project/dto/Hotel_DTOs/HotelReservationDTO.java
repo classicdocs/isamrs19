@@ -1,5 +1,6 @@
 package com.project.project.dto.Hotel_DTOs;
 
+import com.project.project.model.Hotel_Model.Hotel;
 import com.project.project.model.Hotel_Model.HotelReservation;
 import com.project.project.model.Hotel_Model.HotelsOffer;
 import com.project.project.model.Hotel_Model.Room;
@@ -24,6 +25,8 @@ public class HotelReservationDTO {
 
     private String user;
 
+    private Hotel hotel;
+
     public HotelReservationDTO() {
     }
 
@@ -36,6 +39,7 @@ public class HotelReservationDTO {
         this.rooms = reservation.getRooms();
         this.additionalServices = reservation.getAdditionalServices();
         this.user = reservation.getUser().getUsername();
+        this.hotel = reservation.getHotel();
     }
 
     public Long getId() {

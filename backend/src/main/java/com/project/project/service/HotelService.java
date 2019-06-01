@@ -277,7 +277,7 @@ public class HotelService {
             for (HotelFloor floor: hotel.get().getFloors()) {
                 for (Room room: floor.getRoomsOnFloor()) {
                     HotelFloor newFloor = floor;
-                    newFloor.setRoomsOnFloor(null);
+                    newFloor.setRoomsOnFloor(new HashSet<>());
                     room.setHotelFloor(newFloor);
                     rooms.add(room);
                 }
@@ -333,6 +333,10 @@ public class HotelService {
         Optional<Hotel> hotel = hotelRepository.findOneById(hotel_id);
 
         if(hotel.isPresent()){
+
+            hotel.get().setAdmins(null);
+            result.setHotel(hotel.get());
+
             Set<HotelsOffer> additionalServices = new HashSet<>();
             for (HotelsOffer offer: reservation.getAdditionalServices()) {
                 Optional<HotelsOffer> realOffer = hotelsOfferRepository.findById(offer.getId());
@@ -375,12 +379,21 @@ public class HotelService {
     }
 
 
-    public Set<HotelReservation> getReservations(Long user_id){
+    public Set<HotelReservation> getReservations(Long user_id) throws HotelNotFound {
         List<HotelReservation> reservations = hotelReservationRepository.findAll();
 
         Set<HotelReservation> result = new HashSet<>();
         for (HotelReservation reservation : reservations) {
             if(reservation.getUser().getId() == user_id){
+
+                Set<Room> rooms = getRooms(reservation.getHotel().getId());
+                for (Room room: reservation.getRooms()) {
+                    for (Room roomFromRepository: rooms) {
+                        if(room.getId() == roomFromRepository.getId()){
+                            room.setHotelFloor(roomFromRepository.getHotelFloor());
+                        }
+                    }
+                }
                 result.add(reservation);
             }
         }
@@ -455,4 +468,7 @@ public class HotelService {
         return start1.getTime() <= end2.getTime() && start2.getTime() <= end1.getTime();
     }
 
+
 }
+
+

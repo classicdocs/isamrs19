@@ -227,8 +227,17 @@ public class HotelController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity getReservations(@PathVariable("user_id") Long user_id) {
-        Set<HotelReservation> reservations = hotelService.getReservations(user_id);
-        return new ResponseEntity<Set<HotelReservation>>(reservations, HttpStatus.OK);
+        try {
+
+            Set<HotelReservation> reservations = null;
+            reservations = hotelService.getReservations(user_id);
+            return new ResponseEntity<Set<HotelReservation>>(reservations, HttpStatus.OK);
+
+        } catch (HotelNotFound hotelNotFound) {
+            hotelNotFound.printStackTrace();
+            return new ResponseEntity<String>(hotelNotFound.getMessage(), HttpStatus.BAD_REQUEST);
+        }
 
     }
+
 }

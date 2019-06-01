@@ -20,16 +20,16 @@
         <v-card-text>
 
           <v-layout row wrap>
-            <v-flex lg10 md10 sm12 xs12>
+            <v-flex lg10 md10 sm12 xs12 v-if="hfp.floors != null">
               <v-layout row wrap>
 
                 Hotel {{hotel.name}} configuration
-                <v-flex lg12 md12 sm12 xs12 
+                <v-flex lg12 md12 sm12 xs12  
                 v-for="floor in hotel.numOfFloors" :key="floor">
                   
                   <v-btn flat>Floor {{floor}}</v-btn>
                   
-                   <v-btn small 
+                   <v-btn small
                       v-for="(roomPosition,index) in hfp.floors[floor-1].positions" :key="index"
                       :disabled= "roomPosition.exists"
                       @click="pickRoom(floor,roomPosition.number)" 

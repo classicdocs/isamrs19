@@ -44,7 +44,7 @@
                             <v-subheader >Choose type of service</v-subheader>
                         </v-flex>
                         <v-flex xs6>
-                          <v-select :items="freeTypes" label="type" v-model="newOffer.type" required :rules="typeRules"></v-select>
+                          <v-select :items="getFreeTypes()" label="type" v-model="newOffer.type" required :rules="typeRules"></v-select>
                         </v-flex>
 
 
@@ -77,8 +77,9 @@
             
             </v-toolbar>
             <v-data-table
+              v-if="myHotel !== null"
               :headers="headers"
-              :items="hotel.priceList"
+              :items="myHotel.priceList"
               class="elevation-1"
               hide-actions
             >
@@ -123,11 +124,12 @@ import { returnStatement } from '@babel/types';
 
 export default {
   name: "AddAdditionalService",
-  props: ['hotel'],
+  // props: ['hotel'],
   data: () => ({
     form: true,
     addFormDialog: false,
     dialog: false,
+    hotel: new Hotel(),
     types: ['OneBed', 'TwoBeds','ThreeBeds', 'FourBeds','FiveBeds', 'AdditionalService'],
 
     headers: [
@@ -158,36 +160,60 @@ export default {
     }
   },
   computed: {
+
+    myHotel: function() {
+
+      this.hotel = store.getters.newHotel;
+      if(store.getters.newHotel != null){
+        this.hotel.floors.forEach(floor => {
+          floor.roomsOnFloor.forEach(singleRoom => {
+            singleRoom.hotelFloor = null;
+          })
+        });
+      }
+
+      return this.hotel;
+    },
+
     formTitle () {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
     },
-    freeTypes: function(){
-      var lista = [];
-      this.types.forEach(t => {
-        this.hotel.priceList.forEach(offer => {
-          if(offer.type == t){
-            lista.push(t);
-          }
-        })
-      })
-
-      var returnLista = [];
-      this.types.forEach(singleType => {
-        var idx = lista.indexOf(singleType);
-        if(idx == -1){
-          returnLista.push(singleType);
-        }
-      })
-
-      return returnLista;
-    }
   },
   methods: {
+    getFreeTypes(){
+      var lista = [];
+      var returnLista = [];
+      this.types.forEach(t => {
+        if(this.myHotel != null){
+            this.myHotel.priceList.forEach(offer => {
+              if(offer.type == t){
+                lista.push(t);
+              }
+            })
+
+          returnLista = [];
+          this.types.forEach(singleType => {
+            var idx = lista.indexOf(singleType);
+            if(idx == -1){
+              returnLista.push(singleType);
+            }
+          });
+        }
+      });
+
+      return returnLista;
+    },
     update(){
       HotelController.updatePricelist(this.$route.params.id, this.hotel.priceList)
       .then(response => {
-        console.log(response);
-         this.$emit("finished", {msg: "Additional service successfully added", color: "success"})
+          var hotel = this.myHotel;
+
+          if(hotel !== null){
+            hotel.priceList = JSON.parse(JSON.stringify(response.data));
+            store.commit('newHotel',hotel);
+          }
+          
+          this.$emit("finished", {msg: "Additional service successfully added", color: "success"})
       })
       .catch((response) => {
           this.$emit("finished", {msg: "Error! Something with update went wrong...", color: "error"})
@@ -197,37 +223,43 @@ export default {
          this.$emit("serviceExists", {msg: "Service already exists", color: "error"})
     },
     save(){
-      if (this.$refs.form.validate()) {
-      
-      if (this.editedIndex > -1) {
-
-        Object.assign(this.hotel.priceList[this.editedIndex], this.newOffer)
-      } else {
-        var exists = false;
+      var hotel = this.myHotel;
+      if(hotel !== null){
+        if (this.$refs.form.validate()) {
         
-        this.hotel.priceList.forEach(offer => {
-          console.log(offer.type != "AdditionalService");
-          if(offer.type == this.newOffer.type && offer.type != "AdditionalService"){
-            this.alreadyExists();
-            exists = true;
+        if (this.editedIndex > -1) {
+
+          Object.assign(hotel.priceList[this.editedIndex], this.newOffer)
+        } else {
+          var exists = false;
+          
+          hotel.priceList.forEach(offer => {
+            if(offer.type == this.newOffer.type && offer.type != "AdditionalService"){
+              this.alreadyExists();
+              exists = true;
+            }
+          })
+          if(!exists){
+            hotel.priceList.push(this.newOffer)
           }
-        })
-        if(!exists){
-          this.hotel.priceList.push(this.newOffer)
         }
-      }
-      this.close();
-      this.update();
+        this.close();
+        this.update();
+
+        }
       }
     },
     isEmpty(str) {
       return (!str || 0 === str.length);
     },
     editItem (item) {
-      this.newOffer = new HotelsOffer();
-      this.editedIndex = this.hotel.priceList.indexOf(item)
-      this.newOffer = Object.assign({}, item)
-      this.dialog = true
+      var hotel = this.myHotel;
+      if(hotel !== null){
+        this.newOffer = new HotelsOffer();
+        this.editedIndex = hotel.priceList.indexOf(item)
+        this.newOffer = Object.assign({}, item)
+        this.dialog = true
+      }
     },
     deleteItem (item) {
       alert("We are working on it");

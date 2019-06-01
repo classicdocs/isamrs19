@@ -134,6 +134,7 @@ insert into user (dtype,id,address,email,firstname,lastname,username,password,ph
 
 --hotel admini
 insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('HotelAdmin',5,'adresa4','email4','ime4','prezime4','hoteladmin','12345','51544',4,null,null,1, FALSE);
+insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('HotelAdmin',15,'adresa4','email4','ime4','prezime4','a','12345','51544',4,null,null,4, TRUE);
 
 --system admini
 insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('SystemAdmin',6,'adresa5','email5','ime5','prezime5','systemadmin','12345','51545',5,null,null,null, FALSE);
@@ -202,6 +203,7 @@ insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values 
 
 --veza izmedju servisa i admina
 insert into hotel_admins(hotel_id, admins_id) values(1,5);
+insert into hotel_admins(hotel_id, admins_id) values(4,15);
 
 insert into airline_company_admins(airline_company_id, admins_id) values (1,4);
 

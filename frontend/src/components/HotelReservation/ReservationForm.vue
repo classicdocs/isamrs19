@@ -411,6 +411,7 @@ import HotelReservation from "@/models/HotelReservation";
 import Room from "@/models/Room";
 
 import HotelController from "@/controllers/hotels.controller"; 
+import { constants } from 'fs';
 
 export default {
     name: "ReservationForm",
@@ -799,7 +800,10 @@ export default {
         this.hotelReservation.user = store.getters.activeUser.username;
         this.hotelReservation.additionalServices = this.selected;
         this.hotelReservation.rooms = this.pickedRooms;
-
+        var newHotel = this.myHotel;
+        newHotel.floors = []
+        newHotel.admins = [];
+        this.hotelReservation.hotel = newHotel;
 
         HotelController.reserve(this.$route.params.id, this.hotelReservation)
         .then(response => {
@@ -808,6 +812,24 @@ export default {
           // store.commit('hotelReservations', reservations);
           this.reset();
           this.showSnackbar({msg: "Reservation is successfull", color: "success"});
+
+          var currentHotel = this.myHotel;
+          
+          if(typeof currentHotel != 'undefined'){
+            currentHotel.floors.forEach(floor => {
+              floor.roomsOnFloor.forEach(room => {
+                response.data.rooms.forEach(responseRoom => {
+                  if(room.id == responseRoom.id){
+                      room.roomTaken = responseRoom.roomTaken.slice();
+                  }
+                })
+              })
+            })  
+
+            store.commit('newHotel', currentHotel);
+          }
+          
+
         })
       }
     }

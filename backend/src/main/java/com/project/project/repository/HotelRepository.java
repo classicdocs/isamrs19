@@ -20,5 +20,7 @@ public interface HotelRepository extends JpaRepository<Hotel, String> {
 
     @Query("SELECT new com.project.project.dto.Hotel_DTOs.HotelDTO(h) FROM Hotel h WHERE h.name IS NOT NULL")
     Set<HotelDTO> findAllHotels();
+
+;
 }
 
