@@ -187,13 +187,15 @@ public class HotelService {
 
         Set<HotelsOffer> offersToReturn = new HashSet<>();
         if(hotel.isPresent()){
-            for (HotelsOffer offer: offers) {
-                if(!hotel.get().getPriceList().contains(offer)){
-                    offersToReturn.add(this.addHotelsOffer(id, offer));
-                }
-            }
+            hotel.get().setPriceList(offers);
+            hotelRepository.save(hotel.get());
+//            for (HotelsOffer offer: offers) {
+//                if(!hotel.get().getPriceList().contains(offer)){
+//                    offersToReturn.add(this.addHotelsOffer(id, offer));
+//                }
+//            }
 
-            return offersToReturn;
+            return hotel.get().getPriceList();
         }else{
             throw new HotelNotFound(id);
         }
