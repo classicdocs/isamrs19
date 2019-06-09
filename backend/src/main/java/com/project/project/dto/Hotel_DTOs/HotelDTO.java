@@ -2,6 +2,7 @@ package com.project.project.dto.Hotel_DTOs;
 
 import com.project.project.model.HotelAdmin;
 import com.project.project.model.Hotel_Model.Hotel;
+import com.project.project.model.Hotel_Model.HotelDestination;
 import com.project.project.model.Hotel_Model.HotelFloor;
 import com.project.project.model.Hotel_Model.HotelsOffer;
 
@@ -32,6 +33,9 @@ public class HotelDTO {
     private Set<HotelAdmin> admins;
 
     @NotNull
+    private HotelDestination destination;
+
+    @NotNull
     private int numOfFloors;
 
     @NotNull
@@ -50,6 +54,7 @@ public class HotelDTO {
         this.admins = hotel.getAdmins();
         this.numOfFloors = hotel.getNumOfFloors();
         this.roomsByFloor = hotel.getRoomsByFloor();
+        this.destination = hotel.getDestination();
     }
 
     public Set<HotelAdmin> getAdmins() {
@@ -123,4 +128,13 @@ public class HotelDTO {
     public void setRoomsByFloor(int roomsByFloor) {
         this.roomsByFloor = roomsByFloor;
     }
+
+    public HotelDestination getDestination() {
+        return destination;
+    }
+
+    public void setDestination(HotelDestination destination) {
+        this.destination = destination;
+    }
+
 }

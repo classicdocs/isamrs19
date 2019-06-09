@@ -20,7 +20,7 @@
 
         </v-toolbar>
 
-        <v-data-table :headers="headers" :items="rooms" :search="search"
+        <v-data-table :headers="headers" :items="myRooms" :search="search"
           class="elevation-1" :expand="expand" item-key="roomNumber"
         >
           <template v-slot:items="props">
@@ -70,6 +70,7 @@
 import HotelsController from "@/controllers/hotels.controller.js";
 import RoomInfo from "@/components/Hotel/RoomInfo.vue";
 import Room from "@/models/Room";
+import store from"@/store";
 
 export default {
   name: "RoomsOverview",
@@ -107,23 +108,44 @@ export default {
     }
 
   }),
-  created() {
-    HotelsController.getRooms(this.$route.params.id)
-      .then((response) => {
-        response.data.forEach(element => {
-          this.rooms.push(element);
-        });
-      });
+  computed: {
+      myRooms: function() {
+        var hotel = store.getters.newHotel;
+        // console.log("newHotel")
+        // console.log(hotel);
+        // var allRooms = store.getters.allRooms;
+        // if(allRooms == null){
+        //   allRooms = []
+        // }
+        // return allRooms;
+
+        this.rooms = [];
+
+        if(store.getters.newHotel != null){
+            hotel.floors.forEach(floor => {
+              floor.roomsOnFloor.forEach(storeRoom => {
+                storeRoom.hotelFloor = floor;
+                if(storeRoom.roomTaken == null){
+                  storeRoom.roomTaken = [];
+                }
+                if(storeRoom.specialPrices == null){
+                  storeRoom.specialPrices = [];
+                }
+                this.rooms.push(storeRoom);
+              })
+            })
+        }
+        return this.rooms;
+      },
   },
   methods: {
     showRoom(roomID){
-      this.rooms.forEach(room => {
+      this.myRooms.forEach(room => {
           if(room.id == roomID){
               this.room = room;
               this.roomInfo = true;
           }
       })
-      //this.$router.push('/hotel-service/' + this.$route.params.id + '/roomConfiguration/' + roomID); 
     },
     
   }

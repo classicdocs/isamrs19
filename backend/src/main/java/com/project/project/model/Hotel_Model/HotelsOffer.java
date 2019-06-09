@@ -36,7 +36,6 @@ public class HotelsOffer {
     @Column(name = "type", nullable = false)
     private offerType type;
 
-
     @Column(name = "description", nullable = true)
     private String description;
 //    @ManyToOne(fetch = FetchType.EAGER)

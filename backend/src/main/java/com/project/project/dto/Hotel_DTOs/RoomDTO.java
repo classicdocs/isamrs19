@@ -9,6 +9,11 @@ import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 public class RoomDTO {
+
+    @NotNull
+    private Long id;
+
+
     @NotNull
     private int roomNumber;
 
@@ -25,6 +30,7 @@ public class RoomDTO {
     public RoomDTO(Room room) {
         this.roomNumber = room.getRoomNumber();
         this.numberOfBeds = room.getNumberOfBeds();
+        this.id = room.getId();
     }
 
     public RoomDTO(){}
@@ -67,5 +73,13 @@ public class RoomDTO {
 
     public void setSpecialPrices(Set<SpecialPrice> specialPrices) {
         this.specialPrices = specialPrices;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

@@ -20,16 +20,16 @@
         <v-card-text>
 
           <v-layout row wrap>
-            <v-flex lg10 md10 sm12 xs12>
+            <v-flex lg10 md10 sm12 xs12 v-if="hfp.floors != null">
               <v-layout row wrap>
 
                 Hotel {{hotel.name}} configuration
-                <v-flex lg12 md12 sm12 xs12 
+                <v-flex lg12 md12 sm12 xs12  
                 v-for="floor in hotel.numOfFloors" :key="floor">
                   
                   <v-btn flat>Floor {{floor}}</v-btn>
                   
-                   <v-btn small 
+                   <v-btn small
                       v-for="(roomPosition,index) in hfp.floors[floor-1].positions" :key="index"
                       :disabled= "roomPosition.exists"
                       @click="pickRoom(floor,roomPosition.number)" 
@@ -58,7 +58,6 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken" flat @click="addFormDialog = false">Close</v-btn> 
-          <!-- <v-btn @click="resetValidation">Reset Validation</v-btn> -->
           <v-btn @click="reset">Reset Form</v-btn>
           <v-btn :disabled="!selected" color="success" @click="validate">Add</v-btn>
         </v-card-actions>
@@ -116,19 +115,21 @@ export default {
 
         this.hotel.floors.forEach(floor => {
           if(floor.level == this.pickedPosition.level){
-            room.hotelFloor = floor;
+            room.hotelFloor = new HotelFloor();
+            room.hotelFloor.level = floor.level;
+            room.hotelFloor.maxRooms = floor.maxRooms;
+            room.hotelFloor.id = floor.id;
+            room.hotelFloor.hotel = floor.hotel;
             floorLVL = floor.level;
           }
         });
-        
         HotelController.addRoom(this.$route.params.id, room)
           .then((response) => {
             this.hotel.floors.forEach(floor => {
               if(floor.level == floorLVL){
-                floor.roomsOnFloor.push(room);
+                floor.roomsOnFloor.push(response.data);
               }
             });
-
             this.setPositions();
             this.reset();
 

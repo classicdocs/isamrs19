@@ -1,21 +1,17 @@
 package com.project.project.service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
-import com.project.project.dto.Hotel_DTOs.HotelDTO;
-import com.project.project.dto.Hotel_DTOs.HotelFloorDTO;
-import com.project.project.dto.Hotel_DTOs.RoomDTO;
+import com.project.project.dto.Hotel_DTOs.*;
 import com.project.project.exceptions.*;
 import com.project.project.model.HotelAdmin;
-import com.project.project.model.Hotel_Model.Hotel;
-import com.project.project.model.Hotel_Model.HotelFloor;
-import com.project.project.model.Hotel_Model.HotelsOffer;
-import com.project.project.model.Hotel_Model.Room;
-import com.project.project.repository.FloorRepository;
-import com.project.project.repository.HotelAdminRepository;
-import com.project.project.repository.HotelRepository;
+import com.project.project.model.Hotel_Model.*;
+import com.project.project.model.User;
+import com.project.project.repository.*;
 
-import com.project.project.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +31,20 @@ public class HotelService {
     @Autowired
     private FloorRepository floorRepository;
 
+    @Autowired
+    private HotelDestinationsRepository hotelDestinationsRepository;
+
+    @Autowired
+    private HotelReservationRepository hotelReservationRepository;
+
+    @Autowired
+    private HotelsOfferRepository hotelsOfferRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private RoomTakenRepository roomTakenRepository;
 
     public Hotel findOneById(Long id) throws HotelNotFound{
         Optional<Hotel> h = hotelRepository.findOneById(id);
@@ -42,6 +52,14 @@ public class HotelService {
             for (HotelAdmin admin: h.get().getAdmins()) {
                 admin.setHotel(null);
             }
+            List<HotelDestination> destinations = hotelDestinationsRepository.findAll();
+            for (HotelDestination dest: destinations) {
+                if(dest.getHotels().contains(h.get())){
+                    dest.setHotels(null);
+                    h.get().setDestination(dest);
+                    break;
+            }
+        }
             return h.get();
         }else{
             throw new HotelNotFound(id);
@@ -75,8 +93,6 @@ public class HotelService {
         h.setNumOfFloors(hotelDTO.getNumOfFloors());
         h.setRoomsByFloor(hotelDTO.getRoomsByFloor());
 
-        //h.setFloors(hotelDTO.getFloors());
-
         h.setAdmins(hotelDTO.getAdmins());
         h = hotelRepository.save(h);
 
@@ -87,8 +103,12 @@ public class HotelService {
             hf.setHotel(h);
             addFloor(h.getId(), hf);
         }
+        h = hotelRepository.save(h);
+        h.setDestination(hotelDTO.getDestination());
+        h = hotelRepository.save(h);
         return (new HotelDTO(h));
     }
+
 
     public HotelFloorDTO addFloor(Long hotelID, HotelFloorDTO hotelFloorDTO) throws HotelNotFound {
 
@@ -167,13 +187,15 @@ public class HotelService {
 
         Set<HotelsOffer> offersToReturn = new HashSet<>();
         if(hotel.isPresent()){
-            for (HotelsOffer offer: offers) {
-                if(!hotel.get().getPriceList().contains(offer)){
-                    offersToReturn.add(this.addHotelsOffer(id, offer));
-                }
-            }
+            hotel.get().setPriceList(offers);
+            hotelRepository.save(hotel.get());
+//            for (HotelsOffer offer: offers) {
+//                if(!hotel.get().getPriceList().contains(offer)){
+//                    offersToReturn.add(this.addHotelsOffer(id, offer));
+//                }
+//            }
 
-            return offersToReturn;
+            return hotel.get().getPriceList();
         }else{
             throw new HotelNotFound(id);
         }
@@ -216,15 +238,39 @@ public class HotelService {
         }
     }
 
-    public Set<HotelDTO> findAll() {
+    public Set<HotelDTO> findAll() throws HotelNotFound, DestinationNotFound{
         Set<HotelDTO> hotels = hotelRepository.findAllHotels();
         for (HotelDTO hotelDTO: hotels) {
             for (HotelAdmin admin: hotelDTO.getAdmins()) {
                 admin.setHotel(null);
             }
+            HotelDestinationDTO destinationDTO = new HotelDestinationDTO(getDestination(hotelDTO.getId()));
+            HotelDestination destination = new HotelDestination();
+            destination.setName(destinationDTO.getName());
+            hotelDTO.setDestination(destination);
         }
         return hotels;
     }
+
+    public HotelDestination getDestination(Long id) throws HotelNotFound, DestinationNotFound{
+        Optional<Hotel> hotel = hotelRepository.findOneById(id);
+        if(hotel.isPresent()){
+            Optional<HotelDestination> destination = hotelDestinationsRepository.findOneByHotels_id(id);
+            if(destination.isPresent()){
+                for(Hotel h: destination.get().getHotels()){
+                    for(HotelAdmin ha : h.getAdmins()){
+                        ha.setHotel(null);
+                    }
+                }
+                return destination.get();
+            }else{
+                throw new DestinationNotFound(destination.get().getName(), "");
+            }
+        }else{
+            throw new HotelNotFound(id);
+        }
+    }
+
 
     public Set<Room> getRooms(Long id) throws HotelNotFound{
         Optional<Hotel> hotel = hotelRepository.findOneById(id);
@@ -233,7 +279,7 @@ public class HotelService {
             for (HotelFloor floor: hotel.get().getFloors()) {
                 for (Room room: floor.getRoomsOnFloor()) {
                     HotelFloor newFloor = floor;
-                    newFloor.setRoomsOnFloor(null);
+                    newFloor.setRoomsOnFloor(new HashSet<>());
                     room.setHotelFloor(newFloor);
                     rooms.add(room);
                 }
@@ -244,4 +290,187 @@ public class HotelService {
         }
     }
 
+
+    public Set<SearchHotelDTO> search(
+            String destination,
+            String checkInDate,
+            String checkOutDate,
+            int numOfPeople
+    ) throws ParseException, HotelHasNoDestination {
+        Set<HotelDTO> hotels = hotelRepository.findAllHotels();
+        Set<SearchHotelDTO> searchResult = new HashSet<>();
+
+        for (HotelDTO hotel: hotels) {
+            // destination check
+            List<HotelDestination> destinations = hotelDestinationsRepository.findAll();
+            HotelDestination hotelDestination = getDestinationByHotel(destinations, hotel);
+            if (hotelDestination.getName().equals(destination)){
+                // date check
+                if(checkDate(hotel, checkInDate, checkOutDate, numOfPeople)){
+
+                    HotelDestinationDTO hotelDestinationDTO = new HotelDestinationDTO(hotelDestination);
+                    SearchHotelDTO searchHotelDTO = new SearchHotelDTO(hotel);
+                    searchHotelDTO.setDestination(hotelDestinationDTO);
+
+
+                    searchResult.add(searchHotelDTO);
+                }
+            }
+        }
+        return searchResult;
+    }
+
+
+    public HotelReservation reserve(Long hotel_id, HotelReservationDTO reservation) throws UserNotFound, HotelNotFound {
+
+        HotelReservation result = new HotelReservation();
+
+        result.setCheckInDate(reservation.getCheckInDate());
+        result.setCheckOutDate(reservation.getCheckOutDate());
+        result.setNumberOfPeople(reservation.getNumberOfPeople());
+        result.setTotalPrice(reservation.getTotalPrice());
+
+        Room roomExample = reservation.getRooms().iterator().next();
+
+        Optional<Hotel> hotel = hotelRepository.findOneById(hotel_id);
+
+        if(hotel.isPresent()){
+
+            hotel.get().setAdmins(null);
+            result.setHotel(hotel.get());
+
+            Set<HotelsOffer> additionalServices = new HashSet<>();
+            for (HotelsOffer offer: reservation.getAdditionalServices()) {
+                Optional<HotelsOffer> realOffer = hotelsOfferRepository.findById(offer.getId());
+                if( realOffer.isPresent() ){
+                    additionalServices.add(realOffer.get());
+                }
+            }
+            result.setAdditionalServices(additionalServices);
+
+
+            Set<Room> rooms = new HashSet<>();
+            for(Room room : reservation.getRooms()){
+                Optional<Room> realRoom = roomRepository.findOneById(room.getId());
+                if (realRoom.isPresent()){
+
+                    RoomTaken roomTaken = new RoomTaken();
+                    roomTaken.setStartDate(reservation.getCheckInDate());
+                    roomTaken.setEndDate(reservation.getCheckOutDate());
+
+                    roomTaken = roomTakenRepository.save(roomTaken);
+
+                    realRoom.get().getRoomTaken().add(roomTaken);
+
+                    Room newRoom = roomRepository.save(realRoom.get());
+                    rooms.add(newRoom);
+                }
+            }
+            result.setRooms(rooms);
+        }else{
+            throw new HotelNotFound(hotel_id);
+        }
+        Optional<User> user = userRepository.findOneByUsername(reservation.getUser());
+
+        if (user.isPresent()) {
+            result.setUser(user.get());
+        } else throw new UserNotFound(Long.parseLong(reservation.getUser()));
+
+        result = hotelReservationRepository.save(result);
+        return result;
+    }
+
+
+    public Set<HotelReservation> getReservations(Long user_id) throws HotelNotFound {
+        List<HotelReservation> reservations = hotelReservationRepository.findAll();
+
+        Set<HotelReservation> result = new HashSet<>();
+        for (HotelReservation reservation : reservations) {
+            if(reservation.getUser().getId() == user_id){
+
+                Set<Room> rooms = getRooms(reservation.getHotel().getId());
+                for (Room room: reservation.getRooms()) {
+                    for (Room roomFromRepository: rooms) {
+                        if(room.getId() == roomFromRepository.getId()){
+                            room.setHotelFloor(roomFromRepository.getHotelFloor());
+                        }
+                    }
+                }
+                result.add(reservation);
+            }
+        }
+        return result;
+    }
+
+
+
+
+    private HotelDestination getDestinationByHotel(List<HotelDestination> destinations, HotelDTO hotelDTO) throws HotelHasNoDestination {
+        for (HotelDestination destination: destinations) {
+            for(Hotel hotel : destination.getHotels()){
+                if(hotel.getName().equals(hotelDTO.getName())){
+                    return destination;
+                }
+            }
+        }
+        throw new HotelHasNoDestination(hotelDTO.getName());
+    }
+
+    private boolean checkDate(HotelDTO hotel, String checkIn, String CheckOut, int numOfPeople) throws ParseException {
+        int foundPlaces = 0;
+        // kroz svaki sprat
+        for (HotelFloor floor: hotel.getFloors()) {
+            // kroz svaku sobu
+            for(Room room: floor.getRoomsOnFloor()){
+                // ukoliko nema rezervacija
+                if(room.getRoomTaken().isEmpty()){
+                    foundPlaces += room.getNumberOfBeds();
+                    // ukoliko sam nasao dovoljno kreveta
+                    if(foundPlaces >= numOfPeople){
+                        return true;
+                    }
+                // ukoliko ima rezervacija
+                }else{
+                    //2019-05-22
+                    DateFormat format = new SimpleDateFormat("YYYY-mm-dd", Locale.ENGLISH);
+//                    DateFormat format2 = new SimpleDateFormat("YYYY/mm/dd", Locale.ENGLISH);
+
+                    Date checkInDate = format.parse(checkIn);
+                    Date checkOutDate = format.parse(CheckOut);
+                    boolean timeIsPossible = true;
+
+                    // kroz svaku rezervaciju
+                    for (RoomTaken roomTaken: room.getRoomTaken()) {
+//                        Date startRoomTaken = format2.parse(roomTaken.getStartDate());
+//                        Date endRoomTaken = format2.parse(roomTaken.getEndDate());
+
+                        Date startRoomTaken = format.parse(roomTaken.getStartDate());
+                        Date endRoomTaken = format.parse(roomTaken.getEndDate());
+
+                        // ukoliko se neka preklapa sa datumom prijave i odjave
+                        if(overlap(checkInDate,checkOutDate,startRoomTaken,endRoomTaken)){
+                            timeIsPossible = false;
+                            break;
+                        }
+                    }
+                    // ukoliko se nijedna rezervacija ove sobe ne preklapa sa datumom prijave i odjave
+                    if(timeIsPossible){
+                        foundPlaces += room.getNumberOfBeds();
+                        if(foundPlaces >= numOfPeople){
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean overlap(Date start1, Date end1, Date start2, Date end2){
+        return start1.getTime() <= end2.getTime() && start2.getTime() <= end1.getTime();
+    }
+
+
 }
+
+

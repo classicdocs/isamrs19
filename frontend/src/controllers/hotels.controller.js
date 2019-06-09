@@ -21,6 +21,15 @@ export default {
     },
     updatePricelist(hotelID, data){
       return HotelsService.updatePricelist(hotelID, data);
+    },
+    search(data){
+      return HotelsService.search(data);
+    },
+    reserve(hotelID, data){
+      return HotelsService.reserve(hotelID, data);
+    },
+    getReservations(user_id){
+      return HotelsService.getReservations(user_id);
     }
 }
 

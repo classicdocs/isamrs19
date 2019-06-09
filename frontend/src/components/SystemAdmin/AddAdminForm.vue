@@ -46,9 +46,9 @@
                     </v-radio-group>
                 </v-flex>
                 <v-flex xs12>
-                    <v-select v-if="radioGroup == 1" :items="hotels" v-model="selected" label="choose hotel" outline :rules="hotel_rules" required></v-select>
-                    <v-select v-if="radioGroup == 2" :items="airlines" v-model="selected" label="choose airline company" outline :rules="airline_rules" required></v-select>
-                    <v-select v-if="radioGroup == 3" :items="rentACars" v-model="selected" label="choose rent-a-car" outline :rules="rentacar_rules" required></v-select>
+                    <v-select v-if="radioGroup == 1" :items="myHotels" v-model="selected" label="choose hotel" outline :rules="hotel_rules" required></v-select>
+                    <v-select v-if="radioGroup == 2" :items="myAirlines" v-model="selected" label="choose airline company" outline :rules="airline_rules" required></v-select>
+                    <v-select v-if="radioGroup == 3" :items="myRentACars" v-model="selected" label="choose rent-a-car" outline :rules="rentacar_rules" required></v-select>
                 </v-flex>
                 </v-layout>
 
@@ -84,9 +84,9 @@ import Hotel from "@/models/Hotel";
 import AirlineCompany from "@/models/AirlineCompany";
 import RentACar from "@/models/RentACar";
 
+import store from "@/store";
 export default {
     name: "AddAdminForm",
-    props: ['hotels', 'airlines', 'rentACars'],
     data: () => ({
         formValid:true,
         passwordConfirmation:null,
@@ -145,12 +145,43 @@ export default {
         radioGroup: 0,
 
     }),
+    computed: {
+      myHotels: function() {
+        var storeHotels = store.getters.allHotels;
+        var hotelsNames = [];
+        if(store.getters.allHotels != null){
+            storeHotels.forEach(singleHotel => {
+                hotelsNames.push(singleHotel.name);
+            })
+        }
+        return hotelsNames;
+      },
+      myRentACars: function(){
+        var storeRAC = store.getters.allRentACars;
+        var RACNames = [];
+        if(store.getters.allRentACars != null){
+            storeRAC.forEach(singleRAC => {
+                RACNames.push(singleRAC.name);
+            })
+        }
+        return RACNames;
+      },
+      myAirlines: function(){
+        var storeAirlines = store.getters.allAirlines;
+        var AirlinesNames = [];
+        if(store.getters.allAirlines != null){
+            storeAirlines.forEach(singleAirlines => {
+                AirlinesNames.push(singleAirlines.name);
+            })
+        }
+        return AirlinesNames;
+      }
+    }, 
     methods: {
         passwordMatchError () {
             return (this.registration.password === this.passwordConfirmation) ? '' : 'Please enter a matching password'
         },
         validateUser() {
-            console.log("validate user");
             if(this.$refs.form.validate()){
                 this.onSubmit();
             }
