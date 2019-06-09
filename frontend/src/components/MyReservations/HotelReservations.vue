@@ -101,6 +101,8 @@ export default {
     beforeMount() {
         HotelController.getReservations(store.getters.activeUser.id)
         .then((response) => {
+            console.log("response ");
+            console.log(response.data);
             response.data.forEach(element => {
                 this.hotelReservations.push(element);
             });
