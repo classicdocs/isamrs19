@@ -287,4 +287,81 @@ public class UserService {
         }
 
     }
+
+    public FlightReservationResultDTO cancelReservation(Long userId, Long id) throws UserNotFound {
+
+        Optional<User> user = userRepository.findOneById(userId);
+        if (user.isPresent()) {
+            try {
+                RegisteredUser ru = (RegisteredUser) user.get();
+                FlightReservation flightReservationToDelete = null;
+                for (FlightReservation flightReservation : ru.getFlightReservations()) {
+                    if (flightReservation.getId() == id) {
+                        flightReservationToDelete = flightReservation;
+                        break;
+                    }
+                }
+                if (flightReservationToDelete != null ) {
+                    Set<Passenger> passengers = flightReservationToDelete.getPassengers();
+                    for (Passenger passenger : passengers) {
+                        Optional<User> user1 = userRepository.findOneById(passenger.getPassengerId());
+                        if (user1.isPresent() ) {
+                            setSeatFree(flightReservationToDelete.getDepartureFlight().getSeatsFirst(), passenger.getPassengerId());
+                            setSeatFree(flightReservationToDelete.getDepartureFlight().getSeatsBusiness(), passenger.getPassengerId());
+                            setSeatFree(flightReservationToDelete.getDepartureFlight().getSeatsEconomy(), passenger.getPassengerId());
+
+                            if (flightReservationToDelete.getReturnFlight() != null ) {
+                                setSeatFree(flightReservationToDelete.getReturnFlight().getSeatsFirst(), passenger.getPassengerId());
+                                setSeatFree(flightReservationToDelete.getReturnFlight().getSeatsBusiness(), passenger.getPassengerId());
+                                setSeatFree(flightReservationToDelete.getReturnFlight().getSeatsEconomy(), passenger.getPassengerId());
+                            }
+                            if (user1.get().getId() == user.get().getId()) {
+                                continue;
+                            }
+                            RegisteredUser registeredUser = (RegisteredUser) user1.get();
+                            FlightInvitation flightInvitationToDelete = null;
+                            for (FlightInvitation fi : registeredUser.getFlightInvitations() ) {
+                                if (fi.getFlightReservation().getId() == id) {
+                                    flightInvitationToDelete = fi;
+                                    break;
+                                }
+                            }
+                            if (flightInvitationToDelete != null ) {
+                                registeredUser.getFlightInvitations().remove(flightInvitationToDelete);
+                                userRepository.save(registeredUser);
+                            }
+                        } else throw new UserNotFound(userId);
+                    }
+
+                    ru.getFlightReservations().remove(flightReservationToDelete);
+                    userRepository.save(ru);
+                    FlightReservationResultDTO flightReservationResultDTO = new FlightReservationResultDTO();
+                    flightReservationResultDTO.setId(flightReservationToDelete.getId());
+                    return flightReservationResultDTO;
+                }
+                else return null;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        } else {
+            throw new UserNotFound(userId);
+        }
+
+    }
+
+    private void setSeatFree(List<SeatRow> seats, Long passengerId) {
+        for (SeatRow sr : seats) {
+            for (Seat s : sr.getSeats()) {
+                if (s.getPassenger() != null) {
+                    if (s.getPassenger().getPassengerId() == passengerId) {
+                        s.setTaken(false);
+                        s.setPassenger(null);
+                        seatRepository.save(s);
+                    }
+                }
+            }
+        }
+    }
 }

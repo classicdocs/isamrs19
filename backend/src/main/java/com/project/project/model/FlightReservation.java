@@ -20,7 +20,7 @@ public class FlightReservation {
     @ManyToOne(fetch = FetchType.EAGER)
     private Flight returnFlight;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Passenger> passengers;
 
     @Column(nullable = false)

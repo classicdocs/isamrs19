@@ -161,4 +161,20 @@ public class UserController {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PostMapping(
+        value = "/{id}/flight/reservations/cancel",
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity cancelReservation(@PathVariable("id") Long userId, @RequestBody FlightReservationResultDTO flightReservationResultDTO) {
+
+        try {
+            FlightReservationResultDTO result =  userService.cancelReservation(userId, flightReservationResultDTO.getId());
+            return new ResponseEntity<FlightReservationResultDTO>( result, HttpStatus.OK);
+        } catch (UserNotFound e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>( e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

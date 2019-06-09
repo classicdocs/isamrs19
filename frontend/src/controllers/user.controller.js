@@ -33,5 +33,8 @@ export default {
   },
   declineInvitation(id, data) {
     return UserApiService.declineInvitation(id, data);
+  },
+  cancelReservation(id, reservationId) {
+    return UserApiService.cancelReservation(id, reservationId);
   }
 };

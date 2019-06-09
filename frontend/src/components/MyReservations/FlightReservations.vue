@@ -61,7 +61,12 @@
                 </v-data-table>
                 </v-flex>
                 
-                <h3><br>{{"Date of reservation " + reservation.date}}</h3>
+                <v-flex lg6 md6 sm6 xs12>
+                  <h3><br>{{"Date of reservation " + reservation.date}}</h3>
+                </v-flex>
+                <v-flex lg6 md6 sm6 xs12>
+                  <v-btn color="error" style="float:right" @click="cancelReservation(reservation)">Cancel reservation</v-btn>
+                </v-flex>
               </v-layout>
             </v-container>
            
@@ -153,6 +158,16 @@ export default {
         return this.headers1;
       }
       return this.headers2;
+    },
+    cancelReservation(reservation) {
+      let json = {
+        'id': reservation.id
+      }
+      UserController.cancelReservation(store.getters.activeUser.id, json)
+        .then((response) => {
+          alert("SUCCESS");
+        })
+        .catch()
     }
   }
 
