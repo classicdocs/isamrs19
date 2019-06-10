@@ -38,6 +38,9 @@ public class Passenger {
     @Column(nullable = false)
     private boolean accepted;
 
+    @ManyToOne
+    private FlightReservation flightReservation;
+
     public Passenger() {
 
     }

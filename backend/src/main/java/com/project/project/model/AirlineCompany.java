@@ -28,16 +28,16 @@ public class AirlineCompany {
     @Column(name = "destinations")
     private Set<String> destinations = new HashSet<String>();
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "airlineCompany", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Flight> flights;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "airlineCompany", fetch = FetchType.EAGER)
     private Set<Airplane> airplanes;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "airlineCompany", fetch = FetchType.EAGER)
     private Set<FlightReservation> reservations = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "airlineCompany", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<AirlineCompanyAdmin> admins;
 
     public AirlineCompany() {}
@@ -113,5 +113,6 @@ public class AirlineCompany {
     public void setAdmins(Set<AirlineCompanyAdmin> admins) {
         this.admins = admins;
     }
+
 
 }

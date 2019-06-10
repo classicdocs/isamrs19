@@ -10,16 +10,16 @@ import java.util.Set;
 @Entity
 public class RegisteredUser extends User {
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Friendship> friends;
 
-    @OneToMany( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user",  fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<FriendRequest> friendRequests;
 
-    @OneToMany( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user",  fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<FlightReservation> flightReservations;
 
-    @OneToMany( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user",  fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<FlightInvitation> flightInvitations;
 
     public RegisteredUser() {

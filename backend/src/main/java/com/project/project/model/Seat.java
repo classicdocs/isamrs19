@@ -24,6 +24,9 @@ public class Seat {
     @Column(name = "class", nullable = false)
     private String seatClass;
 
+    @ManyToOne
+    private SeatRow seatRow;
+
     public Seat() {
         this.taken = false;
     }

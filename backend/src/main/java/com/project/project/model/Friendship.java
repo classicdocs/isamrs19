@@ -12,12 +12,16 @@ public class Friendship {
     @OneToOne(fetch = FetchType.EAGER)
     private RegisteredUser friend;
 
+    @ManyToOne
+    private RegisteredUser user;
+
     public Friendship() {
 
     }
 
-    public Friendship(RegisteredUser r) {
+    public Friendship(RegisteredUser r, RegisteredUser user) {
         this.friend = r;
+        this.user = user;
     }
 
     public Long getId() {
@@ -34,5 +38,13 @@ public class Friendship {
 
     public void setFriend(RegisteredUser friend) {
         this.friend = friend;
+    }
+
+    public RegisteredUser getUser() {
+        return user;
+    }
+
+    public void setUser(RegisteredUser user) {
+        this.user = user;
     }
 }

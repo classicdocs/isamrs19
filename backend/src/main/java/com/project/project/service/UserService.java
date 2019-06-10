@@ -27,6 +27,12 @@ public class UserService {
     @Autowired
     private PassengerRepository passengerRepository;
 
+    @Autowired
+    private FlightRepository flightRepository;
+
+    @Autowired
+    private FlightReservationRepository flightReservationRepository;
+
     public User findOne(String username) throws UsernameNotFound {
 
         return userRepository.findOneByUsername(username).orElseThrow(() -> new UsernameNotFound(username));
@@ -306,14 +312,15 @@ public class UserService {
                     for (Passenger passenger : passengers) {
                         Optional<User> user1 = userRepository.findOneById(passenger.getPassengerId());
                         if (user1.isPresent() ) {
-                            setSeatFree(flightReservationToDelete.getDepartureFlight().getSeatsFirst(), passenger.getPassengerId());
-                            setSeatFree(flightReservationToDelete.getDepartureFlight().getSeatsBusiness(), passenger.getPassengerId());
-                            setSeatFree(flightReservationToDelete.getDepartureFlight().getSeatsEconomy(), passenger.getPassengerId());
-
+                            setSeatFree(flightReservationToDelete.getDepartureFlight().getSeatsFirst(), passenger.getId());
+                            setSeatFree(flightReservationToDelete.getDepartureFlight().getSeatsBusiness(), passenger.getId());
+                            setSeatFree(flightReservationToDelete.getDepartureFlight().getSeatsEconomy(), passenger.getId());
+                            flightRepository.save(flightReservationToDelete.getDepartureFlight());
                             if (flightReservationToDelete.getReturnFlight() != null ) {
-                                setSeatFree(flightReservationToDelete.getReturnFlight().getSeatsFirst(), passenger.getPassengerId());
-                                setSeatFree(flightReservationToDelete.getReturnFlight().getSeatsBusiness(), passenger.getPassengerId());
-                                setSeatFree(flightReservationToDelete.getReturnFlight().getSeatsEconomy(), passenger.getPassengerId());
+                                setSeatFree(flightReservationToDelete.getReturnFlight().getSeatsFirst(), passenger.getId());
+                                setSeatFree(flightReservationToDelete.getReturnFlight().getSeatsBusiness(), passenger.getId());
+                                setSeatFree(flightReservationToDelete.getReturnFlight().getSeatsEconomy(), passenger.getId());
+                                flightRepository.save(flightReservationToDelete.getReturnFlight());
                             }
                             if (user1.get().getId() == user.get().getId()) {
                                 continue;
@@ -335,6 +342,7 @@ public class UserService {
 
                     ru.getFlightReservations().remove(flightReservationToDelete);
                     userRepository.save(ru);
+                    flightReservationRepository.delete(flightReservationToDelete);
                     FlightReservationResultDTO flightReservationResultDTO = new FlightReservationResultDTO();
                     flightReservationResultDTO.setId(flightReservationToDelete.getId());
                     return flightReservationResultDTO;
@@ -355,7 +363,7 @@ public class UserService {
         for (SeatRow sr : seats) {
             for (Seat s : sr.getSeats()) {
                 if (s.getPassenger() != null) {
-                    if (s.getPassenger().getPassengerId() == passengerId) {
+                    if (s.getPassenger().getId() == passengerId) {
                         s.setTaken(false);
                         s.setPassenger(null);
                         seatRepository.save(s);

@@ -109,10 +109,10 @@ public class AirlineCompanyService {
             a.setSeatsBusinessCols(airplaneDTO.getSeatsBusinessCols());
             a.setSeatsEconomyRows(airplaneDTO.getSeatsEconomyRows());
             a.setSeatsEconomyCols(airplaneDTO.getSeatsEconomyCols());
-
+            a.setAirlineCompany(ac.get());
             a = airplaneRepository.save(a);
-            ac.get().getAirplanes().add(a);
-            airlineCompanyRepository.save(ac.get());
+//            ac.get().getAirplanes().add(a);
+//            airlineCompanyRepository.save(ac.get());
 
             return (new AirplaneDTO(a));
         } else {

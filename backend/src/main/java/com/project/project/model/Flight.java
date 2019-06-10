@@ -66,13 +66,13 @@ public class Flight {
     @Column(name = "ticket_price_economy", nullable = false)
     private double ticketPriceEconomy;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<SeatRow> seatsFirst = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "flight",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<SeatRow> seatsBusiness = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "flight",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<SeatRow> seatsEconomy = new ArrayList<>();
 
     public Flight() {
@@ -281,5 +281,7 @@ public class Flight {
     public void setVersion(Long version) {
         this.version = version;
     }
+
+
 }
 
