@@ -1,5 +1,7 @@
 package com.project.project.model;
 
+import com.project.project.exceptions.AirlineCompanyAlreadyExist;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,6 +15,9 @@ public class Airplane {
 
     @Column(name="model", nullable = false)
     private String model;
+
+    @ManyToOne
+    private AirlineCompany airlineCompany;
 
     @Column(name = "seats_first_rows" ,nullable = false)
     private int seatsFirstRows;
@@ -32,7 +37,7 @@ public class Airplane {
     @Column(name = "seats_economy_cols", nullable = false)
     private int seatsEconomyCols;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "airplane", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Flight> flight;
 
     public Airplane() {
@@ -111,5 +116,11 @@ public class Airplane {
         this.flight = flight;
     }
 
+    public AirlineCompany getAirlineCompany() {
+        return airlineCompany;
+    }
 
+    public void setAirlineCompany(AirlineCompany airlineCompany) {
+        this.airlineCompany = airlineCompany;
+    }
 }

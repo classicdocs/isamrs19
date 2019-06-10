@@ -13,7 +13,8 @@ public class SeatRow   {
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "seatRow", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OrderBy(value = "id ASC")
     private List<Seat> seats = new ArrayList<>();
 
     public SeatRow() {
