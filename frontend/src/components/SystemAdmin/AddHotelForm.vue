@@ -15,7 +15,7 @@
             </v-text-field> 
 
             <v-layout > <!--v-bind="binding"-->
-              <v-flex>
+              <!-- <v-flex>
                 <v-text-field label="country" v-model="country"
                 :rules="[v => !!v || 'country name is required']">
                 </v-text-field> 
@@ -24,22 +24,37 @@
                 <v-text-field label="city" v-model="city" 
                 :rules="[v => !!v || 'city name is required']">
                 </v-text-field> 
+              </v-flex> -->
+              <v-flex>
+                <v-select :items="hotelDestinations" v-model="hotel.destination" 
+                label="choose hotel location" :rules="destination_rules" 
+                required></v-select>
               </v-flex>
             </v-layout>
 
             <v-text-field label="street address" v-model="street"
             :rules="[v => !!v || 'street address is required']">
             </v-text-field> 
-
+            
             <v-textarea name="promotionalDescription" label="promotional description" 
               v-model="hotel.description" 
               hint="Say something good about hotel services and prices..." box>
             </v-textarea>
+            <v-layout row span>
+              
+              <v-flex>
+                Number of floors
+                <number-input v-model="hotel.numOfFloors" :min="1" :max="5" inline center controls></number-input>
+              </v-flex>
+              
+              <v-flex>
+                Number of rooms by floor
+                <number-input v-model="hotel.roomsByFloor" :min="1" :max="50" inline center controls></number-input>
+              </v-flex>
 
-            Number of floors
-            <number-input v-model="hotel.numOfFloors" :min="1" :max="5" inline center controls></number-input>
-            Number of rooms by floor
-            <number-input v-model="hotel.roomsByFloor" :min="1" :max="50" inline center controls></number-input>
+
+            </v-layout>
+            
           </v-container>
 
           <!-- DUGMAD -->
@@ -61,6 +76,9 @@ import Hotel from "@/models/Hotel";
 
 
 import SystemAdminController from "@/controllers/system-admin.controller"
+import HotelDestinationsController from "@/controllers/hotelsDestinations.controller.js";
+
+import store from "@/store";
 import { thisExpression } from '@babel/types';
 
 export default {
@@ -71,20 +89,46 @@ export default {
     country : "",
     city : "",
     street : "",
-
+    hotelDestinations: [],
+    destinations: [],
     hotel: new Hotel(),
+
+    destination_rules:[
+        v => !!v || 'You need to choose existing location from list'
+    ],
   }),
+  created() {
+    HotelDestinationsController.get()
+      .then((response) => {
+        response.data.forEach(element => {
+          this.hotelDestinations.push(element.name);
+          this.destinations.push(element);
+        });
+      });
+  },
   methods: {
     validate() {
       if(this.$refs.form.validate()) {
-        this.hotel.address = this.country + '/' + this.city + '/' + this.street;
+        // this.hotel.address = this.country + '/' + this.city + '/' + this.street;
+        this.hotel.address = this.street;
         this.hotel.priceList = [];
         this.hotel.floors = [];
         this.hotel.admins = [];
+        this.destinations.forEach(dest => {
+          if(dest.name == this.hotel.destination){
+            this.hotel.destination = dest;
+          }
+        })
 
         SystemAdminController.createHotel(this.hotel)
           .then((response) => {
             this.$emit("finished", {msg: "Hotel successfully added", color: "success"})
+            store.commit("newHotel", response.data);
+            var hotels = store.getters.allHotels;
+            hotels.push(response.data);
+            console.log("Dodajem novi hotel v");
+            console.log(hotels);
+            store.commit("allHotels", hotels);
           })
           .catch((response) => {
             this.$emit("finished", {msg: "Error! Something went wrong...", color: "error"})

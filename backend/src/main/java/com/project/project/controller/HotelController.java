@@ -1,20 +1,18 @@
 package com.project.project.controller;
 
-import com.project.project.dto.Hotel_DTOs.HotelDTO;
-import com.project.project.dto.Hotel_DTOs.HotelFloorDTO;
-import com.project.project.dto.Hotel_DTOs.RoomDTO;
-import com.project.project.exceptions.FloorNotFound;
-import com.project.project.exceptions.HotelNotFound;
-import com.project.project.model.Hotel_Model.Hotel;
-import com.project.project.model.Hotel_Model.HotelsOffer;
-import com.project.project.model.Hotel_Model.Room;
+import com.project.project.dto.Hotel_DTOs.*;
+import com.project.project.exceptions.*;
+import com.project.project.model.Hotel_Model.*;
 import com.project.project.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sun.security.krb5.internal.crypto.Des;
 
+import java.text.ParseException;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -23,6 +21,7 @@ public class HotelController {
 
     @Autowired
     private HotelService hotelService;
+
 
     @GetMapping(
             value = "/{id}",
@@ -37,6 +36,28 @@ public class HotelController {
             return new ResponseEntity<String>(hnf.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping(
+            value = "/search",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity get(
+            @RequestParam("destination") String destination,
+            @RequestParam("checkInDate") String checkInDate,
+            @RequestParam("checkOutDate") String checkOutDate,
+            @RequestParam("numOfPeople") int numOfPeople
+    ) {
+        Set<SearchHotelDTO> foundHotels = null;
+        try {
+            foundHotels = hotelService.search(destination, checkInDate, checkOutDate,numOfPeople);
+            return new ResponseEntity<Set<SearchHotelDTO>>(foundHotels, HttpStatus.OK);
+        } catch (HotelHasNoDestination| ParseException notFound) {
+            notFound.printStackTrace();
+            return new ResponseEntity<String>(notFound.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
     @PostMapping(
             value = "/{id}/rooms",
             consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -58,9 +79,13 @@ public class HotelController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity get(){
-
-        Set<HotelDTO> hotels = hotelService.findAll();
-        return new ResponseEntity<Set<HotelDTO>>(hotels, HttpStatus.OK);
+        try{
+            Set<HotelDTO> hotels = hotelService.findAll();
+            return new ResponseEntity<Set<HotelDTO>>(hotels, HttpStatus.OK);
+        }catch (DestinationNotFound|HotelNotFound hnf){
+            hnf.printStackTrace();
+            return new ResponseEntity<String>(hnf.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping(
@@ -167,4 +192,52 @@ public class HotelController {
             return new ResponseEntity<String>(hnf.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping(
+            value = "/{id}/destination",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity getDestination(@PathVariable("id") Long id) {
+        try {
+            HotelDestination destination = hotelService.getDestination(id);
+            return new ResponseEntity<HotelDestination>(destination, HttpStatus.OK);
+        } catch (DestinationNotFound|HotelNotFound hnf) {
+            hnf.printStackTrace();
+            return new ResponseEntity<String>(hnf.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(
+            value = "/{id}/reserve",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity reserve(@PathVariable("id") Long id, @RequestBody HotelReservationDTO hotelReservation) {
+        try {
+            HotelReservation hotelReservation1 = hotelService.reserve(id, hotelReservation);
+            return new ResponseEntity<HotelReservation>(hotelReservation1, HttpStatus.CREATED);
+        } catch (UserNotFound |HotelNotFound hnf) {
+            hnf.printStackTrace();
+            return new ResponseEntity<String>(hnf.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(
+            value = "/reservations/{user_id}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity getReservations(@PathVariable("user_id") Long user_id) {
+        try {
+
+            Set<HotelReservation> reservations = null;
+            reservations = hotelService.getReservations(user_id);
+            return new ResponseEntity<Set<HotelReservation>>(reservations, HttpStatus.OK);
+
+        } catch (HotelNotFound hotelNotFound) {
+            hotelNotFound.printStackTrace();
+            return new ResponseEntity<String>(hotelNotFound.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
 }

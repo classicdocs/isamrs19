@@ -8,7 +8,8 @@ export default class Hotel {
       this.roomsByFloor = null,
       this.priceList = [],
       this.floors = [],
-      this.admins = []
+      this.admins = [],
+      this.destination = null
     }
   
     reset() {
@@ -21,5 +22,6 @@ export default class Hotel {
       this.priceList = [];
       this.floors = [];
       this.admins = [];
+      this.destination = null;
     }
   }

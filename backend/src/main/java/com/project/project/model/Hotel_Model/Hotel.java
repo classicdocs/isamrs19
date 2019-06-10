@@ -36,6 +36,17 @@ public class Hotel {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<HotelAdmin> admins;
 
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private HotelDestination destination;
+
+    public HotelDestination getDestination() {
+        return destination;
+    }
+
+    public void setDestination(HotelDestination destination) {
+        this.destination = destination;
+    }
+
     public Hotel(){}
 
     public int getNumOfFloors() {
@@ -101,7 +112,6 @@ public class Hotel {
     public void setPriceList(Set<HotelsOffer> priceList) {
         this.priceList = priceList;
     }
-
 
     public Set<HotelFloor> getFloors() {
         return floors;

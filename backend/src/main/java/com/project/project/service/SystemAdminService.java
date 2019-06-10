@@ -7,6 +7,7 @@ import com.project.project.dto.RentACarDTO;
 import com.project.project.exceptions.*;
 import com.project.project.model.*;
 import com.project.project.model.Hotel_Model.Hotel;
+import com.project.project.model.Hotel_Model.HotelDestination;
 import com.project.project.model.Hotel_Model.HotelFloor;
 import com.project.project.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,9 @@ public class SystemAdminService {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private HotelDestinationsRepository hotelDestinationsRepository;
+
     public HotelDTO createHotel(HotelDTO hotelDTO) throws HotelAlreadyExists, HotelNotFound {
         Optional<Hotel> hotel = hotelRepository.findOneByName(hotelDTO.getName());
 
@@ -64,6 +68,7 @@ public class SystemAdminService {
         //hotelAdminRepository.saveAdmins(hotelDTO.getAdmins());
         h.setAdmins(hotelDTO.getAdmins());
 
+        //h.setDestination(destination);
         /*Save hotel.*/
         h = hotelRepository.save(h);
 
@@ -74,6 +79,10 @@ public class SystemAdminService {
             hf.setHotel(h);
             addFloor(h.getId(), hf);
         }
+
+        HotelDestination destination = hotelDTO.getDestination();
+        destination.getHotels().add(h);
+        destination = hotelDestinationsRepository.save(destination);
         return (new HotelDTO(h));
     }
 

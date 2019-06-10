@@ -16,6 +16,11 @@
         <div slot="header"><h2>Vehicle reservations</h2></div>
         <vehicle-reservations></vehicle-reservations>
       </v-expansion-panel-content>
+
+      <v-expansion-panel-content>
+        <div slot="header"><h2>Hotel reservations</h2></div>
+        <hotel-reservations></hotel-reservations>
+      </v-expansion-panel-content>
     </v-expansion-panel>
   </div>
 </template>
@@ -24,13 +29,15 @@
 import FlightReservationsVue from '../components/MyReservations/FlightReservations.vue';
 import FlightInvitationsVue from '../components/MyReservations/FlightInvitations.vue';
 import VehicleReservations from '../components/MyReservations/VehicleReservations.vue';
+import HotelReservations from '../components/MyReservations/HotelReservations.vue';
 
 export default {
   name: "MyReservations",
   components: {
     'flight-reservations' : FlightReservationsVue,
     'flight-invitations': FlightInvitationsVue,
-    'vehicle-reservations': VehicleReservations
+    'vehicle-reservations': VehicleReservations,
+    'hotel-reservations': HotelReservations
   }
 }
 </script>

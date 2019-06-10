@@ -18,13 +18,13 @@
         <span class="headline">Pick a room</span>
       </v-card-title>
         <v-card-text>
-        <v-layout col wrap>
+        <v-layout col wrap v-if=" myHotel != null">
             <v-layout row wrap>
-                <v-flex lg10 md10 sm12 xs12>
+                <v-flex lg10 md10 sm12 xs12 >
                 <v-layout row wrap>
 
                     <v-flex lg12 md12 sm12 xs12 
-                    v-for="(floor,floorNUM) in hotel.floors" :key="floorNUM">
+                    v-for="(floor,floorNUM) in myHotel.floors" :key="floorNUM">
                     
                     <v-btn flat>Floor {{floor.level }}</v-btn>
                     
@@ -34,7 +34,7 @@
                     >
                     {{room.roomNumber}}</v-btn>
                     
-                    <v-divider v-if="floorNUM < hotel.floors.length" :key="`divider-${floorNUM}`"></v-divider>
+                    <v-divider v-if="floorNUM < myHotel.floors.length" :key="`divider-${floorNUM}`"></v-divider>
                     </v-flex>
                 </v-layout>
                 </v-flex>
@@ -86,29 +86,35 @@ import store from "@/store";
 
 export default {
   name: "ChangeRoomDialog",
-  props: ['hotel'],
   data: () => ({
     form: true,
     selected: false,
     addFormDialog: false,
   
+    hotel: new Hotel(),
     pickedRoom: new Room(),
     pickedFloor: new HotelFloor(),
     numberOfBeds: 0,
 
   }),
-  watch: {
-    hotel: function () {
-      this.hotel.floors.forEach(floor => {
-        floor.roomsOnFloor.forEach(room => {
-          room.hotelFloor = null;   // moram da ispraznim zbog json beskonacnog kruga
-        });
-      });
-      this.hotel.floors.forEach(floor => {
+  computed: {
+      myHotel: function() {
+
+        this.hotel = store.getters.newHotel;
+        if(store.getters.newHotel != null){
+          this.hotel.floors.sort(function(a, b){return a.level - b.level});
+
+          this.hotel.floors.forEach(floor => {
+
             floor.roomsOnFloor.sort(function(r1, r2){return r1.roomNumber - r2.roomNumber});
-        });
-      return this.hotel;
-    }
+            floor.roomsOnFloor.forEach(singleRoom => {
+              singleRoom.hotelFloor = null;
+            })
+          });
+        }
+
+        return this.hotel;
+      },
   },
   created() {
     this.setDefault();
@@ -117,12 +123,10 @@ export default {
     validate() {
       if(this.$refs.form.validate()) {
         
-        
-        
         HotelController.update(this.$route.params.id, this.pickedRoom, this.pickedRoom.hotelFloor.id)
         .then((response) => {
 
-            this.hotel.floors.forEach(floor => {
+            this.myHotel.floors.forEach(floor => {
               if(floor.level == this.pickedRoom.hotelFloor.level){
                 this.pickedRoom.hotelFloor.roomsOnFloor = floor.roomsOnFloor;
 
@@ -147,10 +151,6 @@ export default {
         this.pickedRoom.HotelFloor = new HotelFloor();
         this.pickedRoom.HotelFloor.level = 0;
         this.pickedRoom.numberOfBeds = 0;
-        this.hotel.floors.sort(function(a, b){return a.level - b.level});
-        this.hotel.floors.forEach(floor => {
-            floor.roomsOnFloor.sort(function(r1, r2){return r1.roomNumber - r2.roomNumber});
-        });
     },
     reset() {
       this.$refs.form.reset();
@@ -162,9 +162,21 @@ export default {
     },
     pickRoom(room, floor){
       this.numberOfBeds = room.numberOfBeds;
-      this.pickedRoom = JSON.parse(JSON.stringify(room)); // deep copy sobe
-      this.pickedRoom.hotelFloor = JSON.parse(JSON.stringify(floor));  //deep copy sprata
-      this.pickedRoom.hotelFloor.roomsOnFloor = []; // mora zbog Json circular 
+      this.pickedRoom = new Room();
+
+      this.pickedRoom.id = room.id;
+      this.pickedRoom.roomNumber = room.roomNumber;
+      this.pickedRoom.numberOfBeds = room.numberOfBeds;
+      this.pickedRoom.roomTaken = room.roomTaken;
+      this.pickedRoom.specialPrices = room.specialPrices;
+      
+        
+      this.pickedRoom.hotelFloor = new HotelFloor();
+      this.pickedRoom.hotelFloor.id = floor.id;
+      this.pickedRoom.hotelFloor.level = floor.level;
+      this.pickedRoom.hotelFloor.maxRooms = floor.maxRooms;
+      this.pickedRoom.hotelFloor.hotel = floor.hotel;
+
       this.selected = true;
     },
   }
