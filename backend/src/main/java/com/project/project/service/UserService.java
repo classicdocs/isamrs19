@@ -33,6 +33,9 @@ public class UserService {
     @Autowired
     private FlightReservationRepository flightReservationRepository;
 
+    @Autowired
+    private AirlineCompanyRepository airlineCompanyRepository;
+
     public User findOne(String username) throws UsernameNotFound {
 
         return userRepository.findOneByUsername(username).orElseThrow(() -> new UsernameNotFound(username));
@@ -335,6 +338,7 @@ public class UserService {
                             }
                             if (flightInvitationToDelete != null ) {
                                 registeredUser.getFlightInvitations().remove(flightInvitationToDelete);
+                                flightInvitationRepository.delete(flightInvitationToDelete);
                                 userRepository.save(registeredUser);
                             }
                         } else throw new UserNotFound(userId);
@@ -342,6 +346,9 @@ public class UserService {
 
                     ru.getFlightReservations().remove(flightReservationToDelete);
                     userRepository.save(ru);
+                    AirlineCompany ac = flightReservationToDelete.getDepartureFlight().getAirlineCompany();
+                    ac.getReservations().remove(flightReservationToDelete);
+                    airlineCompanyRepository.save(ac);
                     flightReservationRepository.delete(flightReservationToDelete);
                     FlightReservationResultDTO flightReservationResultDTO = new FlightReservationResultDTO();
                     flightReservationResultDTO.setId(flightReservationToDelete.getId());

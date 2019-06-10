@@ -34,7 +34,7 @@ public class AirlineCompany {
     @OneToMany(mappedBy = "airlineCompany", fetch = FetchType.EAGER)
     private Set<Airplane> airplanes;
 
-    @OneToMany(mappedBy = "airlineCompany", fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<FlightReservation> reservations = new HashSet<>();
 
     @OneToMany(mappedBy = "airlineCompany", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

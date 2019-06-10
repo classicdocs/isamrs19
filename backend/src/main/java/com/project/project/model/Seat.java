@@ -86,4 +86,12 @@ public class Seat {
     public void setSeatClass(String seatClass) {
         this.seatClass = seatClass;
     }
+
+    public SeatRow getSeatRow() {
+        return seatRow;
+    }
+
+    public void setSeatRow(SeatRow seatRow) {
+        this.seatRow = seatRow;
+    }
 }

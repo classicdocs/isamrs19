@@ -16,11 +16,20 @@ public class SeatRow   {
     @OneToMany(mappedBy = "seatRow", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Seat> seats = new ArrayList<>();
 
-    @ManyToOne
-    private Flight flight;
+    @Column(name = "class")
+    private String seatClass;
+
 
     public SeatRow() {
 
+    }
+
+    public String getSeatClass() {
+        return seatClass;
+    }
+
+    public void setSeatClass(String seatClass) {
+        this.seatClass = seatClass;
     }
 
     public List<Seat> getSeats() {

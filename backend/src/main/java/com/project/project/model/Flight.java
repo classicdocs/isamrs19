@@ -2,6 +2,7 @@ package com.project.project.model;
 
 
 import org.hibernate.action.internal.OrphanRemovalAction;
+import org.hibernate.annotations.SortNatural;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -66,13 +67,13 @@ public class Flight {
     @Column(name = "ticket_price_economy", nullable = false)
     private double ticketPriceEconomy;
 
-    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<SeatRow> seatsFirst = new ArrayList<>();
 
-    @OneToMany(mappedBy = "flight",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<SeatRow> seatsBusiness = new ArrayList<>();
 
-    @OneToMany(mappedBy = "flight",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<SeatRow> seatsEconomy = new ArrayList<>();
 
     public Flight() {

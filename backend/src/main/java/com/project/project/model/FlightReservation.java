@@ -23,8 +23,6 @@ public class FlightReservation {
     @OneToMany(mappedBy = "flightReservation", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Passenger> passengers;
 
-    @ManyToOne
-    private AirlineCompany airlineCompany;
 
     @Column(nullable = false)
     private double pricePerPerson;
@@ -84,13 +82,6 @@ public class FlightReservation {
         this.date = date;
     }
 
-    public AirlineCompany getAirlineCompany() {
-        return airlineCompany;
-    }
-
-    public void setAirlineCompany(AirlineCompany airlineCompany) {
-        this.airlineCompany = airlineCompany;
-    }
 
     public RegisteredUser getUser() {
         return user;
