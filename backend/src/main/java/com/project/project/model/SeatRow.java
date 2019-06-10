@@ -14,22 +14,11 @@ public class SeatRow   {
     private Long id;
 
     @OneToMany(mappedBy = "seatRow", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OrderBy(value = "id ASC")
     private List<Seat> seats = new ArrayList<>();
-
-    @Column(name = "class")
-    private String seatClass;
-
 
     public SeatRow() {
 
-    }
-
-    public String getSeatClass() {
-        return seatClass;
-    }
-
-    public void setSeatClass(String seatClass) {
-        this.seatClass = seatClass;
     }
 
     public List<Seat> getSeats() {

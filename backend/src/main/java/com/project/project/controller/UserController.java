@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.Set;
 
 @RestController
@@ -172,7 +173,23 @@ public class UserController {
         try {
             FlightReservationResultDTO result =  userService.cancelReservation(userId, flightReservationResultDTO.getId());
             return new ResponseEntity<FlightReservationResultDTO>( result, HttpStatus.OK);
-        } catch (UserNotFound e) {
+        } catch (UserNotFound | CancelReservationFailed | ParseException | FriendshipWrongRole e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>( e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(
+            value = "/{id}/flight/invitations/cancel",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity cancelInvitation(@PathVariable("id") Long userId, @RequestBody FlightInvitationDTO flightInvitationDTO) {
+
+        try {
+            FlightInvitationDTO result =  userService.cancelInvitation(userId, flightInvitationDTO.getId());
+            return new ResponseEntity<FlightInvitationDTO>( result, HttpStatus.OK);
+        } catch (UserNotFound | CancelInvitationFailed | FriendshipWrongRole | ParseException e) {
             e.printStackTrace();
             return new ResponseEntity<String>( e.getMessage(), HttpStatus.BAD_REQUEST);
         }

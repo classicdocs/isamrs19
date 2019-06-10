@@ -7,6 +7,8 @@ import com.project.project.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -297,73 +299,79 @@ public class UserService {
 
     }
 
-    public FlightReservationResultDTO cancelReservation(Long userId, Long id) throws UserNotFound {
+    public FlightReservationResultDTO cancelReservation(Long userId, Long id) throws UserNotFound, CancelReservationFailed, ParseException, FriendshipWrongRole {
 
         Optional<User> user = userRepository.findOneById(userId);
         if (user.isPresent()) {
-            try {
-                RegisteredUser ru = (RegisteredUser) user.get();
-                FlightReservation flightReservationToDelete = null;
-                for (FlightReservation flightReservation : ru.getFlightReservations()) {
-                    if (flightReservation.getId() == id) {
-                        flightReservationToDelete = flightReservation;
-                        break;
-                    }
+            if (!user.get().getRole().getRole().equals("User"))
+                throw new FriendshipWrongRole(user.get().getRole().getRole());
+            RegisteredUser ru = (RegisteredUser) user.get();
+            FlightReservation flightReservationToDelete = null;
+            for (FlightReservation flightReservation : ru.getFlightReservations()) {
+                if (flightReservation.getId() == id) {
+                    flightReservationToDelete = flightReservation;
+                    break;
                 }
-                if (flightReservationToDelete != null ) {
-                    Set<Passenger> passengers = flightReservationToDelete.getPassengers();
-                    for (Passenger passenger : passengers) {
-                        Optional<User> user1 = userRepository.findOneById(passenger.getPassengerId());
-                        if (user1.isPresent() ) {
-                            setSeatFree(flightReservationToDelete.getDepartureFlight().getSeatsFirst(), passenger.getId());
-                            setSeatFree(flightReservationToDelete.getDepartureFlight().getSeatsBusiness(), passenger.getId());
-                            setSeatFree(flightReservationToDelete.getDepartureFlight().getSeatsEconomy(), passenger.getId());
-                            flightRepository.save(flightReservationToDelete.getDepartureFlight());
-                            if (flightReservationToDelete.getReturnFlight() != null ) {
-                                setSeatFree(flightReservationToDelete.getReturnFlight().getSeatsFirst(), passenger.getId());
-                                setSeatFree(flightReservationToDelete.getReturnFlight().getSeatsBusiness(), passenger.getId());
-                                setSeatFree(flightReservationToDelete.getReturnFlight().getSeatsEconomy(), passenger.getId());
-                                flightRepository.save(flightReservationToDelete.getReturnFlight());
-                            }
-                            if (user1.get().getId() == user.get().getId()) {
-                                continue;
-                            }
-                            RegisteredUser registeredUser = (RegisteredUser) user1.get();
-                            FlightInvitation flightInvitationToDelete = null;
-                            for (FlightInvitation fi : registeredUser.getFlightInvitations() ) {
-                                if (fi.getFlightReservation().getId() == id) {
-                                    flightInvitationToDelete = fi;
-                                    break;
-                                }
-                            }
-                            if (flightInvitationToDelete != null ) {
-                                registeredUser.getFlightInvitations().remove(flightInvitationToDelete);
-                                flightInvitationRepository.delete(flightInvitationToDelete);
-                                userRepository.save(registeredUser);
-                            }
-                        } else throw new UserNotFound(userId);
-                    }
-
-                    ru.getFlightReservations().remove(flightReservationToDelete);
-                    userRepository.save(ru);
-                    AirlineCompany ac = flightReservationToDelete.getDepartureFlight().getAirlineCompany();
-                    ac.getReservations().remove(flightReservationToDelete);
-                    airlineCompanyRepository.save(ac);
-                    flightReservationRepository.delete(flightReservationToDelete);
-                    FlightReservationResultDTO flightReservationResultDTO = new FlightReservationResultDTO();
-                    flightReservationResultDTO.setId(flightReservationToDelete.getId());
-                    return flightReservationResultDTO;
-                }
-                else return null;
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
             }
+            if (flightReservationToDelete != null) {
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.HOUR_OF_DAY, 3);
+                Date departureDate = sdf.parse(flightReservationToDelete.getDepartureFlight().getDepartureDate() + " " + flightReservationToDelete.getDepartureFlight().getDepartureTime());
+
+                if (!calendar.getTime().before(departureDate))
+                    throw new CancelReservationFailed();
+
+                Set<Passenger> passengers = flightReservationToDelete.getPassengers();
+                for (Passenger passenger : passengers) {
+
+                    setSeatFree(flightReservationToDelete.getDepartureFlight().getSeatsFirst(), passenger.getId());
+                    setSeatFree(flightReservationToDelete.getDepartureFlight().getSeatsBusiness(), passenger.getId());
+                    setSeatFree(flightReservationToDelete.getDepartureFlight().getSeatsEconomy(), passenger.getId());
+                    flightRepository.save(flightReservationToDelete.getDepartureFlight());
+                    if (flightReservationToDelete.getReturnFlight() != null) {
+                        setSeatFree(flightReservationToDelete.getReturnFlight().getSeatsFirst(), passenger.getId());
+                        setSeatFree(flightReservationToDelete.getReturnFlight().getSeatsBusiness(), passenger.getId());
+                        setSeatFree(flightReservationToDelete.getReturnFlight().getSeatsEconomy(), passenger.getId());
+                        flightRepository.save(flightReservationToDelete.getReturnFlight());
+                    }
+
+                    Optional<User> user1 = userRepository.findOneById(passenger.getPassengerId());
+                    if (user1.isPresent()) {
+
+                        if (user1.get().getId() == user.get().getId()) {
+                            continue;
+                        }
+                        RegisteredUser registeredUser = (RegisteredUser) user1.get();
+                        FlightInvitation flightInvitationToDelete = null;
+                        for (FlightInvitation fi : registeredUser.getFlightInvitations()) {
+                            if (fi.getFlightReservation().getId() == id) {
+                                flightInvitationToDelete = fi;
+                                break;
+                            }
+                        }
+                        if (flightInvitationToDelete != null) {
+                            registeredUser.getFlightInvitations().remove(flightInvitationToDelete);
+                            flightInvitationRepository.delete(flightInvitationToDelete);
+                            userRepository.save(registeredUser);
+                        }
+                    }
+                }
+
+                ru.getFlightReservations().remove(flightReservationToDelete);
+                userRepository.save(ru);
+                AirlineCompany ac = flightReservationToDelete.getDepartureFlight().getAirlineCompany();
+                ac.getReservations().remove(flightReservationToDelete);
+                airlineCompanyRepository.save(ac);
+                flightReservationRepository.delete(flightReservationToDelete);
+                FlightReservationResultDTO flightReservationResultDTO = new FlightReservationResultDTO();
+                flightReservationResultDTO.setId(flightReservationToDelete.getId());
+                return flightReservationResultDTO;
+            } else return null;
         } else {
             throw new UserNotFound(userId);
         }
-
     }
 
     private void setSeatFree(List<SeatRow> seats, Long passengerId) {
@@ -377,6 +385,64 @@ public class UserService {
                     }
                 }
             }
+        }
+    }
+
+    public FlightInvitationDTO cancelInvitation(Long userId, Long id) throws UserNotFound, CancelInvitationFailed, FriendshipWrongRole, ParseException {
+
+        Optional<User> user = userRepository.findOneById(userId);
+        if (user.isPresent()) {
+            if (!user.get().getRole().getRole().equals("User"))
+                throw new FriendshipWrongRole(user.get().getRole().getRole());
+            RegisteredUser ru = (RegisteredUser) user.get();
+            FlightInvitation flightInvitationToDelete = null;
+            for (FlightInvitation fi : ru.getFlightInvitations()) {
+                if (fi.getId() == id) {
+                    flightInvitationToDelete = fi;
+                    break;
+                }
+            }
+
+            if (flightInvitationToDelete != null) {
+
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.HOUR_OF_DAY, 3);
+                Date departureDate = sdf.parse(flightInvitationToDelete.getFlightReservation().getDepartureFlight().getDepartureDate() + " " + flightInvitationToDelete.getFlightReservation().getDepartureFlight().getDepartureTime());
+
+                if (!calendar.getTime().before(departureDate))
+                    throw new CancelInvitationFailed();
+
+                FlightReservation flightReservation = flightInvitationToDelete.getFlightReservation();
+                Passenger passenger = null;
+                for (Passenger pa : flightReservation.getPassengers()) {
+                    if (pa.getPassengerId() == ru.getId()) {
+                        passenger = pa;
+                    }
+                }
+                if (passenger != null) {
+
+                    setSeatFree(flightReservation.getDepartureFlight().getSeatsFirst(), passenger.getId());
+                    setSeatFree(flightReservation.getDepartureFlight().getSeatsBusiness(), passenger.getId());
+                    setSeatFree(flightReservation.getDepartureFlight().getSeatsEconomy(), passenger.getId());
+                    if (flightReservation.getReturnFlight() != null ) {
+                        setSeatFree(flightReservation.getReturnFlight().getSeatsFirst(), passenger.getId());
+                        setSeatFree(flightReservation.getReturnFlight().getSeatsBusiness(), passenger.getId());
+                        setSeatFree(flightReservation.getReturnFlight().getSeatsEconomy(), passenger.getId());
+                    }
+
+                    flightReservation.getPassengers().remove(passenger);
+                    passengerRepository.delete(passenger);
+                    flightReservationRepository.save(flightReservation);
+                    ru.getFlightInvitations().remove(flightInvitationToDelete);
+                    flightInvitationRepository.delete(flightInvitationToDelete);
+
+                    return new FlightInvitationDTO(flightInvitationToDelete);
+                } else return null;
+            } else return null;
+        } else  {
+            throw new UserNotFound(userId);
         }
     }
 }

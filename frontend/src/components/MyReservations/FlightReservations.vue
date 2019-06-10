@@ -65,7 +65,7 @@
                   <h3><br>{{"Date of reservation " + reservation.date}}</h3>
                 </v-flex>
                 <v-flex lg6 md6 sm6 xs12>
-                  <v-btn color="error" style="float:right" @click="cancelReservation(reservation)">Cancel reservation</v-btn>
+                  <v-btn color="error" style="float:right" @click="cancelReservation(reservation)" >Cancel reservation</v-btn>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -165,10 +165,15 @@ export default {
       }
       UserController.cancelReservation(store.getters.activeUser.id, json)
         .then((response) => {
-          alert("SUCCESS");
+          store.commit("setSnack", {msg: "You have successfully canceled reservation", color:"success"})
+          let idx = this.reservations.indexOf(reservation);
+          if (idx != -1)
+            this.reservations.splice(idx,1);
         })
-        .catch()
-    }
+        .catch((error) => {
+          store.commit("setSnack", {msg: error.response.data, color:"error"})
+        })
+    },
   }
 
 

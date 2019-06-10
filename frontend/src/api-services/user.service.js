@@ -50,6 +50,9 @@ export default {
   },
   cancelReservation(id, reservationId) {
     return Axios.post(ENDPOINTS.USERS + id + ENDPOINTS.FLIGHTS + ENDPOINTS.RESERVATIONS + ENDPOINTS.CANCEL, reservationId);
+  },
+  cancelInvitation(id, invitationId) {
+    return Axios.post(ENDPOINTS.USERS + id + ENDPOINTS.FLIGHTS + ENDPOINTS.INVITATIONS + ENDPOINTS.CANCEL, invitationId);
   }
 
 };
