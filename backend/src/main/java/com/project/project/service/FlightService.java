@@ -56,6 +56,9 @@ public class FlightService {
     private FlightInvitationRepository flightInvitationRepository;
 
     @Autowired
+    private FlightWithDiscountRepository flightWithDiscountRepository;
+
+    @Autowired
     private EmailService emailService;
 
     @Value("${frontend}")
@@ -513,5 +516,62 @@ public class FlightService {
         msg += "</body></html>";
 
         emailService.prepareAndSend(subject, msg);
+    }
+
+    public void discount(DiscountDTO discount) throws FlightNotFound {
+
+        Optional<Flight> flight = flightRepository.findById(discount.getFlight());
+        if (flight.isPresent()) {
+            for (SeatDTO s : discount.getSeats()) {
+                Seat seat = seatRepository.findOneById(s.getId());
+
+                FlightWithDiscount flightWithDiscount = null;
+                double price = -1;
+                switch (seat.getSeatClass()) {
+                    case "First": {
+                        seat.setDiscount(discount.getDiscountFirst());
+
+                        if (discount.getDiscountFirst() == 0) {
+                            flightWithDiscountRepository.deleteBySeatId(seat.getId());
+                            seatRepository.save(seat);
+                            continue;
+                        }
+
+                        price = flight.get().getTicketPriceFirst() - (flight.get().getTicketPriceFirst() *  discount.getDiscountFirst() / 100);
+                        break;
+                    }
+                    case "Business": {
+                        seat.setDiscount(discount.getDiscountBusiness());
+                        if (discount.getDiscountBusiness() == 0) {
+                            flightWithDiscountRepository.deleteBySeatId(seat.getId());
+                            seatRepository.save(seat);
+                            continue;
+                        }
+
+                        price = flight.get().getTicketPriceBusiness() - (flight.get().getTicketPriceBusiness() *  discount.getDiscountBusiness() / 100);
+                        break;
+                    }
+                    case "Economy": {
+                        seat.setDiscount(discount.getDiscountEconomy());
+                        if (discount.getDiscountEconomy() == 0) {
+                            flightWithDiscountRepository.deleteBySeatId(seat.getId());
+                            seatRepository.save(seat);
+                            continue;
+                        }
+
+                        price = flight.get().getTicketPriceEconomy() - (flight.get().getTicketPriceEconomy() *  discount.getDiscountEconomy() / 100);
+                        break;
+                    }
+                }
+                flightWithDiscount = new FlightWithDiscount();
+                flightWithDiscount.setSeat(seat);
+                flightWithDiscount.setPrice(price);
+                flightWithDiscount.setFlight(flight.get());
+
+                seatRepository.save(seat);
+                flightWithDiscountRepository.save(flightWithDiscount);
+            }
+        } else throw new FlightNotFound(discount.getFlight());
+
     }
 }

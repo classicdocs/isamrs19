@@ -9,7 +9,6 @@ import java.util.List;
 
 public class SeatRowDTO {
 
-    @NotNull
     private Long id;
 
     @NotNull

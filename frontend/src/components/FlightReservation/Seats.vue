@@ -13,7 +13,7 @@
                   <v-btn small 
                   v-for="(seat,index2) in seatsDeparture[index].seats" :key="index2" 
                   :color="seat.color"
-                  :disabled="seat.taken"
+                  :disabled="isDisabled(seat)"
                   @click="pickSeatDeparture(seat)"
                   >{{seat.colNum}}</v-btn>
                 </v-flex>
@@ -40,7 +40,7 @@
                   <v-btn small 
                   v-for="(seat,index2) in seatsReturn[index].seats" :key="index2" 
                   :color="seat.color"
-                  :disabled="seat.taken"
+                  :disabled="isDisabled(seat)"
                   @click="pickSeatReturn(seat)"
                   >{{seat.colNum}}</v-btn>
                 </v-flex>
@@ -68,7 +68,7 @@ import store from '@/store';
 
 export default {
   name: "Seats",
-  props: ['seatsDeparture', 'seatsReturn', 'passengersNumber'],
+  props: ['seatsDeparture', 'seatsReturn', 'passengersNumber', 'discount'],
   data:() => ({
     seatsPickedDeparture: [],
     seatsPickedReturn: [],
@@ -80,14 +80,29 @@ export default {
   computed: {
     getColor() {
       return this.btnColor;
-    }
+    },
+    
   },
   methods: {
+    isDisabled(seat) {
+      
+      if (store.getters.isAirlineAdmin) {
+        if (seat.taken === true)
+          return true;
+        return false;
+      } else {
+        if (seat.taken === true || seat.discount != 0)
+          return true;
+      }
+    },
     setColor() {
       this.seatsDeparture.forEach(row => {
         row.seats.forEach(seat => {
-          if (seat.taken === false)
+          if (seat.taken === false){
             seat["color"] = "success";
+            if (seat.discount != 0)
+              seat["color"] = "yellow";
+          }
           else
             seat["color"] = "error"; 
         });
@@ -98,12 +113,29 @@ export default {
         row.seats.forEach(seat => {
           if (seat.taken === false)
             seat["color"] = "success";
+            if (seat.discount != 0)
+              seat["color"] = "yellow";
           else
             seat["color"] = "error"; 
         });
       });
     },
     pickSeatDeparture(seat) {
+      if (this.discount != undefined) {
+        let ind = this.seatsPickedDeparture.indexOf(seat);
+        if (ind === -1) {
+          seat.color = "primary";
+          this.seatsPickedDeparture.push(seat);
+          store.commit("seats", this.seatsPickedDeparture);
+        } else {
+          if (seat.discount != 0)
+            seat.color = "yellow";
+          else
+            seat.color = "success";
+          this.seatsPickedDeparture.splice(ind,1);
+        }
+        return;
+      }
       let ind = this.seatsPickedDeparture.indexOf(seat);
       if (ind === -1) {
         if (this.seatsPickedDeparture.length >= this.passengersNumber) {

@@ -9,5 +9,8 @@ export default {
   },
   reserve(data) {
     return FlightsApiService.reserve(data);
+  },
+  addDiscount(data) {
+    return FlightsApiService.addDiscount(data);
   }
 };

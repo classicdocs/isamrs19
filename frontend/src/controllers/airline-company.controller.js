@@ -25,6 +25,9 @@ export default {
   },
   addDestination(id,data) {
     return AirlineCompanyApiService.addDestination(id, data);
+  },
+  getFlights(id) {
+    return AirlineCompanyApiService.getFlights(id);
   }
 
 };

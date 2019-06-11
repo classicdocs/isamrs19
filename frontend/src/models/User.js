@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 const USER_ROLES = {
     SYSADMIN: 'syadmin',
     USER: 'User',
-    AIRLINEADMIN: 'airlineadmin',
+    AIRLINEADMIN: 'Airline Company Admin',
     HOTELADMIN: 'hoteladmin',
     RENTACARADMIN: 'RentACar Admin',
 };

@@ -2,11 +2,13 @@ package com.project.project.service;
 
 import com.project.project.dto.AirlineCompanyDTO;
 import com.project.project.dto.AirplaneDTO;
+import com.project.project.dto.FlightDTO;
 import com.project.project.dto.NewDestination;
 import com.project.project.exceptions.*;
 import com.project.project.model.AirlineCompany;
 import com.project.project.model.Airplane;
 import com.project.project.model.Destination;
+import com.project.project.model.Flight;
 import com.project.project.repository.AirlineCompanyRepository;
 import com.project.project.repository.AirplaneRepository;
 import com.project.project.repository.DestinationRepository;
@@ -188,6 +190,19 @@ public class AirlineCompanyService {
             airlineCompanyRepository.save(airlineCompany.get());
             return returnDest;
 
+        } else {
+            throw new AirlineCompanyNotFound(id);
+        }
+    }
+
+    public Set<FlightDTO> getFlights(Long id) throws AirlineCompanyNotFound {
+        Optional<AirlineCompany> ac = airlineCompanyRepository.findOneById(id);
+        if (ac.isPresent()) {
+            Set<FlightDTO> result = new HashSet<>();
+            for (Flight f : ac.get().getFlights()) {
+                result.add(new FlightDTO(f));
+            }
+            return result;
         } else {
             throw new AirlineCompanyNotFound(id);
         }
