@@ -46,6 +46,9 @@ public class HotelService {
     @Autowired
     private RoomTakenRepository roomTakenRepository;
 
+    @Autowired
+    private SpecialPriceRepository specialPriceRepository;
+
     public Hotel findOneById(Long id) throws HotelNotFound{
         Optional<Hotel> h = hotelRepository.findOneById(id);
         if(h.isPresent()){
@@ -468,6 +471,55 @@ public class HotelService {
 
     private boolean overlap(Date start1, Date end1, Date start2, Date end2){
         return start1.getTime() <= end2.getTime() && start2.getTime() <= end1.getTime();
+    }
+
+
+
+    public Room addRoomPrice(Long hotelID, Long roomID, SpecialPrice specialPrice) throws HotelNotFound, ParseException {
+        Optional<Hotel> h = hotelRepository.findOneById(hotelID);
+
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        Date newStartDate = format.parse(specialPrice.getStartDate());
+        Date newEndDate = format.parse(specialPrice.getEndDate());
+
+        if(h.isPresent()){
+            for (HotelFloor floor :h.get().getFloors()) {
+                for (Room r : floor.getRoomsOnFloor()) {
+                    if(r.getId() == roomID){
+                        boolean overlaps = false;
+                        for (SpecialPrice sp : r.getSpecialPrices()) {
+
+                            Date startDate = format.parse(sp.getStartDate());
+                            Date endDate = format.parse(sp.getEndDate());
+
+                            if(overlap(startDate,endDate,newStartDate,newEndDate)){
+                                // preklapaju se
+                                overlaps = true;
+                            }
+                        }
+                        if(!overlaps){
+
+                            SpecialPrice newService = new SpecialPrice();
+                            newService.setStartDate(specialPrice.getStartDate());
+                            newService.setEndDate(specialPrice.getEndDate());
+                            newService.setPrice(specialPrice.getPrice());
+
+                            newService = specialPriceRepository.save(newService);
+
+                            r.getSpecialPrices().add(newService);
+
+                            r = roomRepository.save(r);
+                            Hotel savedHotel = hotelRepository.save(h.get());
+
+                            return r;
+                        }
+                    }
+                }
+            }
+            return new Room();
+        }else{
+            throw new HotelNotFound(hotelID);
+        }
     }
 
 

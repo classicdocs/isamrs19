@@ -3,7 +3,10 @@
     <v-expansion-panel v-model="expansion" expand>
       <v-expansion-panel-content>
         <div slot='header'><h1>Search hotels</h1></div>
-        <search-hotel-form v-on:search-result="showSearchResult($event)"></search-hotel-form>
+        <search-hotel-form 
+        v-on:search-result="showSearchResult($event)"
+        v-on:search-input-error="showInputError($event)"
+        ></search-hotel-form>
       </v-expansion-panel-content>
     </v-expansion-panel>
 
@@ -106,6 +109,12 @@ export default {
       this.searchParams = result.searchHotelParams
 
       this.searchHapened= true;
+    },
+    showInputError(result){
+        store.commit("setSnack", result);
+        this.listOfHotels = [];
+        this.searchParams = new SearchHotelParameters();
+        this.searchHapened= false;
     },
     goToPage(hotel){
       let user = store.getters.isUser;

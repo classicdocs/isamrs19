@@ -156,17 +156,42 @@ export default {
   },
   methods: {
     searchHotels(){
-      HotelController.search(this.search)
-      .then(response => {
-          var result = {
-            'data': response.data,
-            'searchHotelParams': this.search
-          }
-          this.$emit("search-result", result);
-      })
-      .catch((response) => {
-        this.$emit("error", {msg: "Error! Something went wrong...", color: "error"})
-      })
+        var start = this.search.checkInDate.split('-');
+        var startDate = new Date(start[0], start[1] - 1, start[2]); 
+        var endDate = new Date(this.search.checkOutDate); 
+        var today = new Date();
+
+        if(startDate < today) {
+            this.$emit("search-input-error", {msg: "Check in date can not be before today.", color: "error"})
+            
+            //this.showSnackbar({msg: "Check in date can not be before today.", color: "error"});
+            return;
+        }else if (endDate < startDate){
+            this.$emit("search-input-error", {msg: "End date must be after start date.", color: "error"})
+            
+            //this.showSnackbar({msg: "End date must be after start date.", color: "error"});
+            return;
+        }
+
+
+        HotelController.search(this.search)
+        .then(response => {
+            var result = {
+              'data': response.data,
+              'searchHotelParams': this.search
+            }
+            this.$emit("search-result", result);
+        })
+        .catch((response) => {
+          this.$emit("error", {msg: "Error! Something went wrong...", color: "error"})
+        })
+      
+    },
+
+    showSnackbar(obj) {
+      this.snackbar.color = obj.color;
+      this.snackbar.msg = obj.msg;
+      this.snackbar.show = true;
     },
     
     validate() {

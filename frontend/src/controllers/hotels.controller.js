@@ -30,6 +30,9 @@ export default {
     },
     getReservations(user_id){
       return HotelsService.getReservations(user_id);
+    },
+    addSpecialPrice(hotel_id, room_id, specialPrice){
+      return HotelsService.addSpecialPrice(hotel_id, room_id, specialPrice);
     }
 }
 
