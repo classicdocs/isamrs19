@@ -16,6 +16,8 @@ public class RentACarInfoDTO {
     @NotNull
     private String promotionalDescription;
 
+    private double rating;
+
     public RentACarInfoDTO() {
     }
 
@@ -24,6 +26,7 @@ public class RentACarInfoDTO {
         this.name = rentACar.getName();
         this.address = rentACar.getAddress();
         this.promotionalDescription = rentACar.getPromotionalDescription();
+        this.rating = rentACar.getRating();
     }
 
     public Long getId() {
@@ -56,5 +59,13 @@ public class RentACarInfoDTO {
 
     public void setPromotionalDescription(String promotionalDescription) {
         this.promotionalDescription = promotionalDescription;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 }

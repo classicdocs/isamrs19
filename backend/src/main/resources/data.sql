@@ -105,11 +105,11 @@ insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor) valu
 
 ------------------------------------------------------------------------------------------------------------------------
 --rentacar servis 1
-insert into rentacar (id,name,address,promotional_description) values (1,'Drive X', 'North Road 7 London','DriveX has been continually growing ever since its foundation in 1989 in London, Great Britain, with branches all over the country.At all our locations we offer customers affordable and trusted rent a car services.');
+insert into rentacar (id,name,address,promotional_description,rating, total_rating) values (1,'Drive X', 'North Road 7 London','DriveX has been continually growing ever since its foundation in 1989 in London, Great Britain, with branches all over the country.At all our locations we offer customers affordable and trusted rent a car services.',4,1);
 --rentacar servis 2
-insert into rentacar (id,name,address,promotional_description) values (2,'EcoCar', '2nd Street 63 Paris','With over 60 years of experience in the industry, you can be sure that whether you are looking for a family car, sedan or prestige car for your business or leisure trips, EcoCar has the vehicle to meet every car rental need.Make the most out of our large range of services to make car rental experience a unique experience');
+insert into rentacar (id,name,address,promotional_description, rating, total_rating) values (2,'EcoCar', '2nd Street 63 Paris','With over 60 years of experience in the industry, you can be sure that whether you are looking for a family car, sedan or prestige car for your business or leisure trips, EcoCar has the vehicle to meet every car rental need.Make the most out of our large range of services to make car rental experience a unique experience',4.5,2);
 --vozilo 1
-insert into vehicle (id,name,vehicle_manufacturer,vehicle_model,vehicle_type,number_of_passengers,year_of_production,price_per_day,average_rating) values (99,'Test vehicle','Audi','A4','Sedan',4,2014,50,0);
+insert into vehicle (id,name,vehicle_manufacturer,vehicle_model,vehicle_type,number_of_passengers,year_of_production,price_per_day,average_rating,total_rating) values (99,'Test vehicle','Audi','A4','Sedan',4,2014,50,4,1);
 --vozilo 1 u servis 1
 insert into rentacar_vehicles (rentacar_id, vehicles_id) values (1,99);
 

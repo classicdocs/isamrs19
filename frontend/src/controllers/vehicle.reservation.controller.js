@@ -6,5 +6,8 @@ export default {
   },
   get(id) {
     return VehicleReservationApiService.get(id);
+  },
+  rate(data) {
+    return VehicleReservationApiService.rate(data);
   }
 };
