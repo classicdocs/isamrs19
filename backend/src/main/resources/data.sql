@@ -3,7 +3,6 @@ insert into destination (id,airport,country,name,zip) values (1,'John F. Kennedy
 insert into destination (id,airport,country,name,zip) values (2,'Nikola Tesla', 'Serbia', 'Belgrade', 'BGD');
 insert into destination (id,airport,country,name,zip) values (3,'Heathrow', 'Englend', 'London', 'LHR');
 
-
 -- aviokompanije
 insert into airline_company (id,description, address, name) values (1, 'Cheap flights!', 'Serbia/Belgrade', 'AirSerbia');
 insert into airline_company (id,description, address, name) values (2, 'Air France is a french airline company', 'France/Paris', 'AirFrance');
@@ -13,88 +12,6 @@ insert into airline_company_destinations(airline_company_id, destinations ) valu
 insert into airline_company_destinations(airline_company_id, destinations ) values (1, "Belgrade BGD");
 insert into airline_company_destinations(airline_company_id, destinations ) values (1, "London LHR");
 
---avion
-insert into airplane(id, model, seats_first_rows, seats_first_cols, seats_business_rows, seats_business_cols, seats_economy_rows, seats_economy_cols)
- values (1, 'Boing747',1,2,1,2,1,2);
-
---lista aviona u aviokompaniji
-insert into airline_company_airplanes(airline_company_id, airplanes_id) values (1,1);
-
---let
-INSERT INTO flight (id,departure_date,departure_time,distance,flight_time_hours, flight_time_minutes,landing_date,landing_time,airline_company_id,final_destination_id,start_destination_id, airplane_id, ticket_price_first, ticket_price_business, ticket_price_economy)
- VALUES (1,'2019-04-28','22:00',1700,3,30,'2019-04-29','01:30',1,2,3,1,500,200,100);
-INSERT INTO flight (id,departure_date,departure_time,distance,flight_time_hours, flight_time_minutes,landing_date,landing_time,airline_company_id,final_destination_id,start_destination_id, airplane_id, ticket_price_first, ticket_price_business, ticket_price_economy)
- VALUES (2,'2019-05-03','15:00',1700,3,0,'2019-05-03','18:00',1,3,2,1,500,200,100);
-
---lista letova u aviokompaniji
-insert into airline_company_flights(airline_company_id, flights_id) values (1, 1);
-insert into airline_company_flights(airline_company_id, flights_id) values (1, 2);
-
-
---lista letova za avion
-insert into airplane_flight(airplane_id,flight_id) values(1,1);
-insert into airplane_flight(airplane_id,flight_id) values(1,2);
-
-
---sedista
-insert into seat(id, col_num, row_num,taken, class) values (1, 1, 1, FALSE, "First");
-insert into seat(id, col_num, row_num,taken, class) values (2, 1, 2, FALSE, "First");
-insert into seat(id, col_num, row_num,taken, class) values (3, 1, 1, FALSE, "Business");
-insert into seat(id, col_num, row_num,taken, class) values (4, 1, 2, FALSE, "Business");
-insert into seat(id, col_num, row_num,taken, class) values (5, 1, 1, FALSE, "Economy");
-insert into seat(id, col_num, row_num,taken, class) values (6, 1, 2, FALSE, "Economy");
-
-insert into seat_row(id) values (1);
-insert into seat_row(id) values (2);
-insert into seat_row(id) values (3);
-insert into seat_row(id) values (4);
-insert into seat_row(id) values (5);
-insert into seat_row(id) values (6);
-
-insert into seat_row_seats(seat_row_id, seats_id) values (1, 1);
-insert into seat_row_seats(seat_row_id, seats_id) values (2, 2);
-insert into seat_row_seats(seat_row_id, seats_id) values (3, 3);
-insert into seat_row_seats(seat_row_id, seats_id) values (4, 4);
-insert into seat_row_seats(seat_row_id, seats_id) values (5, 5);
-insert into seat_row_seats(seat_row_id, seats_id) values (6, 6);
-
---sedista za let id 3
-insert into flight_seats_first(flight_id, seats_first_id)  values (1,1);
-insert into flight_seats_first(flight_id, seats_first_id)  values (1,2);
-insert into flight_seats_economy(flight_id, seats_economy_id)  values (1,3);
-insert into flight_seats_economy(flight_id, seats_economy_id)  values (1,4);
-insert into flight_seats_business(flight_id, seats_business_id)  values (1,5);
-insert into flight_seats_business(flight_id, seats_business_id)  values (1,6);
-
---sedista
-insert into seat(id, col_num, row_num, taken, class) values (7, 1, 1, FALSE, "First");
-insert into seat(id, col_num, row_num, taken, class) values (8, 1, 2, FALSE, "First");
-insert into seat(id, col_num, row_num, taken, class) values (9, 1, 1, FALSE, "Business");
-insert into seat(id, col_num, row_num, taken, class) values (10, 1, 2, FALSE, "Business");
-insert into seat(id, col_num, row_num, taken, class) values (11, 1, 1, FALSE, "Economy");
-insert into seat(id, col_num, row_num, taken, class) values (12, 1, 2, FALSE, "Economy");
-
-insert into seat_row(id) values (7);
-insert into seat_row(id) values (8);
-insert into seat_row(id) values (9);
-insert into seat_row(id) values (10);
-insert into seat_row(id) values (11);
-insert into seat_row(id) values (12);
-
-insert into seat_row_seats(seat_row_id, seats_id) values (7, 7);
-insert into seat_row_seats(seat_row_id, seats_id) values (8, 8);
-insert into seat_row_seats(seat_row_id, seats_id) values (9, 9);
-insert into seat_row_seats(seat_row_id, seats_id) values (10, 10);
-insert into seat_row_seats(seat_row_id, seats_id) values (11, 11);
-insert into seat_row_seats(seat_row_id, seats_id) values (12, 12);
-
---sedista za let id 2
-insert into flight_seats_first(flight_id, seats_first_id)  values (2,7);
-insert into flight_seats_first(flight_id, seats_first_id)  values (2,8);
-insert into flight_seats_economy(flight_id, seats_economy_id)  values (2,9);
-insert into flight_seats_economy(flight_id, seats_economy_id)  values (2,10);
-insert into flight_seats_business(flight_id, seats_business_id)  values (2,11);
-insert into flight_seats_business(flight_id, seats_business_id)  values (2,12);
 
 -- hotel
 insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor) values (1,'Moscow','Terazije 20','Nice view from hotel',4,15);
@@ -105,11 +22,11 @@ insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor) valu
 
 ------------------------------------------------------------------------------------------------------------------------
 --rentacar servis 1
-insert into rentacar (id,name,address,promotional_description) values (1,'Drive X', 'North Road 7 London','DriveX has been continually growing ever since its foundation in 1989 in London, Great Britain, with branches all over the country.At all our locations we offer customers affordable and trusted rent a car services.');
+insert into rentacar (id,name,address,promotional_description,rating, total_rating) values (1,'Drive X', 'North Road 7 London','DriveX has been continually growing ever since its foundation in 1989 in London, Great Britain, with branches all over the country.At all our locations we offer customers affordable and trusted rent a car services.',4,1);
 --rentacar servis 2
-insert into rentacar (id,name,address,promotional_description) values (2,'EcoCar', '2nd Street 63 Paris','With over 60 years of experience in the industry, you can be sure that whether you are looking for a family car, sedan or prestige car for your business or leisure trips, EcoCar has the vehicle to meet every car rental need.Make the most out of our large range of services to make car rental experience a unique experience');
+insert into rentacar (id,name,address,promotional_description, rating, total_rating) values (2,'EcoCar', '2nd Street 63 Paris','With over 60 years of experience in the industry, you can be sure that whether you are looking for a family car, sedan or prestige car for your business or leisure trips, EcoCar has the vehicle to meet every car rental need.Make the most out of our large range of services to make car rental experience a unique experience',4.5,2);
 --vozilo 1
-insert into vehicle (id,name,vehicle_manufacturer,vehicle_model,vehicle_type,number_of_passengers,year_of_production,price_per_day,average_rating) values (99,'Test vehicle','Audi','A4','Sedan',4,2014,50,0);
+insert into vehicle (id,name,vehicle_manufacturer,vehicle_model,vehicle_type,number_of_passengers,year_of_production,price_per_day,average_rating,total_rating) values (99,'Test vehicle','Audi','A4','Sedan',4,2014,50,4,1);
 --vozilo 1 u servis 1
 insert into rentacar_vehicles (rentacar_id, vehicles_id) values (1,99);
 
@@ -204,8 +121,6 @@ insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values 
 --veza izmedju servisa i admina
 insert into hotel_admins(hotel_id, admins_id) values(1,5);
 insert into hotel_admins(hotel_id, admins_id) values(4,15);
-
-insert into airline_company_admins(airline_company_id, admins_id) values (1,4);
 
 insert into rentacar_admins(rentacar_id,admins_id) values (1,3);
 

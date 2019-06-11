@@ -50,8 +50,8 @@ public class FriendshipService {
                 FriendRequest objToRemove2 = null;
                 for (FriendRequest request : r1.getFriendRequests()) {
                     if (request.getFrom() == r2.getId())  {
-                        r1.getFriends().add(new Friendship(r2));
-                        r2.getFriends().add(new Friendship(r1));
+                        r1.getFriends().add(new Friendship(r2,r1));
+                        r2.getFriends().add(new Friendship(r1,r2));
                         objToRemove1 = request;
                         for (FriendRequest request2 : r2.getFriendRequests()) {
                             if (request2.getTo() == r1.getId())
@@ -73,11 +73,13 @@ public class FriendshipService {
                     return null;
                 }
                 FriendRequest fr = new FriendRequest();
+                fr.setUser(r1);
                 fr.setTo(r2.getId());
                 r1.getFriendRequests().add(fr);
                 userRepository.save(r1);
 
                 fr = new FriendRequest();
+                fr.setUser(r2);
                 fr.setFrom(r1.getId());
                 r2.getFriendRequests().add(fr);
                 userRepository.save(r2);
@@ -108,8 +110,8 @@ public class FriendshipService {
 
 
 
-                r1.getFriends().add(new Friendship(r2));
-                r2.getFriends().add(new Friendship(r1));
+                r1.getFriends().add(new Friendship(r2,r1));
+                r2.getFriends().add(new Friendship(r1,r2));
 
                 FriendRequest objToRemove1 = null;
                 FriendRequest objToRemove2 = null;

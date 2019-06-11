@@ -2,6 +2,7 @@ package com.project.project.model;
 
 
 import org.hibernate.action.internal.OrphanRemovalAction;
+import org.hibernate.annotations.SortNatural;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -281,5 +282,7 @@ public class Flight {
     public void setVersion(Long version) {
         this.version = version;
     }
+
+
 }
 

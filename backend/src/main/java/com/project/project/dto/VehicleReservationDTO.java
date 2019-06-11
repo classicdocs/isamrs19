@@ -8,6 +8,7 @@ public class VehicleReservationDTO {
 
     private String carId;
 
+    private Long id;
 
     private String pickupDate;
 
@@ -37,13 +38,16 @@ public class VehicleReservationDTO {
 
     private String rentACarId;
 
-    private RentACarDTO1 rentACar;
+    private RentACarInfoDTO rentACar;
+
+    private boolean completed;
 
     public VehicleReservationDTO() {
     }
 
-    public VehicleReservationDTO(VehicleReservation vr){
+    public VehicleReservationDTO(VehicleReservation vr, boolean isCompleted){
 
+        this.id = vr.getId();
         this.reservedFrom = vr.getReservedFrom().toString();
         this.reservedUntil = vr.getReservedUntil().toString();
 
@@ -53,11 +57,13 @@ public class VehicleReservationDTO {
 
         this.returnLocation = vr.getReturnLocation();
 
-        this.rentACar = new RentACarDTO1(vr.getRentACar());
+        this.rentACar = new RentACarInfoDTO(vr.getRentACar());
 
         this.user = vr.getUser().getUsername();
 
         this.totalPrice = String.valueOf(vr.getTotalPrice());
+
+        this.completed = isCompleted;
     }
 
     public String getPickupDate() {
@@ -140,11 +146,11 @@ public class VehicleReservationDTO {
         this.carId = carId;
     }
 
-    public RentACarDTO1 getRentACar() {
+    public RentACarInfoDTO getRentACar() {
         return rentACar;
     }
 
-    public void setRentACar(RentACarDTO1 rentACar) {
+    public void setRentACar(RentACarInfoDTO rentACar) {
         this.rentACar = rentACar;
     }
 
@@ -170,5 +176,21 @@ public class VehicleReservationDTO {
 
     public void setTotalPrice(String totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

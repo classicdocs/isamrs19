@@ -20,11 +20,15 @@ public class FlightReservation {
     @ManyToOne(fetch = FetchType.EAGER)
     private Flight returnFlight;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "flightReservation", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Passenger> passengers;
+
 
     @Column(nullable = false)
     private double pricePerPerson;
+
+    @ManyToOne
+    private RegisteredUser user;
 
     public FlightReservation() {
         this.passengers = new HashSet<Passenger>();
@@ -76,5 +80,14 @@ public class FlightReservation {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+
+    public RegisteredUser getUser() {
+        return user;
+    }
+
+    public void setUser(RegisteredUser user) {
+        this.user = user;
     }
 }

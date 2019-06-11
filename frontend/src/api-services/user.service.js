@@ -11,6 +11,7 @@ const ENDPOINTS = {
   INVITATIONS: "/invitations",
   ACCEPT: "/accept",
   DECLINE: "/decline",
+  CANCEL: "/cancel",
 };
 
 export default {
@@ -46,6 +47,12 @@ export default {
   },
   declineInvitation(id, data) {
     return Axios.post(ENDPOINTS.USERS + id + ENDPOINTS.FLIGHTS + ENDPOINTS.INVITATIONS + ENDPOINTS.DECLINE, data);
+  },
+  cancelReservation(id, reservationId) {
+    return Axios.post(ENDPOINTS.USERS + id + ENDPOINTS.FLIGHTS + ENDPOINTS.RESERVATIONS + ENDPOINTS.CANCEL, reservationId);
+  },
+  cancelInvitation(id, invitationId) {
+    return Axios.post(ENDPOINTS.USERS + id + ENDPOINTS.FLIGHTS + ENDPOINTS.INVITATIONS + ENDPOINTS.CANCEL, invitationId);
   }
 
 };

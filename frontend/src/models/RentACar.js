@@ -6,7 +6,8 @@ export default class RentACar {
       this.priceList = [],
       this.vehicles = [],
       this.branches = [],
-      this.admins = []
+      this.admins = [],
+      this.rating = 0
     }
     reset() {
       this.name = null;
@@ -16,6 +17,7 @@ export default class RentACar {
       this.vehicles = [];
       this.branches = [];
       this.admins = [];
+      this.rating = 0;
     }
   }
     

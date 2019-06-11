@@ -34,6 +34,9 @@ public class VehicleReservation {
     @Column
     private double totalPrice;
 
+    @Column
+    private boolean rated;
+
     public VehicleReservation() {
     }
 
@@ -107,5 +110,13 @@ public class VehicleReservation {
 
     public void setReturnLocation(String returnLocation) {
         this.returnLocation = returnLocation;
+    }
+
+    public boolean isRated() {
+        return rated;
+    }
+
+    public void setRated(boolean rated) {
+        this.rated = rated;
     }
 }

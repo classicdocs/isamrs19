@@ -15,6 +15,9 @@ public class FriendRequest {
     @Column(name= "request_to")
     private Long to;
 
+    @ManyToOne
+    private RegisteredUser user;
+
     public FriendRequest() {
 
     }
@@ -41,6 +44,14 @@ public class FriendRequest {
 
     public void setTo(Long to) {
         this.to = to;
+    }
+
+    public RegisteredUser getUser() {
+        return user;
+    }
+
+    public void setUser(RegisteredUser user) {
+        this.user = user;
     }
 }
 

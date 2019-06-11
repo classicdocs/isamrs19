@@ -35,6 +35,13 @@ public class FlightInvitationDTO {
         this.accepted = flightInvitation.isAccepted();
     }
 
+    public FlightInvitationDTO(FlightInvitation flightInvitation) {
+        this.id = flightInvitation.getId();
+        this.flightReservation = new FlightReservationResultDTO(flightInvitation.getFlightReservation(), new HashSet<>());
+        this.seatClass = flightInvitation.getSeatClass();
+        this.accepted = flightInvitation.isAccepted();
+    }
+
     public Long getId() {
         return id;
     }

@@ -34,6 +34,9 @@ public class Vehicle {
     @Column(name = "average_rating")
     private double averageRating;
 
+    @Column(name = "total_rating")
+    private double totalRating;
+
     @OneToMany(fetch = FetchType.EAGER)
     private Set<VehicleTaken> reservations;
 
@@ -118,5 +121,13 @@ public class Vehicle {
 
     public void setAverageRating(double averageRating) {
         this.averageRating = averageRating;
+    }
+
+    public double getTotalRating() {
+        return totalRating;
+    }
+
+    public void setTotalRating(double totalRating) {
+        this.totalRating = totalRating;
     }
 }

@@ -29,6 +29,8 @@ public class RentACarDTO {
     @NotNull
     private Set<RentACarAdmin> admins;
 
+    private double rating;
+
 
     public RentACarDTO(){}
 
@@ -40,6 +42,7 @@ public class RentACarDTO {
         this.vehicles = rentACar.getVehicles();
         this.branches = rentACar.getBranches();
         this.admins = rentACar.getAdmins();
+        this.rating = rentACar.getRating();
     }
 
     public Set<RentACarAdmin> getAdmins() {
@@ -99,4 +102,11 @@ public class RentACarDTO {
         this.branches = branches;
     }
 
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
 }

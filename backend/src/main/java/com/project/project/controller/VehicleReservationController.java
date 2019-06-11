@@ -1,6 +1,8 @@
 package com.project.project.controller;
 
+import com.project.project.dto.RatingDTO;
 import com.project.project.dto.VehicleReservationDTO;
+import com.project.project.exceptions.AlreadyRated;
 import com.project.project.exceptions.UserNotFound;
 import com.project.project.model.VehicleReservation;
 import com.project.project.service.VehicleReservationService;
@@ -10,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.attribute.standard.Media;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,5 +35,15 @@ public class VehicleReservationController {
     public ResponseEntity get(@PathVariable("id") Long id){
         List<VehicleReservationDTO> reservations = vehicleReservationService.getReservations(id);
         return new ResponseEntity<List<VehicleReservationDTO>>(reservations, HttpStatus.OK);
+    }
+
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity rate(@RequestBody RatingDTO ratingDTO) {
+        try {
+            VehicleReservationDTO vr = vehicleReservationService.rate(ratingDTO);
+            return new ResponseEntity<VehicleReservationDTO>(vr, HttpStatus.OK);
+        } catch(AlreadyRated ar) {
+            return new ResponseEntity<String>(ar.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

@@ -18,6 +18,9 @@ public class FlightInvitation {
 
     private String seatClass;
 
+    @ManyToOne
+    private RegisteredUser user;
+
     public FlightInvitation() {
         this.accepted = false;
     }
@@ -60,5 +63,13 @@ public class FlightInvitation {
 
     public void setAccepted(boolean accepted) {
         this.accepted = accepted;
+    }
+
+    public RegisteredUser getUser() {
+        return user;
+    }
+
+    public void setUser(RegisteredUser user) {
+        this.user = user;
     }
 }

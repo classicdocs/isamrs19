@@ -24,8 +24,15 @@ public class Seat {
     @Column(name = "class", nullable = false)
     private String seatClass;
 
+    @Column(name = "discount", nullable = false)
+    private int discount;
+
+    @ManyToOne
+    private SeatRow seatRow;
+
     public Seat() {
         this.taken = false;
+        this.discount = 0;
     }
 
     public Seat(Integer rowNum, Integer colNum, boolean taken, String seatClass) {
@@ -33,6 +40,7 @@ public class Seat {
         this.colNum = colNum;
         this.taken = taken;
         this.seatClass = seatClass;
+        this.discount = 0;
     }
 
     public Long getId() {
@@ -82,5 +90,21 @@ public class Seat {
 
     public void setSeatClass(String seatClass) {
         this.seatClass = seatClass;
+    }
+
+    public SeatRow getSeatRow() {
+        return seatRow;
+    }
+
+    public void setSeatRow(SeatRow seatRow) {
+        this.seatRow = seatRow;
+    }
+
+    public int getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(int discount) {
+        this.discount = discount;
     }
 }

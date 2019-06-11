@@ -1,60 +1,42 @@
-package com.project.project.model;
+package com.project.project.dto;
 
-import com.project.project.dto.UserRegistrationDTO;
+import com.project.project.model.Passenger;
 
-import javax.persistence.*;
+public class PassengerDTO2 {
 
-@Entity
-public class Passenger {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "passenger_id")
     private Long passengerId;
 
-    @Column(nullable = false)
     private String username;
 
-    @Column(nullable = false)
     private String firstname;
 
-    @Column(nullable = false)
     private String lastname;
 
-    @Column(nullable = false)
     private String passport;
 
-    @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false)
     private String phone;
 
-    @Column(nullable = false)
     private String address;
 
-    @Column(nullable = false)
     private boolean accepted;
 
-    @ManyToOne
-    private FlightReservation flightReservation;
+    public PassengerDTO2() {}
 
-    public Passenger() {
-
-    }
-
-    public Passenger(UserRegistrationDTO passenger) {
-        this.passengerId = passenger.getId();
-        this.username = passenger.getUsername();
-        this.firstname = passenger.getFirstname();
-        this.lastname = passenger.getLastname();
-        this.passport = passenger.getPassport();
-        this.email = passenger.getEmail();
-        this.phone = passenger.getPhone();
-        this.address = passenger.getAddress();
-        this.accepted = passenger.getId() == null;
+    public PassengerDTO2(Passenger passenger) {
+        id = passenger.getId();
+        passengerId = passenger.getPassengerId();
+        username = passenger.getUsername();
+        firstname = passenger.getFirstname();
+        lastname = passenger.getLastname();
+        passport = passenger.getPassport();
+        email = passenger.getEmail();
+        phone = passenger.getPhone();
+        address = passenger.getAddress();
+        accepted = passenger.isAccepted();
     }
 
     public Long getId() {
@@ -135,13 +117,5 @@ public class Passenger {
 
     public void setAccepted(boolean accepted) {
         this.accepted = accepted;
-    }
-
-    public FlightReservation getFlightReservation() {
-        return flightReservation;
-    }
-
-    public void setFlightReservation(FlightReservation flightReservation) {
-        this.flightReservation = flightReservation;
     }
 }

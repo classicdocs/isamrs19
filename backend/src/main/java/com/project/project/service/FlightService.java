@@ -56,6 +56,9 @@ public class FlightService {
     private FlightInvitationRepository flightInvitationRepository;
 
     @Autowired
+    private FlightWithDiscountRepository flightWithDiscountRepository;
+
+    @Autowired
     private EmailService emailService;
 
     @Value("${frontend}")
@@ -111,6 +114,7 @@ public class FlightService {
             SeatRow seatRow = new SeatRow();
             for (int j = 1; j <= flight.getAirplane().getSeatsFirstCols(); j++) {
                 Seat s = new Seat();
+                s.setSeatRow(seatRow);
                 s.setRowNum(i);
                 s.setColNum(j);
                 s.setSeatClass("First");
@@ -125,6 +129,7 @@ public class FlightService {
             SeatRow seatRow = new SeatRow();
             for (int j = 1; j <= flight.getAirplane().getSeatsBusinessCols(); j++) {
                 Seat s = new Seat();
+                s.setSeatRow(seatRow);
                 s.setRowNum(i);
                 s.setColNum(j);
                 s.setSeatClass("Business");
@@ -139,6 +144,7 @@ public class FlightService {
             SeatRow seatRow = new SeatRow();
             for (int j = 1; j <= flight.getAirplane().getSeatsEconomyCols(); j++) {
                 Seat s = new Seat();
+                s.setSeatRow(seatRow);
                 s.setRowNum(i);
                 s.setColNum(j);
                 s.setSeatClass("Economy");
@@ -172,8 +178,6 @@ public class FlightService {
 
         Set<Destination> startDestinations = destinationService.findAllByName(startDestination);
         Set<Destination> finalDestinations = destinationService.findAllByName(finalDestination);
-
-
 
         Set<SearchFlightDTO> result = new HashSet<SearchFlightDTO>();
 
@@ -215,7 +219,6 @@ public class FlightService {
                             }
                         }
                     }
-
                     switch (seatClass) {
                         case "First": {
                             if (f.getFreeFirstSeats() >= passengersNumber && f2.getFreeFirstSeats() >= passengersNumber)
@@ -302,19 +305,22 @@ public class FlightService {
                 flightReservation.setDate(date);
 
                 Passenger pa = new Passenger(flightReservationDTO.getMyInfo());
+                pa.setFlightReservation(flightReservation);
                 pa.setAccepted(true);
-                passengerRepository.save(pa);
                 flightReservation.getPassengers().add(pa);
                 flightReservationRepository.save(flightReservation);
+                passengerRepository.save(pa);
+
 
 
                 for (int i = 0; i < passengers.size(); i++) {
                     Passenger p = new Passenger(passengers.get(i));
+                    p.setFlightReservation(flightReservation);
                     passengerRepository.save(p);
 
-                    flightReservation.getPassengers().add(p);
-                    Seat s = seatRepository.getOne(seatsDeparture.get(i).getId());
-                    Seat s2 = seatRepository.getOne(seatsReturn.get(i).getId());
+//                    flightReservation.getPassengers().add(p);
+                    Seat s = seatRepository.findOneById(seatsDeparture.get(i).getId());
+                    Seat s2 = seatRepository.findOneById(seatsReturn.get(i).getId());
 
                     s.setPassenger(p);
                     s.setTaken(true);
@@ -333,6 +339,7 @@ public class FlightService {
                             RegisteredUser ru = (RegisteredUser) user.get();
                             FlightInvitation invitation = new FlightInvitation();
                             invitation.setInvitationFrom(flightReservationDTO.getMyInfo().getId());
+                            invitation.setUser(ru);
                             invitation.setSeatClass(s.getSeatClass());
                             invitations.add(invitation);
                             ru.getFlightInvitations().add(invitation);
@@ -345,14 +352,17 @@ public class FlightService {
                 }
 
                 Optional<User> user =  userRepository.findOneById(flightReservationDTO.getMyInfo().getId());
-                if (user.isPresent() && user.get().getRole().getRole().equals("User")) {
-                    RegisteredUser ru = (RegisteredUser) user.get();
-                    ru.getFlightReservations().add(flightReservation);
-                    userRepository.save(ru);
+                if(user.isPresent() && user.get().getRole().getRole().equals("User")) {
+                    flightReservation.setUser((RegisteredUser) user.get());
                 }
+//                if (user.isPresent() && user.get().getRole().getRole().equals("User")) {
+//                    RegisteredUser ru = (RegisteredUser) user.get();
+//                    ru.getFlightReservations().add(flightReservation);
+//                    userRepository.save(ru);
+//                }
 
-                Seat s = seatRepository.getOne(seatsDeparture.get(passengers.size()).getId());
-                Seat s2 = seatRepository.getOne(seatsReturn.get(passengers.size()).getId());
+                Seat s = seatRepository.findOneById(seatsDeparture.get(passengers.size()).getId());
+                Seat s2 = seatRepository.findOneById(seatsReturn.get(passengers.size()).getId());
 
                 s.setPassenger(pa);
                 s.setTaken(true);
@@ -365,13 +375,12 @@ public class FlightService {
 
                 AirlineCompany airlineCompanyDeparture = airlineCompanyRepository.getOne(flightReservation.getDepartureFlight().getAirlineCompany().getId());
                 AirlineCompany airlineCompanyReturn = airlineCompanyRepository.getOne(flightReservation.getReturnFlight().getAirlineCompany().getId());
-                if (airlineCompanyDeparture.getId() == airlineCompanyReturn.getId()) {
-                    airlineCompanyDeparture.getReservations().add(flightReservation);
-                    airlineCompanyRepository.save(airlineCompanyDeparture);
-                } else {
-                    airlineCompanyDeparture.getReservations().add(flightReservation);
+
+                airlineCompanyDeparture.getReservations().add(flightReservation);
+                airlineCompanyRepository.save(airlineCompanyDeparture);
+
+                if (airlineCompanyDeparture.getId() != airlineCompanyReturn.getId()) {
                     airlineCompanyReturn.getReservations().add(flightReservation);
-                    airlineCompanyRepository.save(airlineCompanyDeparture);
                     airlineCompanyRepository.save(airlineCompanyReturn);
                 }
 
@@ -392,18 +401,20 @@ public class FlightService {
                 flightReservation.setDate(date);
 
                 Passenger pa = new Passenger(flightReservationDTO.getMyInfo());
+                pa.setFlightReservation(flightReservation);
                 pa.setAccepted(true);
-                passengerRepository.save(pa);
                 flightReservation.getPassengers().add(pa);
                 flightReservationRepository.save(flightReservation);
+                passengerRepository.save(pa);
 
 
                 for (int i = 0; i < passengers.size(); i++) {
                     Passenger p = new Passenger(passengers.get(i));
+                    p.setFlightReservation(flightReservation);
                     passengerRepository.save(p);
 
-                    flightReservation.getPassengers().add(p);
-                    Seat s = seatRepository.getOne(seatsDeparture.get(i).getId());
+//                    flightReservation.getPassengers().add(p);
+                    Seat s = seatRepository.findOneById(seatsDeparture.get(i).getId());
 
                     s.setPassenger(p);
                     s.setTaken(true);
@@ -418,6 +429,7 @@ public class FlightService {
                             RegisteredUser ru = (RegisteredUser) user.get();
                             FlightInvitation invitation = new FlightInvitation();
                             invitation.setSeatClass(s.getSeatClass());
+                            invitation.setUser(ru);
                             invitation.setInvitationFrom(flightReservationDTO.getMyInfo().getId());
                             invitation.setFlightReservation(flightReservation);
                             flightInvitationRepository.save(invitation);
@@ -428,13 +440,16 @@ public class FlightService {
                     }
                 }
                 Optional<User> user =  userRepository.findOneById(flightReservationDTO.getMyInfo().getId());
-                if (user.isPresent() && user.get().getRole().getRole().equals("User")) {
-                    RegisteredUser ru = (RegisteredUser) user.get();
-                    ru.getFlightReservations().add(flightReservation);
-                    userRepository.save(ru);
+                if(user.isPresent() && user.get().getRole().getRole().equals("User")) {
+                  flightReservation.setUser((RegisteredUser) user.get());
                 }
+//                if (user.isPresent() && user.get().getRole().getRole().equals("User")) {
+//                    RegisteredUser ru = (RegisteredUser) user.get();
+//                    ru.getFlightReservations().add(flightReservation);
+//                    userRepository.save(ru);
+//                }
 
-                Seat s = seatRepository.getOne(seatsDeparture.get(passengers.size()).getId());
+                Seat s = seatRepository.findOneById(seatsDeparture.get(passengers.size()).getId());
 
                 s.setPassenger(pa);
                 s.setTaken(true);
@@ -501,5 +516,62 @@ public class FlightService {
         msg += "</body></html>";
 
         emailService.prepareAndSend(subject, msg);
+    }
+
+    public void discount(DiscountDTO discount) throws FlightNotFound {
+
+        Optional<Flight> flight = flightRepository.findById(discount.getFlight());
+        if (flight.isPresent()) {
+            for (SeatDTO s : discount.getSeats()) {
+                Seat seat = seatRepository.findOneById(s.getId());
+
+                FlightWithDiscount flightWithDiscount = null;
+                double price = -1;
+                switch (seat.getSeatClass()) {
+                    case "First": {
+                        seat.setDiscount(discount.getDiscountFirst());
+
+                        if (discount.getDiscountFirst() == 0) {
+                            flightWithDiscountRepository.deleteBySeatId(seat.getId());
+                            seatRepository.save(seat);
+                            continue;
+                        }
+
+                        price = flight.get().getTicketPriceFirst() - (flight.get().getTicketPriceFirst() *  discount.getDiscountFirst() / 100);
+                        break;
+                    }
+                    case "Business": {
+                        seat.setDiscount(discount.getDiscountBusiness());
+                        if (discount.getDiscountBusiness() == 0) {
+                            flightWithDiscountRepository.deleteBySeatId(seat.getId());
+                            seatRepository.save(seat);
+                            continue;
+                        }
+
+                        price = flight.get().getTicketPriceBusiness() - (flight.get().getTicketPriceBusiness() *  discount.getDiscountBusiness() / 100);
+                        break;
+                    }
+                    case "Economy": {
+                        seat.setDiscount(discount.getDiscountEconomy());
+                        if (discount.getDiscountEconomy() == 0) {
+                            flightWithDiscountRepository.deleteBySeatId(seat.getId());
+                            seatRepository.save(seat);
+                            continue;
+                        }
+
+                        price = flight.get().getTicketPriceEconomy() - (flight.get().getTicketPriceEconomy() *  discount.getDiscountEconomy() / 100);
+                        break;
+                    }
+                }
+                flightWithDiscount = new FlightWithDiscount();
+                flightWithDiscount.setSeat(seat);
+                flightWithDiscount.setPrice(price);
+                flightWithDiscount.setFlight(flight.get());
+
+                seatRepository.save(seat);
+                flightWithDiscountRepository.save(flightWithDiscount);
+            }
+        } else throw new FlightNotFound(discount.getFlight());
+
     }
 }

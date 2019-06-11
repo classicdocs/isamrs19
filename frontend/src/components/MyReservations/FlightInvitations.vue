@@ -125,7 +125,6 @@ export default {
       }
       UserController.declineInvitation(store.getters.activeUser.id, data)
         .then((response) => {
-          console.log(response.data);
           store.commit("setSnack", {msg: "You have successfully declined invitation", color:"success"})
           let idx = this.invitations.indexOf(invitation);
           if (idx != -1)
@@ -136,6 +135,21 @@ export default {
         })
     },
     cancel(invitation) {
+
+      let data = {
+        "id" : invitation.id
+      }
+
+       UserController.cancelInvitation(store.getters.activeUser.id, data)
+        .then((response) => {
+          store.commit("setSnack", {msg: "You have successfully canceled invitation", color:"success"})
+          let idx = this.invitations.indexOf(invitation);
+          if (idx != -1)
+            this.invitations.splice(idx,1);
+        })
+        .catch((error) => {
+          store.commit("setSnack", {msg: error.response.data, color:"error"})
+        })
     }
   }
 }

@@ -20,6 +20,12 @@ public class RentACar {
     @Column(name = "promotional_description", length=512)
     private String promotionalDescription;
 
+    @Column(name = "rating", nullable = false)
+    private double rating;
+
+    @Column(name = "total_rating", nullable = false)
+    private double total_rating;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Vehicle> vehicles;
 
@@ -87,5 +93,21 @@ public class RentACar {
 
     public void setBranches(Set<String> branches) {
         this.branches = branches;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public double getTotal_rating() {
+        return total_rating;
+    }
+
+    public void setTotal_rating(double total_rating) {
+        this.total_rating = total_rating;
     }
 }

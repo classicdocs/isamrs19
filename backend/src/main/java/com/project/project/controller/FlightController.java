@@ -1,9 +1,6 @@
 package com.project.project.controller;
 
-import com.project.project.dto.FlightDTO;
-import com.project.project.dto.FlightReservationDTO;
-import com.project.project.dto.FlightReservationResultDTO;
-import com.project.project.dto.SearchFlightDTO;
+import com.project.project.dto.*;
 import com.project.project.exceptions.*;
 import com.project.project.model.FlightReservation;
 import com.project.project.service.FlightService;
@@ -16,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -76,5 +74,21 @@ public class FlightController {
             flightNotFound.printStackTrace();
             return new ResponseEntity<String>(flightNotFound.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PostMapping(
+            value = "/discount",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity discount(@RequestBody DiscountDTO discount) {
+        try {
+            flightService.discount(discount);
+            return new ResponseEntity<String>("Success", HttpStatus.OK);
+        } catch (FlightNotFound flightNotFound) {
+            flightNotFound.printStackTrace();
+            return new ResponseEntity<String>(flightNotFound.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
     }
 }

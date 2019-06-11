@@ -10,5 +10,8 @@ export default {
   },
   get(id) {
     return Axios.get(ENDPOINTS.RESERVE + id);
+  },
+  rate(data) {
+    return Axios.put(ENDPOINTS.RESERVE, data);
   }
 };

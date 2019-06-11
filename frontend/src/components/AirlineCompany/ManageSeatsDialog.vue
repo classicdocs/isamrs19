@@ -113,7 +113,6 @@ export default {
       .then((response) => {
         response.data.forEach(element => {
           this.airplanes.push(element);
-          console.log(this.airplanes);
         })
       })
       .catch((error) => {

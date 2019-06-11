@@ -29,11 +29,11 @@
         </v-flex>
       </v-layout>
       <v-layout row wrap>
-        <v-flex lg4 md4 sm6 xs12>
+        <v-flex lg4 md4 sm12 xs12>
           <list-of-destinations ></list-of-destinations>
         </v-flex>
-        <v-flex lg2 md4 sm6 xs12>
-          
+        <v-flex lg8 md8 sm12 xs12>
+          <list-of-flights></list-of-flights>
         </v-flex>
       </v-layout>
     </v-container>
@@ -67,6 +67,7 @@ import ManageSeatsDialog from "@/components/AirlineCompany/ManageSeatsDialog.vue
 import AddDestination from "@/components/AirlineCompany/AddDestination.vue";
 import ListOfDestinations from "@/components/AirlineCompany/ListOfDestinations.vue";
 import store from "@/store";
+import ListOfFlightsVue from '../components/AirlineCompany/ListOfFlights.vue';
 
 export default {
   name: "AirlineCompany",
@@ -78,6 +79,7 @@ export default {
     'manage-seats-dialog': ManageSeatsDialog,
     'add-destination': AddDestination,
     'list-of-destinations': ListOfDestinations,
+    'list-of-flights': ListOfFlightsVue,
 },
   data: () => ({
     admin: false,

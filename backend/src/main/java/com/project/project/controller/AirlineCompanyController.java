@@ -1,10 +1,7 @@
 package com.project.project.controller;
 
 
-import com.project.project.dto.AirlineCompanyDTO;
-import com.project.project.dto.AirplaneDTO;
-import com.project.project.dto.DestinationDTO;
-import com.project.project.dto.NewDestination;
+import com.project.project.dto.*;
 import com.project.project.exceptions.AirlineCompanyAlreadyExist;
 import com.project.project.exceptions.AirlineCompanyNotFound;
 import com.project.project.exceptions.AirplaneNotExist;
@@ -12,6 +9,7 @@ import com.project.project.exceptions.DestinationAlreadyExist;
 import com.project.project.model.AirlineCompany;
 import com.project.project.model.Airplane;
 import com.project.project.model.Destination;
+import com.project.project.model.Flight;
 import com.project.project.service.AirlineCompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.print.attribute.standard.Media;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -71,6 +70,22 @@ public class AirlineCompanyController {
         try {
             destinations = airlineCompanyService.getDestinations(id);
             return new ResponseEntity<Set<String>>(destinations, HttpStatus.OK);
+
+        } catch (AirlineCompanyNotFound ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<String>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(
+            value = "/{id}/flights",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity getFlights(@PathVariable("id") Long id) {
+
+        try {
+            Set<FlightDTO> flights = airlineCompanyService.getFlights(id);
+            return new ResponseEntity<Set<FlightDTO>>(flights, HttpStatus.OK);
 
         } catch (AirlineCompanyNotFound ex) {
             ex.printStackTrace();

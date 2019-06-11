@@ -4,7 +4,7 @@ import com.project.project.model.Passenger;
 
 public class PassengerDTO {
 
-    private Passenger passenger;
+    private PassengerDTO2 passenger;
 
     private Integer seatRowDeparture;
 
@@ -23,7 +23,7 @@ public class PassengerDTO {
     }
 
     public PassengerDTO(Passenger passenger, int seatRowDeparture, int seatColDeparture, int seatRowReturn, int seatColReturn, String seatClass) {
-        this.passenger = passenger;
+        this.passenger = new PassengerDTO2(passenger);
         this.seatRowDeparture = seatRowDeparture;
         this.seatColDeparture = seatColDeparture;
         this.seatRowReturn = seatRowReturn;
@@ -33,18 +33,18 @@ public class PassengerDTO {
     }
 
     public PassengerDTO(Passenger passenger, int seatRowDeparture, int seatColDeparture, String seatClass) {
-        this.passenger = passenger;
+        this.passenger = new PassengerDTO2(passenger);
         this.seatRowDeparture = seatRowDeparture;
         this.seatColDeparture = seatColDeparture;
         this.seatClass = seatClass;
         this.accepted = passenger.isAccepted();
     }
 
-    public Passenger getPassenger() {
+    public PassengerDTO2 getPassenger() {
         return passenger;
     }
 
-    public void setPassenger(Passenger passenger) {
+    public void setPassenger(PassengerDTO2 passenger) {
         this.passenger = passenger;
     }
 

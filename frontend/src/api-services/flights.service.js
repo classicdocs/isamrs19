@@ -3,7 +3,8 @@ import Axios from 'axios';
 const ENDPOINTS = {
   FLIGHTS: 'flights/',
   SEARCH: 'search',
-  RESERVE: "reserve"
+  RESERVE: "reserve",
+  DISCOUNT: "discount",
 };
 
 export default {
@@ -15,5 +16,8 @@ export default {
   },
   reserve(data) {
     return Axios.post(ENDPOINTS.FLIGHTS + ENDPOINTS.RESERVE, data);
+  },
+  addDiscount(data) {
+    return Axios.post(ENDPOINTS.FLIGHTS + ENDPOINTS.DISCOUNT, data);
   }
 };
