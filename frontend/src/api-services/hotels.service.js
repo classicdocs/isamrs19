@@ -8,7 +8,8 @@ const ENDPOINTS = {
   UPDATE_PRICELIST: '/updatePriceList',
   SEARCH: '/search',
   RESERVE: '/reserve',
-  RESERVATIONS: 'reservations/'
+  RESERVATIONS: 'reservations/',
+  ADDPRICE: '/addRoomPrice/'
 };
 
 export default {
@@ -41,5 +42,8 @@ export default {
   },
   getReservations(user_id){
     return Axios.get(ENDPOINTS.HOTELS + ENDPOINTS.RESERVATIONS + user_id);
+  },
+  addSpecialPrice(hotel_id, room_id, specialPrice){
+    return Axios.put(ENDPOINTS.HOTELS + hotel_id + ENDPOINTS.ADDPRICE + room_id, specialPrice);
   }
 };

@@ -21,9 +21,9 @@
                 ></change-room-dialog>
 
                 <priceList-overview>
-
                 </priceList-overview>
 
+                <add-special-price></add-special-price>
             </v-layout>
             <v-layout col wrap>
                 <rooms-overview
@@ -65,6 +65,7 @@ import ChangeRoomDialog from "@/components/Hotel/ChangeRoomDialog.vue";
 import RoomsOverview from "@/components/Hotel/RoomsOverview.vue"
 import ReservationForm from "@/components/HotelReservation/ReservationForm.vue";
 import PriceListOverview from "@/components/Hotel/PriceListOverview.vue";
+import AddSpecialPrice from "@/components/Hotel/AddSpecialPrice.vue";
 
 import HotelController from "@/controllers/hotels.controller"; 
 import Hotel from "@/models/Hotel"; 
@@ -78,7 +79,8 @@ export default {
     'change-room-dialog':ChangeRoomDialog,
     'rooms-overview':RoomsOverview,
     'priceList-overview': PriceListOverview,
-    'reservation-form':ReservationForm
+    'reservation-form':ReservationForm,
+    'add-special-price': AddSpecialPrice
 },
   data: () => ({
 
