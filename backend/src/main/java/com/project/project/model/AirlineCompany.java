@@ -40,6 +40,9 @@ public class AirlineCompany {
     @OneToMany(mappedBy = "airlineCompany", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<AirlineCompanyAdmin> admins;
 
+    @OneToMany(mappedBy = "airlineCompany", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<FlightWithDiscount> flightsWithDiscount = new HashSet<>();
+
     public AirlineCompany() {}
 
     public Long getId() {
@@ -114,5 +117,11 @@ public class AirlineCompany {
         this.admins = admins;
     }
 
+    public Set<FlightWithDiscount> getFlightsWithDiscount() {
+        return flightsWithDiscount;
+    }
 
+    public void setFlightsWithDiscount(Set<FlightWithDiscount> flightsWithDiscount) {
+        this.flightsWithDiscount = flightsWithDiscount;
+    }
 }

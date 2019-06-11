@@ -6,6 +6,7 @@ const ENDPOINTS = {
   AIRLINE_COMPANIES: 'airline-companies',
   DESTINATIONS: "/destinations",
   FLIGHTS: "/flights",
+  DISCOUNT: "/discount",
 };
 
 export default {
@@ -35,5 +36,8 @@ export default {
   },
   getFlights(id) {
     return Axios.get(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.FLIGHTS);
+  },
+  getFlightsDiscount(id) {
+    return Axios.get(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.FLIGHTS + ENDPOINTS.DISCOUNT);
   }
 };

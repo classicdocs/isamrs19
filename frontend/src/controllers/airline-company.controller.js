@@ -28,6 +28,9 @@ export default {
   },
   getFlights(id) {
     return AirlineCompanyApiService.getFlights(id);
+  },
+  getFlightsDiscount(id) {
+    return AirlineCompanyApiService.getFlightsDiscount(id);
   }
 
 };

@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div v-if="flights.length > 0">
     <v-card>
        <v-card-title primary-title>
-        <h2>List of flights</h2>
+        <h2>Flights on discount</h2>
       </v-card-title>
       <v-card-text>
         <v-data-table
@@ -12,20 +12,21 @@
         class="elevation-1"
       >
       <template v-slot:items="props">
-        <td class="text-xs-center">{{ props.item.id }}</td>
-        <td class="text-xs-center">{{ props.item.startDestination.name }}</td>
-        <td class="text-xs-center">{{ props.item.finalDestination.name }}</td>
-        <td class="text-xs-center">{{ props.item.departureDate }}</td>
-        <td class="text-xs-center">{{ props.item.departureTime }}</td>
-        <td class="text-xs-center">{{ props.item.landingDate }}</td>
-        <td class="text-xs-center">{{ props.item.landingTime }}</td>
-        <td class="text-xs-center">{{ props.item.flightTimeHours + "h " + props.item.flightTimeMinutes +"min"}}</td>
-        <td class="text-xs-center">{{ props.item.airplane.model }}</td>
-        <td class="text-xs-center">{{ props.item.ticketPriceFirst }}</td>
-        <td class="text-xs-center">{{ props.item.ticketPriceBusiness }}</td>
-        <td class="text-xs-center">{{ props.item.ticketPriceEconomy }}</td>
-        <td class="text-xs-center" v-if="isAdmin">
-          <flight-discount v-bind:flight="props.item"></flight-discount>
+        <td class="text-xs-center">{{ props.item.flight.id }}</td>
+        <td class="text-xs-center">{{ props.item.flight.startDestination.name }}</td>
+        <td class="text-xs-center">{{ props.item.flight.finalDestination.name }}</td>
+        <td class="text-xs-center">{{ props.item.flight.departureDate }}</td>
+        <td class="text-xs-center">{{ props.item.flight.departureTime }}</td>
+        <td class="text-xs-center">{{ props.item.flight.landingDate }}</td>
+        <td class="text-xs-center">{{ props.item.flight.landingTime }}</td>
+        <td class="text-xs-center">{{ props.item.flight.flightTimeHours + "h " + props.item.flight.flightTimeMinutes + "min" }}</td>
+        <td class="text-xs-center">{{ props.item.flight.airplane.model }}</td>
+        <td class="text-xs-center">{{ props.item.price }}</td>
+        <td class="text-xs-center">{{ props.item.seat.seatClass }}</td>
+        <td class="text-xs-center">{{ props.item.seat.rowNum }}</td>
+        <td class="text-xs-center">{{ props.item.seat.colNum }}</td>
+        <td class="text-xs-center" v-if="isUser">
+          <v-btn color="success">Reserve</v-btn>
         </td>
       </template>
       </v-data-table>
@@ -41,10 +42,7 @@ import FlightDiscountVue from './FlightDiscount.vue';
 
 
 export default {
-  name:'ListOfFlights',
-  components: {
-    'flight-discount' : FlightDiscountVue
-  },
+  name:'ListOfFlightsWithDiscount',
   data:() => ({
     flights: [],
     headers: [
@@ -57,23 +55,23 @@ export default {
         { text: 'Landing time', value: 'landingTime' , align: 'center'},
         { text: 'Flight time', value: 'flightTime' , align: 'center'},
         { text: 'Airplane', value: 'airplane' , align: 'center'},
-        { text: 'First ', value: 'ticketPriceFirst' , align: 'center'},
-        { text: 'Business', value: 'ticketPriceBusiness' , align: 'center'},
-        { text: 'Economy', value: 'ticketPriceEconomy' , align: 'center'},
+        { text: 'Price ', value: 'price' , align: 'center'},
+        { text: 'Class', value: 'seatClass' , align: 'center'},
+        { text: 'Row', value: 'rowNum' , align: 'center'},
+        { text: 'Column', value: 'colNum' , align: 'center'},
       ],
   }),
   computed: {
-    isAdmin() {
-      return store.getters.isAirlineAdmin;
+    isUser() {
+      return store.getters.isUser;
     },
   },
-  mounted() {
+  beforeMount() {
     this.getFlights();
   },
   methods: {
-    
     getFlights() {
-       AirlineCompanyController.getFlights(this.$route.params.id)
+       AirlineCompanyController.getFlightsDiscount(this.$route.params.id)
       .then((response) => {
         console.log(response.data);
         response.data.forEach(element => {
