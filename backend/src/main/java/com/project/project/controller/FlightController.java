@@ -83,12 +83,12 @@ public class FlightController {
     )
     public ResponseEntity discount(@RequestBody DiscountDTO discount) {
         try {
-            flightService.discount(discount);
+             flightService.discount(discount);
             return new ResponseEntity<String>("Success", HttpStatus.OK);
         } catch (FlightNotFound flightNotFound) {
             flightNotFound.printStackTrace();
             return new ResponseEntity<String>(flightNotFound.getMessage(), HttpStatus.BAD_REQUEST);
         }
-
     }
+
 }

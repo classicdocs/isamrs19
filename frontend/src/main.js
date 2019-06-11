@@ -31,8 +31,6 @@ Axios.defaults.headers.Accept = 'application/json';
 Axios.defaults.headers['Access-Control-Allow-Origin'] = '*';
 
 
-
-
 new Vue({
   router,
   store,

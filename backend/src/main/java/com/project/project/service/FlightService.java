@@ -520,6 +520,7 @@ public class FlightService {
 
     public void discount(DiscountDTO discount) throws FlightNotFound {
 
+
         Optional<Flight> flight = flightRepository.findById(discount.getFlight());
         if (flight.isPresent()) {
             for (SeatDTO s : discount.getSeats()) {
@@ -563,13 +564,17 @@ public class FlightService {
                         break;
                     }
                 }
+                AirlineCompany ac = flight.get().getAirlineCompany();
+
                 flightWithDiscount = new FlightWithDiscount();
                 flightWithDiscount.setSeat(seat);
                 flightWithDiscount.setPrice(price);
                 flightWithDiscount.setFlight(flight.get());
+                flightWithDiscount.setAirlineCompany(ac);
 
                 seatRepository.save(seat);
                 flightWithDiscountRepository.save(flightWithDiscount);
+
             }
         } else throw new FlightNotFound(discount.getFlight());
 

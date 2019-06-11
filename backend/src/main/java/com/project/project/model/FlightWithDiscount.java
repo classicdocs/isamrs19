@@ -18,6 +18,9 @@ public class FlightWithDiscount {
     @Column(name = "price")
     private double price;
 
+    @ManyToOne
+    private AirlineCompany airlineCompany;
+
     public FlightWithDiscount() {
 
     }
@@ -59,5 +62,13 @@ public class FlightWithDiscount {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public AirlineCompany getAirlineCompany() {
+        return airlineCompany;
+    }
+
+    public void setAirlineCompany(AirlineCompany airlineCompany) {
+        this.airlineCompany = airlineCompany;
     }
 }

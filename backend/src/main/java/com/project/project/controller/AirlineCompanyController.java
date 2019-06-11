@@ -170,4 +170,18 @@ public class AirlineCompanyController {
         Set<AirlineCompanyDTO> airlineCompanies = airlineCompanyService.findAllAirlines();
         return new ResponseEntity<Set<AirlineCompanyDTO>>(airlineCompanies, HttpStatus.OK);
     }
+
+    @GetMapping(
+            value = "/{id}/flights/discount",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity getFlightsWithDiscount(@PathVariable("id") Long airlineCompany) {
+        try {
+            Set<FlightWithDiscountDTO> flights = airlineCompanyService.getFlightsWithDiscount(airlineCompany);
+            return new ResponseEntity<Set<FlightWithDiscountDTO>>(flights, HttpStatus.OK);
+        } catch (AirlineCompanyNotFound e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

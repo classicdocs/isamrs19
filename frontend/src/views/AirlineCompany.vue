@@ -33,6 +33,7 @@
           <list-of-destinations ></list-of-destinations>
         </v-flex>
         <v-flex lg8 md8 sm12 xs12>
+          <flights-discount></flights-discount>
           <list-of-flights></list-of-flights>
         </v-flex>
       </v-layout>
@@ -68,6 +69,7 @@ import AddDestination from "@/components/AirlineCompany/AddDestination.vue";
 import ListOfDestinations from "@/components/AirlineCompany/ListOfDestinations.vue";
 import store from "@/store";
 import ListOfFlightsVue from '../components/AirlineCompany/ListOfFlights.vue';
+import ListOfFlightsWithDiscountVue from '../components/AirlineCompany/ListOfFlightsWithDiscount.vue';
 
 export default {
   name: "AirlineCompany",
@@ -80,6 +82,7 @@ export default {
     'add-destination': AddDestination,
     'list-of-destinations': ListOfDestinations,
     'list-of-flights': ListOfFlightsVue,
+    'flights-discount' : ListOfFlightsWithDiscountVue
 },
   data: () => ({
     admin: false,
