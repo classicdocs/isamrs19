@@ -478,7 +478,7 @@ public class HotelService {
     public Room addRoomPrice(Long hotelID, Long roomID, SpecialPrice specialPrice) throws HotelNotFound, ParseException {
         Optional<Hotel> h = hotelRepository.findOneById(hotelID);
 
-        DateFormat format = new SimpleDateFormat("YYYY-mm-dd", Locale.ENGLISH);
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         Date newStartDate = format.parse(specialPrice.getStartDate());
         Date newEndDate = format.parse(specialPrice.getEndDate());
 

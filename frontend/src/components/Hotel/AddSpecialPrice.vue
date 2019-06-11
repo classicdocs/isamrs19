@@ -257,7 +257,19 @@ export default {
   methods: {
     addPrice(){
         if(this.$refs.form.validate()) {
-            console.log(this.newPrice);
+            var startDate = new Date(this.newPrice.startDate); 
+            var endDate = new Date(this.newPrice.endDate); 
+            var today = new Date();
+
+            if(startDate < today) {
+                this.showSnackbar({msg: "You can only chose date range which start is some day from tomorow.", color: "error"});
+                return;
+            }else if (endDate <= startDate){
+                this.showSnackbar({msg: "End date must be after start date.", color: "error"});
+                return;
+            }
+
+
 
             HotelController.addSpecialPrice(this.$route.params.id, this.pickedRoom.id, this.newPrice)
             .then(response =>{
@@ -269,19 +281,17 @@ export default {
                             floor.roomsOnFloor.forEach(room => {
                                 if(room.id == response.data.id){
                                     room.specialPrices = response.data.specialPrices;
-                                    alert(response.data.specialPrices);
                                 }
                             })
                         })
                         store.commit("newHotel", h);
-                        alert("commit");
                     }
+                    this.definePrice = false;
+                    this.showSnackbar({msg: "Special price successfully added.", color: "success"});
                 }else{
                     // time overlaps
                     this.showSnackbar({msg: "Your date range overlaps with already defined date ranges. Please pick another one", color: "error"});
                 }
-                console.log("vracena soba");
-                console.log(response.data);
             })
             .catch((response) => {
                 alert(response.data);

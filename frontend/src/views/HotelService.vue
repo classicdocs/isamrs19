@@ -127,10 +127,9 @@ export default {
         .then((response) => {
           this.hotel = response.data;
           store.commit('newHotel', this.hotel);
-          // console.log(this.hotel);
         })
-        .catch(() => {
-          alert(error.response.data);
+        .catch((error) => {
+          alert(error.data);
           this.$router.push({name: "home"});
         });
       

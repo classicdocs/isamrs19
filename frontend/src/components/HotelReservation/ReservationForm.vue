@@ -693,6 +693,18 @@ export default {
       continueTo(number){
         if(number == 2){
           // if (this.$refs.form.validate()) {
+            var startDate = new Date(this.checkInDate); 
+            var endDate = new Date(this.checkOutDate); 
+            var today = new Date();
+
+            if(startDate <= today) {
+                this.showSnackbar({msg: "Check in date can not be before today.", color: "error"});
+                return;
+            }else if (endDate <= startDate){
+                this.showSnackbar({msg: "End date must be after start date.", color: "error"});
+                return;
+            }
+
             if(this.checkInDate != null && this.checkOutDate != null && this.numOfPeople != 0){
               this.checkDates();
               this.step = 2;
