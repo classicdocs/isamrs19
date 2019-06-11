@@ -10,6 +10,7 @@ import * as rentacars from "./rentacars.store";
 import * as rooms from "./rooms.store";
 import * as searchHotelParams from "./searchHotelParams.store";
 import * as hotelReservations from "./hotelReservations.store";
+import * as discount from "./discount.store";
 
 export {
   reservation,
@@ -24,4 +25,5 @@ export {
   rooms,
   searchHotelParams,
   hotelReservations,
+  discount,
 };

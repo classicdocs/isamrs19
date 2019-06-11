@@ -18,6 +18,7 @@
         <search-result v-for="(item, index) in filterResult"
           :key="index" 
           v-bind:data="item" 
+          v-bind:searchParams="searchParams"
           >
         </search-result>
       </v-flex>

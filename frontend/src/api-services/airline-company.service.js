@@ -4,7 +4,8 @@ const ENDPOINTS = {
   AIRLINE_COMPANY: 'airline-companies/',
   AIRPLANES: '/airplanes/',
   AIRLINE_COMPANIES: 'airline-companies',
-  DESTINATIONS: "/destinations"
+  DESTINATIONS: "/destinations",
+  FLIGHTS: "/flights",
 };
 
 export default {
@@ -30,6 +31,9 @@ export default {
     return Axios.get(ENDPOINTS.AIRLINE_COMPANIES);
   },
   addDestination(id,data) {
-    return Axios.post(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.DESTINATIONS, data)
+    return Axios.post(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.DESTINATIONS, data);
+  },
+  getFlights(id) {
+    return Axios.get(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.FLIGHTS);
   }
 };

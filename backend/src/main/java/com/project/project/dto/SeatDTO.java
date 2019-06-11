@@ -14,6 +14,8 @@ public class SeatDTO {
 
     private boolean taken;
 
+    private int discount;
+
 
     public SeatDTO() {
 
@@ -25,6 +27,7 @@ public class SeatDTO {
         this.rowNum = s.getRowNum();
         this.colNum = s.getColNum();
         this.taken = s.isTaken();
+        this.discount = s.getDiscount();
     }
 
     public Long getId() {
@@ -65,5 +68,13 @@ public class SeatDTO {
 
     public void setTaken(boolean taken) {
         this.taken = taken;
+    }
+
+    public int getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(int discount) {
+        this.discount = discount;
     }
 }
