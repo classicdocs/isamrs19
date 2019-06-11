@@ -4,10 +4,11 @@
       <v-layout row wrap>
         <v-flex lg4 md6 sm6 xs12>
           <airline-company-info v-bind:airlineCompany="airlineCompany"/>
+          <list-of-destinations ></list-of-destinations>
         </v-flex>
-        <v-flex lg8 md6 sm6 xs12 v-if="admin">
-          <v-container>
-            <v-layout row wrap>
+        <v-flex lg8 md6 sm6 xs12>
+          <v-container  v-if="admin">
+            <v-layout row wrap >
               <add-flight-dialog 
                 v-on:snack="showSnackbar($event)"
               ></add-flight-dialog>
@@ -26,13 +27,6 @@
               <add-destination v-bind:airlineCompany="airlineCompany"></add-destination>
             </v-layout>
           </v-container>
-        </v-flex>
-      </v-layout>
-      <v-layout row wrap>
-        <v-flex lg4 md4 sm12 xs12>
-          <list-of-destinations ></list-of-destinations>
-        </v-flex>
-        <v-flex lg8 md8 sm12 xs12>
           <flights-discount></flights-discount>
           <list-of-flights></list-of-flights>
         </v-flex>

@@ -207,7 +207,8 @@ public class AirlineCompanyService {
         if (ac.isPresent()) {
             Set<FlightWithDiscountDTO> result = new HashSet<>();
             for (FlightWithDiscount f : ac.get().getFlightsWithDiscount()) {
-                result.add(new FlightWithDiscountDTO(f));
+                if (!f.isTaken())
+                    result.add(new FlightWithDiscountDTO(f));
             }
             return result;
         } else {
