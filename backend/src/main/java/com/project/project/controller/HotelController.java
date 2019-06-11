@@ -240,4 +240,26 @@ public class HotelController {
 
     }
 
+
+    @PutMapping(
+            value = "/{id}/addRoomPrice/{room_id}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity addRoomPrice(@PathVariable("id") Long hotelID,
+                                       @PathVariable("room_id") Long roomID,
+                                         @RequestBody SpecialPrice specialPrice) {
+
+        Room room = null;
+        try {
+            room = hotelService.addRoomPrice(hotelID, roomID, specialPrice);
+            return new ResponseEntity<Room>(room, HttpStatus.OK);
+        }catch (ParseException | HotelNotFound notFound){
+            notFound.printStackTrace();
+            return new ResponseEntity<String>(notFound.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+
 }

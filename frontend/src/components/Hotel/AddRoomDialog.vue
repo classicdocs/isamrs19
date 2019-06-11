@@ -154,10 +154,15 @@ export default {
     setDefault(){
       this.hfp = new Hotel_Floor_Position();
       this.hfp.numOfFloors = this.hotel.numOfFloors;
+
+      /*Hotel ima spratove, spratovi imaju sobe, sortiram spratove po levelu (nivou sprata)*/
       this.hotel.floors.sort(function(a, b){return a.level - b.level});
-        this.hotel.floors.forEach(floor => {
-            floor.roomsOnFloor.sort(function(r1, r2){return r1.roomNumber - r2.roomNumber});
-        });
+      /* sortiram sobe na spratu po broju sobe (roomNumber)*/
+      this.hotel.floors.forEach(floor => {
+          floor.roomsOnFloor.sort(function(r1, r2){return r1.roomNumber - r2.roomNumber});
+      });
+
+
       this.setPositions();
     },
     setPositions(){
