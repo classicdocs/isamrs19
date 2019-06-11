@@ -229,7 +229,7 @@
               Price per day: {{ vehicle.pricePerDay }} <br/>
             </v-flex>
             <v-flex id="rating">
-
+              <v-rating :readonly="true" v-model="vehicle.averageRating" large half-increments></v-rating>
             </v-flex>
             <v-flex id="reserve">
               <v-btn  color="primary" @click="reserveVehicle(vehicle.id)"> Rent </v-btn>
@@ -355,7 +355,7 @@ export default {
         this.vehicle_list = [];
 
         store.commit('setSnack', {msg: "You have successfully reserved a vehicle!", color: "success"});
-        this.$router.push({name: "my-reservations"});
+        //this.$router.push({name: "my-reservations"});
       },
     }
 }
@@ -384,7 +384,7 @@ export default {
 
 #carinfo {
     padding-left: 10px;
-    min-width: 500px;
+    min-width: 250px;
 }
 
 #car {
@@ -417,6 +417,10 @@ export default {
 
 #mestouzimanja {
   padding-right: 20px;
+}
+
+#rating {
+  padding-right: 50px;
 }
 
 </style>

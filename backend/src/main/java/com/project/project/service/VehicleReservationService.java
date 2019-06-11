@@ -1,6 +1,8 @@
 package com.project.project.service;
 
+import com.project.project.dto.RatingDTO;
 import com.project.project.dto.VehicleReservationDTO;
+import com.project.project.exceptions.AlreadyRated;
 import com.project.project.exceptions.UserNotFound;
 import com.project.project.model.*;
 import com.project.project.repository.*;
@@ -75,13 +77,15 @@ public class VehicleReservationService {
 
         vr.setVehicle(vehicle);
 
+        vr.setRated(false);
+
         rentACarRepository.save(rentACar);
 
         vehicleRepository.save(vehicle);
 
         vehicleReservationRepository.save(vr);
 
-        return new VehicleReservationDTO(vr);
+        return new VehicleReservationDTO(vr,false);
     }
 
     public List<VehicleReservationDTO> getReservations(Long id) {
@@ -89,8 +93,14 @@ public class VehicleReservationService {
 
         ArrayList<VehicleReservationDTO> reservationDTOS = new ArrayList<VehicleReservationDTO>();
 
+        boolean isCompleted = false;
         for (VehicleReservation vr : reservations) {
-            reservationDTOS.add(new VehicleReservationDTO(vr));
+            if(vr.getReservedUntil().before(new Date())){
+                isCompleted = true;
+            } else {
+                isCompleted = false;
+            }
+            reservationDTOS.add(new VehicleReservationDTO(vr,isCompleted));
         }
 
         return reservationDTOS;
@@ -98,5 +108,41 @@ public class VehicleReservationService {
 
     private int daysBetween(Date d1, Date d2){
         return (int)( (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
+    }
+
+    public VehicleReservationDTO rate(RatingDTO ratingDTO) throws AlreadyRated {
+
+        VehicleReservation vr = vehicleReservationRepository.findOneById(ratingDTO.getId());
+
+        if (vr.isRated())
+            throw new AlreadyRated();
+
+        Vehicle v = vr.getVehicle();
+
+        double averageVehicleRating = v.getAverageRating();
+        double totalVehicleRating = v.getTotalRating();
+
+        double newAverageVehicleRating = ((averageVehicleRating * totalVehicleRating) + ratingDTO.getSpecific()) / (totalVehicleRating + 1);
+        v.setAverageRating(newAverageVehicleRating);
+        v.setTotalRating(totalVehicleRating + 1);
+
+        RentACar r = vr.getRentACar();
+
+        double averageRentACarRating = r.getRating();
+        double totalRentACarRating = r.getTotal_rating();
+
+        double newAverageRentACarRating = ((averageRentACarRating * totalRentACarRating) + ratingDTO.getService()) / (totalRentACarRating+ 1);
+        r.setRating(newAverageRentACarRating);
+        r.setTotal_rating(totalRentACarRating + 1);
+
+        vr.setRated(true);
+
+        vehicleRepository.save(v);
+
+        rentACarRepository.save(r);
+
+        vehicleReservationRepository.save(vr);
+
+        return new VehicleReservationDTO(vr,false);
     }
 }

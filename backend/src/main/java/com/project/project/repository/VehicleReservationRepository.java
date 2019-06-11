@@ -10,4 +10,6 @@ import java.util.List;
 public interface VehicleReservationRepository extends JpaRepository<VehicleReservation, Long> {
     @Query(value = "select * from vehicle_reservation vr where vr.user_id = ?1", nativeQuery = true)
     List<VehicleReservation> findReservations(Long id);
+
+    VehicleReservation findOneById(Long id);
 }
