@@ -1,5 +1,6 @@
 export default class VehicleReservation {
     constructor() {
+        this.id = null,
         this.pickupDate = null,
         this.pickupTime = null,
         this.returnDate = null,
@@ -8,6 +9,7 @@ export default class VehicleReservation {
         this.returnLocation = null,
         this.carId = null,
         this.user = null,
-        this.rentACarId = null
+        this.rentACarId = null,
+        this.completed = false
     }
 }

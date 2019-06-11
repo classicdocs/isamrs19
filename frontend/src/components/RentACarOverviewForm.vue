@@ -29,7 +29,7 @@
             <td class="text-xs-center">{{ props.item.name }}</td>
             <td class="text-xs-center">{{ props.item.address }}</td>
             <!-- <td class="text-xs-right">{{ props.item.promotionalDescription }}</td> -->
-            <!-- <td class="text-xs-center">{{ "NO DATA" }}</td> -->
+            <td class="text-xs-center"> <v-rating :readonly="true" v-model="props.item.rating" half-increments></v-rating></td>
           </tr>
           </template>
           <template v-slot:expand="props">
@@ -71,7 +71,7 @@ export default {
           },
           { text: 'Address', value: 'address' , align: 'center'},
           // { text: 'Description', value: 'description' , align: 'center', sortable: false},
-          //{ text: 'Average rate', value: 'avgRate' , align: 'center'}
+          { text: 'Average rating', value: 'avgRate' , align: 'center'}
         ],
     rentACars: [],
     form : true,
