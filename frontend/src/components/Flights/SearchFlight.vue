@@ -11,10 +11,10 @@
     </v-expansion-panel>
     <v-container grid-list-xl id="container" fluid>
       <v-layout row wrap >
-        <v-flex lg4 md4 sm12 xs12 v-if="searchResult.length !== 0" >
+        <v-flex lg2 md4 sm4 xs12 v-if="searchResult.length !== 0" >
           <filter-form v-on:filter="filter($event)"></filter-form>
         </v-flex>
-      <v-flex lg8 md8 sm12 xs12 v-if="filterResult.length !== 0">
+      <v-flex lg10 md8 sm10 xs12 v-if="filterResult.length !== 0">
         <search-result v-for="(item, index) in filterResult"
           :key="index" 
           v-bind:data="item" 

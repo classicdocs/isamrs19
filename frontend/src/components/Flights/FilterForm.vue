@@ -49,8 +49,8 @@
               </v-layout>
             </v-flex>
             <v-flex lg12 md12 sm12 xs12>
-              <v-btn color="primary" style="float:right" @click="doFilter">Filter</v-btn>
-              <v-btn color="default" style="float:right" @click="resetFilter">Reset</v-btn>
+              <v-btn color="primary" style="float:left" @click="doFilter">Filter</v-btn>
+              <v-btn color="default" style="float:left" @click="resetFilter">Reset</v-btn>
             </v-flex>
           </v-layout>
         </v-container>
