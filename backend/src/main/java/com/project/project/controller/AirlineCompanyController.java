@@ -18,8 +18,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.print.attribute.standard.Media;
+import java.text.ParseException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @RestController
@@ -180,6 +182,22 @@ public class AirlineCompanyController {
             Set<FlightWithDiscountDTO> flights = airlineCompanyService.getFlightsWithDiscount(airlineCompany);
             return new ResponseEntity<Set<FlightWithDiscountDTO>>(flights, HttpStatus.OK);
         } catch (AirlineCompanyNotFound e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(
+            value = "/{id}/reports",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity getReports(@PathVariable("id") Long airlineCompanyId,
+                                               @RequestParam("year") String year, @RequestParam("month") String month) {
+
+        try {
+            ReportsDTO result = airlineCompanyService.getReports(airlineCompanyId, year, month);
+            return new ResponseEntity<ReportsDTO>(result, HttpStatus.OK);
+        } catch (ParseException | AirlineCompanyNotFound e) {
             e.printStackTrace();
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
