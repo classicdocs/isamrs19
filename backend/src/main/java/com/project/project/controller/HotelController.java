@@ -216,7 +216,7 @@ public class HotelController {
         try {
             HotelReservation hotelReservation1 = hotelService.reserve(id, hotelReservation);
             return new ResponseEntity<HotelReservation>(hotelReservation1, HttpStatus.CREATED);
-        } catch (UserNotFound |HotelNotFound hnf) {
+        } catch (ParseException | UserNotFound |HotelNotFound hnf) {
             hnf.printStackTrace();
             return new ResponseEntity<String>(hnf.getMessage(), HttpStatus.BAD_REQUEST);
         }

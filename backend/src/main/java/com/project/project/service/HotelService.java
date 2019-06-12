@@ -14,6 +14,13 @@ import com.project.project.repository.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.LockModeType;
+import javax.persistence.Persistence;
 
 
 @Service
@@ -48,6 +55,10 @@ public class HotelService {
 
     @Autowired
     private SpecialPriceRepository specialPriceRepository;
+
+    @Autowired
+    private EntityManager entityManager;
+
 
     public Hotel findOneById(Long id) throws HotelNotFound{
         Optional<Hotel> h = hotelRepository.findOneById(id);
@@ -324,7 +335,8 @@ public class HotelService {
     }
 
 
-    public HotelReservation reserve(Long hotel_id, HotelReservationDTO reservation) throws UserNotFound, HotelNotFound {
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public HotelReservation reserve(Long hotel_id, HotelReservationDTO reservation) throws UserNotFound, HotelNotFound, ParseException {
 
         HotelReservation result = new HotelReservation();
 
@@ -334,6 +346,12 @@ public class HotelService {
         result.setTotalPrice(reservation.getTotalPrice());
 
         Room roomExample = reservation.getRooms().iterator().next();
+
+
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        Date reservationStart = format.parse(reservation.getCheckInDate());
+        Date reservationEnd = format.parse(reservation.getCheckOutDate());
+
 
         Optional<Hotel> hotel = hotelRepository.findOneById(hotel_id);
 
@@ -351,23 +369,38 @@ public class HotelService {
             }
             result.setAdditionalServices(additionalServices);
 
-
             Set<Room> rooms = new HashSet<>();
             for(Room room : reservation.getRooms()){
-                Optional<Room> realRoom = roomRepository.findOneById(room.getId());
-                if (realRoom.isPresent()){
 
-                    RoomTaken roomTaken = new RoomTaken();
-                    roomTaken.setStartDate(reservation.getCheckInDate());
-                    roomTaken.setEndDate(reservation.getCheckOutDate());
+                /*ENTITY MANAGER DOBAVLJA SOBU PO ID I ZAKLJUCAVA JE PRE MENJANJA*/
+                Room realRoom = entityManager.find(Room.class, room.getId(), LockModeType.PESSIMISTIC_WRITE);
+                entityManager.lock(realRoom, LockModeType.PESSIMISTIC_WRITE);
+                //Optional<Room> realRoom = roomRepository.findOneById(room.getId());
+                //if (realRoom.isPresent()){
 
-                    roomTaken = roomTakenRepository.save(roomTaken);
 
-                    realRoom.get().getRoomTaken().add(roomTaken);
-
-                    Room newRoom = roomRepository.save(realRoom.get());
-                    rooms.add(newRoom);
+                /* PROVERAVAM DA LI POSTOJI NEKI DATUM KADA JE SOBA REZERVISANA KOJI SE PREKLAPA SA NOVIM*/
+                for(RoomTaken rt : realRoom.getRoomTaken()){
+                    Date rtStart = format.parse(rt.getStartDate());
+                    Date rtEnd = format.parse(rt.getEndDate());
+                    if(overlap(rtStart, rtEnd, reservationStart, reservationEnd)){
+                        return null;
+                    }
                 }
+                RoomTaken roomTaken = new RoomTaken();
+
+                roomTaken.setStartDate(reservation.getCheckInDate());
+                roomTaken.setEndDate(reservation.getCheckOutDate());
+
+                roomTaken = roomTakenRepository.save(roomTaken);
+
+                //realRoom.get().getRoomTaken().add(roomTaken);
+                realRoom.getRoomTaken().add(roomTaken);
+
+                //Room newRoom = roomRepository.save(realRoom.get());
+                Room newRoom = roomRepository.save(realRoom);
+                rooms.add(newRoom);
+                //}
             }
             result.setRooms(rooms);
         }else{
@@ -405,9 +438,6 @@ public class HotelService {
         return result;
     }
 
-
-
-
     private HotelDestination getDestinationByHotel(List<HotelDestination> destinations, HotelDTO hotelDTO) throws HotelHasNoDestination {
         for (HotelDestination destination: destinations) {
             for(Hotel hotel : destination.getHotels()){
@@ -418,6 +448,54 @@ public class HotelService {
         }
         throw new HotelHasNoDestination(hotelDTO.getName());
     }
+
+    public Room addRoomPrice(Long hotelID, Long roomID, SpecialPrice specialPrice) throws HotelNotFound, ParseException {
+        Optional<Hotel> h = hotelRepository.findOneById(hotelID);
+
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        Date newStartDate = format.parse(specialPrice.getStartDate());
+        Date newEndDate = format.parse(specialPrice.getEndDate());
+
+        if(h.isPresent()){
+            for (HotelFloor floor :h.get().getFloors()) {
+                for (Room r : floor.getRoomsOnFloor()) {
+                    if(r.getId() == roomID){
+                        boolean overlaps = false;
+                        for (SpecialPrice sp : r.getSpecialPrices()) {
+
+                            Date startDate = format.parse(sp.getStartDate());
+                            Date endDate = format.parse(sp.getEndDate());
+
+                            if(overlap(startDate,endDate,newStartDate,newEndDate)){
+                                // preklapaju se
+                                overlaps = true;
+                            }
+                        }
+                        if(!overlaps){
+
+                            SpecialPrice newService = new SpecialPrice();
+                            newService.setStartDate(specialPrice.getStartDate());
+                            newService.setEndDate(specialPrice.getEndDate());
+                            newService.setPrice(specialPrice.getPrice());
+
+                            newService = specialPriceRepository.save(newService);
+
+                            r.getSpecialPrices().add(newService);
+
+                            r = roomRepository.save(r);
+                            Hotel savedHotel = hotelRepository.save(h.get());
+
+                            return r;
+                        }
+                    }
+                }
+            }
+            return new Room();
+        }else{
+            throw new HotelNotFound(hotelID);
+        }
+    }
+
 
     private boolean checkDate(HotelDTO hotel, String checkIn, String CheckOut, int numOfPeople) throws ParseException {
         int foundPlaces = 0;
@@ -473,54 +551,6 @@ public class HotelService {
         return start1.getTime() <= end2.getTime() && start2.getTime() <= end1.getTime();
     }
 
-
-
-    public Room addRoomPrice(Long hotelID, Long roomID, SpecialPrice specialPrice) throws HotelNotFound, ParseException {
-        Optional<Hotel> h = hotelRepository.findOneById(hotelID);
-
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-        Date newStartDate = format.parse(specialPrice.getStartDate());
-        Date newEndDate = format.parse(specialPrice.getEndDate());
-
-        if(h.isPresent()){
-            for (HotelFloor floor :h.get().getFloors()) {
-                for (Room r : floor.getRoomsOnFloor()) {
-                    if(r.getId() == roomID){
-                        boolean overlaps = false;
-                        for (SpecialPrice sp : r.getSpecialPrices()) {
-
-                            Date startDate = format.parse(sp.getStartDate());
-                            Date endDate = format.parse(sp.getEndDate());
-
-                            if(overlap(startDate,endDate,newStartDate,newEndDate)){
-                                // preklapaju se
-                                overlaps = true;
-                            }
-                        }
-                        if(!overlaps){
-
-                            SpecialPrice newService = new SpecialPrice();
-                            newService.setStartDate(specialPrice.getStartDate());
-                            newService.setEndDate(specialPrice.getEndDate());
-                            newService.setPrice(specialPrice.getPrice());
-
-                            newService = specialPriceRepository.save(newService);
-
-                            r.getSpecialPrices().add(newService);
-
-                            r = roomRepository.save(r);
-                            Hotel savedHotel = hotelRepository.save(h.get());
-
-                            return r;
-                        }
-                    }
-                }
-            }
-            return new Room();
-        }else{
-            throw new HotelNotFound(hotelID);
-        }
-    }
 
 
 }
