@@ -328,9 +328,11 @@ export default {
           this.optional = true;
         })
         .catch((error) => {
+          loader.hide();
+          this.$router.push({name: "flights"})
           store.commit("setSnack", {msg: error.response.data, color: "error"});
-          console.log(error.response.data);
         })
+
     },
     forceRerender() {
       this.componentKey += 1;

@@ -77,7 +77,6 @@ export default {
     getFlights() {
        AirlineCompanyController.getFlightsDiscount(this.$route.params.id)
       .then((response) => {
-        console.log(response.data);
         response.data.forEach(element => {
           this.flights.push(element);
         });
@@ -105,10 +104,14 @@ export default {
         .then((response) => {
           loader.hide();
           store.commit("setSnack", {msg: "You have successfully booked a flight!", color: "success"});
+          this.flights = [];
+          this.getFlights();
         })
         .catch((error) => {
+          loader.hide();
           store.commit("setSnack", {msg: error.response.data, color: "error"});
-          console.log(error.response.data);
+          this.flights = [];
+          this.getFlights();
         })
     },
     getMyInfo(passport) {
