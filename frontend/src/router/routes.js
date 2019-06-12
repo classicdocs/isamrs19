@@ -120,8 +120,8 @@ export const routes = [
       path: "/:id/my-reservations/",
       name: "my-reservations",
       component : MyReservations,
-      // meta: {
-      //   user: true
-      // }
+      meta: {
+        user: true
+      }
     }
   ];

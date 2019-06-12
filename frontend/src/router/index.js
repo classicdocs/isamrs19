@@ -24,10 +24,10 @@ router.beforeEach((to, from, next) => {
         store.commit('deauth');
     }
 
-    // if (to.meta.user && store.getters.activeUser.id != to.params.id)
-    // {
-    //     return next({name: 'flights'})
-    // }
+    if (to.meta.user && store.getters.activeUser.id != to.params.id)
+    {
+        return next({name: 'flights'})
+    }
     // if (to.meta.guest && store.getters.isLogged) {
     //     return next({ name: 'flights' });
     // }
