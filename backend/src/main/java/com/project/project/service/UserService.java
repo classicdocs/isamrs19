@@ -38,6 +38,9 @@ public class UserService {
     @Autowired
     private AirlineCompanyRepository airlineCompanyRepository;
 
+    @Autowired
+    private FlightWithDiscountRepository flightWithDiscountRepository;
+
     public User findOne(String username) throws UsernameNotFound {
 
         return userRepository.findOneByUsername(username).orElseThrow(() -> new UsernameNotFound(username));
@@ -382,6 +385,13 @@ public class UserService {
                         s.setTaken(false);
                         s.setPassenger(null);
                         seatRepository.save(s);
+                        if (s.getDiscount() != 0) {
+                            Optional<FlightWithDiscount> f = flightWithDiscountRepository.findOneBySeatId(s.getId());
+                            if (f.isPresent()) {
+                                f.get().setTaken(false);
+                                flightWithDiscountRepository.save(f.get());
+                            }
+                        }
                     }
                 }
             }

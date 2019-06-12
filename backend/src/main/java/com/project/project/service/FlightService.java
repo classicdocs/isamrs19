@@ -419,6 +419,7 @@ public class FlightService {
                     s.setPassenger(p);
                     s.setTaken(true);
 
+
                     passengerDTOS.add(new PassengerDTO(p, s.getRowNum(), s.getColNum(), s.getSeatClass()));
 
                     seatRepository.save(s);
@@ -453,6 +454,12 @@ public class FlightService {
 
                 s.setPassenger(pa);
                 s.setTaken(true);
+
+                Optional<FlightWithDiscount> fl = flightWithDiscountRepository.findOneBySeatId(s.getId());
+                if (fl.isPresent()) {
+                    fl.get().setTaken(true);
+                    flightWithDiscountRepository.save(fl.get());
+                }
 
                 seatRepository.save(s);
 

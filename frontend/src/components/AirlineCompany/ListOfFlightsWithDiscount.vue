@@ -26,7 +26,7 @@
         <td class="text-xs-center">{{ props.item.seat.rowNum }}</td>
         <td class="text-xs-center">{{ props.item.seat.colNum }}</td>
         <td class="text-xs-center" v-if="isUser">
-          <v-btn color="success">Reserve</v-btn>
+          <v-btn color="success" @click="reserve(props.item)">Reserve</v-btn>
         </td>
       </template>
       </v-data-table>
@@ -39,7 +39,9 @@
 import AirlineCompanyController from "@/controllers/airline-company.controller"
 import store from "@/store";
 import FlightDiscountVue from './FlightDiscount.vue';
-
+import FlightController from "@/controllers/flights.controller";
+import UserController from "@/controllers/user.controller";
+import Friend from "@/models/Friend.js";
 
 export default {
   name:'ListOfFlightsWithDiscount',
@@ -60,6 +62,7 @@ export default {
         { text: 'Row', value: 'rowNum' , align: 'center'},
         { text: 'Column', value: 'colNum' , align: 'center'},
       ],
+    myInfo: null,
   }),
   computed: {
     isUser() {
@@ -67,6 +70,7 @@ export default {
     },
   },
   beforeMount() {
+    this.getMyInfo();
     this.getFlights();
   },
   methods: {
@@ -81,7 +85,38 @@ export default {
       .catch((error) => {
         alert(error.response.data);
       })
-    }
+    },
+    reserve(flight) {
+      this.myInfo.passport = 222;
+      let data = {
+        "myInfo" : this.myInfo,
+        "flights" : {
+          "departureFlight": flight.flight
+        },
+        "seatsPickedDeparture": [flight.seat],
+        "passengers": [],
+        "price": flight.price
+      }
+      
+      console.log(data);
+
+      let loader = this.$loading.show()
+      FlightController.reserve(data)
+        .then((response) => {
+          loader.hide();
+          store.commit("setSnack", {msg: "You have successfully booked a flight!", color: "success"});
+        })
+        .catch((error) => {
+          store.commit("setSnack", {msg: error.response.data, color: "error"});
+          console.log(error.response.data);
+        })
+    },
+    getMyInfo(passport) {
+      UserController.getUser(store.getters.activeUser.id)
+      .then((response) => {
+        this.myInfo = response.data;
+      })
+    },
   }
 }
 </script>
