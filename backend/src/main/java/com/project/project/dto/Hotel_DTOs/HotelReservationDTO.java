@@ -27,6 +27,19 @@ public class HotelReservationDTO {
 
     private Hotel hotel;
 
+    public HotelReservationDTO(Long id, String checkInDate, String checkOutDate, int numberOfPeople, double totalPrice,
+                               Set<Room> rooms, Set<HotelsOffer> additionalServices, String user, Hotel hotel) {
+        this.id = id;
+        this.checkInDate = checkInDate;
+        this.checkOutDate = checkOutDate;
+        this.numberOfPeople = numberOfPeople;
+        this.totalPrice = totalPrice;
+        this.rooms = rooms;
+        this.additionalServices = additionalServices;
+        this.user = user;
+        this.hotel = hotel;
+    }
+
     public HotelReservationDTO() {
     }
 

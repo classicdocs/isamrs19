@@ -285,6 +285,14 @@ public class HotelService {
         }
     }
 
+    public Room findRoomById(Long id) throws RoomDoesntExist{
+        Optional<Room> room = roomRepository.findOneById(id);
+        if(room.isPresent()){
+            return room.get();
+        }else{
+            throw new RoomDoesntExist(id);
+        }
+    }
 
     public Set<Room> getRooms(Long id) throws HotelNotFound{
         Optional<Hotel> hotel = hotelRepository.findOneById(id);
