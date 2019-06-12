@@ -80,7 +80,6 @@ export default {
     let id = store.getters.activeUser.id;
     UserController.getFlightInvitations(id)
       .then((response) => {
-        console.log(response.data);
         this.invitations = response.data;
       })
       .catch((error) => {
@@ -89,7 +88,6 @@ export default {
   },
   methods: {
     getTitle(reservation, user){
-      console.log(reservation);
       let title = "";
       title += reservation.departureFlight.startDestination.name + " - " + reservation.departureFlight.finalDestination.name;
       if (reservation.returnFlight != null) {
@@ -111,7 +109,6 @@ export default {
       }
       UserController.acceptInvitation(store.getters.activeUser.id, data)
         .then((response) => {
-          console.log(response.data);
           store.commit("setSnack", {msg: "You have successfully accepted invitation", color:"success"})
           invitation.accepted = true;
         })
