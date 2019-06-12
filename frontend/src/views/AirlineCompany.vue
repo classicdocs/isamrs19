@@ -25,6 +25,7 @@
                 v-on:snack="showSnackbar($event)"
               ></manage-seats-dialog>
               <add-destination v-bind:airlineCompany="airlineCompany"></add-destination>
+              <reports/>
             </v-layout>
           </v-container>
           <flights-discount></flights-discount>
@@ -64,6 +65,7 @@ import ListOfDestinations from "@/components/AirlineCompany/ListOfDestinations.v
 import store from "@/store";
 import ListOfFlightsVue from '../components/AirlineCompany/ListOfFlights.vue';
 import ListOfFlightsWithDiscountVue from '../components/AirlineCompany/ListOfFlightsWithDiscount.vue';
+import ReportsVue from '../components/AirlineCompany/Reports.vue';
 
 export default {
   name: "AirlineCompany",
@@ -76,7 +78,8 @@ export default {
     'add-destination': AddDestination,
     'list-of-destinations': ListOfDestinations,
     'list-of-flights': ListOfFlightsVue,
-    'flights-discount' : ListOfFlightsWithDiscountVue
+    'flights-discount' : ListOfFlightsWithDiscountVue,
+    'reports': ReportsVue
 },
   data: () => ({
     admin: false,
