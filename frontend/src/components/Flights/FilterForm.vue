@@ -19,70 +19,32 @@
               </v-radio-group>
             </v-flex>
             <v-flex lg12 md12 sm12 xs12>
-              <h4>Ticket price: </h4>
               <v-layout row >
-                <v-flex
-                  style="width: 150px"
-                >
-                  <v-text-field
-                    v-model="filter.priceSlider.range[0]"
-                    class="mt-0"
-                    hide-details
-                    single-line
-                    type="number"
-                  ></v-text-field>
-                </v-flex>
                 <v-flex class="px-3">
-                  <v-range-slider
-                    v-model="filter.priceSlider.range"
-                    :max="filter.priceSlider.max"
-                    :min="filter.priceSlider.min"
-                  ></v-range-slider>
-                </v-flex>
-                <v-flex
-                  style="width: 150px"
-                >
-                  <v-text-field
-                    v-model="filter.priceSlider.range[1]"
-                    class="mt-0"
-                    hide-details
-                    single-line
-                    type="number"
+                  <v-form
+                    ref="form1"
+                    v-model="form1"
+                    lazy-validation
+                  >
+                  <v-text-field label="Max ticket price" v-model="price" type="number" style="width:150px"
+                  :rules="[v => /^[1-9]{1}[0-9]*$/.test(v) || 'Ticket price must be a positive number']"
                   ></v-text-field>
+                  </v-form>
                 </v-flex>
               </v-layout>
             </v-flex>
             <v-flex lg12 md12 sm12 xs12>
-              <h4>Flight duration: </h4>
               <v-layout row >
-                <v-flex
-                  style="width: 150px"
-                >
-                  <v-text-field
-                    v-model="filter.flightDurationSlider.range[0]"
-                    class="mt-0"
-                    hide-details
-                    single-line
-                    type="number"
-                  ></v-text-field>
-                </v-flex>
                 <v-flex class="px-3">
-                  <v-range-slider
-                    v-model="filter.flightDurationSlider.range"
-                    :max="filter.flightDurationSlider.max"
-                    :min="filter.flightDurationSlider.min"
-                  ></v-range-slider>
-                </v-flex>
-                <v-flex
-                  style="width: 150px"
-                >
-                  <v-text-field
-                    v-model="filter.flightDurationSlider.range[1]"
-                    class="mt-0"
-                    hide-details
-                    single-line
-                    type="number"
+                  <v-form
+                    ref="form2"
+                    v-model="form2"
+                    lazy-validation
+                  >
+                  <v-text-field label="Max flight duration" v-model="duration" type="number" style="width:150px"
+                  :rules="[v => /^[1-9]{1}[0-9]*$/.test(v) || 'Flight duration must be a positive number']"
                   ></v-text-field>
+                  </v-form>
                 </v-flex>
               </v-layout>
             </v-flex>
@@ -90,7 +52,6 @@
               <v-btn color="primary" style="float:right" @click="doFilter">Filter</v-btn>
               <v-btn color="default" style="float:right" @click="resetFilter">Reset</v-btn>
             </v-flex>
-            
           </v-layout>
         </v-container>
       </v-card-text>
@@ -99,6 +60,9 @@
 </template>
 
 <script>
+
+import store from "@/store";
+
 export default {
   name: "FilterForm",
   data:() => ({
@@ -107,32 +71,40 @@ export default {
     filter: {
       "stops": null,
       priceSlider: {
-        "min": 0,
+        "min": 1,
         "max":5000,
-        "range": [0,5000]
+        "range": [1,5000]
       },
       flightDurationSlider: {
-        "min": 0,
+        "min": 1,
         "max":30,
-        "range": [0,30]
+        "range": [1,30]
       }
     },
-    
+    form1: true,
+    form2: true,
+    price: 5000,
+    duration: 30,
   }),
   methods: {
     doFilter() {
-      this.$emit('filter', this.filter);
+      if (this.$refs.form1.validate() && this.$refs.form2.validate()) {
+        this.filter.priceSlider.range[1] = this.price;
+        this.filter.flightDurationSlider.range[1] = this.duration;
+        this.$emit('filter', this.filter);
+      } else {
+        store.commit("setSnack", {msg: "Price or duration must be a positive number", color: "error"});
+      }
+
+      
     },
     resetFilter() {
       this.filter.stops = null;
-      this.filter.priceSlider.range[0] = this.filter.priceSlider.min;
-      this.filter.priceSlider.range[1] = this.filter.priceSlider.max;
+      this.price = this.filter.priceSlider.max;
+      this.duration = this.filter.flightDurationSlider.max;
 
-      this.filter.flightDurationSlider.range[0] = this.filter.flightDurationSlider.min;
-      this.filter.flightDurationSlider.range[1] = this.filter.flightDurationSlider.max;
-
-      this.$emit('filter', this.filter);
-    }
+      this.doFilter();
+  }
   }
 }
 </script>
