@@ -12,7 +12,7 @@ export class User {
     constructor(data) {
         _.assignWith(this, data);
     }
-    
+
     static get USER_ROLES() {
         return USER_ROLES;
     }
