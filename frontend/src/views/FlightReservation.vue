@@ -100,6 +100,8 @@
               <v-stepper-content step="3">
                 <fill-passengers-info
                   v-bind:passengersNumber="flightReservation.searchParams.passengersNumber"
+                  v-bind:flightPrice="flightReservation.price"
+                  v-bind:airlineCompany="flightReservation.flights.departureFlight.airlineCompany.id"
                 ></fill-passengers-info>
 
                 <v-btn
@@ -311,10 +313,16 @@ export default {
       let passengers = store.getters.passengers;
       for (let passenger of passengers) {
         if (passenger.firstname === "" || passenger.lastname === "" || passenger.email === "" || passenger.address === "" || 
-            passenger.passport === "" || passenger.phone === "") {
+            passenger.passport === "" || passenger.passport === null || passenger.phone === "") {
           store.commit("setSnack", {msg: "You must fill information about every passenger!", color: "primary"});
           return;
         }
+      }
+      let myInfo = store.getters.myInfo;
+      if (myInfo.firstname === "" || myInfo.lastname === "" || myInfo.email === "" || myInfo.address === "" || 
+            myInfo.passport === "" || myInfo.passport === null || myInfo.phone === "") {
+          store.commit("setSnack", {msg: "You must fill your information !", color: "primary"});
+          return;
       }
       let data = store.getters.flightReservation;
       data.passengers = store.getters.passengers;

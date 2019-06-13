@@ -37,6 +37,9 @@
 </template>
 
 <script>
+
+import store from "@/store";
+
 export default {
   name: "OptionalReservationDialog",
   data:() => ({
@@ -44,7 +47,7 @@ export default {
   }),
   methods: {
     close() {
-      this.$router.push({name: "my-reservations"});
+      this.$router.push({name: "my-reservations", params: {id: store.getters.activeUser.id}});
     },
     toRentACar() {
       this.$router.push({name: "rent-a-cars"});

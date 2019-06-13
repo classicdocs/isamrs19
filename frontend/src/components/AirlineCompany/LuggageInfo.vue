@@ -28,7 +28,7 @@
         <td class="text-xs-center">{{ props.item.name }}</td>
         <td class="text-xs-center">{{ props.item.dimensions }} cm</td>
         <td class="text-xs-center">{{ props.item.weight }} kg</td>
-        <td class="text-xs-center">${{props.item.price}} </td>
+        <td class="text-xs-center"> {{getPrice(props.item.price)}} </td>
         <td class="text-xs-center">
           <v-btn flat @click="deleteLuggage(props.item.id)">Delete</v-btn>
         </td>
@@ -102,6 +102,12 @@ export default {
         .catch((error) => {
           store.commit("setSnack", {msg: error.response.data, color: "error"})
         })
+    },
+    getPrice(price) {
+      if (price === 0)
+        return "FREE";
+      else
+        return price + "€";
     }
   }
 }

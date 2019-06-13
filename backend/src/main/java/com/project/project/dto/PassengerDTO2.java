@@ -1,6 +1,10 @@
 package com.project.project.dto;
 
+import com.project.project.model.Luggage;
 import com.project.project.model.Passenger;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class PassengerDTO2 {
 
@@ -24,6 +28,8 @@ public class PassengerDTO2 {
 
     private boolean accepted;
 
+    private Set<LuggageDTO> luggages;
+
     public PassengerDTO2() {}
 
     public PassengerDTO2(Passenger passenger) {
@@ -37,6 +43,17 @@ public class PassengerDTO2 {
         phone = passenger.getPhone();
         address = passenger.getAddress();
         accepted = passenger.isAccepted();
+        luggages = new HashSet<>();
+        for (Luggage l : passenger.getLuggages())
+            luggages.add(new LuggageDTO(l));
+    }
+
+    public Set<LuggageDTO> getLuggageDTOSet() {
+        return luggages;
+    }
+
+    public void setLuggageDTOSet(Set<LuggageDTO> luggageDTOSet) {
+        this.luggages = luggageDTOSet;
     }
 
     public Long getId() {

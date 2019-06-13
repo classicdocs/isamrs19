@@ -7,6 +7,7 @@ export default class Friend {
     this.email = "",
     this.phone = "",
     this.passport = "",
-    this.address = ""
+    this.address = "",
+    this.luggages = []
   }
 }

@@ -3,6 +3,8 @@ package com.project.project.dto;
 import com.project.project.model.User;
 
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.Set;
 
 public class UserRegistrationDTO {
 
@@ -31,6 +33,8 @@ public class UserRegistrationDTO {
 
     private String passport;
 
+    private Set<LuggageDTO> luggages = new HashSet<>();
+
     public UserRegistrationDTO() {
     }
 
@@ -43,6 +47,14 @@ public class UserRegistrationDTO {
         this.email = user.getEmail();
         this.address = user.getAddress();
         this.phone = user.getPhone();
+    }
+
+    public Set<LuggageDTO> getLuggages() {
+        return luggages;
+    }
+
+    public void setLuggages(Set<LuggageDTO> luggageDTO) {
+        this.luggages = luggageDTO;
     }
 
     public Long getId() {

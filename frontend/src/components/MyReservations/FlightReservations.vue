@@ -58,6 +58,7 @@
                   <td class="text-xs-left" v-if="reservation.returnFlight !== null">{{ props.item.seatRowReturn }}</td>
                   <td class="text-xs-left" v-if="reservation.returnFlight !== null">{{ props.item.seatColReturn }}</td>
                   <td class="text-xs-left">{{ props.item.seatClass }}</td>
+                  <td class="text-xs-left">{{getLuggage(props.item.passenger.luggageDTOSet)}}</td>
                   <td class="text-xs-left">{{ props.item.passenger.email }}</td>
                   <td class="text-xs-left">{{ props.item.passenger.phone }}</td> 
                   <td class="text-xs-left">{{ props.item.passenger.address }}</td>
@@ -179,6 +180,7 @@ export default {
       { text: 'Seat row return', value: 'rowRet' },
       { text: 'Seat column return', value: 'colRet' },
       { text: 'Seat class', value: 'class' },
+      { text: 'Luggage', value: 'luggage'},
       { text: 'Email', value: 'email' },
       { text: 'Phone number', value: 'phone' },
       { text: 'Address', value: 'address' },
@@ -191,6 +193,7 @@ export default {
       { text: 'Seat row departure', value: 'rowDept' },
       { text: 'Seat column departure', value: 'colDept' },
       { text: 'Seat class', value: 'class' },
+      { text: 'Luggage', value: 'luggage'},
       { text: 'Email', value: 'email' },
       { text: 'Phone number', value: 'phone' },
       { text: 'Address', value: 'address' },
@@ -262,56 +265,70 @@ export default {
           store.commit("setSnack", {msg: error.response.data, color:"error"})
         })
     },
-    rate(id,hasReturn,sameCompany) {      
-      this.id = id;
-      this.hasReturnFlight = hasReturn;
-      this.sameCompany = sameCompany;
-      this.ratingDialog = true;
+    getLuggage(luggages) {
+      let ret = "";
+      luggages.forEach(l => {
+        ret += l.name + ", ";
+      });
+      return ret.substring(0, ret.length - 2);
     },
-    rateService() {
-      if(this.hasReturnFlight) {
-        if(this.sameCompany){
-          this.ratingWithReturn.id = this.id;
-          this.ratingWithReturn.service = this.companyRating;
-          this.ratingWithReturn.specific = this.flightRating;
-          this.ratingWithReturn.returnFlightRating = this.returnFlightRating;
-          
-          FlightRatingController.rateWithReturn(this.ratingWithReturn)
-          .then((response) => {
-          store.commit("setSnack", {msg: "Rating successful", color:"success"})
-          })
-          .catch((error) => {
-          store.commit("setSnack", {msg: error.response.data, color:"error"})
-        });
-          
-        } else {
-          this.ratingDifferentCompanies.id = this.id;
-          this.ratingDifferentCompanies.service = this.companyRating;
-          this.ratingDifferentCompanies.specific = this.flightRating;
-          this.ratingDifferentCompanies.returnFlightRating = this.returnFlightRating;  
-          this.ratingDifferentCompanies.returnCompanyRating = this.returnCompanyRating;
+    getPrice(item) {
+      let price = item.price;
+      item.passenger.luggages.forEach(l => {
+        price += l.price;
+      });
+      return price;
+    }
+  },
+  rate(id,hasReturn,sameCompany) {      
+    this.id = id;
+    this.hasReturnFlight = hasReturn;
+    this.sameCompany = sameCompany;
+    this.ratingDialog = true;
+  },
+  rateService() {
+    if(this.hasReturnFlight) {
+      if(this.sameCompany){
+        this.ratingWithReturn.id = this.id;
+        this.ratingWithReturn.service = this.companyRating;
+        this.ratingWithReturn.specific = this.flightRating;
+        this.ratingWithReturn.returnFlightRating = this.returnFlightRating;
+        
+        FlightRatingController.rateWithReturn(this.ratingWithReturn)
+        .then((response) => {
+        store.commit("setSnack", {msg: "Rating successful", color:"success"})
+        })
+        .catch((error) => {
+        store.commit("setSnack", {msg: error.response.data, color:"error"})
+      });
+        
+      } else {
+        this.ratingDifferentCompanies.id = this.id;
+        this.ratingDifferentCompanies.service = this.companyRating;
+        this.ratingDifferentCompanies.specific = this.flightRating;
+        this.ratingDifferentCompanies.returnFlightRating = this.returnFlightRating;  
+        this.ratingDifferentCompanies.returnCompanyRating = this.returnCompanyRating;
 
-          FlightRatingController.rateDifferentCompanies(this.ratingDifferentCompanies)
-          .then((response) => {
-          store.commit("setSnack", {msg: "Rating successful", color:"success"})
-          })
-          .catch((error) => {
-          store.commit("setSnack", {msg: error.response.data, color:"error"})
-        });
-        }
-      } else {  
-        this.rating.id = this.id;
-        this.rating.service = this.companyRating;
-        this.rating.specific = this.flightRating;
-      
-        FlightRatingController.rate(this.rating)
-          .then((response) => {
-          store.commit("setSnack", {msg: "Rating successful", color:"success"})
-          })
-          .catch((error) => {
-          store.commit("setSnack", {msg: error.response.data, color:"error"})
-        });
-
+        FlightRatingController.rateDifferentCompanies(this.ratingDifferentCompanies)
+        .then((response) => {
+        store.commit("setSnack", {msg: "Rating successful", color:"success"})
+        })
+        .catch((error) => {
+        store.commit("setSnack", {msg: error.response.data, color:"error"})
+      });
+      }
+    } else {  
+      this.rating.id = this.id;
+      this.rating.service = this.companyRating;
+      this.rating.specific = this.flightRating;
+    
+      FlightRatingController.rate(this.rating)
+        .then((response) => {
+        store.commit("setSnack", {msg: "Rating successful", color:"success"})
+        })
+        .catch((error) => {
+        store.commit("setSnack", {msg: error.response.data, color:"error"})
+      });
       }
 
       this.ratingDialog = false;
@@ -331,7 +348,6 @@ export default {
       this.returnCompanyRating = 0;
       this.returnFlightRating = 0; 
     },
-  }
 }
 </script>
 
