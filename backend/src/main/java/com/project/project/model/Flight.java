@@ -76,6 +76,12 @@ public class Flight {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<SeatRow> seatsEconomy = new ArrayList<>();
 
+    @Column(name = "average_rating")
+    private double averageRating;
+
+    @Column(name = "total_rating")
+    private double totalRating;
+
     public Flight() {
     }
 
@@ -283,6 +289,20 @@ public class Flight {
         this.version = version;
     }
 
+    public double getTotalRating() {
+        return totalRating;
+    }
 
+    public void setTotalRating(double totalRating) {
+        this.totalRating = totalRating;
+    }
+
+    public double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
+    }
 }
 

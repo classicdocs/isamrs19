@@ -110,6 +110,8 @@ public class FlightService {
         flight.setTicketPriceBusiness(flightDTO.getTicketPriceBusiness());
         flight.setTicketPriceEconomy(flightDTO.getTicketPriceEconomy());
         flight.setTransferDestinations(transfers);
+        flight.setAverageRating(0);
+        flight.setTotalRating(0);
 
         List<SeatRow> seatsFirst = new ArrayList<>();
         for (int i = 1; i <= flight.getAirplane().getSeatsFirstRows(); i++) {
