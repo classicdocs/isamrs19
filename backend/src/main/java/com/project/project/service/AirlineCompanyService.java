@@ -198,7 +198,23 @@ public class AirlineCompanyService {
         if (ac.isPresent()) {
             Set<FlightDTO> result = new HashSet<>();
             for (Flight f : ac.get().getFlights()) {
+                if (f.isArchived())
+                    continue;
                 result.add(new FlightDTO(f));
+            }
+            return result;
+        } else {
+            throw new AirlineCompanyNotFound(id);
+        }
+    }
+
+    public Set<FlightDTO> getArchivedFlights(Long id) throws AirlineCompanyNotFound {
+        Optional<AirlineCompany> ac = airlineCompanyRepository.findOneById(id);
+        if (ac.isPresent()) {
+            Set<FlightDTO> result = new HashSet<>();
+            for (Flight f : ac.get().getFlights()) {
+                if (f.isArchived())
+                    result.add(new FlightDTO(f));
             }
             return result;
         } else {

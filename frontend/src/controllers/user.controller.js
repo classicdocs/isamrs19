@@ -25,6 +25,9 @@ export default {
   getFlightReservations(id) {
     return UserApiService.getFlightReservations(id);
   },
+  getFlightReservationsHistory(id) {
+    return UserApiService.getFlightReservationsHistory(id);
+  },
   getFlightInvitations(id) {
     return UserApiService.getFlightInvitations(id);
   },

@@ -12,6 +12,7 @@ const ENDPOINTS = {
   ACCEPT: "/accept",
   DECLINE: "/decline",
   CANCEL: "/cancel",
+  HISTORY: "/history",
 };
 
 export default {
@@ -38,6 +39,9 @@ export default {
   },
   getFlightReservations(id) {
     return Axios.get(ENDPOINTS.USERS + id + ENDPOINTS.FLIGHTS + ENDPOINTS.RESERVATIONS);
+  },
+  getFlightReservationsHistory(id) {
+    return Axios.get(ENDPOINTS.USERS + id + ENDPOINTS.FLIGHTS + ENDPOINTS.RESERVATIONS + ENDPOINTS.HISTORY);
   },
   getFlightInvitations(id) {
     return Axios.get(ENDPOINTS.USERS + id + ENDPOINTS.FLIGHTS + ENDPOINTS.INVITATIONS);

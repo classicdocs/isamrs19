@@ -10,6 +10,7 @@ const ENDPOINTS = {
   REPORTS: "/reports",
   SOLD_TICKETS: "/sold-tickets",
   LUGGAGE: "/luggage/",
+  ARCHIVED: "/archived",
 };
 
 export default {
@@ -39,6 +40,9 @@ export default {
   },
   getFlights(id) {
     return Axios.get(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.FLIGHTS);
+  },
+  getArchivedFlights(id) {
+    return Axios.get(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.FLIGHTS + ENDPOINTS.ARCHIVED);
   },
   getFlightsDiscount(id) {
     return Axios.get(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.FLIGHTS + ENDPOINTS.DISCOUNT);

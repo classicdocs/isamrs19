@@ -55,7 +55,7 @@ public class FlightController {
         try {
             flights = flightService.search(startDestination, finalDestination, departureDate,returnDate,seatClass, passengersNumber);
             return new ResponseEntity<Set<SearchFlightDTO>>(flights, HttpStatus.OK);
-        } catch (DestinationNotFound | ParseException destinationNotFound) {
+        } catch (DestinationNotFound | ParseException | DateInPast | DateException destinationNotFound) {
             destinationNotFound.printStackTrace();
             return new ResponseEntity<String>(destinationNotFound.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -90,6 +90,21 @@ public class FlightController {
              flightService.discount(discount);
             return new ResponseEntity<String>("Success", HttpStatus.OK);
         } catch (FlightNotFound e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping(
+            value = "/archive",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity archive(@RequestBody FlightDTO flightDTO) {
+        try {
+            FlightDTO result = flightService.archiveFlight(flightDTO.getId());
+            return new ResponseEntity<FlightDTO>(result, HttpStatus.OK);
+        } catch (FlightNotFound | ParseException | ArchiveNotPosible e) {
             e.printStackTrace();
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

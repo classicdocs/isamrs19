@@ -181,7 +181,28 @@ public class FlightService {
             String startDestination, String finalDestination,
             String departureDate, Optional<String> returnDate,
             String seatClass, int passengersNumber
-    ) throws DestinationNotFound, ParseException {
+    ) throws DestinationNotFound, ParseException, DateInPast, DateException {
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date departureD = sdf.parse(departureDate);
+        Calendar c = Calendar.getInstance();
+        Date current = c.getTime();
+
+        c.setTime(departureD);
+        c.add(Calendar.DATE, 1);
+        departureD = c.getTime();
+        if (departureD.before(current)) {
+            throw new DateInPast();
+        }
+
+        if (returnDate.isPresent()) {
+            Date returnD = sdf.parse(returnDate.get());
+            if (returnD.before(departureD))
+                throw new DateException(departureDate, returnDate.get());
+        }
+
 
         Set<Destination> startDestinations = destinationService.findAllByName(startDestination);
         Set<Destination> finalDestinations = destinationService.findAllByName(finalDestination);
@@ -621,5 +642,22 @@ public class FlightService {
             }
         } else throw new FlightNotFound(discount.getFlight());
 
+    }
+
+    public FlightDTO archiveFlight(Long flightId) throws FlightNotFound, ParseException, ArchiveNotPosible {
+
+        Optional<Flight> f = flightRepository.findById(flightId);
+        if (f.isPresent()) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date now = Calendar.getInstance().getTime();
+            String date = f.get().getLandingDate() + " " + f.get().getLandingTime() + ":00";
+            if (now.before(sdf.parse(date))) {
+                throw new ArchiveNotPosible();
+            }
+
+            f.get().setArchived(true);
+            Flight flight = flightRepository.save(f.get());
+            return new FlightDTO(flight);
+        } else throw new FlightNotFound(flightId);
     }
 }

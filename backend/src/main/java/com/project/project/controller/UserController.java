@@ -111,7 +111,24 @@ public class UserController {
     public ResponseEntity getFlightReservations(@PathVariable("id") Long id) {
 
         try {
-            Set<FlightReservationResultDTO> flightReservations = userService.getFlightReservations(id);
+            Set<FlightReservationResultDTO> flightReservations = userService.getFlightReservations(id, false);
+            return new ResponseEntity<Set<FlightReservationResultDTO>>(flightReservations, HttpStatus.OK);
+        } catch (UserNotFound userNotFound) {
+            userNotFound.printStackTrace();
+            return new ResponseEntity<String>(userNotFound.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (ParseException e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(
+            value = "/{id}/flight/reservations/history",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity getFlightReservationsHistory(@PathVariable("id") Long id) {
+
+        try {
+            Set<FlightReservationResultDTO> flightReservations = userService.getFlightReservations(id, true);
             return new ResponseEntity<Set<FlightReservationResultDTO>>(flightReservations, HttpStatus.OK);
         } catch (UserNotFound userNotFound) {
             userNotFound.printStackTrace();

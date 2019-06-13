@@ -188,7 +188,7 @@ public class UserService {
         }
     }
 
-    public Set<FlightReservationResultDTO> getFlightReservations(Long id) throws UserNotFound, ParseException {
+    public Set<FlightReservationResultDTO> getFlightReservations(Long id, Boolean active) throws UserNotFound, ParseException {
         Optional<User> user = userRepository.findOneById(id);
         if (user.isPresent()) {
             RegisteredUser ru = (RegisteredUser) user.get();
@@ -238,7 +238,28 @@ public class UserService {
 
                 FlightReservationResultDTO flightReservationResultDTO = new FlightReservationResultDTO(flightReservation
                         , passengerDTOS, isCompleted, hasReturnFlight, sameCompanies);
-                result.add(flightReservationResultDTO);
+
+                if (active) {
+                    if (flightReservationResultDTO.getDepartureFlight().isArchived()){
+                        if (flightReservationResultDTO.getReturnFlight() != null) {
+                            if (flightReservationResultDTO.getReturnFlight().isArchived()) {
+                                result.add(flightReservationResultDTO);
+                            }
+                        } else {
+                            result.add(flightReservationResultDTO);
+                        }
+                    }
+                } else {
+                    if (!flightReservationResultDTO.getDepartureFlight().isArchived()){
+                        if (flightReservationResultDTO.getReturnFlight() != null) {
+                            if (!flightReservationResultDTO.getReturnFlight().isArchived()) {
+                                result.add(flightReservationResultDTO);
+                            }
+                        } else {
+                            result.add(flightReservationResultDTO);
+                        }
+                    }
+                }
             }
             return result;
         } else {
