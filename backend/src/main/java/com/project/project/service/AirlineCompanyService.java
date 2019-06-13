@@ -6,13 +6,14 @@ import com.project.project.model.*;
 import com.project.project.repository.AirlineCompanyRepository;
 import com.project.project.repository.AirplaneRepository;
 import com.project.project.repository.DestinationRepository;
+import com.project.project.repository.LuggageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.YearMonth;
+import java.util.*;
 
 @Service
 public class AirlineCompanyService {
@@ -28,6 +29,9 @@ public class AirlineCompanyService {
 
     @Autowired
     private DestinationRepository destinationRepository;
+
+    @Autowired
+    private LuggageRepository luggageRepository;
 
     public AirlineCompany findOneById(Long id) throws AirlineCompanyNotFound {
         return airlineCompanyRepository.findOneById(id).orElseThrow(() -> new AirlineCompanyNotFound(id));
@@ -207,11 +211,196 @@ public class AirlineCompanyService {
         if (ac.isPresent()) {
             Set<FlightWithDiscountDTO> result = new HashSet<>();
             for (FlightWithDiscount f : ac.get().getFlightsWithDiscount()) {
-                result.add(new FlightWithDiscountDTO(f));
+                if (!f.isTaken())
+                    result.add(new FlightWithDiscountDTO(f));
             }
             return result;
         } else {
             throw new AirlineCompanyNotFound(airlineCompany);
         }
+    }
+
+    public ReportsDTO getReports(Long airlineCompany, String year, String month) throws AirlineCompanyNotFound, ParseException {
+        Optional<AirlineCompany> ac = airlineCompanyRepository.findOneById(airlineCompany);
+        if (ac.isPresent()) {
+
+            ReportsDTO result = new ReportsDTO();
+            Map<String, Integer> soldTickets = new LinkedHashMap<>();
+            Map<String, Double> income = new LinkedHashMap<>();
+
+
+            if (month.equals("")) {
+                String[] months = new String[] {"January", "February", "March", "April", "May", "Jun", "July", "August", "September", "October", "November", "December"};
+                for (String m: months) {
+                    soldTickets.put(m,0);
+                    income.put(m,0.0);
+                }
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat sdfYear = new SimpleDateFormat("yyyy");
+                SimpleDateFormat sdfMonth = new SimpleDateFormat("MM");
+                Date pickedYear = sdfYear.parse(year);
+
+                for (FlightReservation flightReservation: ac.get().getReservations()) {
+                    Date date = sdfYear.parse(flightReservation.getDate());
+                    if (pickedYear.equals(date)){
+
+
+                        Date date1 = sdf.parse(flightReservation.getDate());
+                        String m = String.valueOf(sdfMonth.format(date1));
+                        String s = "";
+                        switch (m) {
+                            case "01": {
+                                s = "January"; break;
+                            }
+                            case "02": {
+                                s = "February"; break;
+                            }
+                            case "03": {
+                                s = "March"; break;
+                            }
+                            case "04": {
+                                s = "April"; break;
+                            }
+                            case "05": {
+                                s = "May"; break;
+                            }
+                            case "06": {
+                                s = "Jun"; break;
+                            }
+                            case "07": {
+                                s = "July"; break;
+                            }
+                            case "08": {
+                                s = "August"; break;
+                            }
+                            case "09": {
+                                s = "September"; break;
+                            }
+                            case "10": {
+                                s = "October"; break;
+                            }
+                            case "11": {
+                                s = "November"; break;
+                            }
+                            case "12": {
+                                s = "December"; break;
+                            }
+                        }
+                        int count = soldTickets.getOrDefault(s,0);
+                        soldTickets.put(s, count + 1);
+
+                        double price = flightReservation.getPassengers().size() * flightReservation.getPricePerPerson();
+                        double count1 = income.getOrDefault(s,0.0);
+                        income.put(s, count1 + price);
+                    }
+                }
+
+                result.setSoldTickets(soldTickets);
+                result.setIncome(income);
+                return result;
+            } else {
+                SimpleDateFormat sdfMonth = new SimpleDateFormat("MMMM");
+                SimpleDateFormat sdfMonthFromDate = new SimpleDateFormat("MM");
+                Date dateMonth = sdfMonth.parse(month);
+                Integer m = Integer.parseInt(sdfMonthFromDate.format(dateMonth));
+                YearMonth yearMonthObject = YearMonth.of(Integer.parseInt(year), m);
+                int daysInMonth = yearMonthObject.lengthOfMonth();
+
+                for(int i = 1; i <= daysInMonth; i++) {
+                    if (i < 10) {
+                        soldTickets.put("0" + i,0);
+                        income.put("0" + i, 0.0);
+                    }
+                    else {
+                        soldTickets.put(String.valueOf(i), 0);
+                        income.put(String.valueOf(i), 0.0);
+                    }
+                }
+                SimpleDateFormat sdfYearMonth = new SimpleDateFormat("yyyy-MM");
+                SimpleDateFormat sdfYearMonthDay = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat sdfDay = new SimpleDateFormat("dd");
+                Date pickedDate = sdfYearMonth.parse(year + "-" + m);
+
+                for (FlightReservation flightReservation: ac.get().getReservations()) {
+                    Date date = sdfYearMonth.parse(flightReservation.getDate());
+                    if (pickedDate.equals(date)) {
+                        Date date1 = sdfYearMonthDay.parse(flightReservation.getDate());
+                        String d = String.valueOf(sdfDay.format(date1));
+
+                        int count = soldTickets.getOrDefault(d, 0);
+                        soldTickets.put(d, count + 1);
+
+                        double price = flightReservation.getPassengers().size() * flightReservation.getPricePerPerson();
+                        double count1 = income.getOrDefault(d,0.0);
+                        income.put(d, count1 + price);
+                    }
+                }
+
+                result.setSoldTickets(soldTickets);
+                result.setIncome(income);
+                return result;
+            }
+
+        } else {
+            throw new AirlineCompanyNotFound(airlineCompany);
+        }
+    }
+
+    public Set<LuggageDTO> getLuggages(Long airlineCompanyId) throws AirlineCompanyNotFound {
+
+        Optional<AirlineCompany> ac = airlineCompanyRepository.findOneById(airlineCompanyId);
+        if (ac.isPresent()) {
+            Set<LuggageDTO> result = new HashSet<>();
+            for (Luggage luggage : ac.get().getLuggages()) {
+                result.add(new LuggageDTO(luggage));
+            }
+            return result;
+        } else throw new AirlineCompanyNotFound(airlineCompanyId);
+    }
+
+    public LuggageDTO addLuggage(Long airlineCompanyId, LuggageDTO luggageDTO) throws LuggageAlreadyExist, AirlineCompanyNotFound {
+
+        Optional<AirlineCompany> ac = airlineCompanyRepository.findOneById(airlineCompanyId);
+        if (ac.isPresent()) {
+
+            for (Luggage luggage : ac.get().getLuggages()) {
+                if (luggage.getName().equals(luggageDTO.getName()))
+                    throw new LuggageAlreadyExist(luggageDTO.getName());
+            }
+
+            Luggage l = new Luggage();
+            l.setName(luggageDTO.getName());
+            l.setDimensions(luggageDTO.getDimensions());
+            l.setWeight(luggageDTO.getWeight());
+            l.setPrice(luggageDTO.getPrice());
+            l.setAirlineCompany(ac.get());
+
+            luggageRepository.save(l);
+            return new LuggageDTO(l);
+
+        } else throw new AirlineCompanyNotFound(airlineCompanyId);
+
+    }
+
+    public LuggageDTO deleteLuggage(Long airlineCompanyId, Long luggageId) throws AirlineCompanyNotFound, LuggageNotFound {
+
+        Optional<AirlineCompany> ac = airlineCompanyRepository.findOneById(airlineCompanyId);
+        if (ac.isPresent()) {
+            Luggage luggageToDelete = null;
+            for (Luggage luggage : ac.get().getLuggages()) {
+                if (luggage.getId().equals(luggageId)) {
+                    luggageToDelete = luggage;
+                    break;
+                }
+            }
+            if (luggageToDelete != null) {
+                ac.get().getLuggages().remove(luggageToDelete);
+                luggageRepository.delete(luggageToDelete);
+                return new LuggageDTO(luggageToDelete);
+            } else throw new LuggageNotFound(luggageId);
+
+        } else throw new AirlineCompanyNotFound(airlineCompanyId);
+
     }
 }

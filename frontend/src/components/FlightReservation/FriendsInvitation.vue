@@ -50,18 +50,18 @@ export default {
     selected: [],
   }),
   beforeMount() {
-    this.selected = []
+    this.selected =[];
   },
   computed: {
     getFriends() {
       this.friends = store.getters.friends;
       return this.friends;
-    }
+    },
   },
   watch: {
     selected() {
       this.$emit("friendsInvited", this.selected);
-    }
+    },
   },
   methods: {
     check(props) {
@@ -74,9 +74,9 @@ export default {
       } else {
         props.selected = !props.selected;      
       }
+    },
+    
 
-
-    }
   }
 }
 </script>

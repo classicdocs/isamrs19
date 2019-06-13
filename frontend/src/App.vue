@@ -132,7 +132,10 @@ export default {
       return '/users/' + (this.activeUser ? this.activeUser.id : -1) +  '/profil';
     },
     getReservationsPath() {
-      return (this.activeUser ? this.activeUser.id : -1) +'/my-reservations/';  
+      console.log("RESERVATIONPATH")
+      let path = "/" + (this.activeUser ? this.activeUser.id : -1) +'/my-reservations';  
+      console.log(path);
+      return path;
     },
     getIdAdminOf() {
       let path = '';

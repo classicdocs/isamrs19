@@ -22,6 +22,15 @@ public class FlightReservationDTO {
 
     }
 
+    public FlightReservationDTO(UserRegistrationDTO myInfo, ArrayList<UserRegistrationDTO> passengers, SearchFlightDTO flights, double price, List<SeatDTO> seatsPickedDeparture, List<SeatDTO> seatsPickedReturn) {
+        this.myInfo = myInfo;
+        this.passengers = passengers;
+        this.flights = flights;
+        this.price = price;
+        this.seatsPickedDeparture = seatsPickedDeparture;
+        this.seatsPickedReturn = seatsPickedReturn;
+    }
+
     public UserRegistrationDTO getMyInfo() {
         return myInfo;
     }
@@ -69,4 +78,6 @@ public class FlightReservationDTO {
     public void setSeatsPickedReturn(List<SeatDTO> seatsPickedReturn) {
         this.seatsPickedReturn = seatsPickedReturn;
     }
+
+
 }

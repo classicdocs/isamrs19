@@ -7,6 +7,9 @@ const ENDPOINTS = {
   DESTINATIONS: "/destinations",
   FLIGHTS: "/flights",
   DISCOUNT: "/discount",
+  REPORTS: "/reports",
+  SOLD_TICKETS: "/sold-tickets",
+  LUGGAGE: "/luggage/",
 };
 
 export default {
@@ -39,5 +42,17 @@ export default {
   },
   getFlightsDiscount(id) {
     return Axios.get(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.FLIGHTS + ENDPOINTS.DISCOUNT);
+  },
+  getReports(id, data) {
+    return Axios.get(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.REPORTS, {params: data});
+  },
+  getLuggage(id) {
+    return Axios.get(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.LUGGAGE);
+  },
+  addLuggage(id, data) {
+    return Axios.post(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.LUGGAGE, data);
+  },
+  deleteLuggage(id, luggageId) {
+    return Axios.delete(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.LUGGAGE + luggageId);
   }
 };

@@ -4,10 +4,11 @@
       <v-layout row wrap>
         <v-flex lg4 md6 sm6 xs12>
           <airline-company-info v-bind:airlineCompany="airlineCompany"/>
+          <list-of-destinations ></list-of-destinations>
         </v-flex>
-        <v-flex lg8 md6 sm6 xs12 v-if="admin">
-          <v-container>
-            <v-layout row wrap>
+        <v-flex lg8 md6 sm6 xs12>
+          <v-container  v-if="admin">
+            <v-layout row wrap >
               <add-flight-dialog 
                 v-on:snack="showSnackbar($event)"
               ></add-flight-dialog>
@@ -24,15 +25,10 @@
                 v-on:snack="showSnackbar($event)"
               ></manage-seats-dialog>
               <add-destination v-bind:airlineCompany="airlineCompany"></add-destination>
+              <reports/>
+              <luggage-info/>
             </v-layout>
           </v-container>
-        </v-flex>
-      </v-layout>
-      <v-layout row wrap>
-        <v-flex lg4 md4 sm12 xs12>
-          <list-of-destinations ></list-of-destinations>
-        </v-flex>
-        <v-flex lg8 md8 sm12 xs12>
           <flights-discount></flights-discount>
           <list-of-flights></list-of-flights>
         </v-flex>
@@ -70,6 +66,8 @@ import ListOfDestinations from "@/components/AirlineCompany/ListOfDestinations.v
 import store from "@/store";
 import ListOfFlightsVue from '../components/AirlineCompany/ListOfFlights.vue';
 import ListOfFlightsWithDiscountVue from '../components/AirlineCompany/ListOfFlightsWithDiscount.vue';
+import ReportsVue from '../components/AirlineCompany/Reports.vue';
+import LuggageInfoVue from '../components/AirlineCompany/LuggageInfo.vue';
 
 export default {
   name: "AirlineCompany",
@@ -82,7 +80,9 @@ export default {
     'add-destination': AddDestination,
     'list-of-destinations': ListOfDestinations,
     'list-of-flights': ListOfFlightsVue,
-    'flights-discount' : ListOfFlightsWithDiscountVue
+    'flights-discount' : ListOfFlightsWithDiscountVue,
+    'reports': ReportsVue,
+    'luggage-info': LuggageInfoVue
 },
   data: () => ({
     admin: false,

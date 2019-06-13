@@ -211,7 +211,6 @@ export default {
   beforeMount() {
     UserController.getFlightReservations(store.getters.activeUser.id)
       .then((response) => {
-        console.log(response.data);
         this.reservations = response.data;
       })
       .catch((error) => {

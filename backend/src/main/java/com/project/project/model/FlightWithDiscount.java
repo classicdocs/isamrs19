@@ -18,6 +18,9 @@ public class FlightWithDiscount {
     @Column(name = "price")
     private double price;
 
+    @Column(name = "taken")
+    private boolean taken;
+
     @ManyToOne
     private AirlineCompany airlineCompany;
 
@@ -30,6 +33,15 @@ public class FlightWithDiscount {
         this.flight = flight;
         this.seat = seat;
         this.price = price;
+        this.taken = false;
+    }
+
+    public boolean isTaken() {
+        return taken;
+    }
+
+    public void setTaken(boolean taken) {
+        this.taken = taken;
     }
 
     public Flight getFlight() {
