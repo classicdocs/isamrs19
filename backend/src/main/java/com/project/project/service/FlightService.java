@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import java.text.ParseException;
@@ -275,10 +277,10 @@ public class FlightService {
         return result;
     }
 
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
     public FlightReservationResultDTO reserve(FlightReservationDTO flightReservationDTO) throws FlightNotFound {
 
         FlightReservation flightReservation = new FlightReservation();
-
 
         Optional<Flight> departureFlight = flightRepository.findById(flightReservationDTO.getFlights().getDepartureFlight().getId());
 
@@ -526,8 +528,6 @@ public class FlightService {
     }
 
     public void discount(DiscountDTO discount) throws FlightNotFound {
-
-
         Optional<Flight> flight = flightRepository.findById(discount.getFlight());
         if (flight.isPresent()) {
             for (SeatDTO s : discount.getSeats()) {

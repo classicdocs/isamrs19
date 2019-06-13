@@ -80,6 +80,7 @@
 
               <v-stepper-content step="2">
                 <friends-invitation
+                  :key="componentKey"
                   v-on:friendsInvited="setInvitedFriends($event)"
                 ></friends-invitation>
                 <v-btn
@@ -174,7 +175,8 @@ export default {
     friends: false,
     invitedFriends: [],
     passengers: [],
-    optional: false
+    optional: false,
+    componentKey: 0,
   }),
   computed: {
     getDepartureSeats() {
@@ -246,7 +248,7 @@ export default {
       this.snackbar.show = true;
     },
     goToFriendsInvitation() {
-      console.log(store.getters.friends);
+      this.forceRerender();
       if (store.getters.friends.length === 0 || this.flightReservation.searchParams.passengersNumber === 1) {
         this.friends = false;
         this.stepper = 3;
@@ -326,10 +328,15 @@ export default {
           this.optional = true;
         })
         .catch((error) => {
+          loader.hide();
+          this.$router.push({name: "flights"})
           store.commit("setSnack", {msg: error.response.data, color: "error"});
-          console.log(error.response.data);
         })
+
     },
+    forceRerender() {
+      this.componentKey += 1;
+    }
     
   },
   
