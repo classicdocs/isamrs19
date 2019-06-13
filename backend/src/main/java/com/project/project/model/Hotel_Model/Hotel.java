@@ -39,6 +39,12 @@ public class Hotel {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private HotelDestination destination;
 
+    @Column(name = "average_rating")
+    private double averageRating;
+
+    @Column(name = "total_rating")
+    private double totalRating;
+
     public HotelDestination getDestination() {
         return destination;
     }
@@ -119,5 +125,21 @@ public class Hotel {
 
     public void setFloors(Set<HotelFloor> floors) {
         this.floors = floors;
+    }
+
+    public double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
+    }
+
+    public double getTotalRating() {
+        return totalRating;
+    }
+
+    public void setTotalRating(double totalRating) {
+        this.totalRating = totalRating;
     }
 }

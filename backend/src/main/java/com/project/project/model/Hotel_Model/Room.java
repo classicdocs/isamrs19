@@ -29,6 +29,12 @@ public class Room {
     @OneToMany(fetch = FetchType.LAZY)
     private Set<SpecialPrice> specialPrices;
 
+    @Column(name = "average_rating")
+    private double averageRating;
+
+    @Column(name = "total_rating")
+    private double totalRating;
+
     public Room(){}
 
     public Long getId() {
@@ -78,5 +84,21 @@ public class Room {
 
     public void setSpecialPrices(Set<SpecialPrice> specialPrices) {
         this.specialPrices = specialPrices;
+    }
+
+    public double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
+    }
+
+    public double getTotalRating() {
+        return totalRating;
+    }
+
+    public void setTotalRating(double totalRating) {
+        this.totalRating = totalRating;
     }
 }
