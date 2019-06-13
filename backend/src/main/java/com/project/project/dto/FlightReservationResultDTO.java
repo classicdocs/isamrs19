@@ -21,6 +21,12 @@ public class FlightReservationResultDTO {
 
     private double pricePerPerson;
 
+    private boolean completed;
+
+    private boolean hasReturnFlight;
+
+    private boolean sameCompanies;
+
     public  FlightReservationResultDTO() {
 
     }
@@ -35,6 +41,22 @@ public class FlightReservationResultDTO {
             this.returnFlight = null;
         this.passengers = passengers;
         this.pricePerPerson = flightReservation.getPricePerPerson();
+    }
+
+    public FlightReservationResultDTO(FlightReservation flightReservation, Set<PassengerDTO> passengers,
+                                      boolean completed, boolean hasReturnFlight, boolean sameCompanies) {
+        this.id = flightReservation.getId();
+        this.date = flightReservation.getDate();
+        this.departureFlight = new FlightDTO(flightReservation.getDepartureFlight());
+        if (flightReservation.getReturnFlight() != null)
+            this.returnFlight = new FlightDTO(flightReservation.getReturnFlight());
+        else
+            this.returnFlight = null;
+        this.passengers = passengers;
+        this.pricePerPerson = flightReservation.getPricePerPerson();
+        this.completed = completed;
+        this.hasReturnFlight = hasReturnFlight;
+        this.sameCompanies = sameCompanies;
     }
 
     public Long getId() {
@@ -85,4 +107,27 @@ public class FlightReservationResultDTO {
         this.pricePerPerson = pricePerPerson;
     }
 
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
+    public boolean isHasReturnFlight() {
+        return hasReturnFlight;
+    }
+
+    public void setHasReturnFlight(boolean hasReturnFlight) {
+        this.hasReturnFlight = hasReturnFlight;
+    }
+
+    public boolean isSameCompanies() {
+        return sameCompanies;
+    }
+
+    public void setSameCompanies(boolean sameCompanies) {
+        this.sameCompanies = sameCompanies;
+    }
 }

@@ -116,6 +116,8 @@ public class UserController {
         } catch (UserNotFound userNotFound) {
             userNotFound.printStackTrace();
             return new ResponseEntity<String>(userNotFound.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (ParseException e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

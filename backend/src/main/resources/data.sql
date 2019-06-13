@@ -4,8 +4,8 @@ insert into destination (id,airport,country,name,zip) values (2,'Nikola Tesla', 
 insert into destination (id,airport,country,name,zip) values (3,'Heathrow', 'Englend', 'London', 'LHR');
 
 -- aviokompanije
-insert into airline_company (id,description, address, name) values (1, 'Cheap flights!', 'Serbia/Belgrade', 'AirSerbia');
-insert into airline_company (id,description, address, name) values (2, 'Air France is a french airline company', 'France/Paris', 'AirFrance');
+insert into airline_company (id,description, address, name, average_rating,total_rating) values (1, 'Cheap flights!', 'Serbia/Belgrade', 'AirSerbia', 4, 1);
+insert into airline_company (id,description, address, name, average_rating,total_rating) values (2, 'Air France is a french airline company', 'France/Paris', 'AirFrance', 4.5, 2);
 
 -- lista destinacija u aviokompaniji
 insert into airline_company_destinations(airline_company_id, destinations ) values (1, "New York JFK");

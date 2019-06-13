@@ -4,12 +4,14 @@ export default class AirlineCompany {
     this.id = null,
     this.name = null,
     this.address = null,
-    this.description = null
+    this.description = null,
+    this.averageRating = 0
   }
   reset() {
     this.id = null,
     this.name = null,
     this.address = null,
-    this.description = null
+    this.description = null,
+    this.averageRating = 0
   }
 }
