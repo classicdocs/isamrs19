@@ -57,7 +57,7 @@
             v-model="price"
             type="number"
             required
-            suffix="$"
+            suffix="€"
           ></v-text-field>
         </v-card-text>
         <v-card-actions>

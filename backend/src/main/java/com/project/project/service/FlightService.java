@@ -63,6 +63,9 @@ public class FlightService {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private LuggageRepository luggageRepository;
+
     @Value("${frontend}")
     private String frontend;
 
@@ -308,6 +311,14 @@ public class FlightService {
 
                 Passenger pa = new Passenger(flightReservationDTO.getMyInfo());
                 pa.setFlightReservation(flightReservation);
+
+                Set<Luggage> luggages = new HashSet<>();
+                for (LuggageDTO luggageDTO : flightReservationDTO.getMyInfo().getLuggages()) {
+                    Luggage luggage = luggageRepository.getOne(luggageDTO.getId());
+                    luggages.add(luggage);
+                }
+                pa.setLuggages(luggages);
+
                 pa.setAccepted(true);
                 flightReservation.getPassengers().add(pa);
                 flightReservationRepository.save(flightReservation);
@@ -318,6 +329,13 @@ public class FlightService {
                 for (int i = 0; i < passengers.size(); i++) {
                     Passenger p = new Passenger(passengers.get(i));
                     p.setFlightReservation(flightReservation);
+
+                    luggages = new HashSet<>();
+                    for (LuggageDTO luggageDTO : passengers.get(i).getLuggages()) {
+                        Luggage luggage = luggageRepository.getOne(luggageDTO.getId());
+                        luggages.add(luggage);
+                    }
+                    p.setLuggages(luggages);
                     passengerRepository.save(p);
 
 //                    flightReservation.getPassengers().add(p);
@@ -405,6 +423,14 @@ public class FlightService {
                 Passenger pa = new Passenger(flightReservationDTO.getMyInfo());
                 pa.setFlightReservation(flightReservation);
                 pa.setAccepted(true);
+
+                Set<Luggage> luggages = new HashSet<>();
+                for (LuggageDTO luggageDTO : flightReservationDTO.getMyInfo().getLuggages()) {
+                    Luggage luggage = luggageRepository.getOne(luggageDTO.getId());
+                    luggages.add(luggage);
+                }
+                pa.setLuggages(luggages);
+
                 flightReservation.getPassengers().add(pa);
                 flightReservationRepository.save(flightReservation);
                 passengerRepository.save(pa);
@@ -412,6 +438,14 @@ public class FlightService {
 
                 for (int i = 0; i < passengers.size(); i++) {
                     Passenger p = new Passenger(passengers.get(i));
+
+                    luggages = new HashSet<>();
+                    for (LuggageDTO luggageDTO : passengers.get(i).getLuggages()) {
+                        Luggage luggage = luggageRepository.getOne(luggageDTO.getId());
+                        luggages.add(luggage);
+                    }
+                    p.setLuggages(luggages);
+
                     p.setFlightReservation(flightReservation);
                     passengerRepository.save(p);
 

@@ -53,6 +53,7 @@
                   <td class="text-xs-left" v-if="reservation.returnFlight !== null">{{ props.item.seatRowReturn }}</td>
                   <td class="text-xs-left" v-if="reservation.returnFlight !== null">{{ props.item.seatColReturn }}</td>
                   <td class="text-xs-left">{{ props.item.seatClass }}</td>
+                  <td class="text-xs-left">{{getLuggage(props.item.passenger.luggageDTOSet)}}</td>
                   <td class="text-xs-left">{{ props.item.passenger.email }}</td>
                   <td class="text-xs-left">{{ props.item.passenger.phone }}</td> 
                   <td class="text-xs-left">{{ props.item.passenger.address }}</td>
@@ -101,6 +102,7 @@ export default {
       { text: 'Seat row return', value: 'rowRet' },
       { text: 'Seat column return', value: 'colRet' },
       { text: 'Seat class', value: 'class' },
+      { text: 'Luggage', value: 'luggage'},
       { text: 'Email', value: 'email' },
       { text: 'Phone number', value: 'phone' },
       { text: 'Address', value: 'address' },
@@ -113,6 +115,7 @@ export default {
       { text: 'Seat row departure', value: 'rowDept' },
       { text: 'Seat column departure', value: 'colDept' },
       { text: 'Seat class', value: 'class' },
+      { text: 'Luggage', value: 'luggage'},
       { text: 'Email', value: 'email' },
       { text: 'Phone number', value: 'phone' },
       { text: 'Address', value: 'address' },
@@ -173,6 +176,20 @@ export default {
           store.commit("setSnack", {msg: error.response.data, color:"error"})
         })
     },
+    getLuggage(luggages) {
+      let ret = "";
+      luggages.forEach(l => {
+        ret += l.name + ", ";
+      });
+      return ret.substring(0, ret.length - 2);
+    },
+    getPrice(item) {
+      let price = item.price;
+      item.passenger.luggages.forEach(l => {
+        price += l.price;
+      });
+      return price;
+    }
   }
 
 
