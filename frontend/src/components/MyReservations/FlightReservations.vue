@@ -279,57 +279,56 @@ export default {
       });
       return price;
     }
-  }
-    rate(id,hasReturn,sameCompany) {      
-      this.id = id;
-      this.hasReturnFlight = hasReturn;
-      this.sameCompany = sameCompany;
-      this.ratingDialog = true;
-    },
-    rateService() {
-      if(this.hasReturnFlight) {
-        if(this.sameCompany){
-          this.ratingWithReturn.id = this.id;
-          this.ratingWithReturn.service = this.companyRating;
-          this.ratingWithReturn.specific = this.flightRating;
-          this.ratingWithReturn.returnFlightRating = this.returnFlightRating;
-          
-          FlightRatingController.rateWithReturn(this.ratingWithReturn)
-          .then((response) => {
-          store.commit("setSnack", {msg: "Rating successful", color:"success"})
-          })
-          .catch((error) => {
-          store.commit("setSnack", {msg: error.response.data, color:"error"})
-        });
-          
-        } else {
-          this.ratingDifferentCompanies.id = this.id;
-          this.ratingDifferentCompanies.service = this.companyRating;
-          this.ratingDifferentCompanies.specific = this.flightRating;
-          this.ratingDifferentCompanies.returnFlightRating = this.returnFlightRating;  
-          this.ratingDifferentCompanies.returnCompanyRating = this.returnCompanyRating;
+  },
+  rate(id,hasReturn,sameCompany) {      
+    this.id = id;
+    this.hasReturnFlight = hasReturn;
+    this.sameCompany = sameCompany;
+    this.ratingDialog = true;
+  },
+  rateService() {
+    if(this.hasReturnFlight) {
+      if(this.sameCompany){
+        this.ratingWithReturn.id = this.id;
+        this.ratingWithReturn.service = this.companyRating;
+        this.ratingWithReturn.specific = this.flightRating;
+        this.ratingWithReturn.returnFlightRating = this.returnFlightRating;
+        
+        FlightRatingController.rateWithReturn(this.ratingWithReturn)
+        .then((response) => {
+        store.commit("setSnack", {msg: "Rating successful", color:"success"})
+        })
+        .catch((error) => {
+        store.commit("setSnack", {msg: error.response.data, color:"error"})
+      });
+        
+      } else {
+        this.ratingDifferentCompanies.id = this.id;
+        this.ratingDifferentCompanies.service = this.companyRating;
+        this.ratingDifferentCompanies.specific = this.flightRating;
+        this.ratingDifferentCompanies.returnFlightRating = this.returnFlightRating;  
+        this.ratingDifferentCompanies.returnCompanyRating = this.returnCompanyRating;
 
-          FlightRatingController.rateDifferentCompanies(this.ratingDifferentCompanies)
-          .then((response) => {
-          store.commit("setSnack", {msg: "Rating successful", color:"success"})
-          })
-          .catch((error) => {
-          store.commit("setSnack", {msg: error.response.data, color:"error"})
-        });
-        }
-      } else {  
-        this.rating.id = this.id;
-        this.rating.service = this.companyRating;
-        this.rating.specific = this.flightRating;
-      
-        FlightRatingController.rate(this.rating)
-          .then((response) => {
-          store.commit("setSnack", {msg: "Rating successful", color:"success"})
-          })
-          .catch((error) => {
-          store.commit("setSnack", {msg: error.response.data, color:"error"})
-        });
-
+        FlightRatingController.rateDifferentCompanies(this.ratingDifferentCompanies)
+        .then((response) => {
+        store.commit("setSnack", {msg: "Rating successful", color:"success"})
+        })
+        .catch((error) => {
+        store.commit("setSnack", {msg: error.response.data, color:"error"})
+      });
+      }
+    } else {  
+      this.rating.id = this.id;
+      this.rating.service = this.companyRating;
+      this.rating.specific = this.flightRating;
+    
+      FlightRatingController.rate(this.rating)
+        .then((response) => {
+        store.commit("setSnack", {msg: "Rating successful", color:"success"})
+        })
+        .catch((error) => {
+        store.commit("setSnack", {msg: error.response.data, color:"error"})
+      });
       }
 
       this.ratingDialog = false;
@@ -349,7 +348,6 @@ export default {
       this.returnCompanyRating = 0;
       this.returnFlightRating = 0; 
     },
-  }
 }
 </script>
 
