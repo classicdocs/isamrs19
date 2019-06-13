@@ -124,6 +124,8 @@ public class SystemAdminService {
         rentACar.setBranches(rentACarDTO.getBranches());
         rentACar.setVehicles(rentACarDTO.getVehicles());
         rentACar.setAdmins(rentACarDTO.getAdmins());
+        rentACar.setRating(0);
+        rentACar.setTotal_rating(0);
 
         return rentACarRepository.save(rentACar);
     }
@@ -140,6 +142,8 @@ public class SystemAdminService {
         airlineCompany.setName(airlineCompanyDTO.getName());
         airlineCompany.setAddress(airlineCompanyDTO.getAddress());
         airlineCompany.setDescription(airlineCompanyDTO.getDescription());
+        airlineCompany.setAverageRating(0);
+        airlineCompany.setTotalRating(0);
         airlineCompany = airlineCompanyRepository.save(airlineCompany);
 
         return (new AirlineCompanyDTO(airlineCompany));

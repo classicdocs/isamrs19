@@ -12,6 +12,9 @@ public class AirlineCompanyDTO {
     private String address;
     private String description;
 
+    private double averageRating;
+    private double totalRating;
+
     public AirlineCompanyDTO() {}
 
     public AirlineCompanyDTO(AirlineCompany airlineCompany) {
@@ -19,6 +22,8 @@ public class AirlineCompanyDTO {
         this.name = airlineCompany.getName();
         this.address = airlineCompany.getAddress();
         this.description = airlineCompany.getDescription();
+        this.averageRating = airlineCompany.getAverageRating();
+        this.totalRating = airlineCompany.getTotalRating();
     }
 
     public Long getId() {
@@ -51,5 +56,21 @@ public class AirlineCompanyDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
+    }
+
+    public double getTotalRating() {
+        return totalRating;
+    }
+
+    public void setTotalRating(double totalRating) {
+        this.totalRating = totalRating;
     }
 }

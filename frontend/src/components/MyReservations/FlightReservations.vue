@@ -7,6 +7,11 @@
           <v-expansion-panel-content
             v-for="(reservation,index) in reservations" :key="index">
             <div slot='header'><h3>Reservation {{index + 1}} - {{getTitle(reservation)}}</h3></div>
+            <v-btn v-if="reservation.completed" 
+            color="blue darken" 
+            flat 
+            @click="rate(reservation.id, reservation.hasReturnFlight, reservation.sameCompanies)"
+            >Rate</v-btn>
             <v-container>
               <v-layout row wrap>
                 <v-flex lg6 md6 >
@@ -75,6 +80,75 @@
           
       </v-card-text>
     </v-card>
+    <v-dialog width="300" v-model="ratingDialog">
+            <v-card
+            class="elevation-16 mx-auto"
+            >
+            <v-card-title
+            class="headline"
+            primary-title
+            >
+            Rate Our Service
+            </v-card-title>
+            <v-card-text>
+            If you enjoyed using our company, please take a few seconds to rate your experience with us.
+            <div class="text-xs-center">
+                <v-rating
+                v-model="companyRating"
+                background-color="grey darken-1"
+                half-increments
+                hover
+                ></v-rating>
+            </div>
+            Please rate the flight you took as well.
+            <div class="text-xs-center">
+                <v-rating
+                v-model="flightRating"
+                background-color="grey darken-1"
+                half-increments
+                hover
+                ></v-rating>
+            </div>
+
+            <div v-if="hasReturnFlight">    
+
+            <div v-if="!sameCompany">          
+            Also,you can rate the company you used on your return flight.
+            <div class="text-xs-center">
+                <v-rating
+                v-model="returnCompanyRating"
+                background-color="grey darken-1"
+                half-increments
+                hover
+                ></v-rating>
+            </div>
+            </div>
+            And the return flight,too.
+            <div class="text-xs-center">
+                <v-rating
+                v-model="returnFlightRating"
+                background-color="grey darken-1"
+                half-increments
+                hover
+                ></v-rating>
+            </div>
+
+            </div>
+
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-actions class="justify-space-between">
+            <v-btn flat @click="noThanks">No Thanks</v-btn>
+            <v-btn
+                color="primary"
+                flat
+                @click="rateService"
+            >
+                Rate Now
+            </v-btn>
+            </v-card-actions>
+        </v-card>
+        </v-dialog>
   </div>
 </template>
 
@@ -83,6 +157,10 @@
 import store from "@/store";
 import UserController from "@/controllers/user.controller.js";
 import FlightInfoVue from '../Flights/FlightInfo.vue';
+import FlightRatingController from '@/controllers/flight.rating.controller.js';
+import Rating from "@/models/Rating.js";
+import RatingWithReturn from "@/models/RatingWithReturn.js";
+import RatingDifferentCompanies from "@/models/RatingDifferentCompanies.js";
 
 export default {
   name: "FlightReservations",
@@ -118,6 +196,17 @@ export default {
       { text: 'Address', value: 'address' },
       { text: 'Accepted', value: 'accepted' },
     ],
+    rating: new Rating(),
+    ratingWithReturn: new RatingWithReturn(),
+    ratingDifferentCompanies: new RatingDifferentCompanies(),
+    ratingDialog: false,
+    companyRating: 0,
+    flightRating: 0,
+    id: -1,
+    hasReturnFlight: false,
+    sameCompany: false,
+    returnCompanyRating: 0,
+    returnFlightRating: 0,
   }),
   beforeMount() {
     UserController.getFlightReservations(store.getters.activeUser.id)
@@ -174,9 +263,76 @@ export default {
           store.commit("setSnack", {msg: error.response.data, color:"error"})
         })
     },
+    rate(id,hasReturn,sameCompany) {      
+      this.id = id;
+      this.hasReturnFlight = hasReturn;
+      this.sameCompany = sameCompany;
+      this.ratingDialog = true;
+    },
+    rateService() {
+      if(this.hasReturnFlight) {
+        if(this.sameCompany){
+          this.ratingWithReturn.id = this.id;
+          this.ratingWithReturn.service = this.companyRating;
+          this.ratingWithReturn.specific = this.flightRating;
+          this.ratingWithReturn.returnFlightRating = this.returnFlightRating;
+          
+          FlightRatingController.rateWithReturn(this.ratingWithReturn)
+          .then((response) => {
+          store.commit("setSnack", {msg: "Rating successful", color:"success"})
+          })
+          .catch((error) => {
+          store.commit("setSnack", {msg: error.response.data, color:"error"})
+        });
+          
+        } else {
+          this.ratingDifferentCompanies.id = this.id;
+          this.ratingDifferentCompanies.service = this.companyRating;
+          this.ratingDifferentCompanies.specific = this.flightRating;
+          this.ratingDifferentCompanies.returnFlightRating = this.returnFlightRating;  
+          this.ratingDifferentCompanies.returnCompanyRating = this.returnCompanyRating;
+
+          FlightRatingController.rateDifferentCompanies(this.ratingDifferentCompanies)
+          .then((response) => {
+          store.commit("setSnack", {msg: "Rating successful", color:"success"})
+          })
+          .catch((error) => {
+          store.commit("setSnack", {msg: error.response.data, color:"error"})
+        });
+        }
+      } else {  
+        this.rating.id = this.id;
+        this.rating.service = this.companyRating;
+        this.rating.specific = this.flightRating;
+      
+        FlightRatingController.rate(this.rating)
+          .then((response) => {
+          store.commit("setSnack", {msg: "Rating successful", color:"success"})
+          })
+          .catch((error) => {
+          store.commit("setSnack", {msg: error.response.data, color:"error"})
+        });
+
+      }
+
+      this.ratingDialog = false;
+      this.companyRating = 0;
+      this.flightRating = 0;
+      this.id = -1;
+      this.returnCompanyRating = 0;
+      this.returnFlightRating = 0;         
+    },
+    noThanks() {
+      this.ratingDialog = false;
+      this.hasReturnFlight = false;
+      this.sameCompany = false;
+      this.companyRating = 0;
+      this.flightRating = 0;
+      this.id = -1;
+      this.returnCompanyRating = 0;
+      this.returnFlightRating = 0; 
+    },
   }
-
-
 }
 </script>
 

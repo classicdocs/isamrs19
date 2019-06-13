@@ -47,6 +47,7 @@ public class VehicleService {
         vehicle.setYearOfProduction(vehicleDTO.getYearOfProduction());
         vehicle.setPricePerDay(vehicleDTO.getPricePerDay());
         vehicle.setAverageRating(0);
+        vehicle.setTotalRating(0);
 
         RentACar rentACar = rentACarService.findOneById(vehicleDTO.getRentACar());
         Set<Vehicle> vehicles = rentACar.getVehicles();

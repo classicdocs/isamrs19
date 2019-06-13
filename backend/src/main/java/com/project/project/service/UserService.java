@@ -185,11 +185,20 @@ public class UserService {
         }
     }
 
-    public Set<FlightReservationResultDTO> getFlightReservations(Long id) throws UserNotFound {
+    public Set<FlightReservationResultDTO> getFlightReservations(Long id) throws UserNotFound, ParseException {
         Optional<User> user = userRepository.findOneById(id);
         if (user.isPresent()) {
             RegisteredUser ru = (RegisteredUser) user.get();
             Set<FlightReservationResultDTO> result = new HashSet<>();
+
+            String landing_date_string;
+            String landing_time_string;
+            Date landing_datetime;
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            boolean isCompleted;
+            boolean hasReturnFlight;
+            boolean sameCompanies;
+
             for(FlightReservation flightReservation : ru.getFlightReservations()) {
                 Set<PassengerDTO> passengerDTOS = new HashSet<>();
                 for (Passenger passenger : flightReservation.getPassengers()) {
@@ -202,7 +211,30 @@ public class UserService {
                     }
 
                 }
-                FlightReservationResultDTO flightReservationResultDTO = new FlightReservationResultDTO(flightReservation, passengerDTOS);
+
+                isCompleted = false;
+                hasReturnFlight = false;
+                sameCompanies = false;
+
+                if(flightReservation.getReturnFlight() == null){
+                    landing_date_string = flightReservation.getDepartureFlight().getLandingDate();
+                    landing_time_string = flightReservation.getDepartureFlight().getLandingTime();
+                } else {
+                    landing_date_string = flightReservation.getReturnFlight().getLandingDate();
+                    landing_time_string = flightReservation.getReturnFlight().getLandingTime();
+                    hasReturnFlight = true;
+                    if (flightReservation.getDepartureFlight().getAirlineCompany().getId().equals(flightReservation
+                            .getReturnFlight().getAirlineCompany().getId())){
+                        sameCompanies = true;
+                    }
+                }
+
+                landing_datetime = format.parse(landing_date_string + ' ' + landing_time_string);
+
+                isCompleted = landing_datetime.before(new Date());
+
+                FlightReservationResultDTO flightReservationResultDTO = new FlightReservationResultDTO(flightReservation
+                        , passengerDTOS, isCompleted, hasReturnFlight, sameCompanies);
                 result.add(flightReservationResultDTO);
             }
             return result;

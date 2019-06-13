@@ -13,6 +13,10 @@ public class RatingDTO {
     @NotNull
     private double specific;
 
+    private double returnFlightRating;
+
+    private double returnCompanyRating;
+
     public RatingDTO() {
     }
 
@@ -38,5 +42,21 @@ public class RatingDTO {
 
     public void setSpecific(double specific) {
         this.specific = specific;
+    }
+
+    public double getReturnFlightRating() {
+        return returnFlightRating;
+    }
+
+    public void setReturnFlightRating(double returnFlightRating) {
+        this.returnFlightRating = returnFlightRating;
+    }
+
+    public double getReturnCompanyRating() {
+        return returnCompanyRating;
+    }
+
+    public void setReturnCompanyRating(double returnCompanyRating) {
+        this.returnCompanyRating = returnCompanyRating;
     }
 }
