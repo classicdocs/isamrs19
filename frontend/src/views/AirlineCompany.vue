@@ -26,6 +26,7 @@
               ></manage-seats-dialog>
               <add-destination v-bind:airlineCompany="airlineCompany"></add-destination>
               <reports/>
+              <luggage-info/>
             </v-layout>
           </v-container>
           <flights-discount></flights-discount>
@@ -66,6 +67,7 @@ import store from "@/store";
 import ListOfFlightsVue from '../components/AirlineCompany/ListOfFlights.vue';
 import ListOfFlightsWithDiscountVue from '../components/AirlineCompany/ListOfFlightsWithDiscount.vue';
 import ReportsVue from '../components/AirlineCompany/Reports.vue';
+import LuggageInfoVue from '../components/AirlineCompany/LuggageInfo.vue';
 
 export default {
   name: "AirlineCompany",
@@ -79,7 +81,8 @@ export default {
     'list-of-destinations': ListOfDestinations,
     'list-of-flights': ListOfFlightsVue,
     'flights-discount' : ListOfFlightsWithDiscountVue,
-    'reports': ReportsVue
+    'reports': ReportsVue,
+    'luggage-info': LuggageInfoVue
 },
   data: () => ({
     admin: false,

@@ -34,6 +34,15 @@ export default {
   },
   getReports(id, data) {
     return AirlineCompanyApiService.getReports(id,data);
+  },
+  getLuggage(id) {
+    return AirlineCompanyApiService.getLuggage(id);
+  },
+  addLuggage(id, data) {
+    return AirlineCompanyApiService.addLuggage(id,data);
+  },
+  deleteLuggage(id, luggageId) {
+    return AirlineCompanyApiService.deleteLuggage(id,luggageId);
   }
 
 };
