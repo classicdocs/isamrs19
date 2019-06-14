@@ -14,10 +14,16 @@ insert into airline_company_destinations(airline_company_id, destinations ) valu
 
 
 -- hotel
-insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor) values (1,'Moscow','Terazije 20','Nice view from hotel',4,15);
-insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor) values (3,'Kasina','Terazije 25','Hotel with rich history',2,15);
-insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor) values (4,'Parisjen','Old square 52','Best in Paris',4,30);
-insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor) values (2,'Sheraton','Futoski put 76','Known for good services',3,8);
+--insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor) values (1,'Moscow','Terazije 20','Nice view from hotel',4,15);
+--insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor) values (3,'Kasina','Terazije 25','Hotel with rich history',2,15);
+--insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor) values (4,'Parisjen','Old square 52','Best in Paris',4,30);
+--insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor) values (2,'Sheraton','Futoski put 76','Known for good services',3,8);
+
+insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor,latitude,longitude) values (1,'Moscow','Terazije 20','Nice view from hotel',4,15,10.0,10.0);
+insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor,latitude,longitude) values (3,'Kasina','Terazije 25','Hotel with rich history',2,15,12.0,12.0);
+insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor,latitude,longitude) values (4,'Parisjen','Old square 52','Best in Paris',4,30,15.0,15.0);
+insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor,latitude,longitude) values (2,'Sheraton','Futoski put 76','Known for good services',3,8,20.0,20.0);
+
 
 
 ------------------------------------------------------------------------------------------------------------------------

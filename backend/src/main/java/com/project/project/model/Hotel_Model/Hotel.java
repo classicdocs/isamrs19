@@ -27,6 +27,17 @@ public class Hotel {
     @Column(name = "roomsByFloor", nullable = false)
     private int roomsByFloor;
 
+    @Column(name = "latitude", nullable = false)
+    private double latitude;
+
+    @Column(name = "longitude", nullable = false)
+    private double longitude;
+
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<HotelsOffer> priceList;
 
@@ -119,5 +130,17 @@ public class Hotel {
 
     public void setFloors(Set<HotelFloor> floors) {
         this.floors = floors;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
     }
 }

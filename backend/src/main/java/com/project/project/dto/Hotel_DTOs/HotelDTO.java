@@ -41,6 +41,11 @@ public class HotelDTO {
     @NotNull
     private int roomsByFloor;
 
+    @NotNull
+    private double latitude;
+
+    @NotNull
+    private double longitude;
 
     public HotelDTO(){}
 
@@ -55,6 +60,8 @@ public class HotelDTO {
         this.numOfFloors = hotel.getNumOfFloors();
         this.roomsByFloor = hotel.getRoomsByFloor();
         this.destination = hotel.getDestination();
+        this.latitude = hotel.getLatitude();
+        this.longitude = hotel.getLongitude();
     }
 
     public Set<HotelAdmin> getAdmins() {
@@ -135,6 +142,22 @@ public class HotelDTO {
 
     public void setDestination(HotelDestination destination) {
         this.destination = destination;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
 }

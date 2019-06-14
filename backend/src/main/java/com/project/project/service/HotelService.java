@@ -107,6 +107,9 @@ public class HotelService {
         h.setNumOfFloors(hotelDTO.getNumOfFloors());
         h.setRoomsByFloor(hotelDTO.getRoomsByFloor());
 
+        h.setLongitude(hotelDTO.getLongitude());
+        h.setLatitude(hotelDTO.getLatitude());
+
         h.setAdmins(hotelDTO.getAdmins());
         h = hotelRepository.save(h);
 

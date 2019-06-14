@@ -21,6 +21,13 @@ Vue.use(Loading);
 Vue.use(Vuetify);
 Vue.prototype.router = router;
 
+import * as VueGoogleMaps from 'vue2-google-maps';
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyDrEPyJ7fFAAZwckY00u0C3Gw-ndSEFJdI'
+  },
+});
+
 import 'vuetify/dist/vuetify.min.css'
 
 // LoginController.initStoreAuth();

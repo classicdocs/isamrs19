@@ -8,55 +8,86 @@
           </v-card-title>
 
           <!-- LABELE -->
+          <v-card-text>
+            <v-container>
+              <v-text-field label="hotel name" v-model="hotel.name"
+              :rules="[v => !!v || 'hotel name is required']">
+              </v-text-field> 
 
-          <v-container>
-            <v-text-field label="hotel name" v-model="hotel.name"
-            :rules="[v => !!v || 'hotel name is required']">
-            </v-text-field> 
+              <v-layout> 
+                <v-flex>
+                  <v-select :items="hotelDestinations" v-model="hotel.destination" 
+                  label="choose hotel location" :rules="destination_rules" 
+                  required></v-select>
+                </v-flex>
+              </v-layout>
 
-            <v-layout > <!--v-bind="binding"-->
-              <!-- <v-flex>
-                <v-text-field label="country" v-model="country"
-                :rules="[v => !!v || 'country name is required']">
-                </v-text-field> 
-              </v-flex>
-              <v-flex>
-                <v-text-field label="city" v-model="city" 
-                :rules="[v => !!v || 'city name is required']">
-                </v-text-field> 
-              </v-flex> -->
-              <v-flex>
-                <v-select :items="hotelDestinations" v-model="hotel.destination" 
-                label="choose hotel location" :rules="destination_rules" 
-                required></v-select>
-              </v-flex>
-            </v-layout>
-
-            <v-text-field label="street address" v-model="street"
-            :rules="[v => !!v || 'street address is required']">
-            </v-text-field> 
-            
-            <v-textarea name="promotionalDescription" label="promotional description" 
-              v-model="hotel.description" 
-              hint="Say something good about hotel services and prices..." box>
-            </v-textarea>
-            <v-layout row span>
+              <v-text-field label="street address" v-model="street"
+              :rules="[v => !!v || 'street address is required']">
+              </v-text-field> 
               
-              <v-flex>
-                Number of floors
-                <number-input v-model="hotel.numOfFloors" :min="1" :max="5" inline center controls></number-input>
-              </v-flex>
+              <div>
+                <v-subheader>You can represent location on map if you want.</v-subheader>
+                <h4>latitude = {{lat}} <br>longitude = {{lng}}</h4>
+              <gmap-map
+                v-bind:center="hotelPosition"
+                v-bind:zoom="7"
+                style="height: 225px"
+                :options="{
+                  zoomControl: false,
+                  mapTypeControl: false,
+                  scaleControl: false,
+                  streetViewControl: false,
+                  rotateControl: false,
+                  fullscreenControl: true,
+                  disableDefaultUi: false,
+                }"
+                @click="infoWindowShown = true"
+              >
+
+                  <!-- v-bind:position="hotelPosition" -->
+                
+                <gmap-marker
+                  v-bind:clickable="true"
+                  @click="center=m.position"
+
+                  :position="hotelPosition"
+                  :draggable="true" 
+                  @drag="updateCoordinates"
+                >
+                <GmapInfoWindow :opened="infoWindowShown" @closeclick="infoWindowShown = false">
+                  {{hotel.address}}
+                </GmapInfoWindow>
+                </gmap-marker>
+              </gmap-map>
+            </div>
+
+            <br>
+            <div>
+              <v-textarea name="promotionalDescription" label="promotional description" 
+                v-model="hotel.description" 
+                hint="Say something good about hotel services and prices..." box>
+              </v-textarea>
+              <v-layout row span>
+                
+                <v-flex>
+                  Number of floors
+                  <number-input v-model="hotel.numOfFloors" :min="1" :max="5" inline center controls></number-input>
+                </v-flex>
+                
+                <v-flex>
+                  Number of rooms by floor
+                  <number-input v-model="hotel.roomsByFloor" :min="1" :max="50" inline center controls></number-input>
+                </v-flex>
               
-              <v-flex>
-                Number of rooms by floor
-                <number-input v-model="hotel.roomsByFloor" :min="1" :max="50" inline center controls></number-input>
-              </v-flex>
 
+              </v-layout>
+              </div>
+            </v-container>
 
-            </v-layout>
             
-          </v-container>
 
+          </v-card-text>
           <!-- DUGMAD -->
 
           <v-card-actions>
@@ -96,7 +127,24 @@ export default {
     destination_rules:[
         v => !!v || 'You need to choose existing location from list'
     ],
+
+    infoWindowShown: false,
+    center: {
+      lat: 42.55139,
+      lng: 21.90028
+    },
+    hotelPosition: {lat: 42.55139, lng: 21.90028},
+    coordinates: {lat: 42.55139, lng: 21.90028},
+
   }),
+  computed: {
+    lat: function() {
+      return this.coordinates.lat;
+    },
+    lng: function() {
+      return this.coordinates.lng;
+    }
+  },
   created() {
     HotelDestinationsController.get()
       .then((response) => {
@@ -107,6 +155,12 @@ export default {
       });
   },
   methods: {
+    updateCoordinates(location) {
+        this.coordinates = {
+            lat: location.latLng.lat(),
+            lng: location.latLng.lng(),
+        };
+    },
     validate() {
       if(this.$refs.form.validate()) {
         // this.hotel.address = this.country + '/' + this.city + '/' + this.street;
@@ -135,6 +189,7 @@ export default {
           })
       }
     },
+    
     reset() {
       this.$refs.form.reset();
     },
