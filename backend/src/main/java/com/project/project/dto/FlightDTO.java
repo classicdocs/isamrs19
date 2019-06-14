@@ -42,6 +42,8 @@ public class FlightDTO {
 
     private boolean archived;
 
+    private double averageRating;
+
     private List<SeatRowDTO> seatsFirst = new ArrayList<SeatRowDTO>();
 
     private List<SeatRowDTO> seatsBusiness = new ArrayList<SeatRowDTO>();
@@ -71,6 +73,7 @@ public class FlightDTO {
         this.ticketPriceBusiness = flight.getTicketPriceBusiness();
         this.ticketPriceEconomy = flight.getTicketPriceEconomy();
         this.archived = flight.isArchived();
+        this.averageRating = flight.getAverageRating();
 
         for (SeatRow sr: flight.getSeatsFirst()) {
                 this.seatsFirst.add(new SeatRowDTO(sr));
@@ -242,5 +245,13 @@ public class FlightDTO {
 
     public void setArchived(boolean archived) {
         this.archived = archived;
+    }
+
+    public double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
     }
 }

@@ -30,6 +30,9 @@
             <td class="text-xs-center">{{ props.item.ticketPriceFirst }}</td>
             <td class="text-xs-center">{{ props.item.ticketPriceBusiness }}</td>
             <td class="text-xs-center">{{ props.item.ticketPriceEconomy }}</td>
+            <td class="text-xs-center">
+              <v-rating id="airlineStars" :readonly="true" :value="props.item.averageRating" half-increments ></v-rating>
+            </td>
           </template>
         </v-data-table>
     </v-card-text>
@@ -64,6 +67,7 @@ export default {
         { text: 'First ', value: 'ticketPriceFirst' , align: 'center'},
         { text: 'Business', value: 'ticketPriceBusiness' , align: 'center'},
         { text: 'Economy', value: 'ticketPriceEconomy' , align: 'center'},
+        { text: 'Rating', value: 'rating', align: 'center'},
       ],
   }),
   mounted() {
@@ -73,6 +77,7 @@ export default {
     getFlights() {
        AirlineCompanyController.getArchivedFlights(this.$route.params.id)
       .then((response) => {
+        console.log(response.data);
         response.data.forEach(element => {
           this.flights.push(element);
         });
@@ -84,3 +89,9 @@ export default {
   }
 }
 </script>
+
+<style>
+#airlineStars {
+  width: 250px;
+}
+</style>

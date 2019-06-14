@@ -27,7 +27,7 @@
             <td class="text-xs-center" v-if="isAdmin">
               <flight-discount v-bind:flight="props.item"></flight-discount>
             </td>
-            <td class="text-xs-center"><v-btn flat @click="archive(props.item.id)">Archive</v-btn></td>
+            <td class="text-xs-center"><v-btn flat @click="archive(props.item.id)" v-if="isAdmin">Archive</v-btn></td>
           </template>
         </v-data-table>
         <archived-flights v-if="isAdmin"/>
