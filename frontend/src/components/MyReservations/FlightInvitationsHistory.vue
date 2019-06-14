@@ -1,7 +1,16 @@
 <template>
-  <div>
-    <v-card>
-      <v-card-text>
+  <v-dialog
+    v-model="dialog"
+    persistent
+  >
+  <template v-slot:activator="{ on }">
+    <v-btn flat v-on="on" >History</v-btn>
+  </template>
+  <v-card>
+    <v-card-title primary-title>
+     <span class="headline">History of your flight intivations</span>
+    </v-card-title>
+    <v-card-text>
         <v-expansion-panel 
 			  >
           <v-expansion-panel-content
@@ -13,15 +22,6 @@
                   <p>You have invitation from the user <b> {{invitation.invitationFrom.username}} </b>[{{invitation.invitationFrom.firstname}}
                     {{invitation.invitationFrom.lastname}}] 
                   </p>
-                  <div v-if="invitation.accepted === false">
-                    <v-btn color="success" @click="accept(invitation)">Accept</v-btn>
-                    <v-btn color="error" @click="decline(invitation)">Decline</v-btn>
-                  </div>
-                  <div v-else>
-                    <p>Invitation is ACCEPTED!</p>
-                    <p>You can cancel your reservation minimum three hours before flight!</p>
-                    <v-btn @click="cancel(invitation)">Cancel</v-btn>
-                  </div>
                 </v-flex>
               </v-layout>
               <v-layout row wrap>
@@ -53,13 +53,15 @@
                 </v-flex>
               </v-layout>
             </v-container>
-           
           </v-expansion-panel-content>
         </v-expansion-panel>
-        <history/>
       </v-card-text>
+       <v-card-actions>
+      <v-spacer></v-spacer>
+      <v-btn color="blue darken" flat @click="dialog = false">Close</v-btn> 
+    </v-card-actions>
     </v-card>
-  </div>
+  </v-dialog>
 </template>
 
 <script>
@@ -67,20 +69,19 @@
 import store from "@/store";
 import UserController from "@/controllers/user.controller.js";
 import FlightInfoVue from '../Flights/FlightInfo.vue';
-import FlightInvitationsHistoryVue from './FlightInvitationsHistory.vue';
 
 export default {
-  name: "FlightInvitations",
+  name: "FlightInvitationsHistory",
   components: {
-    'flight' : FlightInfoVue,
-    'history': FlightInvitationsHistoryVue
+    'flight' : FlightInfoVue
   },
   data:() => ({
+    dialog: false,
     invitations: [],
   }),
   beforeMount() {
     let id = store.getters.activeUser.id;
-    UserController.getFlightInvitations(id)
+    UserController.getFlightInvitationsHistory(id)
       .then((response) => {
         this.invitations = response.data;
       })
@@ -105,51 +106,6 @@ export default {
       }
       return params;
     },
-    accept(invitation) {
-      let data = {
-        "id" : invitation.id
-      }
-      UserController.acceptInvitation(store.getters.activeUser.id, data)
-        .then((response) => {
-          store.commit("setSnack", {msg: "You have successfully accepted invitation", color:"success"})
-          invitation.accepted = true;
-        })
-        .catch((error) => {
-          console.log(error.response.data);
-        })
-    },
-    decline(invitation) {
-      let data = {
-        "id" : invitation.id
-      }
-      UserController.declineInvitation(store.getters.activeUser.id, data)
-        .then((response) => {
-          store.commit("setSnack", {msg: "You have successfully declined invitation", color:"success"})
-          let idx = this.invitations.indexOf(invitation);
-          if (idx != -1)
-            this.invitations.splice(idx,1);
-        })
-        .catch((error) => {
-          console.log(error.response.data);
-        })
-    },
-    cancel(invitation) {
-
-      let data = {
-        "id" : invitation.id
-      }
-
-       UserController.cancelInvitation(store.getters.activeUser.id, data)
-        .then((response) => {
-          store.commit("setSnack", {msg: "You have successfully canceled invitation", color:"success"})
-          let idx = this.invitations.indexOf(invitation);
-          if (idx != -1)
-            this.invitations.splice(idx,1);
-        })
-        .catch((error) => {
-          store.commit("setSnack", {msg: error.response.data, color:"error"})
-        })
-    }
   }
 }
 </script>

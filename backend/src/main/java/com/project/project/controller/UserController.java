@@ -144,7 +144,21 @@ public class UserController {
     )
     public ResponseEntity getFlightInvitations(@PathVariable("id") Long id) {
         try {
-            Set<FlightInvitationDTO> flightInvitationDTOS = userService.getFlightInvitation(id);
+            Set<FlightInvitationDTO> flightInvitationDTOS = userService.getFlightInvitation(id, false);
+            return new ResponseEntity<Set<FlightInvitationDTO>>(flightInvitationDTOS, HttpStatus.OK);
+        } catch (UserNotFound userNotFound) {
+            userNotFound.printStackTrace();
+            return  new ResponseEntity<String>(userNotFound.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(
+            value = "/{id}/flight/invitations/history",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity getFlightInvitationsHistory(@PathVariable("id") Long id) {
+        try {
+            Set<FlightInvitationDTO> flightInvitationDTOS = userService.getFlightInvitation(id, true);
             return new ResponseEntity<Set<FlightInvitationDTO>>(flightInvitationDTOS, HttpStatus.OK);
         } catch (UserNotFound userNotFound) {
             userNotFound.printStackTrace();

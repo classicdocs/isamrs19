@@ -31,6 +31,9 @@ export default {
   getFlightInvitations(id) {
     return UserApiService.getFlightInvitations(id);
   },
+  getFlightInvitationsHistory(id) {
+    return UserApiService.getFlightInvitationsHistory(id);
+  },
   acceptInvitation(id, data) {
     return UserApiService.acceptInvitation(id, data);
   },

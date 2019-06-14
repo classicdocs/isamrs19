@@ -46,6 +46,9 @@ export default {
   getFlightInvitations(id) {
     return Axios.get(ENDPOINTS.USERS + id + ENDPOINTS.FLIGHTS + ENDPOINTS.INVITATIONS);
   },
+  getFlightInvitationsHistory(id) {
+    return Axios.get(ENDPOINTS.USERS + id + ENDPOINTS.FLIGHTS + ENDPOINTS.INVITATIONS + ENDPOINTS.HISTORY);
+  },
   acceptInvitation(id, data) {
     return Axios.post(ENDPOINTS.USERS + id + ENDPOINTS.FLIGHTS + ENDPOINTS.INVITATIONS + ENDPOINTS.ACCEPT, data);
   },

@@ -267,7 +267,7 @@ public class UserService {
         }
     }
 
-    public Set<FlightInvitationDTO> getFlightInvitation(Long id) throws UserNotFound {
+    public Set<FlightInvitationDTO> getFlightInvitation(Long id, boolean active) throws UserNotFound {
 
         Optional<User> user = userRepository.findOneById(id);
         if (user.isPresent()) {
@@ -276,7 +276,30 @@ public class UserService {
             for (FlightInvitation flightInvitation : ru.getFlightInvitations()) {
                 Optional<User> from = userRepository.findOneById(flightInvitation.getInvitationFrom());
                 if (from.isPresent()) {
-                    flightInvitationDTOS.add(new FlightInvitationDTO(flightInvitation, new UserRegistrationDTO(from.get())));
+
+                    if (active) {
+                        if (flightInvitation.getFlightReservation().getDepartureFlight().isArchived()){
+                            if (flightInvitation.getFlightReservation().getReturnFlight() != null) {
+                                if (flightInvitation.getFlightReservation().getReturnFlight().isArchived()) {
+                                    flightInvitationDTOS.add(new FlightInvitationDTO(flightInvitation, new UserRegistrationDTO(from.get())));
+                                }
+                            } else {
+                                flightInvitationDTOS.add(new FlightInvitationDTO(flightInvitation, new UserRegistrationDTO(from.get())));
+                            }
+                        }
+                    } else {
+                        if (!flightInvitation.getFlightReservation().getDepartureFlight().isArchived()){
+                            if (flightInvitation.getFlightReservation().getReturnFlight() != null) {
+                                if (!flightInvitation.getFlightReservation().getReturnFlight().isArchived()) {
+                                    flightInvitationDTOS.add(new FlightInvitationDTO(flightInvitation, new UserRegistrationDTO(from.get())));
+                                }
+                            } else {
+                                flightInvitationDTOS.add(new FlightInvitationDTO(flightInvitation, new UserRegistrationDTO(from.get())));
+                            }
+                        }
+                    }
+
+
                 } else {
                     throw new UserNotFound(flightInvitation.getInvitationFrom());
                 }
