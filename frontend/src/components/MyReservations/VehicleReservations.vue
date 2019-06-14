@@ -115,31 +115,18 @@ export default {
 
           
 
-          VehicleReservationController.rate(this.rating).catch((error) => {
-            alert(error.response.data);
+          VehicleReservationController.rate(this.rating)
+           .then((response) => {
+            store.commit("setSnack", {msg: "Rating successful", color:"success"})
+           })        
+           .catch((error) => {
+            store.commit("setSnack", {msg: error.response.data, color:"error"})
           });
 
           this.ratingDialog = false;
           this.serviceRating = 0;
           this.vehicleRating = 0;
           this.id = -1;
-
-          ///this.getData();
-
-          //this.$forceUpdate();
-
-          //this.forceRerender();
-
-          /*this.reservations = [];
-
-          alert("Rate-ovano");
-
-          VehicleReservationController.get(store.getters.activeUser.id).then((response) => {
-            response.data.forEach(element => {
-              this.reservations.push(element);
-            });
-          });*/
-
         },
         noThanks() {
           this.ratingDialog = false;

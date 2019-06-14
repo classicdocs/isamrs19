@@ -41,6 +41,11 @@ public class HotelDTO {
     @NotNull
     private int roomsByFloor;
 
+    @NotNull
+    private double average_rating;
+
+    @NotNull
+    private double total_rating;
 
     public HotelDTO(){}
 
@@ -55,6 +60,8 @@ public class HotelDTO {
         this.numOfFloors = hotel.getNumOfFloors();
         this.roomsByFloor = hotel.getRoomsByFloor();
         this.destination = hotel.getDestination();
+        this.average_rating = hotel.getAverage_rating();
+        this.total_rating = hotel.getTotal_rating();
     }
 
     public Set<HotelAdmin> getAdmins() {
@@ -137,4 +144,19 @@ public class HotelDTO {
         this.destination = destination;
     }
 
+    public double getAverage_rating() {
+        return average_rating;
+    }
+
+    public void setAverage_rating(double average_rating) {
+        this.average_rating = average_rating;
+    }
+
+    public double getTotal_rating() {
+        return total_rating;
+    }
+
+    public void setTotal_rating(double total_rating) {
+        this.total_rating = total_rating;
+    }
 }
