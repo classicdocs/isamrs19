@@ -40,6 +40,8 @@ public class FlightDTO {
     @Positive
     private double ticketPriceEconomy;
 
+    private boolean archived;
+
     private List<SeatRowDTO> seatsFirst = new ArrayList<SeatRowDTO>();
 
     private List<SeatRowDTO> seatsBusiness = new ArrayList<SeatRowDTO>();
@@ -68,6 +70,7 @@ public class FlightDTO {
         this.ticketPriceFirst = flight.getTicketPriceFirst();
         this.ticketPriceBusiness = flight.getTicketPriceBusiness();
         this.ticketPriceEconomy = flight.getTicketPriceEconomy();
+        this.archived = flight.isArchived();
 
         for (SeatRow sr: flight.getSeatsFirst()) {
                 this.seatsFirst.add(new SeatRowDTO(sr));
@@ -230,5 +233,14 @@ public class FlightDTO {
 
     public void setSeatsEconomy(List<SeatRowDTO> seatsEconomy) {
         this.seatsEconomy = seatsEconomy;
+    }
+
+
+    public boolean isArchived() {
+        return archived;
+    }
+
+    public void setArchived(boolean archived) {
+        this.archived = archived;
     }
 }

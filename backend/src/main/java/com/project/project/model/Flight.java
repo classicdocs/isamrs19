@@ -82,6 +82,9 @@ public class Flight {
     @Column(name = "total_rating")
     private double totalRating;
 
+    @Column(name = "archived")
+    private boolean archived = false;
+
     public Flight() {
     }
 
@@ -303,6 +306,15 @@ public class Flight {
 
     public void setAverageRating(double averageRating) {
         this.averageRating = averageRating;
+    }
+
+
+    public boolean isArchived() {
+        return archived;
+    }
+
+    public void setArchived(boolean archived) {
+        this.archived = archived;
     }
 }
 

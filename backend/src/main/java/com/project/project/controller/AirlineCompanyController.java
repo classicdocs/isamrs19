@@ -93,6 +93,22 @@ public class AirlineCompanyController {
     }
 
     @GetMapping(
+            value = "/{id}/flights/archived",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity getArchivedFlights(@PathVariable("id") Long id) {
+
+        try {
+            Set<FlightDTO> flights = airlineCompanyService.getArchivedFlights(id);
+            return new ResponseEntity<Set<FlightDTO>>(flights, HttpStatus.OK);
+
+        } catch (AirlineCompanyNotFound ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<String>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(
             value = "/{id}/airplanes",
             produces = MediaType.APPLICATION_JSON_VALUE
     )

@@ -1,11 +1,17 @@
 <template>
-  <div>
-    <v-card>
-       <v-card-title primary-title>
-        <h2>List of flights</h2>
-      </v-card-title>
-      <v-card-text>
-          <v-data-table
+  <v-dialog
+    v-model="dialog"
+    persistent
+  >
+  <template v-slot:activator="{ on }">
+    <v-btn flat v-on="on" >Archived flights</v-btn>
+  </template>
+  <v-card>
+    <v-card-title primary-title>
+     <span class="headline">List of archived flights</span>
+    </v-card-title>
+    <v-card-text>
+      <v-data-table
           :headers="headers"
           :items="flights"
           hide-actions
@@ -24,33 +30,26 @@
             <td class="text-xs-center">{{ props.item.ticketPriceFirst }}</td>
             <td class="text-xs-center">{{ props.item.ticketPriceBusiness }}</td>
             <td class="text-xs-center">{{ props.item.ticketPriceEconomy }}</td>
-            <td class="text-xs-center" v-if="isAdmin">
-              <flight-discount v-bind:flight="props.item"></flight-discount>
-            </td>
-            <td class="text-xs-center"><v-btn flat @click="archive(props.item.id)">Archive</v-btn></td>
           </template>
         </v-data-table>
-        <archived-flights v-if="isAdmin"/>
-      </v-card-text>
-    </v-card>
-  </div>
+    </v-card-text>
+    <v-card-actions>
+      <v-spacer></v-spacer>
+      <v-btn color="blue darken" flat @click="dialog = false">Close</v-btn> 
+    </v-card-actions>
+  </v-card>
+    
+  </v-dialog>
 </template>
 
 <script>
-import FlightController from "@/controllers/flights.controller"
-import AirlineCompanyController from "@/controllers/airline-company.controller"
-import store from "@/store";
-import FlightDiscountVue from './FlightDiscount.vue';
-import ListOfArchivedFlightsVue from './ListOfArchivedFlights.vue';
 
+import AirlineCompanyController from "@/controllers/airline-company.controller";
 
 export default {
-  name:'ListOfFlights',
-  components: {
-    'flight-discount' : FlightDiscountVue,
-    'archived-flights': ListOfArchivedFlightsVue
-  },
+  name: "ListOfArchivedFlights",
   data:() => ({
+    dialog: false,
     flights: [],
     headers: [
         { text: 'ID', align: 'center',value: 'id' },
@@ -67,20 +66,13 @@ export default {
         { text: 'Economy', value: 'ticketPriceEconomy' , align: 'center'},
       ],
   }),
-  computed: {
-    isAdmin() {
-      return store.getters.isAirlineAdmin;
-    },
-  },
   mounted() {
     this.getFlights();
   },
   methods: {
-    
     getFlights() {
-       AirlineCompanyController.getFlights(this.$route.params.id)
+       AirlineCompanyController.getArchivedFlights(this.$route.params.id)
       .then((response) => {
-        console.log(response.data);
         response.data.forEach(element => {
           this.flights.push(element);
         });
@@ -88,30 +80,7 @@ export default {
       .catch((error) => {
         alert(error.response.data);
       })
-    },
-    archive(id) {
-      let data = {
-        "id" : id
-      }
-      FlightController.archive(data)
-        .then((response) => {
-          let ind = -1;
-          this.flights.forEach(f => {
-            if (f.id == response.data.id)
-              ind = this.flights.indexOf(f);
-          });
-          if (ind != -1)
-            this.flights.splice(ind,1);
-          store.commit("setSnack", {msg: "You have successfully archived flight", color: "success"});  
-        })
-        .catch((error) => {
-          store.commit("setSnack", {msg: error.response.data, color: "error"});  
-        })
     }
   }
 }
 </script>
-
-<style>
-
-</style>

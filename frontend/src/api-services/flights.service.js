@@ -5,6 +5,7 @@ const ENDPOINTS = {
   SEARCH: 'search',
   RESERVE: "reserve",
   DISCOUNT: "discount",
+  ARCHIVE: "archive",
 };
 
 export default {
@@ -19,5 +20,8 @@ export default {
   },
   addDiscount(data) {
     return Axios.post(ENDPOINTS.FLIGHTS + ENDPOINTS.DISCOUNT, data);
+  },
+  archive(id) {
+    return Axios.put(ENDPOINTS.FLIGHTS + ENDPOINTS.ARCHIVE, id);
   }
 };

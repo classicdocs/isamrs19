@@ -141,6 +141,7 @@
 import SearchFlight from "@/models/SearchFlight.js";
 import FlightController from "@/controllers/flights.controller.js";
 import DestinationController from "@/controllers/destinations.controller.js";
+import store from "@/store";
 
 export default {
   name: "SearchForm",
@@ -166,12 +167,12 @@ export default {
     },
   }),
   created() {
-    // this.search.startDestination = "London",
-    // this.search.finalDestination = "Belgrade",
-    // this.search.departureDate = "2019-05-22",
-    // this.search.returnDate = "2019-05-25",
-    // this.search.seatClass = "First",
-    // this.search.passengersNumber = 4
+    this.search.startDestination = "London",
+    this.search.finalDestination = "Belgrade",
+    this.search.departureDate = "2019-06-22",
+    this.search.returnDate = "2019-06-25",
+    this.search.seatClass = "First",
+    this.search.passengersNumber = 1
 
     DestinationController.get()
       .then((response) => {
@@ -215,7 +216,7 @@ export default {
               this.$emit("search-result", json)
             })
             .catch((error) => {
-              console.error.response.data();
+              store.commit("setSnack", {msg: error.response.data, color:"error"});
             })
         }
       }

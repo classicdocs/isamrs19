@@ -29,6 +29,9 @@ export default {
   getFlights(id) {
     return AirlineCompanyApiService.getFlights(id);
   },
+  getArchivedFlights(id) {
+    return AirlineCompanyApiService.getArchivedFlights(id);
+  },
   getFlightsDiscount(id) {
     return AirlineCompanyApiService.getFlightsDiscount(id);
   },
