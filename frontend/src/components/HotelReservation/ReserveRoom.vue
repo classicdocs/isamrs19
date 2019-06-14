@@ -8,7 +8,9 @@
               <h2 style="vertical-align:middle">Room details <v-icon x-large>weekend</v-icon></h2><br>
               <v-subheader><h3>Floor {{room.hotelFloor.level}}|
               Number {{room.roomNumber}}|
-              Beds {{room.numberOfBeds}}</h3></v-subheader>
+              Beds {{room.numberOfBeds}}</h3>
+              <v-rating id="roomStars" :readonly="true" v-model="room.average_rating" half-increments></v-rating>
+              </v-subheader>
               </span>
           </v-card-title>
 
@@ -116,6 +118,10 @@ export default {
 .divider {
   border-width: 3px;
   border-color: dodgerblue;
+}
+
+#roomStars {
+  padding-left: 35px;
 }
 
 </style>

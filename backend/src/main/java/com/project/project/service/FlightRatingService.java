@@ -16,10 +16,10 @@ import org.springframework.stereotype.Service;
 public class FlightRatingService {
 
     @Autowired
-    FlightReservationRepository flightReservationRepository;
+    private FlightReservationRepository flightReservationRepository;
 
     @Autowired
-    FlightRepository flightRepository;
+    private FlightRepository flightRepository;
 
     @Autowired
     AirlineCompanyRepository airlineCompanyRepository;

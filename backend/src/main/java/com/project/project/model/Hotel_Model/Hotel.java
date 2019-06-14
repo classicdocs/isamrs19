@@ -40,10 +40,10 @@ public class Hotel {
     private HotelDestination destination;
 
     @Column(name = "average_rating")
-    private double averageRating;
+    private double average_rating;
 
     @Column(name = "total_rating")
-    private double totalRating;
+    private double total_rating;
 
     public HotelDestination getDestination() {
         return destination;
@@ -127,19 +127,19 @@ public class Hotel {
         this.floors = floors;
     }
 
-    public double getAverageRating() {
-        return averageRating;
+    public double getAverage_rating() {
+        return average_rating;
     }
 
-    public void setAverageRating(double averageRating) {
-        this.averageRating = averageRating;
+    public void setAverage_rating(double average_rating) {
+        this.average_rating = average_rating;
     }
 
-    public double getTotalRating() {
-        return totalRating;
+    public double getTotal_rating() {
+        return total_rating;
     }
 
-    public void setTotalRating(double totalRating) {
-        this.totalRating = totalRating;
+    public void setTotal_rating(double total_rating) {
+        this.total_rating = total_rating;
     }
 }

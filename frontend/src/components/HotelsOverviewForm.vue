@@ -35,7 +35,7 @@
           <tr @click="props.expanded = !props.expanded">
             <td class="text-xs-center">{{ props.item.name }}</td>
             <td class="text-xs-center">{{ props.item.destination.name }}</td>
-            <td class="text-xs-center"> <v-rating :readonly="true" v-model="props.item.averageRating" half-increments></v-rating></td>
+            <td class="text-xs-center"> <v-rating :readonly="true" v-model="props.item.average_rating" half-increments></v-rating></td>
 
             <td class="text-xs-center">
               <v-btn @click="goToPage(props.item.name)">
@@ -84,7 +84,8 @@ export default {
             value: 'name'
           },
           { text: 'Location', value: 'destination.name' , align: 'center'},
-          { text: 'Average rate', value: 'avgRate' , align: 'center'}
+          { text: 'Average rate', value: 'avgRate' , align: 'center'},
+          { text: ' ', value: 'button' , align: 'center'}
         ],
     hotels: [],
     form : true,
