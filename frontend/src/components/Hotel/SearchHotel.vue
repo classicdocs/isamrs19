@@ -126,8 +126,9 @@ export default {
       this.$router.push('/hotel-service/' + hotel.id); 
     }
   },
-}
+};
 </script>
+
 <style>
 
 #containter {

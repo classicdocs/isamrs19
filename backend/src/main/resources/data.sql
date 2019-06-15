@@ -14,10 +14,44 @@ insert into airline_company_destinations(airline_company_id, destinations ) valu
 
 
 -- hotel
-insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor, average_rating,total_rating) values (1,'Moscow','Terazije 20','Nice view from hotel',4,15,4,1);
-insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor, average_rating,total_rating) values (3,'Kasina','Terazije 25','Hotel with rich history',2,15,3,1);
-insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor, average_rating,total_rating) values (4,'Parisjen','Old square 52','Best in Paris',4,30,2,1);
-insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor, average_rating,total_rating) values (2,'Sheraton','Futoski put 76','Known for good services',3,8,5,1);
+insert into hotel_destination(id, country, name, zip) values
+(1, 'Serbia', 'Vranje', 'VR');
+insert into hotel_destination(id, country, name, zip) values
+(2, 'Serbia', 'Belgrade', 'BG');
+insert into hotel_destination(id, country, name, zip) values
+(3, 'Serbia', 'Nis', 'NI');
+insert into hotel_destination(id, country, name, zip) values
+(4, 'Serbia', 'Kragujevac', 'KG');
+insert into hotel_destination(id, country, name, zip) values
+(5, 'Serbia', 'Subotica', 'SU');
+insert into hotel_destination(id, country, name, zip) values
+(6, 'Serbia', 'Kikinda', 'KI');
+insert into hotel_destination(id, country, name, zip) values
+(7, 'Serbia', 'Zrenjanin', 'ZR');
+insert into hotel_destination(id, country, name, zip) values
+(8, 'Serbia', 'Novi Sad', 'NS');
+insert into hotel_destination(id, country, name, zip) values
+(9, 'Japan', 'Tokio', 'TOK');
+insert into hotel_destination(id, country, name, zip) values
+(10, 'Italia', 'Barri', 'BAR');
+
+
+insert into map_location(id, latitude, longitude) values
+(1, 11.11, 22.22);
+
+insert into hotel(id,name,address,description,
+    num_of_floors,rooms_by_floor,location,destination_id, average_rating,total_rating)
+    values (1,'Moscow','Terazije 20','Nice view from hotel',4,15,1,1,4,1);
+insert into hotel(id,name,address,description,
+    num_of_floors,rooms_by_floor,location,destination_id, average_rating,total_rating)
+    values (3,'Kasina','Terazije 25','Hotel with rich history',2,15,1,1,3,1);
+insert into hotel(id,name,address,description,
+    num_of_floors,rooms_by_floor,location,destination_id, average_rating,total_rating)
+    values (4,'Parisjen','Old square 52','Best in Paris',4,30,1,3,2,1);
+insert into hotel(id,name,address,description,
+    num_of_floors,rooms_by_floor,location,destination_id, average_rating,total_rating)
+    values (2,'Sheraton','Futoski put 76','Known for good services',3,8,1,2,5,1);
+
 
 
 ------------------------------------------------------------------------------------------------------------------------
@@ -148,28 +182,11 @@ insert into room_special_prices(room_id,special_prices_id) values
 insert into room_special_prices(room_id,special_prices_id) values
 (1,3);
 
-insert into hotel_destination(id, country, name, zip) values
-(1, 'Serbia', 'Vranje', 'VR');
-insert into hotel_destination(id, country, name, zip) values
-(2, 'Serbia', 'Novi Sad', 'NS');
-insert into hotel_destination(id, country, name, zip) values
-(3, 'Japan', 'Tokio', 'TOK');
-insert into hotel_destination(id, country, name, zip) values
-(4, 'Italia', 'Barri', 'BAR');
---
-insert into hotel_destination_hotels(hotel_destination_id, hotels_id) values
-(1, 1);
-insert into hotel_destination_hotels(hotel_destination_id, hotels_id) values
-(1, 2);
-insert into hotel_destination_hotels(hotel_destination_id, hotels_id) values
-(2, 4);
-insert into hotel_destination_hotels(hotel_destination_id, hotels_id) values
-(3, 3);
 
 insert into hotels_offer(id, description, price, type) values
 (1,'Room with one bed', 150, 0);
---insert into hotels_offer(id, description, price, type) values
---(2,'Room with two beds', 250, 1);
+insert into hotels_offer(id, description, price, type) values
+(2,'Room with two beds', 250, 1);
 --insert into hotels_offer(id, description, price, type) values
 --(3,'Room with three beds', 350, 2);
 --insert into hotels_offer(id, description, price, type) values
@@ -185,8 +202,8 @@ insert into hotels_offer(id, description, price, type) values
 
 insert into hotel_price_list(hotel_id, price_list_id) values
 (1,1);
---insert into hotel_price_list(hotel_id, price_list_id) values
---(1,2);
+insert into hotel_price_list(hotel_id, price_list_id) values
+(1,2);
 --insert into hotel_price_list(hotel_id, price_list_id) values
 --(1,3);
 --insert into hotel_price_list(hotel_id, price_list_id) values

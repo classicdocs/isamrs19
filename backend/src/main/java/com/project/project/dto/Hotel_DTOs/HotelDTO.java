@@ -5,6 +5,7 @@ import com.project.project.model.Hotel_Model.Hotel;
 import com.project.project.model.Hotel_Model.HotelDestination;
 import com.project.project.model.Hotel_Model.HotelFloor;
 import com.project.project.model.Hotel_Model.HotelsOffer;
+import com.project.project.model.MapLocation;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -43,6 +44,8 @@ public class HotelDTO {
 
     @NotNull
     private double average_rating;
+    @NotNull
+    private MapLocation mapLocation;
 
     @NotNull
     private double total_rating;
@@ -62,6 +65,7 @@ public class HotelDTO {
         this.destination = hotel.getDestination();
         this.average_rating = hotel.getAverage_rating();
         this.total_rating = hotel.getTotal_rating();
+        this.mapLocation = hotel.getMapLocation();
     }
 
     public Set<HotelAdmin> getAdmins() {
@@ -158,5 +162,13 @@ public class HotelDTO {
 
     public void setTotal_rating(double total_rating) {
         this.total_rating = total_rating;
+    }
+
+    public MapLocation getMapLocation() {
+        return mapLocation;
+    }
+
+    public void setMapLocation(MapLocation mapLocation) {
+        this.mapLocation = mapLocation;
     }
 }

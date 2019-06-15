@@ -33,6 +33,9 @@ export default {
     },
     addSpecialPrice(hotel_id, room_id, specialPrice){
       return HotelsService.addSpecialPrice(hotel_id, room_id, specialPrice);
+    },
+    changeLocation(hotel_id, mapLocation){
+      return HotelsService.changeLocation(hotel_id, mapLocation);
     }
 }
 

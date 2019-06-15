@@ -823,7 +823,13 @@ export default {
           // reservations.push(response.data);
           // store.commit('hotelReservations', reservations);
           this.reset();
+
+          if(typeof response.data.rooms == 'undefined'){
+            this.showSnackbar({msg: "Sorry, to late! Some of the rooms you chose are already reserved", color: "error"});
+            return;
+          }
           this.showSnackbar({msg: "Reservation is successfull", color: "success"});
+          
 
           var currentHotel = this.myHotel;
           

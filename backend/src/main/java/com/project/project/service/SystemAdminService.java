@@ -9,6 +9,7 @@ import com.project.project.model.*;
 import com.project.project.model.Hotel_Model.Hotel;
 import com.project.project.model.Hotel_Model.HotelDestination;
 import com.project.project.model.Hotel_Model.HotelFloor;
+import com.project.project.model.Hotel_Model.Room;
 import com.project.project.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,9 @@ public class SystemAdminService {
     @Autowired
     private HotelDestinationsRepository hotelDestinationsRepository;
 
+    @Autowired
+    private MapLocationRepository mapLocationRepository;
+
     public HotelDTO createHotel(HotelDTO hotelDTO) throws HotelAlreadyExists, HotelNotFound {
         Optional<Hotel> hotel = hotelRepository.findOneByName(hotelDTO.getName());
 
@@ -61,6 +65,9 @@ public class SystemAdminService {
         h.setNumOfFloors(hotelDTO.getNumOfFloors());
         h.setRoomsByFloor(hotelDTO.getRoomsByFloor());
 
+        MapLocation ml = mapLocationRepository.save(hotelDTO.getMapLocation());
+        h.setMapLocation(ml);
+
         //h.setRoomConfiguration(hotelDTO.getRoomConfiguration());
 
         /*Save hotel admins. Not trough for loop because every iteration forms
@@ -68,7 +75,7 @@ public class SystemAdminService {
         //hotelAdminRepository.saveAdmins(hotelDTO.getAdmins());
         h.setAdmins(hotelDTO.getAdmins());
 
-        //h.setDestination(destination);
+        h.setDestination(hotelDTO.getDestination());
         /*Save hotel.*/
         h = hotelRepository.save(h);
 
@@ -77,12 +84,10 @@ public class SystemAdminService {
             hf.setLevel(i);
             hf.setMaxRooms(h.getRoomsByFloor());
             hf.setHotel(h);
+            hf.setRoomsOnFloor(new HashSet<Room>());
             addFloor(h.getId(), hf);
         }
 
-        HotelDestination destination = hotelDTO.getDestination();
-        destination.getHotels().add(h);
-        destination = hotelDestinationsRepository.save(destination);
         return (new HotelDTO(h));
     }
 

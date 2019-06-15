@@ -71,6 +71,9 @@ import HotelController from "@/controllers/hotels.controller";
 import Hotel from "@/models/Hotel"; 
 import store from "@/store";
 
+
+import MapsTest from "@/components/MapsTest/MapsTest.vue"; 
+
 export default {
   name: "HotelService",
   components: {
@@ -80,7 +83,7 @@ export default {
     'rooms-overview':RoomsOverview,
     'priceList-overview': PriceListOverview,
     'reservation-form':ReservationForm,
-    'add-special-price': AddSpecialPrice
+    'add-special-price': AddSpecialPrice,
 },
   data: () => ({
 
@@ -119,8 +122,6 @@ export default {
           allRooms = response.data;
         }
         store.commit('allRooms', response.data);
-        console.log("All rooms");
-        console.log(response.data);
       })
 
       HotelController.getHotel(this.id)
