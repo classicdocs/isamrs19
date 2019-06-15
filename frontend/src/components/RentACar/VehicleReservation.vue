@@ -350,11 +350,16 @@ export default {
         this.vr.user = store.getters.activeUser.username;
         this.vr.rentACarId = this.$route.params.id;
         
-        VehicleReservationController.reserve(this.vr);
+        VehicleReservationController.reserve(this.vr)
+         .then((response) => {
+          store.commit('setSnack', {msg: "You have successfully reserved a vehicle!", color: "success"});
+         })
+         .catch((error) => {
+           store.commit("setSnack", {msg: error.response.data, color:"error"})
+         });
 
         this.vehicle_list = [];
-
-        store.commit('setSnack', {msg: "You have successfully reserved a vehicle!", color: "success"});
+        
         //this.$router.push({name: "my-reservations"});
       },
     }
