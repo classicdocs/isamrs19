@@ -5,6 +5,7 @@ import com.project.project.model.Hotel_Model.Hotel;
 import com.project.project.model.Hotel_Model.HotelDestination;
 import com.project.project.model.Hotel_Model.HotelFloor;
 import com.project.project.model.Hotel_Model.HotelsOffer;
+import com.project.project.model.MapLocation;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -42,10 +43,13 @@ public class HotelDTO {
     private int roomsByFloor;
 
     @NotNull
-    private double latitude;
+    private MapLocation mapLocation;
 
-    @NotNull
-    private double longitude;
+//    @NotNull
+//    private double latitude;
+//
+//    @NotNull
+//    private double longitude;
 
     public HotelDTO(){}
 
@@ -60,8 +64,9 @@ public class HotelDTO {
         this.numOfFloors = hotel.getNumOfFloors();
         this.roomsByFloor = hotel.getRoomsByFloor();
         this.destination = hotel.getDestination();
-        this.latitude = hotel.getLatitude();
-        this.longitude = hotel.getLongitude();
+        this.mapLocation = hotel.getMapLocation();
+//        this.latitude = hotel.getLatitude();
+//        this.longitude = hotel.getLongitude();
     }
 
     public Set<HotelAdmin> getAdmins() {
@@ -144,20 +149,27 @@ public class HotelDTO {
         this.destination = destination;
     }
 
-    public double getLatitude() {
-        return latitude;
+//    public double getLatitude() {
+//        return latitude;
+//    }
+//
+//    public void setLatitude(double latitude) {
+//        this.latitude = latitude;
+//    }
+//
+//    public double getLongitude() {
+//        return longitude;
+//    }
+//
+//    public void setLongitude(double longitude) {
+//        this.longitude = longitude;
+//    }
+
+    public MapLocation getMapLocation() {
+        return mapLocation;
     }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
+    public void setMapLocation(MapLocation mapLocation) {
+        this.mapLocation = mapLocation;
     }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
 }

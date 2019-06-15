@@ -2,6 +2,7 @@ package com.project.project.model.Hotel_Model;
 
 
 import com.project.project.model.HotelAdmin;
+import com.project.project.model.MapLocation;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -27,16 +28,28 @@ public class Hotel {
     @Column(name = "roomsByFloor", nullable = false)
     private int roomsByFloor;
 
-    @Column(name = "latitude", nullable = false)
-    private double latitude;
 
-    @Column(name = "longitude", nullable = false)
-    private double longitude;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "location")
+    private MapLocation mapLocation;
 
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
+    public MapLocation getMapLocation() {
+        return mapLocation;
     }
+
+    public void setMapLocation(MapLocation mapLocation) {
+        this.mapLocation = mapLocation;
+    }
+//    @Column(name = "latitude", nullable = false)
+//    private double latitude;
+//
+//    @Column(name = "longitude", nullable = false)
+//    private double longitude;
+
+
+//    public void setLongitude(double longitude) {
+//        this.longitude = longitude;
+//    }
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<HotelsOffer> priceList;
@@ -47,7 +60,8 @@ public class Hotel {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<HotelAdmin> admins;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne
+    @JoinColumn(name="destination_id", nullable=false)
     private HotelDestination destination;
 
     public HotelDestination getDestination() {
@@ -132,15 +146,15 @@ public class Hotel {
         this.floors = floors;
     }
 
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
+//    public double getLatitude() {
+//        return latitude;
+//    }
+//
+//    public void setLatitude(double latitude) {
+//        this.latitude = latitude;
+//    }
+//
+//    public double getLongitude() {
+//        return longitude;
+//    }
 }

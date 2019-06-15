@@ -1,3 +1,5 @@
+import MapLocation from "./MapLocation";
+
 export default class Hotel {
     constructor() {
       this.id = null,
@@ -9,7 +11,8 @@ export default class Hotel {
       this.priceList = [],
       this.floors = [],
       this.admins = [],
-      this.destination = null
+      this.destination = null,
+      this.mapLocation = new MapLocation()
     }
   
     reset() {
@@ -23,5 +26,6 @@ export default class Hotel {
       this.floors = [];
       this.admins = [];
       this.destination = null;
+      this.mapLocation = new MapLocation()
     }
   }

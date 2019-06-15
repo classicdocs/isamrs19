@@ -4,9 +4,10 @@
       <v-card-title><h3 style="color: grey">Hotel: <br></h3><h1> {{hotel.name}}</h1></v-card-title>
       <v-card-text id="info">
         <div v-if="hotel.destination != null"><h3 style="color: gray;">Destination: <br></h3><h3> {{hotel.destination.name}}</h3></div>
+        
+        
         <div>
-
-          <gmap-map
+          <gmap-map v-if="hotel != null"
             v-bind:center="hotelPosition"
             v-bind:zoom="7"
             style="height: 225px"
@@ -21,22 +22,28 @@
             }"
             @click="infoWindowShown = true"
           >
-
-            <!-- v-bind:position="hotelPosition" -->
-          
-          <gmap-marker
+          <gmap-marker 
             v-bind:clickable="true"
-            @click="center=m.position"
+            @click="center=hotelPosition"
 
             :position="hotelPosition"
-            :draggable="true" 
+            :draggable="isAdmin" 
             @drag="updateCoordinates"
+            @dragend="dragEnded"
           >
           <GmapInfoWindow :opened="infoWindowShown" @closeclick="infoWindowShown = false">
             {{hotel.address}}
           </GmapInfoWindow>
           </gmap-marker>
+
+          
         </gmap-map>
+        </div>
+
+        <div>
+          <v-btn v-if="mapChanged" @click="saveMapChanges()">Save map changes</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn v-if="mapChanged" @click="cancelMapChanges()">Cancel map changes</v-btn>
         </div>
 
         <div><h3 style="color: gray;">Address: <br></h3><h3> {{hotel.address}}</h3></div>
@@ -49,13 +56,13 @@
 </template>
 
 <script>
-import * as ol from 'ol';
-import Feature from 'ol/Feature.js';
-import geom from 'ol/geom.js'
-import Map from 'ol/Map.js';
-import View from 'ol/View.js';
-import TileLayer from 'ol/layer/Tile.js'  
-import OSM from "ol/source/OSM"
+
+import Hotel from "@/models/Hotel";
+import HotelFloor from "@/models/HotelFloor";
+import Room from "@/models/Room";
+import MapLocation from "@/models/MapLocation";
+import HotelController from "@/controllers/hotels.controller";
+import store from "@/store";
 
 import * as VueGoogleMaps from 'vue2-google-maps'
 
@@ -64,38 +71,79 @@ export default {
   name: "HotelServiceInfo",
   props: ["hotel"],
   
-  data(){
-    return{
+  data: () => ({
+      mapChanged: false,
       infoWindowShown: false,
-      center: {
+      
+      hotelPosition: {
         lat: 42.55139,
         lng: 21.90028
       },
-      hotelPosition: {lat: 42.55139, lng: 21.90028},
 
-    };
+      mapLocation : new MapLocation()
+  }),
+  watch: {
+    hotel: function(){
+      this.hotelPosition.lat = this.hotel.mapLocation.latitude;
+      this.hotelPosition.lng = this.hotel.mapLocation.longitude;
+    },
+    mapChanged: function(){
+      this.hotelPosition = {
+          lat: this.coordinates.lat,
+          lng: this.coordinates.lng,
+      };
+    }
   },
 
+  computed: {
+    isAdmin: function(){
+      if (store.getters.activeUserRole === 'Hotel Admin')
+      if (this.$route.params.id == store.getters.activeUser.idAdminOf)
+        return true;
+      else
+        return false;
+    }
+  },
 
   methods: {
-    updateCoordinates(location) {
-        this.coordinates = {
-            lat: location.latLng.lat(),
-            lng: location.latLng.lng(),
-        };
-        console.log(location);
+    dragEnded(location){
+      this.hotelPosition = {
+          lat: location.latLng.lat(),
+          lng: location.latLng.lng(),
+      };
     },
-  }
+    updateCoordinates(location) {
+            
+      this.coordinates = {
+        lat: location.latLng.lat(),
+        lng: location.latLng.lng(),
+      };
+      this.mapChanged = true;
 
+    },
+    saveMapChanges(){
+      this.mapLocation.latitude = this.hotelPosition.lat;
+      this.mapLocation.longitude = this.hotelPosition.lng;
+
+      HotelController.changeLocation(this.$route.params.id, this.mapLocation)
+      .then(response => {
+        store.commit('newHotel', response.data);
+      }).catch(error => {
+        alert(error);
+      })
+      this.mapChanged = false;
+    },
+    cancelMapChanges(){
+      this.coordinates = {
+          lat: this.hotel.mapLocation.latitude,
+          lng: this.hotel.mapLocation.longitude,
+      };
+      this.mapChanged = false;
+    }
+  },
+  
 };
 </script>
 
-<style scoped lang="stylus">
-  @import "~ol/ol.css"
-  #mapOL
-    height 300px
-
-  h3 {
-    display: inline-flex;
-  }
+<style>
 </style> 

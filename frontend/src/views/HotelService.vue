@@ -122,8 +122,6 @@ export default {
           allRooms = response.data;
         }
         store.commit('allRooms', response.data);
-        console.log("All rooms");
-        console.log(response.data);
       })
 
       HotelController.getHotel(this.id)

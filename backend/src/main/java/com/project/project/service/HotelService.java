@@ -9,6 +9,7 @@ import com.project.project.dto.Hotel_DTOs.*;
 import com.project.project.exceptions.*;
 import com.project.project.model.HotelAdmin;
 import com.project.project.model.Hotel_Model.*;
+import com.project.project.model.MapLocation;
 import com.project.project.model.User;
 import com.project.project.repository.*;
 
@@ -59,6 +60,8 @@ public class HotelService {
     @Autowired
     private EntityManager entityManager;
 
+    @Autowired
+    private MapLocationRepository mapLocationRepository;
 
     public Hotel findOneById(Long id) throws HotelNotFound{
         Optional<Hotel> h = hotelRepository.findOneById(id);
@@ -107,8 +110,10 @@ public class HotelService {
         h.setNumOfFloors(hotelDTO.getNumOfFloors());
         h.setRoomsByFloor(hotelDTO.getRoomsByFloor());
 
-        h.setLongitude(hotelDTO.getLongitude());
-        h.setLatitude(hotelDTO.getLatitude());
+        MapLocation ml = mapLocationRepository.save(hotelDTO.getMapLocation());
+        h.setMapLocation(ml);
+//        h.setLongitude(hotelDTO.getLongitude());
+//        h.setLatitude(hotelDTO.getLatitude());
 
         h.setAdmins(hotelDTO.getAdmins());
         h = hotelRepository.save(h);
@@ -269,22 +274,23 @@ public class HotelService {
         return hotels;
     }
 
-    public HotelDestination getDestination(Long id) throws HotelNotFound, DestinationNotFound{
-        Optional<Hotel> hotel = hotelRepository.findOneById(id);
+    public HotelDestination getDestination(Long hotel_id) throws HotelNotFound, DestinationNotFound{
+        Optional<Hotel> hotel = hotelRepository.findOneById(hotel_id);
         if(hotel.isPresent()){
-            Optional<HotelDestination> destination = hotelDestinationsRepository.findOneByHotels_id(id);
-            if(destination.isPresent()){
-                for(Hotel h: destination.get().getHotels()){
-                    for(HotelAdmin ha : h.getAdmins()){
-                        ha.setHotel(null);
-                    }
-                }
-                return destination.get();
-            }else{
-                throw new DestinationNotFound(destination.get().getName(), "");
-            }
+            return hotel.get().getDestination();
+//            Optional<HotelDestination> destination = hotelDestinationsRepository.findById(hotel.get().getDestination().getId());
+//            if(destination.isPresent()){
+//                for(Hotel h: destination.get().getHotels()){
+//                    for(HotelAdmin ha : h.getAdmins()){
+//                        ha.setHotel(null);
+//                    }
+//                }
+//                return destination.get();
+//            }else{
+//                throw new DestinationNotFound(destination.get().getName(), "");
+//            }
         }else{
-            throw new HotelNotFound(id);
+            throw new HotelNotFound(hotel_id);
         }
     }
 
@@ -311,6 +317,38 @@ public class HotelService {
             }
             return rooms;
         } else {
+            throw new HotelNotFound(id);
+        }
+    }
+
+    public Hotel changeLocation(Long id, MapLocation mapLocation) throws HotelNotFound{
+        Optional<Hotel> hotel = hotelRepository.findOneById(id);
+        if(hotel.isPresent()){
+            Hotel newHotel = new Hotel();
+//            newHotel.setMapLocation(mapLocation);
+            MapLocation ml = mapLocationRepository.save(mapLocation);
+            newHotel.setMapLocation(ml);
+
+            newHotel.setId(hotel.get().getId());
+            newHotel.setName(hotel.get().getName());
+            newHotel.setAddress(hotel.get().getAddress());
+            newHotel.setDescription(hotel.get().getDescription());
+
+            newHotel.setDestination(hotel.get().getDestination());
+            newHotel.setPriceList(hotel.get().getPriceList());
+            newHotel.setAdmins(hotel.get().getAdmins());
+
+            newHotel.setFloors(hotel.get().getFloors());
+            newHotel.setNumOfFloors(hotel.get().getNumOfFloors());
+            newHotel.setRoomsByFloor(hotel.get().getRoomsByFloor());
+
+            newHotel = hotelRepository.save(newHotel);
+            for (HotelAdmin admin: newHotel.getAdmins()) {
+                admin.setHotel(null);
+            }
+
+            return newHotel;
+        }else{
             throw new HotelNotFound(id);
         }
     }

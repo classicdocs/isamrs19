@@ -3,6 +3,7 @@ package com.project.project.controller;
 import com.project.project.dto.Hotel_DTOs.*;
 import com.project.project.exceptions.*;
 import com.project.project.model.Hotel_Model.*;
+import com.project.project.model.MapLocation;
 import com.project.project.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -255,6 +256,24 @@ public class HotelController {
             room = hotelService.addRoomPrice(hotelID, roomID, specialPrice);
             return new ResponseEntity<Room>(room, HttpStatus.OK);
         }catch (ParseException | HotelNotFound notFound){
+            notFound.printStackTrace();
+            return new ResponseEntity<String>(notFound.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+    @PutMapping(
+            value = "/{id}/changeLocation",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity changeLocation(@PathVariable("id") Long hotelID,
+                                         @RequestBody MapLocation mapLocation) {
+        Hotel hotel = null;
+        try {
+            hotel = hotelService.changeLocation(hotelID, mapLocation);
+            return new ResponseEntity<Hotel>(hotel, HttpStatus.OK);
+        }catch (HotelNotFound notFound){
             notFound.printStackTrace();
             return new ResponseEntity<String>(notFound.getMessage(), HttpStatus.BAD_REQUEST);
         }

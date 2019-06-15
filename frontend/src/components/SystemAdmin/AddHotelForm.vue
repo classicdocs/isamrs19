@@ -108,6 +108,7 @@ import Hotel from "@/models/Hotel";
 
 import SystemAdminController from "@/controllers/system-admin.controller"
 import HotelDestinationsController from "@/controllers/hotelsDestinations.controller.js";
+import MapLocation from "@/models/MapLocation";
 
 import store from "@/store";
 import { thisExpression } from '@babel/types';
@@ -168,6 +169,11 @@ export default {
         this.hotel.priceList = [];
         this.hotel.floors = [];
         this.hotel.admins = [];
+        
+        this.hotel.mapLocation = new MapLocation();
+        this.hotel.mapLocation.latitude = this.coordinates.lat;
+        this.hotel.mapLocation.longitude = this.coordinates.lng;
+        
         this.destinations.forEach(dest => {
           if(dest.name == this.hotel.destination){
             this.hotel.destination = dest;
@@ -180,8 +186,7 @@ export default {
             store.commit("newHotel", response.data);
             var hotels = store.getters.allHotels;
             hotels.push(response.data);
-            console.log("Dodajem novi hotel v");
-            console.log(hotels);
+
             store.commit("allHotels", hotels);
           })
           .catch((response) => {
