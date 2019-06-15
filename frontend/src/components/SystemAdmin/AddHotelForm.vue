@@ -27,7 +27,7 @@
               </v-text-field> 
               
               <div>
-                <v-subheader>You can represent location on map if you want.</v-subheader>
+                <v-subheader>You can represent address on map if you want.</v-subheader>
                 <h4>latitude = {{lat}} <br>longitude = {{lng}}</h4>
               <gmap-map
                 v-bind:center="hotelPosition"
@@ -42,22 +42,18 @@
                   fullscreenControl: true,
                   disableDefaultUi: false,
                 }"
-                @click="infoWindowShown = true"
               >
 
                   <!-- v-bind:position="hotelPosition" -->
                 
                 <gmap-marker
                   v-bind:clickable="true"
-                  @click="center=m.position"
+                  @click="center=hotelPosition"
 
                   :position="hotelPosition"
                   :draggable="true" 
                   @drag="updateCoordinates"
                 >
-                <GmapInfoWindow :opened="infoWindowShown" @closeclick="infoWindowShown = false">
-                  {{hotel.address}}
-                </GmapInfoWindow>
                 </gmap-marker>
               </gmap-map>
             </div>

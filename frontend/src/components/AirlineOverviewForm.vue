@@ -25,7 +25,7 @@
         >
           <template v-slot:items="props">
           <tr @click="props.expanded = !props.expanded">
-            <td class="text-xs-center"><a href="">{{ props.item.name }}</a></td>
+            <td class="text-xs-center">{{ props.item.name }}</td>
             <td class="text-xs-center">{{ props.item.address }}</td>
             <!-- <td class="text-xs-right">{{ props.item.description }}</td> -->
             <td class="text-xs-center"> <v-rating :readonly="true" v-model="props.item.averageRating" half-increments></v-rating></td>

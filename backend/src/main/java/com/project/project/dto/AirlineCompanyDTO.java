@@ -1,6 +1,7 @@
 package com.project.project.dto;
 
 import com.project.project.model.AirlineCompany;
+import com.project.project.model.MapLocation;
 
 import javax.validation.constraints.NotNull;
 
@@ -15,6 +16,8 @@ public class AirlineCompanyDTO {
     private double averageRating;
     private double totalRating;
 
+    private MapLocation mapLocation;
+
     public AirlineCompanyDTO() {}
 
     public AirlineCompanyDTO(AirlineCompany airlineCompany) {
@@ -24,6 +27,7 @@ public class AirlineCompanyDTO {
         this.description = airlineCompany.getDescription();
         this.averageRating = airlineCompany.getAverageRating();
         this.totalRating = airlineCompany.getTotalRating();
+        this.mapLocation = airlineCompany.getMapLocation();
     }
 
     public Long getId() {
@@ -72,5 +76,13 @@ public class AirlineCompanyDTO {
 
     public void setTotalRating(double totalRating) {
         this.totalRating = totalRating;
+    }
+
+    public MapLocation getMapLocation() {
+        return mapLocation;
+    }
+
+    public void setMapLocation(MapLocation mapLocation) {
+        this.mapLocation = mapLocation;
     }
 }

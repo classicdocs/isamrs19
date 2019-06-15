@@ -149,6 +149,10 @@ public class SystemAdminService {
         airlineCompany.setDescription(airlineCompanyDTO.getDescription());
         airlineCompany.setAverageRating(0);
         airlineCompany.setTotalRating(0);
+
+        MapLocation ml = mapLocationRepository.save(airlineCompanyDTO.getMapLocation());
+        airlineCompany.setMapLocation(ml);
+
         airlineCompany = airlineCompanyRepository.save(airlineCompany);
 
         return (new AirlineCompanyDTO(airlineCompany));

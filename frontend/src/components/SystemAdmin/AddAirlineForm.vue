@@ -7,35 +7,60 @@
             <span class="headline">Add new airline company <v-icon x-large>flight_takeoff</v-icon></span>
           </v-card-title>
 
+
+
           <!-- LABELE -->
+          <v-card-text>
+            <v-container>
+              <v-text-field label="airline company name" v-model="airlineCompany.name"
+              :rules="[v => !!v || 'airline company name is required']">
+              </v-text-field> 
 
-          <v-container>
-            <v-text-field label="airline company name" v-model="airlineCompany.name"
-            :rules="[v => !!v || 'airline company name is required']">
-            </v-text-field> 
+              <v-text-field label="street address" v-model="airlineCompany.address"
+              :rules="[v => !!v || 'street address is required']">
+              </v-text-field> 
+              
+              <div>
+                <v-subheader>You can represent address on map if you want.</v-subheader>
+                <h4>latitude = {{lat}} <br>longitude = {{lng}}</h4>
+              <gmap-map
+                v-bind:center="airlinePosition"
+                v-bind:zoom="7"
+                style="height: 225px"
+                :options="{
+                  zoomControl: false,
+                  mapTypeControl: false,
+                  scaleControl: false,
+                  streetViewControl: false,
+                  rotateControl: false,
+                  fullscreenControl: true,
+                  disableDefaultUi: false,
+                }"
+              >
+                <gmap-marker
+                  v-bind:clickable="true"
+                  @click="center=airlinePosition"
 
-            <v-layout > <!--v-bind="binding"-->
-              <v-flex>
-                <v-text-field label="country" v-model="country"
-                :rules="[v => !!v || 'country name is required']">
-                </v-text-field> 
-              </v-flex>
-              <v-flex>
-                <v-text-field label="city" v-model="city" 
-                :rules="[v => !!v || 'city name is required']">
-                </v-text-field> 
-              </v-flex>
-            </v-layout>
+                  :position="airlinePosition"
+                  :draggable="true" 
+                  @drag="updateCoordinates"
+                >
+                </gmap-marker>
+              </gmap-map>
+            </div>
 
-            <v-text-field label="street address" v-model="street"
-            :rules="[v => !!v || 'street address is required']">
-            </v-text-field> 
+            <br>
+            <div>
+              <v-textarea name="promotionalDescription" label="promotional description" 
+                v-model="airlineCompany.description" 
+                hint="Say something good about airline company services and prices..." box>
+              </v-textarea>
+            </div>
+            </v-container>
 
-            <v-textarea name="promotionalDescription" label="promotional description" 
-              v-model="airlineCompany.description" 
-              hint="Say something good about airline company services and prices..." box>
-            </v-textarea>
-          </v-container>
+            
+
+          </v-card-text>
 
           <!-- DUGMAD -->
 
@@ -54,6 +79,7 @@
 
 import AirlineCompany from "@/models/AirlineCompany";
 import SystemAdminControler from "@/controllers/system-admin.controller";
+import MapLocation from "@/models/MapLocation";
 import { thisExpression } from '@babel/types';
 
 export default {
@@ -66,12 +92,35 @@ export default {
     street : "",
 
     airlineCompany: new AirlineCompany(),
+    center: {
+      lat: 42.55139,
+      lng: 21.90028
+    },
+    airlinePosition: {lat: 42.55139, lng: 21.90028},
+    coordinates: {lat: 42.55139, lng: 21.90028},
 
   }),
+  computed: {
+    lat: function() {
+      return this.coordinates.lat;
+    },
+    lng: function() {
+      return this.coordinates.lng;
+    }
+  },
   methods: {
+    updateCoordinates(location) {
+        this.coordinates = {
+            lat: location.latLng.lat(),
+            lng: location.latLng.lng(),
+        };
+    },
     validate() {
       if(this.$refs.form.validate()) {
-        this.airlineCompany.address = this.country + '/' + this.city + '/' + this.street;
+        this.airlineCompany.mapLocation = new MapLocation();
+        this.airlineCompany.mapLocation.latitude = this.coordinates.lat;
+        this.airlineCompany.mapLocation.longitude = this.coordinates.lng;
+        
 
 
         SystemAdminControler.createAirline(this.airlineCompany)
@@ -82,13 +131,6 @@ export default {
           this.$emit("finished", {msg: "Error! Something went wrong...", color: "error"})
         })
 
-        // SysHotelControler.createHotel(this.hotel)
-        //   .then((response) => {
-        //     this.$emit("finished", {msg: "Hotel successfully added", color: "success"})
-        //   })
-        //   .catch((response) => {
-        //     this.$emit("finished", {msg: "Error! Something went wrong...", color: "error"})
-        //   })
       }
     },
     reset() {

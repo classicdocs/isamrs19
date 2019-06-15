@@ -33,23 +33,6 @@ public class Hotel {
     @JoinColumn(name = "location")
     private MapLocation mapLocation;
 
-    public MapLocation getMapLocation() {
-        return mapLocation;
-    }
-
-    public void setMapLocation(MapLocation mapLocation) {
-        this.mapLocation = mapLocation;
-    }
-//    @Column(name = "latitude", nullable = false)
-//    private double latitude;
-//
-//    @Column(name = "longitude", nullable = false)
-//    private double longitude;
-
-
-//    public void setLongitude(double longitude) {
-//        this.longitude = longitude;
-//    }
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<HotelsOffer> priceList;
@@ -167,4 +150,13 @@ public class Hotel {
     public void setTotal_rating(double total_rating) {
         this.total_rating = total_rating;
     }
+
+    public MapLocation getMapLocation() {
+        return mapLocation;
+    }
+
+    public void setMapLocation(MapLocation mapLocation) {
+        this.mapLocation = mapLocation;
+    }
+
 }
