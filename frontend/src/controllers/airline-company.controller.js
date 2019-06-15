@@ -46,6 +46,9 @@ export default {
   },
   deleteLuggage(id, luggageId) {
     return AirlineCompanyApiService.deleteLuggage(id,luggageId);
+  },
+  changeLocation(airline_id, mapLocation){
+    return AirlineCompanyApiService.changeLocation(airline_id, mapLocation);
   }
 
 };

@@ -3,10 +3,7 @@ package com.project.project.controller;
 
 import com.project.project.dto.*;
 import com.project.project.exceptions.*;
-import com.project.project.model.AirlineCompany;
-import com.project.project.model.Airplane;
-import com.project.project.model.Destination;
-import com.project.project.model.Flight;
+import com.project.project.model.*;
 import com.project.project.service.AirlineCompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -260,5 +257,23 @@ public class AirlineCompanyController {
             e.printStackTrace();
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PutMapping(
+            value = "/{id}/changeLocation",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity changeLocation(@PathVariable("id") Long hotelID,
+                                         @RequestBody MapLocation mapLocation) {
+        AirlineCompany airlineCompany = null;
+        try {
+            airlineCompany = airlineCompanyService.changeLocation(hotelID, mapLocation);
+            return new ResponseEntity<AirlineCompany>(airlineCompany, HttpStatus.OK);
+        }catch (AirlineCompanyNotFound notFound){
+            notFound.printStackTrace();
+            return new ResponseEntity<String>(notFound.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
     }
 }

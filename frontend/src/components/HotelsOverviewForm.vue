@@ -39,7 +39,7 @@
 
             <td class="text-xs-center">
               <v-btn @click="goToPage(props.item.name)">
-              hotel page
+              {{props.item.name}} page
               <v-icon right>hotel</v-icon>
               </v-btn></td>
 

@@ -80,7 +80,6 @@ public class SystemAdminController {
     public ResponseEntity createAirline(@RequestBody AirlineCompanyDTO airlineCompanyDTO) throws AirlineCompanyAlreadyExist {
         try {
             AirlineCompanyDTO airline = systemAdminService.createAirlineCompany(airlineCompanyDTO);
-            //AirlineCompanyDTO airline = airlineCompanyService.save(airlineCompanyDTO);
             return new ResponseEntity<>(airline, HttpStatus.CREATED);
         }catch (AirlineCompanyAlreadyExist airlineCompanyAlreadyExist) {
             airlineCompanyAlreadyExist.printStackTrace();

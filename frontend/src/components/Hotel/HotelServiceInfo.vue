@@ -129,6 +129,8 @@ export default {
 
       HotelController.changeLocation(this.$route.params.id, this.mapLocation)
       .then(response => {
+        this.hotel.mapLocation.latitude = this.hotelPosition.lat;
+        this.hotel.mapLocation.longitude = this.hotelPosition.lng;
         store.commit('newHotel', response.data);
       }).catch(error => {
         alert(error);

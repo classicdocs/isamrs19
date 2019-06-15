@@ -25,10 +25,17 @@
         >
           <template v-slot:items="props">
           <tr @click="props.expanded = !props.expanded">
-            <td class="text-xs-center"><a href="">{{ props.item.name }}</a></td>
+            <td class="text-xs-center">{{ props.item.name }}</td>
             <td class="text-xs-center">{{ props.item.address }}</td>
             <!-- <td class="text-xs-right">{{ props.item.description }}</td> -->
             <td class="text-xs-center"> <v-rating :readonly="true" v-model="props.item.averageRating" half-increments></v-rating></td>
+            <td class="text-xs-center">
+              <v-btn @click="goToPage(props.item.id)">
+              {{props.item.name}} page
+              <v-icon right>flight</v-icon>
+              </v-btn>
+            </td>
+          
           </tr>
           </template>
           <template v-slot:expand="props">
@@ -74,7 +81,8 @@ export default {
           },
           { text: 'Address', value: 'address' , align: 'center'},
           // { text: 'Description', value: 'description' , align: 'center', sortable: false},
-          { text: 'Average rate', value: 'avgRate' , align: 'center'}
+          { text: 'Average rate', value: 'avgRate' , align: 'center'},
+          { text: ' ', value: 'button' , align: 'center'}
         ],
     airlineCompanies: [],
     form : true,
@@ -94,6 +102,11 @@ export default {
         });
       });
   },
+  methods: {
+    goToPage(id){
+      this.$router.push('/airline-company/' + id); 
+    }
+  }
 }
 </script>
 <style>

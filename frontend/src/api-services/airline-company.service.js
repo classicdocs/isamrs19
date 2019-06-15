@@ -11,6 +11,7 @@ const ENDPOINTS = {
   SOLD_TICKETS: "/sold-tickets",
   LUGGAGE: "/luggage/",
   ARCHIVED: "/archived",
+  CHANGE_LOCATION: '/changeLocation/'
 };
 
 export default {
@@ -58,5 +59,8 @@ export default {
   },
   deleteLuggage(id, luggageId) {
     return Axios.delete(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.LUGGAGE + luggageId);
+  },
+  changeLocation(airline_id, mapLocation){
+    return Axios.put(ENDPOINTS.AIRLINE_COMPANY + airline_id + ENDPOINTS.CHANGE_LOCATION, mapLocation);
   }
 };

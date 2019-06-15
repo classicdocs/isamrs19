@@ -52,6 +52,10 @@ public class AirlineCompany {
     @Column(name = "total_rating")
     private double totalRating;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "location")
+    private MapLocation mapLocation;
+
     public AirlineCompany() {}
 
     public Long getId() {
@@ -157,4 +161,13 @@ public class AirlineCompany {
     public void setAverageRating(double averageRating) {
         this.averageRating = averageRating;
     }
+
+    public MapLocation getMapLocation() {
+        return mapLocation;
+    }
+
+    public void setMapLocation(MapLocation mapLocation) {
+        this.mapLocation = mapLocation;
+    }
+
 }
