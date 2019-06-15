@@ -4,6 +4,7 @@ import com.project.project.dto.RatingDTO;
 import com.project.project.dto.VehicleReservationDTO;
 import com.project.project.exceptions.AlreadyRated;
 import com.project.project.exceptions.UserNotFound;
+import com.project.project.exceptions.VehicleAlreadyReserved;
 import com.project.project.model.VehicleReservation;
 import com.project.project.service.VehicleReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,12 @@ public class VehicleReservationController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity reserve(@RequestBody VehicleReservationDTO vehicleReservationDTO) throws ParseException, UserNotFound {
-        VehicleReservationDTO vehicleReservation = vehicleReservationService.reserve(vehicleReservationDTO);
-        return new ResponseEntity<VehicleReservationDTO>(vehicleReservation, HttpStatus.CREATED);
+        try {
+            VehicleReservationDTO vehicleReservation = vehicleReservationService.reserve(vehicleReservationDTO);
+            return new ResponseEntity<VehicleReservationDTO>(vehicleReservation, HttpStatus.CREATED);
+        } catch (VehicleAlreadyReserved var) {
+            return new ResponseEntity<String>(var.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping(value = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
