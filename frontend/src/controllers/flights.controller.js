@@ -12,5 +12,8 @@ export default {
   },
   addDiscount(data) {
     return FlightsApiService.addDiscount(data);
+  },
+  archive(id) {
+    return FlightsApiService.archive(id);
   }
 };

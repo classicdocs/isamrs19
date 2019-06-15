@@ -16,6 +16,7 @@
             <td>{{ props.item.pickupLocation }} </td>
             <td>{{ props.item.returnLocation }} </td>
             <td><v-btn v-if="props.item.completed" color="blue darken" flat @click="rate(props.item.id)">Rate</v-btn></td>
+            <td><v-btn color="error" flat @click="cancel(props.item)">Cancel reservation</v-btn></td>
         </template>
         </v-data-table>
         <v-dialog width="300" v-model="ratingDialog">
@@ -69,6 +70,7 @@
 import VehicleReservationController from "@/controllers/vehicle.reservation.controller.js";
 import Rating from "@/models/Rating.js";
 import store from '@/store';
+import VehicleCancelController from "@/controllers/vehicle.cancel.controller.js"
 
 export default {
     name: "VehicleReservations",
@@ -90,6 +92,7 @@ export default {
         { text: 'Pick up location', value: 'pickup' ,sortable: false, },
         { text: 'Return location', value: 'return' ,sortable: false, },
         { text: ' ', value: 'btn' ,sortable: false, },
+        { text: ' ', value: 'btn1' ,sortable: false, },
       ],
       ratingDialog: false,
       serviceRating: 0,
@@ -115,31 +118,18 @@ export default {
 
           
 
-          VehicleReservationController.rate(this.rating).catch((error) => {
-            alert(error.response.data);
+          VehicleReservationController.rate(this.rating)
+           .then((response) => {
+            store.commit("setSnack", {msg: "Rating successful", color:"success"})
+           })        
+           .catch((error) => {
+            store.commit("setSnack", {msg: error.response.data, color:"error"})
           });
 
           this.ratingDialog = false;
           this.serviceRating = 0;
           this.vehicleRating = 0;
           this.id = -1;
-
-          ///this.getData();
-
-          //this.$forceUpdate();
-
-          //this.forceRerender();
-
-          /*this.reservations = [];
-
-          alert("Rate-ovano");
-
-          VehicleReservationController.get(store.getters.activeUser.id).then((response) => {
-            response.data.forEach(element => {
-              this.reservations.push(element);
-            });
-          });*/
-
         },
         noThanks() {
           this.ratingDialog = false;
@@ -150,6 +140,22 @@ export default {
         rate(id) {
           this.ratingDialog = true;
           this.id = id;
+        },
+        cancel(reservation) {
+          VehicleCancelController.cancel(reservation.id)
+          .then((response) => {
+           store.commit("setSnack", {msg: "You have successfully canceled a reservation.", color:"success"})
+           let idx = this.reservations.indexOf(reservation);
+           if (idx != -1)
+            this.reservations.splice(idx,1);
+           })
+           .catch((error) => {
+            store.commit("setSnack", {msg: error.response.data, color:"error"})
+           });       
+        },
+        refreshList() {
+          this.reservations = [];
+          this.getData();
         }
     }
 }

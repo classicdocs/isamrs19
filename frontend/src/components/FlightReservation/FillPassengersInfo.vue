@@ -14,6 +14,8 @@
         <v-stepper-content step="1">
           <passenger-info
             v-bind:passenger="myInfo"
+            v-bind:flightPrice="flightPrice"
+            v-bind:luggage="luggage"
           ></passenger-info>
           <v-btn
             style="float:right"
@@ -29,6 +31,8 @@
         <v-stepper-content v-for="(item,index) in passengers" :key="index" :step="index + 2" >
           <passenger-info
             v-bind:passenger="passengers[index]"
+            v-bind:flightPrice="flightPrice"
+            v-bind:luggage="luggage"
           ></passenger-info>
           <v-btn
             color="primary"
@@ -54,19 +58,23 @@
 import store from "@/store";
 import PassengerInfoVue from './PassengerInfo.vue';
 import {mapGetters} from 'vuex';
+import AirlineCompanyController from "@/controllers/airline-company.controller";
+
 
 export default {
   name: "FillPassengersInfo",
   components: {
     'passenger-info': PassengerInfoVue,
   },
-  props: ["passengersNumber"],
+  props: ["passengersNumber", "flightPrice", "airlineCompany"],
   data:() => ({
     stepper: 0,
     friends: [],
+    luggage: [],
   }),
   mounted() {
     this.stepper = 0;
+    this.getLuggage();
   },
   computed: {
     ...mapGetters({
@@ -82,7 +90,16 @@ export default {
       } else {
         return false;
       }
-    }
+    },
+    getLuggage() {
+      AirlineCompanyController.getLuggage(this.airlineCompany)
+        .then((response) => {
+          this.luggage = response.data;
+        })
+        .catch((error) => {
+          store.commit("setSnack", {msg: error.response.data, color: "error"})
+        })
+    },
   },
 }
 </script>

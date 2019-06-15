@@ -15,7 +15,7 @@ public class MyConfiguration {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                .allowedMethods("PUT", "GET", "POST");
+                .allowedMethods("PUT", "GET", "POST", "DELETE");
             }
         };
     }

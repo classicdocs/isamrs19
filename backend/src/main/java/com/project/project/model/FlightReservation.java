@@ -30,6 +30,9 @@ public class FlightReservation {
     @ManyToOne
     private RegisteredUser user;
 
+    @Column
+    private boolean rated;
+
     public FlightReservation() {
         this.passengers = new HashSet<Passenger>();
     }
@@ -89,5 +92,13 @@ public class FlightReservation {
 
     public void setUser(RegisteredUser user) {
         this.user = user;
+    }
+
+    public boolean isRated() {
+        return rated;
+    }
+
+    public void setRated(boolean rated) {
+        this.rated = rated;
     }
 }

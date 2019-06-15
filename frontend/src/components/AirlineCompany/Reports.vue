@@ -47,15 +47,11 @@
 </template>
 
 <script>
-import CertainPeriodVue from './Reports/CertainPeriod.vue';
-import SoldTicketsVue from './Reports/SoldTickets.vue';
 import AirlineCompanyController from "@/controllers/airline-company.controller";
 import ChartComponentVue from './Reports/Chart.component.vue';
 export default {
   name: "Reports",
   components: {
-    'certain-period' : CertainPeriodVue,
-    'sold-tickets': SoldTicketsVue,
     'chart' : ChartComponentVue
   },
   data:() => ({

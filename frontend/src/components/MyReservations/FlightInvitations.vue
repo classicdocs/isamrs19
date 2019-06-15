@@ -56,7 +56,7 @@
            
           </v-expansion-panel-content>
         </v-expansion-panel>
-          
+        <history/>
       </v-card-text>
     </v-card>
   </div>
@@ -67,11 +67,13 @@
 import store from "@/store";
 import UserController from "@/controllers/user.controller.js";
 import FlightInfoVue from '../Flights/FlightInfo.vue';
+import FlightInvitationsHistoryVue from './FlightInvitationsHistory.vue';
 
 export default {
   name: "FlightInvitations",
   components: {
-    'flight' : FlightInfoVue
+    'flight' : FlightInfoVue,
+    'history': FlightInvitationsHistoryVue
   },
   data:() => ({
     invitations: [],
@@ -80,7 +82,6 @@ export default {
     let id = store.getters.activeUser.id;
     UserController.getFlightInvitations(id)
       .then((response) => {
-        console.log(response.data);
         this.invitations = response.data;
       })
       .catch((error) => {
@@ -89,7 +90,6 @@ export default {
   },
   methods: {
     getTitle(reservation, user){
-      console.log(reservation);
       let title = "";
       title += reservation.departureFlight.startDestination.name + " - " + reservation.departureFlight.finalDestination.name;
       if (reservation.returnFlight != null) {
@@ -111,7 +111,6 @@ export default {
       }
       UserController.acceptInvitation(store.getters.activeUser.id, data)
         .then((response) => {
-          console.log(response.data);
           store.commit("setSnack", {msg: "You have successfully accepted invitation", color:"success"})
           invitation.accepted = true;
         })

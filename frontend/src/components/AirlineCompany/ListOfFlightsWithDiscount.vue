@@ -26,7 +26,7 @@
         <td class="text-xs-center">{{ props.item.seat.rowNum }}</td>
         <td class="text-xs-center">{{ props.item.seat.colNum }}</td>
         <td class="text-xs-center" v-if="isUser">
-          <v-btn color="success" @click="reserve(props.item)">Reserve</v-btn>
+          <reserve v-bind:flight="props.item" v-on:reservedFlight="removeFlight($event)"/>
         </td>
       </template>
       </v-data-table>
@@ -36,15 +36,17 @@
 </template>
 
 <script>
-import AirlineCompanyController from "@/controllers/airline-company.controller"
+import AirlineCompanyController from "@/controllers/airline-company.controller";
 import store from "@/store";
 import FlightDiscountVue from './FlightDiscount.vue';
-import FlightController from "@/controllers/flights.controller";
-import UserController from "@/controllers/user.controller";
 import Friend from "@/models/Friend.js";
+import ReserveFlightWithDiscountVue from './ReserveFlightWithDiscount.vue';
 
 export default {
   name:'ListOfFlightsWithDiscount',
+  components: {
+    'reserve': ReserveFlightWithDiscountVue
+  },
   data:() => ({
     flights: [],
     headers: [
@@ -62,7 +64,6 @@ export default {
         { text: 'Row', value: 'rowNum' , align: 'center'},
         { text: 'Column', value: 'colNum' , align: 'center'},
       ],
-    myInfo: null,
   }),
   computed: {
     isUser() {
@@ -70,14 +71,12 @@ export default {
     },
   },
   beforeMount() {
-    this.getMyInfo();
     this.getFlights();
   },
   methods: {
     getFlights() {
        AirlineCompanyController.getFlightsDiscount(this.$route.params.id)
       .then((response) => {
-        console.log(response.data);
         response.data.forEach(element => {
           this.flights.push(element);
         });
@@ -86,41 +85,10 @@ export default {
         alert(error.response.data);
       })
     },
-    reserve(flight) {
-      this.myInfo.passport = 222;
-      let data = {
-        "myInfo" : this.myInfo,
-        "flights" : {
-          "departureFlight": flight.flight
-        },
-        "seatsPickedDeparture": [flight.seat],
-        "passengers": [],
-        "price": flight.price
-      }
-      
-      console.log(data);
-
-      let loader = this.$loading.show()
-      FlightController.reserve(data)
-        .then((response) => {
-          loader.hide();
-          store.commit("setSnack", {msg: "You have successfully booked a flight!", color: "success"});
-        })
-        .catch((error) => {
-          store.commit("setSnack", {msg: error.response.data, color: "error"});
-          console.log(error.response.data);
-        })
-    },
-    getMyInfo(passport) {
-      UserController.getUser(store.getters.activeUser.id)
-      .then((response) => {
-        this.myInfo = response.data;
-      })
-    },
+    removeFlight(flight) {
+      this.flights = [];
+      this.getFlights();
+    }
   }
 }
 </script>
-
-<style>
-
-</style>

@@ -157,7 +157,7 @@
                   <template v-slot:activator="{ on }">
                     <v-text-field
                       v-model="flight.landingTime"
-                      label="Departure time"
+                      label="Landing time"
                       prepend-icon="access_time"
                       readonly
                       :rules="[v => !!v || 'Landing time is required']"

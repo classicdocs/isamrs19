@@ -466,8 +466,10 @@ public class HotelService {
     }
 
 
-    public Set<HotelReservation> getReservations(Long user_id) throws HotelNotFound {
+    public Set<HotelReservation> getReservations(Long user_id) throws HotelNotFound, ParseException {
         List<HotelReservation> reservations = hotelReservationRepository.findAll();
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
         Set<HotelReservation> result = new HashSet<>();
         for (HotelReservation reservation : reservations) {
@@ -481,6 +483,13 @@ public class HotelService {
                         }
                     }
                 }
+
+                if(format.parse(reservation.getCheckOutDate()).before(new Date())){
+                    reservation.setCompleted(true);
+                } else {
+                    reservation.setCompleted(false);
+                }
+
                 result.add(reservation);
             }
         }

@@ -25,6 +25,12 @@ public class HotelReservation {
     @Column(nullable = false)
     private double totalPrice;
 
+    @Column
+    private boolean rated;
+
+    @Column
+    private boolean completed;
+
 //    @OneToMany(fetch = FetchType.EAGER)
 //    private Set<Room> rooms;
 
@@ -125,5 +131,21 @@ public class HotelReservation {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public boolean isRated() {
+        return rated;
+    }
+
+    public void setRated(boolean rated) {
+        this.rated = rated;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 }

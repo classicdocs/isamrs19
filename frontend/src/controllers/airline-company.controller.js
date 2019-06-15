@@ -29,11 +29,23 @@ export default {
   getFlights(id) {
     return AirlineCompanyApiService.getFlights(id);
   },
+  getArchivedFlights(id) {
+    return AirlineCompanyApiService.getArchivedFlights(id);
+  },
   getFlightsDiscount(id) {
     return AirlineCompanyApiService.getFlightsDiscount(id);
   },
   getReports(id, data) {
     return AirlineCompanyApiService.getReports(id,data);
+  },
+  getLuggage(id) {
+    return AirlineCompanyApiService.getLuggage(id);
+  },
+  addLuggage(id, data) {
+    return AirlineCompanyApiService.addLuggage(id,data);
+  },
+  deleteLuggage(id, luggageId) {
+    return AirlineCompanyApiService.deleteLuggage(id,luggageId);
   }
 
 };

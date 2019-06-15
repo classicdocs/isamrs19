@@ -3,6 +3,8 @@ package com.project.project.model;
 import com.project.project.dto.UserRegistrationDTO;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Passenger {
@@ -38,6 +40,9 @@ public class Passenger {
     @Column(nullable = false)
     private boolean accepted;
 
+    @ManyToMany
+    private Set<Luggage> luggages = new HashSet<>();
+
     @ManyToOne
     private FlightReservation flightReservation;
 
@@ -55,6 +60,14 @@ public class Passenger {
         this.phone = passenger.getPhone();
         this.address = passenger.getAddress();
         this.accepted = passenger.getId() == null;
+    }
+
+    public Set<Luggage> getLuggages() {
+        return luggages;
+    }
+
+    public void setLuggages(Set<Luggage> luggages) {
+        this.luggages = luggages;
     }
 
     public Long getId() {

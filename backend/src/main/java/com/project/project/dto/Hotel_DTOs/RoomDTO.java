@@ -27,10 +27,18 @@ public class RoomDTO {
 
     private Set<SpecialPrice> specialPrices;
 
+    @NotNull
+    private double average_rating;
+
+    @NotNull
+    private double total_rating;
+
     public RoomDTO(Room room) {
         this.roomNumber = room.getRoomNumber();
         this.numberOfBeds = room.getNumberOfBeds();
         this.id = room.getId();
+        this.average_rating = room.getAverage_rating();
+        this.total_rating = room.getTotal_rating();
     }
 
     public RoomDTO(){}
@@ -81,5 +89,21 @@ public class RoomDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public double getAverage_rating() {
+        return average_rating;
+    }
+
+    public void setAverage_rating(double average_rating) {
+        this.average_rating = average_rating;
+    }
+
+    public double getTotal_rating() {
+        return total_rating;
+    }
+
+    public void setTotal_rating(double total_rating) {
+        this.total_rating = total_rating;
     }
 }

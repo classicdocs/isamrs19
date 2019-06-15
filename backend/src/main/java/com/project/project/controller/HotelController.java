@@ -237,10 +237,10 @@ public class HotelController {
         } catch (HotelNotFound hotelNotFound) {
             hotelNotFound.printStackTrace();
             return new ResponseEntity<String>(hotelNotFound.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (ParseException e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-
     }
-
 
     @PutMapping(
             value = "/{id}/addRoomPrice/{room_id}",

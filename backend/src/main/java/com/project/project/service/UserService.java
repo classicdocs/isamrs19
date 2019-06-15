@@ -188,11 +188,20 @@ public class UserService {
         }
     }
 
-    public Set<FlightReservationResultDTO> getFlightReservations(Long id) throws UserNotFound {
+    public Set<FlightReservationResultDTO> getFlightReservations(Long id, Boolean active) throws UserNotFound, ParseException {
         Optional<User> user = userRepository.findOneById(id);
         if (user.isPresent()) {
             RegisteredUser ru = (RegisteredUser) user.get();
             Set<FlightReservationResultDTO> result = new HashSet<>();
+
+            String landing_date_string;
+            String landing_time_string;
+            Date landing_datetime;
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            boolean isCompleted;
+            boolean hasReturnFlight;
+            boolean sameCompanies;
+
             for(FlightReservation flightReservation : ru.getFlightReservations()) {
                 Set<PassengerDTO> passengerDTOS = new HashSet<>();
                 for (Passenger passenger : flightReservation.getPassengers()) {
@@ -205,8 +214,52 @@ public class UserService {
                     }
 
                 }
-                FlightReservationResultDTO flightReservationResultDTO = new FlightReservationResultDTO(flightReservation, passengerDTOS);
-                result.add(flightReservationResultDTO);
+
+                isCompleted = false;
+                hasReturnFlight = false;
+                sameCompanies = false;
+
+                if(flightReservation.getReturnFlight() == null){
+                    landing_date_string = flightReservation.getDepartureFlight().getLandingDate();
+                    landing_time_string = flightReservation.getDepartureFlight().getLandingTime();
+                } else {
+                    landing_date_string = flightReservation.getReturnFlight().getLandingDate();
+                    landing_time_string = flightReservation.getReturnFlight().getLandingTime();
+                    hasReturnFlight = true;
+                    if (flightReservation.getDepartureFlight().getAirlineCompany().getId().equals(flightReservation
+                            .getReturnFlight().getAirlineCompany().getId())){
+                        sameCompanies = true;
+                    }
+                }
+
+                landing_datetime = format.parse(landing_date_string + ' ' + landing_time_string);
+
+                isCompleted = landing_datetime.before(new Date());
+
+                FlightReservationResultDTO flightReservationResultDTO = new FlightReservationResultDTO(flightReservation
+                        , passengerDTOS, isCompleted, hasReturnFlight, sameCompanies);
+
+                if (active) {
+                    if (flightReservationResultDTO.getDepartureFlight().isArchived()){
+                        if (flightReservationResultDTO.getReturnFlight() != null) {
+                            if (flightReservationResultDTO.getReturnFlight().isArchived()) {
+                                result.add(flightReservationResultDTO);
+                            }
+                        } else {
+                            result.add(flightReservationResultDTO);
+                        }
+                    }
+                } else {
+                    if (!flightReservationResultDTO.getDepartureFlight().isArchived()){
+                        if (flightReservationResultDTO.getReturnFlight() != null) {
+                            if (!flightReservationResultDTO.getReturnFlight().isArchived()) {
+                                result.add(flightReservationResultDTO);
+                            }
+                        } else {
+                            result.add(flightReservationResultDTO);
+                        }
+                    }
+                }
             }
             return result;
         } else {
@@ -214,7 +267,7 @@ public class UserService {
         }
     }
 
-    public Set<FlightInvitationDTO> getFlightInvitation(Long id) throws UserNotFound {
+    public Set<FlightInvitationDTO> getFlightInvitation(Long id, boolean active) throws UserNotFound {
 
         Optional<User> user = userRepository.findOneById(id);
         if (user.isPresent()) {
@@ -223,7 +276,30 @@ public class UserService {
             for (FlightInvitation flightInvitation : ru.getFlightInvitations()) {
                 Optional<User> from = userRepository.findOneById(flightInvitation.getInvitationFrom());
                 if (from.isPresent()) {
-                    flightInvitationDTOS.add(new FlightInvitationDTO(flightInvitation, new UserRegistrationDTO(from.get())));
+
+                    if (active) {
+                        if (flightInvitation.getFlightReservation().getDepartureFlight().isArchived()){
+                            if (flightInvitation.getFlightReservation().getReturnFlight() != null) {
+                                if (flightInvitation.getFlightReservation().getReturnFlight().isArchived()) {
+                                    flightInvitationDTOS.add(new FlightInvitationDTO(flightInvitation, new UserRegistrationDTO(from.get())));
+                                }
+                            } else {
+                                flightInvitationDTOS.add(new FlightInvitationDTO(flightInvitation, new UserRegistrationDTO(from.get())));
+                            }
+                        }
+                    } else {
+                        if (!flightInvitation.getFlightReservation().getDepartureFlight().isArchived()){
+                            if (flightInvitation.getFlightReservation().getReturnFlight() != null) {
+                                if (!flightInvitation.getFlightReservation().getReturnFlight().isArchived()) {
+                                    flightInvitationDTOS.add(new FlightInvitationDTO(flightInvitation, new UserRegistrationDTO(from.get())));
+                                }
+                            } else {
+                                flightInvitationDTOS.add(new FlightInvitationDTO(flightInvitation, new UserRegistrationDTO(from.get())));
+                            }
+                        }
+                    }
+
+
                 } else {
                     throw new UserNotFound(flightInvitation.getInvitationFrom());
                 }

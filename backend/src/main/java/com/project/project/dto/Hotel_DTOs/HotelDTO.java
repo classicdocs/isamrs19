@@ -43,13 +43,12 @@ public class HotelDTO {
     private int roomsByFloor;
 
     @NotNull
+    private double average_rating;
+    @NotNull
     private MapLocation mapLocation;
 
-//    @NotNull
-//    private double latitude;
-//
-//    @NotNull
-//    private double longitude;
+    @NotNull
+    private double total_rating;
 
     public HotelDTO(){}
 
@@ -64,9 +63,9 @@ public class HotelDTO {
         this.numOfFloors = hotel.getNumOfFloors();
         this.roomsByFloor = hotel.getRoomsByFloor();
         this.destination = hotel.getDestination();
+        this.average_rating = hotel.getAverage_rating();
+        this.total_rating = hotel.getTotal_rating();
         this.mapLocation = hotel.getMapLocation();
-//        this.latitude = hotel.getLatitude();
-//        this.longitude = hotel.getLongitude();
     }
 
     public Set<HotelAdmin> getAdmins() {
@@ -149,21 +148,21 @@ public class HotelDTO {
         this.destination = destination;
     }
 
-//    public double getLatitude() {
-//        return latitude;
-//    }
-//
-//    public void setLatitude(double latitude) {
-//        this.latitude = latitude;
-//    }
-//
-//    public double getLongitude() {
-//        return longitude;
-//    }
-//
-//    public void setLongitude(double longitude) {
-//        this.longitude = longitude;
-//    }
+    public double getAverage_rating() {
+        return average_rating;
+    }
+
+    public void setAverage_rating(double average_rating) {
+        this.average_rating = average_rating;
+    }
+
+    public double getTotal_rating() {
+        return total_rating;
+    }
+
+    public void setTotal_rating(double total_rating) {
+        this.total_rating = total_rating;
+    }
 
     public MapLocation getMapLocation() {
         return mapLocation;

@@ -43,6 +43,15 @@ public class AirlineCompany {
     @OneToMany(mappedBy = "airlineCompany", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<FlightWithDiscount> flightsWithDiscount = new HashSet<>();
 
+    @OneToMany(mappedBy = "airlineCompany", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Luggage> luggages = new HashSet<>();
+
+    @Column(name = "average_rating")
+    private double averageRating;
+
+    @Column(name = "total_rating")
+    private double totalRating;
+
     public AirlineCompany() {}
 
     public Long getId() {
@@ -123,5 +132,29 @@ public class AirlineCompany {
 
     public void setFlightsWithDiscount(Set<FlightWithDiscount> flightsWithDiscount) {
         this.flightsWithDiscount = flightsWithDiscount;
+    }
+
+    public Set<Luggage> getLuggages() {
+        return luggages;
+    }
+
+    public void setLuggages(Set<Luggage> luggages) {
+        this.luggages = luggages;
+    }
+
+    public double getTotalRating() {
+        return totalRating;
+    }
+
+    public void setTotalRating(double totalRating) {
+        this.totalRating = totalRating;
+    }
+
+    public double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
     }
 }

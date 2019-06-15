@@ -4,8 +4,8 @@ insert into destination (id,airport,country,name,zip) values (2,'Nikola Tesla', 
 insert into destination (id,airport,country,name,zip) values (3,'Heathrow', 'Englend', 'London', 'LHR');
 
 -- aviokompanije
-insert into airline_company (id,description, address, name) values (1, 'Cheap flights!', 'Serbia/Belgrade', 'AirSerbia');
-insert into airline_company (id,description, address, name) values (2, 'Air France is a french airline company', 'France/Paris', 'AirFrance');
+insert into airline_company (id,description, address, name, average_rating,total_rating) values (1, 'Cheap flights!', 'Serbia/Belgrade', 'AirSerbia', 4, 1);
+insert into airline_company (id,description, address, name, average_rating,total_rating) values (2, 'Air France is a french airline company', 'France/Paris', 'AirFrance', 4.5, 2);
 
 -- lista destinacija u aviokompaniji
 insert into airline_company_destinations(airline_company_id, destinations ) values (1, "New York JFK");
@@ -14,6 +14,10 @@ insert into airline_company_destinations(airline_company_id, destinations ) valu
 
 
 -- hotel
+insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor, average_rating,total_rating) values (1,'Moscow','Terazije 20','Nice view from hotel',4,15,4,1);
+insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor, average_rating,total_rating) values (3,'Kasina','Terazije 25','Hotel with rich history',2,15,3,1);
+insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor, average_rating,total_rating) values (4,'Parisjen','Old square 52','Best in Paris',4,30,2,1);
+insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor, average_rating,total_rating) values (2,'Sheraton','Futoski put 76','Known for good services',3,8,5,1);
 insert into hotel_destination(id, country, name, zip) values
 (1, 'Serbia', 'Vranje', 'VR');
 insert into hotel_destination(id, country, name, zip) values
@@ -121,20 +125,20 @@ insert into hotel_floors(hotel_id,floors_id) values (3,8);
 
 -- sobe
 -- PRVI SPRAT
-insert into room(id,number_of_beds,room_number) values (1, 2, 1);
-insert into room(id,number_of_beds,room_number) values (2, 2, 2);
-insert into room(id,number_of_beds,room_number) values (3, 3, 3);
-insert into room(id,number_of_beds,room_number) values (4, 4, 4);
+insert into room(id,number_of_beds,room_number,average_rating,total_rating) values (1, 2, 1, 3, 1);
+insert into room(id,number_of_beds,room_number,average_rating,total_rating) values (2, 2, 2, 3, 1);
+insert into room(id,number_of_beds,room_number,average_rating,total_rating) values (3, 3, 3, 3, 1);
+insert into room(id,number_of_beds,room_number,average_rating,total_rating) values (4, 4, 4, 3, 1);
 -- DRUGI SPRAT
-insert into room(id,number_of_beds,room_number) values (5, 1, 1);
-insert into room(id,number_of_beds,room_number) values (6, 4, 2);
-insert into room(id,number_of_beds,room_number) values (7, 3, 5);
-insert into room(id,number_of_beds,room_number) values (8, 4, 10);
+insert into room(id,number_of_beds,room_number,average_rating,total_rating) values (5, 1, 1, 3, 1);
+insert into room(id,number_of_beds,room_number,average_rating,total_rating) values (6, 4, 2, 3, 1);
+insert into room(id,number_of_beds,room_number,average_rating,total_rating) values (7, 3, 5, 3, 1);
+insert into room(id,number_of_beds,room_number,average_rating,total_rating) values (8, 4, 10, 3, 1);
 
-insert into room(id,number_of_beds,room_number) values (9, 1, 1);
-insert into room(id,number_of_beds,room_number) values (10, 4, 2);
-insert into room(id,number_of_beds,room_number) values (11, 1, 3);
-insert into room(id,number_of_beds,room_number) values (12, 4, 9);
+insert into room(id,number_of_beds,room_number,average_rating,total_rating) values (9, 1, 1, 3, 1);
+insert into room(id,number_of_beds,room_number,average_rating,total_rating) values (10, 4, 2, 3, 1);
+insert into room(id,number_of_beds,room_number,average_rating,total_rating) values (11, 1, 3, 3, 1);
+insert into room(id,number_of_beds,room_number,average_rating,total_rating) values (12, 4, 9, 3, 1);
 
 --spratovi sobe
 insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (1,1);

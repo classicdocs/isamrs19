@@ -64,6 +64,12 @@ public class Hotel {
     @JoinColumn(name="destination_id", nullable=false)
     private HotelDestination destination;
 
+    @Column(name = "average_rating")
+    private double average_rating;
+
+    @Column(name = "total_rating")
+    private double total_rating;
+
     public HotelDestination getDestination() {
         return destination;
     }
@@ -146,15 +152,19 @@ public class Hotel {
         this.floors = floors;
     }
 
-//    public double getLatitude() {
-//        return latitude;
-//    }
-//
-//    public void setLatitude(double latitude) {
-//        this.latitude = latitude;
-//    }
-//
-//    public double getLongitude() {
-//        return longitude;
-//    }
+    public double getAverage_rating() {
+        return average_rating;
+    }
+
+    public void setAverage_rating(double average_rating) {
+        this.average_rating = average_rating;
+    }
+
+    public double getTotal_rating() {
+        return total_rating;
+    }
+
+    public void setTotal_rating(double total_rating) {
+        this.total_rating = total_rating;
+    }
 }

@@ -2,10 +2,7 @@ package com.project.project.controller;
 
 
 import com.project.project.dto.*;
-import com.project.project.exceptions.AirlineCompanyAlreadyExist;
-import com.project.project.exceptions.AirlineCompanyNotFound;
-import com.project.project.exceptions.AirplaneNotExist;
-import com.project.project.exceptions.DestinationAlreadyExist;
+import com.project.project.exceptions.*;
 import com.project.project.model.AirlineCompany;
 import com.project.project.model.Airplane;
 import com.project.project.model.Destination;
@@ -87,6 +84,22 @@ public class AirlineCompanyController {
 
         try {
             Set<FlightDTO> flights = airlineCompanyService.getFlights(id);
+            return new ResponseEntity<Set<FlightDTO>>(flights, HttpStatus.OK);
+
+        } catch (AirlineCompanyNotFound ex) {
+            ex.printStackTrace();
+            return new ResponseEntity<String>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(
+            value = "/{id}/flights/archived",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity getArchivedFlights(@PathVariable("id") Long id) {
+
+        try {
+            Set<FlightDTO> flights = airlineCompanyService.getArchivedFlights(id);
             return new ResponseEntity<Set<FlightDTO>>(flights, HttpStatus.OK);
 
         } catch (AirlineCompanyNotFound ex) {
@@ -192,12 +205,58 @@ public class AirlineCompanyController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity getReports(@PathVariable("id") Long airlineCompanyId,
-                                               @RequestParam("year") String year, @RequestParam("month") String month) {
+                                     @RequestParam("year") String year, @RequestParam("month") String month) {
 
         try {
             ReportsDTO result = airlineCompanyService.getReports(airlineCompanyId, year, month);
             return new ResponseEntity<ReportsDTO>(result, HttpStatus.OK);
         } catch (ParseException | AirlineCompanyNotFound e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(
+            value = "/{id}/luggage",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity getLuggage(@PathVariable("id") Long airlineCompanyId) {
+
+        try {
+            Set<LuggageDTO> luggageDTOS = airlineCompanyService.getLuggages(airlineCompanyId);
+            return new ResponseEntity<Set<LuggageDTO>>(luggageDTOS, HttpStatus.OK);
+        } catch (AirlineCompanyNotFound e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(
+            value = "/{id}/luggage",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity addLuggage(@PathVariable("id") Long airlineCompanyId, @RequestBody LuggageDTO luggageDTO) {
+
+        try {
+            LuggageDTO result = airlineCompanyService.addLuggage(airlineCompanyId, luggageDTO);
+            return new ResponseEntity<LuggageDTO>(result, HttpStatus.OK);
+        } catch (AirlineCompanyNotFound | LuggageAlreadyExist e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping(
+            value = "/{id}/luggage/{luggageId}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity deleteLuggage(@PathVariable("id") Long airlineCompanyId, @PathVariable("luggageId") Long luggageId) {
+
+        try {
+            LuggageDTO result = airlineCompanyService.deleteLuggage(airlineCompanyId, luggageId);
+            return new ResponseEntity<LuggageDTO>(result, HttpStatus.OK);
+        } catch (AirlineCompanyNotFound  | LuggageNotFound e) {
             e.printStackTrace();
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

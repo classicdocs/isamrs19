@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import java.text.ParseException;
@@ -61,6 +63,9 @@ public class FlightService {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private LuggageRepository luggageRepository;
+
     @Value("${frontend}")
     private String frontend;
 
@@ -108,6 +113,8 @@ public class FlightService {
         flight.setTicketPriceBusiness(flightDTO.getTicketPriceBusiness());
         flight.setTicketPriceEconomy(flightDTO.getTicketPriceEconomy());
         flight.setTransferDestinations(transfers);
+        flight.setAverageRating(0);
+        flight.setTotalRating(0);
 
         List<SeatRow> seatsFirst = new ArrayList<>();
         for (int i = 1; i <= flight.getAirplane().getSeatsFirstRows(); i++) {
@@ -174,7 +181,28 @@ public class FlightService {
             String startDestination, String finalDestination,
             String departureDate, Optional<String> returnDate,
             String seatClass, int passengersNumber
-    ) throws DestinationNotFound, ParseException {
+    ) throws DestinationNotFound, ParseException, DateInPast, DateException {
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date departureD = sdf.parse(departureDate);
+        Calendar c = Calendar.getInstance();
+        Date current = c.getTime();
+
+        c.setTime(departureD);
+        c.add(Calendar.DATE, 1);
+        departureD = c.getTime();
+        if (departureD.before(current)) {
+            throw new DateInPast();
+        }
+
+        if (returnDate.isPresent()) {
+            Date returnD = sdf.parse(returnDate.get());
+            if (returnD.before(departureD))
+                throw new DateException(departureDate, returnDate.get());
+        }
+
 
         Set<Destination> startDestinations = destinationService.findAllByName(startDestination);
         Set<Destination> finalDestinations = destinationService.findAllByName(finalDestination);
@@ -275,10 +303,10 @@ public class FlightService {
         return result;
     }
 
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
     public FlightReservationResultDTO reserve(FlightReservationDTO flightReservationDTO) throws FlightNotFound {
 
         FlightReservation flightReservation = new FlightReservation();
-
 
         Optional<Flight> departureFlight = flightRepository.findById(flightReservationDTO.getFlights().getDepartureFlight().getId());
 
@@ -306,6 +334,14 @@ public class FlightService {
 
                 Passenger pa = new Passenger(flightReservationDTO.getMyInfo());
                 pa.setFlightReservation(flightReservation);
+
+                Set<Luggage> luggages = new HashSet<>();
+                for (LuggageDTO luggageDTO : flightReservationDTO.getMyInfo().getLuggages()) {
+                    Luggage luggage = luggageRepository.getOne(luggageDTO.getId());
+                    luggages.add(luggage);
+                }
+                pa.setLuggages(luggages);
+
                 pa.setAccepted(true);
                 flightReservation.getPassengers().add(pa);
                 flightReservationRepository.save(flightReservation);
@@ -316,6 +352,13 @@ public class FlightService {
                 for (int i = 0; i < passengers.size(); i++) {
                     Passenger p = new Passenger(passengers.get(i));
                     p.setFlightReservation(flightReservation);
+
+                    luggages = new HashSet<>();
+                    for (LuggageDTO luggageDTO : passengers.get(i).getLuggages()) {
+                        Luggage luggage = luggageRepository.getOne(luggageDTO.getId());
+                        luggages.add(luggage);
+                    }
+                    p.setLuggages(luggages);
                     passengerRepository.save(p);
 
 //                    flightReservation.getPassengers().add(p);
@@ -403,6 +446,14 @@ public class FlightService {
                 Passenger pa = new Passenger(flightReservationDTO.getMyInfo());
                 pa.setFlightReservation(flightReservation);
                 pa.setAccepted(true);
+
+                Set<Luggage> luggages = new HashSet<>();
+                for (LuggageDTO luggageDTO : flightReservationDTO.getMyInfo().getLuggages()) {
+                    Luggage luggage = luggageRepository.getOne(luggageDTO.getId());
+                    luggages.add(luggage);
+                }
+                pa.setLuggages(luggages);
+
                 flightReservation.getPassengers().add(pa);
                 flightReservationRepository.save(flightReservation);
                 passengerRepository.save(pa);
@@ -410,6 +461,14 @@ public class FlightService {
 
                 for (int i = 0; i < passengers.size(); i++) {
                     Passenger p = new Passenger(passengers.get(i));
+
+                    luggages = new HashSet<>();
+                    for (LuggageDTO luggageDTO : passengers.get(i).getLuggages()) {
+                        Luggage luggage = luggageRepository.getOne(luggageDTO.getId());
+                        luggages.add(luggage);
+                    }
+                    p.setLuggages(luggages);
+
                     p.setFlightReservation(flightReservation);
                     passengerRepository.save(p);
 
@@ -526,8 +585,6 @@ public class FlightService {
     }
 
     public void discount(DiscountDTO discount) throws FlightNotFound {
-
-
         Optional<Flight> flight = flightRepository.findById(discount.getFlight());
         if (flight.isPresent()) {
             for (SeatDTO s : discount.getSeats()) {
@@ -585,5 +642,22 @@ public class FlightService {
             }
         } else throw new FlightNotFound(discount.getFlight());
 
+    }
+
+    public FlightDTO archiveFlight(Long flightId) throws FlightNotFound, ParseException, ArchiveNotPosible {
+
+        Optional<Flight> f = flightRepository.findById(flightId);
+        if (f.isPresent()) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date now = Calendar.getInstance().getTime();
+            String date = f.get().getLandingDate() + " " + f.get().getLandingTime() + ":00";
+            if (now.before(sdf.parse(date))) {
+                throw new ArchiveNotPosible();
+            }
+
+            f.get().setArchived(true);
+            Flight flight = flightRepository.save(f.get());
+            return new FlightDTO(flight);
+        } else throw new FlightNotFound(flightId);
     }
 }

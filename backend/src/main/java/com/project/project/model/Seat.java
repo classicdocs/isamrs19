@@ -9,6 +9,9 @@ public class Seat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Version
+    private Long version;
+
     @Column(name = "row_num", nullable = false)
     private Integer rowNum;
 
@@ -106,5 +109,13 @@ public class Seat {
 
     public void setDiscount(int discount) {
         this.discount = discount;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }

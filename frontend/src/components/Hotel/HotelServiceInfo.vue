@@ -2,6 +2,8 @@
   <div>
     <v-card>
       <v-card-title><h3 style="color: grey">Hotel: <br></h3><h1> {{hotel.name}}</h1></v-card-title>
+      <div><v-rating id="hotelStars" :readonly="true" v-model="hotel.average_rating" half-increments></v-rating></div>
+
       <v-card-text id="info">
         <div v-if="hotel.destination != null"><h3 style="color: gray;">Destination: <br></h3><h3> {{hotel.destination.name}}</h3></div>
         
@@ -146,4 +148,13 @@ export default {
 </script>
 
 <style>
-</style> 
+h3 {
+  
+  display: inline-flex;
+}
+
+#hotelStars {
+  padding-left: 20px;
+}
+
+</style>

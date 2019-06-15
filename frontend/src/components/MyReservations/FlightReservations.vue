@@ -7,6 +7,11 @@
           <v-expansion-panel-content
             v-for="(reservation,index) in reservations" :key="index">
             <div slot='header'><h3>Reservation {{index + 1}} - {{getTitle(reservation)}}</h3></div>
+            <v-btn v-if="reservation.completed" 
+            color="blue darken" 
+            flat 
+            @click="rate(reservation.id, reservation.hasReturnFlight, reservation.sameCompanies)"
+            >Rate</v-btn>
             <v-container>
               <v-layout row wrap>
                 <v-flex lg6 md6 >
@@ -53,6 +58,7 @@
                   <td class="text-xs-left" v-if="reservation.returnFlight !== null">{{ props.item.seatRowReturn }}</td>
                   <td class="text-xs-left" v-if="reservation.returnFlight !== null">{{ props.item.seatColReturn }}</td>
                   <td class="text-xs-left">{{ props.item.seatClass }}</td>
+                  <td class="text-xs-left">{{getLuggage(props.item.passenger.luggageDTOSet)}}</td>
                   <td class="text-xs-left">{{ props.item.passenger.email }}</td>
                   <td class="text-xs-left">{{ props.item.passenger.phone }}</td> 
                   <td class="text-xs-left">{{ props.item.passenger.address }}</td>
@@ -72,9 +78,10 @@
            
           </v-expansion-panel-content>
         </v-expansion-panel>
-          
+        <history/>
       </v-card-text>
     </v-card>
+    
   </div>
 </template>
 
@@ -83,11 +90,17 @@
 import store from "@/store";
 import UserController from "@/controllers/user.controller.js";
 import FlightInfoVue from '../Flights/FlightInfo.vue';
+import FlightRatingController from '@/controllers/flight.rating.controller.js';
+import Rating from "@/models/Rating.js";
+import RatingWithReturn from "@/models/RatingWithReturn.js";
+import RatingDifferentCompanies from "@/models/RatingDifferentCompanies.js";
+import FlightReservationsHistoryVue from './FlightReservationsHistory.vue';
 
 export default {
   name: "FlightReservations",
   components: {
-    'flight' : FlightInfoVue
+    'flight' : FlightInfoVue,
+    'history': FlightReservationsHistoryVue
   },
   data:() => ({
     expansion: [true],
@@ -101,6 +114,7 @@ export default {
       { text: 'Seat row return', value: 'rowRet' },
       { text: 'Seat column return', value: 'colRet' },
       { text: 'Seat class', value: 'class' },
+      { text: 'Luggage', value: 'luggage'},
       { text: 'Email', value: 'email' },
       { text: 'Phone number', value: 'phone' },
       { text: 'Address', value: 'address' },
@@ -113,16 +127,17 @@ export default {
       { text: 'Seat row departure', value: 'rowDept' },
       { text: 'Seat column departure', value: 'colDept' },
       { text: 'Seat class', value: 'class' },
+      { text: 'Luggage', value: 'luggage'},
       { text: 'Email', value: 'email' },
       { text: 'Phone number', value: 'phone' },
       { text: 'Address', value: 'address' },
       { text: 'Accepted', value: 'accepted' },
     ],
+    
   }),
   beforeMount() {
     UserController.getFlightReservations(store.getters.activeUser.id)
       .then((response) => {
-        console.log(response.data);
         this.reservations = response.data;
       })
       .catch((error) => {
@@ -174,9 +189,21 @@ export default {
           store.commit("setSnack", {msg: error.response.data, color:"error"})
         })
     },
-  }
-
-
+    getLuggage(luggages) {
+      let ret = "";
+      luggages.forEach(l => {
+        ret += l.name + ", ";
+      });
+      return ret.substring(0, ret.length - 2);
+    },
+    getPrice(item) {
+      let price = item.price;
+      item.passenger.luggages.forEach(l => {
+        price += l.price;
+      });
+      return price;
+    }
+  },
 }
 </script>
 

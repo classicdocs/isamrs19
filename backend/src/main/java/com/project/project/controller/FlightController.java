@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -54,7 +55,7 @@ public class FlightController {
         try {
             flights = flightService.search(startDestination, finalDestination, departureDate,returnDate,seatClass, passengersNumber);
             return new ResponseEntity<Set<SearchFlightDTO>>(flights, HttpStatus.OK);
-        } catch (DestinationNotFound | ParseException destinationNotFound) {
+        } catch (DestinationNotFound | ParseException | DateInPast | DateException destinationNotFound) {
             destinationNotFound.printStackTrace();
             return new ResponseEntity<String>(destinationNotFound.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -70,9 +71,12 @@ public class FlightController {
         try {
             FlightReservationResultDTO flightReservation1 = flightService.reserve(flightReservation);
             return new ResponseEntity<FlightReservationResultDTO>(flightReservation1, HttpStatus.CREATED);
-        } catch (FlightNotFound flightNotFound) {
-            flightNotFound.printStackTrace();
-            return new ResponseEntity<String>(flightNotFound.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (FlightNotFound e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (ObjectOptimisticLockingFailureException e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>("Something went wrong! Please try again.", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -85,9 +89,24 @@ public class FlightController {
         try {
              flightService.discount(discount);
             return new ResponseEntity<String>("Success", HttpStatus.OK);
-        } catch (FlightNotFound flightNotFound) {
-            flightNotFound.printStackTrace();
-            return new ResponseEntity<String>(flightNotFound.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (FlightNotFound e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping(
+            value = "/archive",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity archive(@RequestBody FlightDTO flightDTO) {
+        try {
+            FlightDTO result = flightService.archiveFlight(flightDTO.getId());
+            return new ResponseEntity<FlightDTO>(result, HttpStatus.OK);
+        } catch (FlightNotFound | ParseException | ArchiveNotPosible e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

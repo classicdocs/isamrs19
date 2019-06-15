@@ -6,6 +6,7 @@ import com.project.project.model.*;
 import com.project.project.repository.AirlineCompanyRepository;
 import com.project.project.repository.AirplaneRepository;
 import com.project.project.repository.DestinationRepository;
+import com.project.project.repository.LuggageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,9 @@ public class AirlineCompanyService {
 
     @Autowired
     private DestinationRepository destinationRepository;
+
+    @Autowired
+    private LuggageRepository luggageRepository;
 
     public AirlineCompany findOneById(Long id) throws AirlineCompanyNotFound {
         return airlineCompanyRepository.findOneById(id).orElseThrow(() -> new AirlineCompanyNotFound(id));
@@ -194,7 +198,23 @@ public class AirlineCompanyService {
         if (ac.isPresent()) {
             Set<FlightDTO> result = new HashSet<>();
             for (Flight f : ac.get().getFlights()) {
+                if (f.isArchived())
+                    continue;
                 result.add(new FlightDTO(f));
+            }
+            return result;
+        } else {
+            throw new AirlineCompanyNotFound(id);
+        }
+    }
+
+    public Set<FlightDTO> getArchivedFlights(Long id) throws AirlineCompanyNotFound {
+        Optional<AirlineCompany> ac = airlineCompanyRepository.findOneById(id);
+        if (ac.isPresent()) {
+            Set<FlightDTO> result = new HashSet<>();
+            for (Flight f : ac.get().getFlights()) {
+                if (f.isArchived())
+                    result.add(new FlightDTO(f));
             }
             return result;
         } else {
@@ -341,5 +361,62 @@ public class AirlineCompanyService {
         } else {
             throw new AirlineCompanyNotFound(airlineCompany);
         }
+    }
+
+    public Set<LuggageDTO> getLuggages(Long airlineCompanyId) throws AirlineCompanyNotFound {
+
+        Optional<AirlineCompany> ac = airlineCompanyRepository.findOneById(airlineCompanyId);
+        if (ac.isPresent()) {
+            Set<LuggageDTO> result = new HashSet<>();
+            for (Luggage luggage : ac.get().getLuggages()) {
+                result.add(new LuggageDTO(luggage));
+            }
+            return result;
+        } else throw new AirlineCompanyNotFound(airlineCompanyId);
+    }
+
+    public LuggageDTO addLuggage(Long airlineCompanyId, LuggageDTO luggageDTO) throws LuggageAlreadyExist, AirlineCompanyNotFound {
+
+        Optional<AirlineCompany> ac = airlineCompanyRepository.findOneById(airlineCompanyId);
+        if (ac.isPresent()) {
+
+            for (Luggage luggage : ac.get().getLuggages()) {
+                if (luggage.getName().equals(luggageDTO.getName()))
+                    throw new LuggageAlreadyExist(luggageDTO.getName());
+            }
+
+            Luggage l = new Luggage();
+            l.setName(luggageDTO.getName());
+            l.setDimensions(luggageDTO.getDimensions());
+            l.setWeight(luggageDTO.getWeight());
+            l.setPrice(luggageDTO.getPrice());
+            l.setAirlineCompany(ac.get());
+
+            luggageRepository.save(l);
+            return new LuggageDTO(l);
+
+        } else throw new AirlineCompanyNotFound(airlineCompanyId);
+
+    }
+
+    public LuggageDTO deleteLuggage(Long airlineCompanyId, Long luggageId) throws AirlineCompanyNotFound, LuggageNotFound {
+
+        Optional<AirlineCompany> ac = airlineCompanyRepository.findOneById(airlineCompanyId);
+        if (ac.isPresent()) {
+            Luggage luggageToDelete = null;
+            for (Luggage luggage : ac.get().getLuggages()) {
+                if (luggage.getId().equals(luggageId)) {
+                    luggageToDelete = luggage;
+                    break;
+                }
+            }
+            if (luggageToDelete != null) {
+                ac.get().getLuggages().remove(luggageToDelete);
+                luggageRepository.delete(luggageToDelete);
+                return new LuggageDTO(luggageToDelete);
+            } else throw new LuggageNotFound(luggageId);
+
+        } else throw new AirlineCompanyNotFound(airlineCompanyId);
+
     }
 }

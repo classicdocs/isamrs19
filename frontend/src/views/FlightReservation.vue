@@ -80,6 +80,7 @@
 
               <v-stepper-content step="2">
                 <friends-invitation
+                  :key="componentKey"
                   v-on:friendsInvited="setInvitedFriends($event)"
                 ></friends-invitation>
                 <v-btn
@@ -99,6 +100,8 @@
               <v-stepper-content step="3">
                 <fill-passengers-info
                   v-bind:passengersNumber="flightReservation.searchParams.passengersNumber"
+                  v-bind:flightPrice="flightReservation.price"
+                  v-bind:airlineCompany="flightReservation.flights.departureFlight.airlineCompany.id"
                 ></fill-passengers-info>
 
                 <v-btn
@@ -174,7 +177,8 @@ export default {
     friends: false,
     invitedFriends: [],
     passengers: [],
-    optional: false
+    optional: false,
+    componentKey: 0,
   }),
   computed: {
     getDepartureSeats() {
@@ -246,7 +250,7 @@ export default {
       this.snackbar.show = true;
     },
     goToFriendsInvitation() {
-      console.log(store.getters.friends);
+      this.forceRerender();
       if (store.getters.friends.length === 0 || this.flightReservation.searchParams.passengersNumber === 1) {
         this.friends = false;
         this.stepper = 3;
@@ -309,10 +313,16 @@ export default {
       let passengers = store.getters.passengers;
       for (let passenger of passengers) {
         if (passenger.firstname === "" || passenger.lastname === "" || passenger.email === "" || passenger.address === "" || 
-            passenger.passport === "" || passenger.phone === "") {
+            passenger.passport === "" || passenger.passport === null || passenger.phone === "") {
           store.commit("setSnack", {msg: "You must fill information about every passenger!", color: "primary"});
           return;
         }
+      }
+      let myInfo = store.getters.myInfo;
+      if (myInfo.firstname === "" || myInfo.lastname === "" || myInfo.email === "" || myInfo.address === "" || 
+            myInfo.passport === "" || myInfo.passport === null || myInfo.phone === "") {
+          store.commit("setSnack", {msg: "You must fill your information !", color: "primary"});
+          return;
       }
       let data = store.getters.flightReservation;
       data.passengers = store.getters.passengers;
@@ -326,10 +336,15 @@ export default {
           this.optional = true;
         })
         .catch((error) => {
+          loader.hide();
+          this.$router.push({name: "flights"})
           store.commit("setSnack", {msg: error.response.data, color: "error"});
-          console.log(error.response.data);
         })
+
     },
+    forceRerender() {
+      this.componentKey += 1;
+    }
     
   },
   

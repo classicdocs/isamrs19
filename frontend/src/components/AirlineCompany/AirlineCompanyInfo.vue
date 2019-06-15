@@ -2,9 +2,11 @@
   <div>
     <v-card>
       <v-card-title><h3 style="color: grey">Airline-company: <br></h3><h1> {{airlineCompany.name}}</h1></v-card-title>
+      <div><v-rating id="airlineStars" :readonly="true" v-model="airlineCompany.averageRating" half-increments></v-rating></div>
       <v-card-text id="info">
+        
         <div><h3 style="color: gray;">Address: <br></h3><h3> {{airlineCompany.address}}</h3></div>
-        <div><h3 style="color: gray;">Description: <br></h3><h3> {{airlineCompany.description}}</h3></div>
+        <div><h3 style="color: gray;">Description: <br></h3><h3> {{airlineCompany.description}}</h3></div>        
       </v-card-text>
     </v-card>
   </div>
@@ -26,6 +28,10 @@ export default {
 h3 {
   
   display: inline-flex;
+}
+
+#airlineStars {
+  padding-left: 20px;
 }
 </style>
 
