@@ -25,11 +25,17 @@
         >
           <template v-slot:items="props">
           <!-- <tr @click="props.expanded = !props.expanded"> -->
-          <tr @click="goToService(props.item.id)">
+          <tr>
             <td class="text-xs-center">{{ props.item.name }}</td>
             <td class="text-xs-center">{{ props.item.address }}</td>
             <!-- <td class="text-xs-right">{{ props.item.promotionalDescription }}</td> -->
             <td class="text-xs-center"> <v-rating :readonly="true" v-model="props.item.rating" half-increments></v-rating></td>
+            <td class="text-xs-center">
+              <v-btn @click="goToService(props.item.id)">
+              {{props.item.name}} page
+              <v-icon right>local_taxi</v-icon>
+              </v-btn>
+            </td>
           </tr>
           </template>
           <template v-slot:expand="props">
@@ -71,7 +77,8 @@ export default {
           },
           { text: 'Address', value: 'address' , align: 'center'},
           // { text: 'Description', value: 'description' , align: 'center', sortable: false},
-          { text: 'Average rating', value: 'avgRate' , align: 'center'}
+          { text: 'Average rating', value: 'avgRate' , align: 'center'},
+          { text: ' ', value: 'button' , align: 'center'}
         ],
     rentACars: [],
     form : true,
