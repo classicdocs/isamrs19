@@ -14,10 +14,6 @@ insert into airline_company_destinations(airline_company_id, destinations ) valu
 
 
 -- hotel
-insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor, average_rating,total_rating) values (1,'Moscow','Terazije 20','Nice view from hotel',4,15,4,1);
-insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor, average_rating,total_rating) values (3,'Kasina','Terazije 25','Hotel with rich history',2,15,3,1);
-insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor, average_rating,total_rating) values (4,'Parisjen','Old square 52','Best in Paris',4,30,2,1);
-insert into hotel(id,name,address,description,num_of_floors,rooms_by_floor, average_rating,total_rating) values (2,'Sheraton','Futoski put 76','Known for good services',3,8,5,1);
 insert into hotel_destination(id, country, name, zip) values
 (1, 'Serbia', 'Vranje', 'VR');
 insert into hotel_destination(id, country, name, zip) values
@@ -44,17 +40,17 @@ insert into map_location(id, latitude, longitude) values
 (1, 11.11, 22.22);
 
 insert into hotel(id,name,address,description,
-    num_of_floors,rooms_by_floor,location,destination_id)
-    values (1,'Moscow','Terazije 20','Nice view from hotel',4,15,1,1);
+    num_of_floors,rooms_by_floor,location,destination_id, average_rating,total_rating)
+    values (1,'Moscow','Terazije 20','Nice view from hotel',4,15,1,1,4,1);
 insert into hotel(id,name,address,description,
-    num_of_floors,rooms_by_floor,location,destination_id)
-    values (3,'Kasina','Terazije 25','Hotel with rich history',2,15,1,1);
+    num_of_floors,rooms_by_floor,location,destination_id, average_rating,total_rating)
+    values (3,'Kasina','Terazije 25','Hotel with rich history',2,15,1,1,3,1);
 insert into hotel(id,name,address,description,
-    num_of_floors,rooms_by_floor,location,destination_id)
-    values (4,'Parisjen','Old square 52','Best in Paris',4,30,1,3);
+    num_of_floors,rooms_by_floor,location,destination_id, average_rating,total_rating)
+    values (4,'Parisjen','Old square 52','Best in Paris',4,30,1,3,2,1);
 insert into hotel(id,name,address,description,
-    num_of_floors,rooms_by_floor,location,destination_id)
-    values (2,'Sheraton','Futoski put 76','Known for good services',3,8,1,2);
+    num_of_floors,rooms_by_floor,location,destination_id, average_rating,total_rating)
+    values (2,'Sheraton','Futoski put 76','Known for good services',3,8,1,2,5,1);
 
 
 
