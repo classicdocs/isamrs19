@@ -3,10 +3,7 @@ package com.project.project.service;
 import com.project.project.dto.*;
 import com.project.project.exceptions.*;
 import com.project.project.model.*;
-import com.project.project.repository.AirlineCompanyRepository;
-import com.project.project.repository.AirplaneRepository;
-import com.project.project.repository.DestinationRepository;
-import com.project.project.repository.LuggageRepository;
+import com.project.project.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +29,9 @@ public class AirlineCompanyService {
 
     @Autowired
     private LuggageRepository luggageRepository;
+
+    @Autowired
+    private MapLocationRepository mapLocationRepository;
 
     public AirlineCompany findOneById(Long id) throws AirlineCompanyNotFound {
         return airlineCompanyRepository.findOneById(id).orElseThrow(() -> new AirlineCompanyNotFound(id));
@@ -418,5 +418,42 @@ public class AirlineCompanyService {
 
         } else throw new AirlineCompanyNotFound(airlineCompanyId);
 
+    }
+
+    public AirlineCompany changeLocation(Long id, MapLocation mapLocation) throws AirlineCompanyNotFound{
+        Optional<AirlineCompany> airlineCompany = airlineCompanyRepository.findOneById(id);
+        if(airlineCompany.isPresent()){
+            AirlineCompany newAirlineCompany = new AirlineCompany();
+
+            MapLocation ml = mapLocationRepository.save(mapLocation);
+            newAirlineCompany.setMapLocation(ml);
+
+            newAirlineCompany.setId(airlineCompany.get().getId());
+            newAirlineCompany.setName(airlineCompany.get().getName());
+            newAirlineCompany.setAddress(airlineCompany.get().getAddress());
+            newAirlineCompany.setDescription(airlineCompany.get().getDescription());
+
+            newAirlineCompany.setAdmins(airlineCompany.get().getAdmins());
+
+            newAirlineCompany.setTotalRating(airlineCompany.get().getTotalRating());
+            newAirlineCompany.setAverageRating(airlineCompany.get().getAverageRating());
+            newAirlineCompany.setAirplanes(airlineCompany.get().getAirplanes());
+            newAirlineCompany.setReservations(airlineCompany.get().getReservations());
+            newAirlineCompany.setFlights(airlineCompany.get().getFlights());
+            newAirlineCompany.setFlightsWithDiscount(airlineCompany.get().getFlightsWithDiscount());
+
+            newAirlineCompany.setLuggages(airlineCompany.get().getLuggages());
+            newAirlineCompany.setDestinations(airlineCompany.get().getDestinations());
+
+
+            newAirlineCompany = airlineCompanyRepository.save(newAirlineCompany);
+            for (AirlineCompanyAdmin admin: newAirlineCompany.getAdmins()) {
+                admin.setAirlineCompany(null);
+            }
+
+            return newAirlineCompany;
+        }else{
+            throw new AirlineCompanyNotFound(id);
+        }
     }
 }
