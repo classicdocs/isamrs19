@@ -1,5 +1,3 @@
-import MapLocation from "./MapLocation";
-
 export default class RentACar {
     constructor() {
       this.name = null,
@@ -9,8 +7,7 @@ export default class RentACar {
       this.vehicles = [],
       this.branches = [],
       this.admins = [],
-      this.rating = 0,
-      this.mapLocation = new MapLocation()
+      this.rating = 0
     }
     reset() {
       this.name = null;
@@ -21,7 +18,6 @@ export default class RentACar {
       this.branches = [];
       this.admins = [];
       this.rating = 0;
-      this.mapLocation = new MapLocation();
     }
   }
     

@@ -115,7 +115,7 @@ public class SystemAdminService {
         }
     }
 
-    public RentACar createRentACar(RentACarInfoDTO rentACarInfoDTO) throws RentACarAlreadyExist {
+    public RentACarInfoDTO createRentACar(RentACarInfoDTO rentACarInfoDTO) throws RentACarAlreadyExist {
 
         Optional<RentACar> service = rentACarRepository.findOneByName(rentACarInfoDTO.getName());
 
@@ -138,10 +138,10 @@ public class SystemAdminService {
         MapLocation ml = mapLocationRepository.save(rentACarInfoDTO.getMapLocation());
         rentACar.setMapLocation(ml);
 
-        return rentACarRepository.save(rentACar);
+        return new RentACarInfoDTO(rentACarRepository.save(rentACar));
     }
 
-    public AirlineCompany createAirlineCompany(AirlineCompanyDTO airlineCompanyDTO) throws AirlineCompanyAlreadyExist {
+    public AirlineCompanyDTO createAirlineCompany(AirlineCompanyDTO airlineCompanyDTO) throws AirlineCompanyAlreadyExist {
 
         Optional<AirlineCompany> airline = airlineCompanyRepository.findOneByName(airlineCompanyDTO.getName());
 
@@ -161,7 +161,7 @@ public class SystemAdminService {
 
         airlineCompany = airlineCompanyRepository.save(airlineCompany);
 
-        return airlineCompany;
+        return (new AirlineCompanyDTO(airlineCompany));
     }
 
     public HotelAdmin createHotelAdmin(HotelAdmin hotelAdmin) throws AdminAlreadyExists{

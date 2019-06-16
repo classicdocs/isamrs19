@@ -65,11 +65,11 @@
           <!-- DUGMAD -->
 
           <v-card-actions>
-          <v-spacer></v-spacer>
-            <v-btn v-on:click="cancel" color="info">CANCEL</v-btn>
-            <v-btn v-on:click="reset" color="error">RESET</v-btn>
-            <v-btn :disabled="!form" v-on:click="validate" color="success">ADD</v-btn>
-          </v-card-actions>
+            <v-spacer></v-spacer>
+              <v-btn :disabled="!form" v-on:click="validate" color="success">NEXT</v-btn>
+              <v-btn v-on:click="reset" color="error">RESET</v-btn>
+              <v-btn v-on:click="cancel" color="info">CANCEL</v-btn>
+           </v-card-actions>
       </v-form>
     </v-card>
   </div>
@@ -80,7 +80,6 @@
 import AirlineCompany from "@/models/AirlineCompany";
 import SystemAdminControler from "@/controllers/system-admin.controller";
 import MapLocation from "@/models/MapLocation";
-import store from "@/store";
 import { thisExpression } from '@babel/types';
 
 export default {
@@ -125,11 +124,7 @@ export default {
 
 
         SystemAdminControler.createAirline(this.airlineCompany)
-        .then((response) => {
-          var allAirlines = store.getters.allAirlines;
-          allAirlines.push(response.data);
-          store.commit('allAirlines', allAirlines);
-          
+        .then((Response) => {
           this.$emit("finished", {msg: "Airline company successfully added", color: "success"})
         })
         .catch((response) => {
