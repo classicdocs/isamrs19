@@ -72,7 +72,7 @@ public class SystemAdminService {
         //h.setRoomConfiguration(hotelDTO.getRoomConfiguration());
 
         /*Save hotel admins. Not trough for loop because every iteration forms
-        * new pool connection.*/
+         * new pool connection.*/
         //hotelAdminRepository.saveAdmins(hotelDTO.getAdmins());
         h.setAdmins(hotelDTO.getAdmins());
 
@@ -115,7 +115,7 @@ public class SystemAdminService {
         }
     }
 
-    public RentACarInfoDTO createRentACar(RentACarInfoDTO rentACarInfoDTO) throws RentACarAlreadyExist {
+    public RentACar createRentACar(RentACarInfoDTO rentACarInfoDTO) throws RentACarAlreadyExist {
 
         Optional<RentACar> service = rentACarRepository.findOneByName(rentACarInfoDTO.getName());
 
@@ -138,10 +138,10 @@ public class SystemAdminService {
         MapLocation ml = mapLocationRepository.save(rentACarInfoDTO.getMapLocation());
         rentACar.setMapLocation(ml);
 
-        return new RentACarInfoDTO(rentACarRepository.save(rentACar));
+        return rentACarRepository.save(rentACar);
     }
 
-    public AirlineCompanyDTO createAirlineCompany(AirlineCompanyDTO airlineCompanyDTO) throws AirlineCompanyAlreadyExist {
+    public AirlineCompany createAirlineCompany(AirlineCompanyDTO airlineCompanyDTO) throws AirlineCompanyAlreadyExist {
 
         Optional<AirlineCompany> airline = airlineCompanyRepository.findOneByName(airlineCompanyDTO.getName());
 
@@ -161,7 +161,7 @@ public class SystemAdminService {
 
         airlineCompany = airlineCompanyRepository.save(airlineCompany);
 
-        return (new AirlineCompanyDTO(airlineCompany));
+        return airlineCompany;
     }
 
     public HotelAdmin createHotelAdmin(HotelAdmin hotelAdmin) throws AdminAlreadyExists{

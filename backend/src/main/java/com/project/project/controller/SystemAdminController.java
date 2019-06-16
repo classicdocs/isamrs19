@@ -6,10 +6,7 @@ import com.project.project.dto.Hotel_DTOs.HotelDTO;
 import com.project.project.dto.RentACarDTO;
 import com.project.project.dto.RentACarInfoDTO;
 import com.project.project.exceptions.*;
-import com.project.project.model.AirlineCompanyAdmin;
-import com.project.project.model.HotelAdmin;
-import com.project.project.model.RentACar;
-import com.project.project.model.RentACarAdmin;
+import com.project.project.model.*;
 import com.project.project.service.AirlineCompanyService;
 import com.project.project.service.HotelService;
 import com.project.project.service.RentACarService;
@@ -63,8 +60,8 @@ public class SystemAdminController {
     public ResponseEntity createRentACar(@RequestBody RentACarInfoDTO rentACarInfoDTO) {
         try {
 
-            RentACarInfoDTO rentACar = systemAdminService.createRentACar(rentACarInfoDTO);
-            return new ResponseEntity<RentACarInfoDTO>(rentACar, HttpStatus.CREATED);
+            RentACar rentACar = systemAdminService.createRentACar(rentACarInfoDTO);
+            return new ResponseEntity<RentACar>(rentACar, HttpStatus.CREATED);
 
         } catch (RentACarAlreadyExist rentACarAlreadyExist) {
 
@@ -80,7 +77,7 @@ public class SystemAdminController {
     )
     public ResponseEntity createAirline(@RequestBody AirlineCompanyDTO airlineCompanyDTO) throws AirlineCompanyAlreadyExist {
         try {
-            AirlineCompanyDTO airline = systemAdminService.createAirlineCompany(airlineCompanyDTO);
+            AirlineCompany airline = systemAdminService.createAirlineCompany(airlineCompanyDTO);
             return new ResponseEntity<>(airline, HttpStatus.CREATED);
         }catch (AirlineCompanyAlreadyExist airlineCompanyAlreadyExist) {
             airlineCompanyAlreadyExist.printStackTrace();
