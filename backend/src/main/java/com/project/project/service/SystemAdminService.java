@@ -4,6 +4,7 @@ import com.project.project.dto.AirlineCompanyDTO;
 import com.project.project.dto.Hotel_DTOs.HotelDTO;
 import com.project.project.dto.Hotel_DTOs.HotelFloorDTO;
 import com.project.project.dto.RentACarDTO;
+import com.project.project.dto.RentACarInfoDTO;
 import com.project.project.exceptions.*;
 import com.project.project.model.*;
 import com.project.project.model.Hotel_Model.Hotel;
@@ -114,25 +115,30 @@ public class SystemAdminService {
         }
     }
 
-    public RentACar createRentACar(RentACarDTO rentACarDTO) throws RentACarAlreadyExist {
+    public RentACarInfoDTO createRentACar(RentACarInfoDTO rentACarInfoDTO) throws RentACarAlreadyExist {
 
-        Optional<RentACar> service = rentACarRepository.findOneByName(rentACarDTO.getName());
+        Optional<RentACar> service = rentACarRepository.findOneByName(rentACarInfoDTO.getName());
 
         if(service.isPresent()){
-            throw new RentACarAlreadyExist(rentACarDTO.getName());
+            throw new RentACarAlreadyExist(rentACarInfoDTO.getName());
         }
         RentACar rentACar = new RentACar();
-        rentACar.setId(rentACarDTO.getId());
-        rentACar.setName(rentACarDTO.getName());
-        rentACar.setAddress(rentACarDTO.getAddress());
-        rentACar.setPromotionalDescription(rentACarDTO.getPromotionalDescription());
-        rentACar.setBranches(rentACarDTO.getBranches());
-        rentACar.setVehicles(rentACarDTO.getVehicles());
-        rentACar.setAdmins(rentACarDTO.getAdmins());
+        rentACar.setId(rentACarInfoDTO.getId());
+        rentACar.setName(rentACarInfoDTO.getName());
+        rentACar.setAddress(rentACarInfoDTO.getAddress());
+        rentACar.setPromotionalDescription(rentACarInfoDTO.getPromotionalDescription());
+
+
+        rentACar.setBranches(new HashSet<String>());
+        rentACar.setVehicles(new HashSet<Vehicle>());
+        rentACar.setAdmins(new HashSet<RentACarAdmin>());
         rentACar.setRating(0);
         rentACar.setTotal_rating(0);
 
-        return rentACarRepository.save(rentACar);
+        MapLocation ml = mapLocationRepository.save(rentACarInfoDTO.getMapLocation());
+        rentACar.setMapLocation(ml);
+
+        return new RentACarInfoDTO(rentACarRepository.save(rentACar));
     }
 
     public AirlineCompanyDTO createAirlineCompany(AirlineCompanyDTO airlineCompanyDTO) throws AirlineCompanyAlreadyExist {

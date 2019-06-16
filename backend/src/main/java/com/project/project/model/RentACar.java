@@ -37,6 +37,10 @@ public class RentACar {
     @Column(name = "branches")
     private Set<String> branches;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "location")
+    private MapLocation mapLocation;
+
     public RentACar() {}
 
     public Long getId() {
@@ -109,5 +113,13 @@ public class RentACar {
 
     public void setTotal_rating(double total_rating) {
         this.total_rating = total_rating;
+    }
+
+    public MapLocation getMapLocation() {
+        return mapLocation;
+    }
+
+    public void setMapLocation(MapLocation mapLocation) {
+        this.mapLocation = mapLocation;
     }
 }

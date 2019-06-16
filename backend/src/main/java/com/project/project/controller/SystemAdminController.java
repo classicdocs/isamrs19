@@ -4,6 +4,7 @@ package com.project.project.controller;
 import com.project.project.dto.AirlineCompanyDTO;
 import com.project.project.dto.Hotel_DTOs.HotelDTO;
 import com.project.project.dto.RentACarDTO;
+import com.project.project.dto.RentACarInfoDTO;
 import com.project.project.exceptions.*;
 import com.project.project.model.AirlineCompanyAdmin;
 import com.project.project.model.HotelAdmin;
@@ -59,11 +60,11 @@ public class SystemAdminController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity createRentACar(@RequestBody RentACarDTO rentACarDTO) {
+    public ResponseEntity createRentACar(@RequestBody RentACarInfoDTO rentACarInfoDTO) {
         try {
 
-            RentACar rentACar = systemAdminService.createRentACar(rentACarDTO);
-            return new ResponseEntity<RentACarDTO>(new RentACarDTO(rentACar), HttpStatus.CREATED);
+            RentACarInfoDTO rentACar = systemAdminService.createRentACar(rentACarInfoDTO);
+            return new ResponseEntity<RentACarInfoDTO>(rentACar, HttpStatus.CREATED);
 
         } catch (RentACarAlreadyExist rentACarAlreadyExist) {
 

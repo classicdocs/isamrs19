@@ -1,11 +1,15 @@
+-- map location
+insert into map_location(id, latitude, longitude) values
+(1, 11.11, 22.22);
+
 -- destinacije
 insert into destination (id,airport,country,name,zip) values (1,'John F. Kennedy', 'USA', 'New York', 'JFK');
 insert into destination (id,airport,country,name,zip) values (2,'Nikola Tesla', 'Serbia', 'Belgrade', 'BGD');
 insert into destination (id,airport,country,name,zip) values (3,'Heathrow', 'Englend', 'London', 'LHR');
 
 -- aviokompanije
-insert into airline_company (id,description, address, name, average_rating,total_rating) values (1, 'Cheap flights!', 'Serbia/Belgrade', 'AirSerbia', 4, 1);
-insert into airline_company (id,description, address, name, average_rating,total_rating) values (2, 'Air France is a french airline company', 'France/Paris', 'AirFrance', 4.5, 2);
+insert into airline_company (id,description, address, name, average_rating,total_rating, location) values (1, 'Cheap flights!', 'Serbia/Belgrade', 'AirSerbia', 4, 1, 1);
+insert into airline_company (id,description, address, name, average_rating,total_rating, location) values (2, 'Air France is a french airline company', 'France/Paris', 'AirFrance', 4.5, 2, 1);
 
 -- lista destinacija u aviokompaniji
 insert into airline_company_destinations(airline_company_id, destinations ) values (1, "New York JFK");
@@ -36,8 +40,7 @@ insert into hotel_destination(id, country, name, zip) values
 (10, 'Italia', 'Barri', 'BAR');
 
 
-insert into map_location(id, latitude, longitude) values
-(1, 11.11, 22.22);
+
 
 insert into hotel(id,name,address,description,
     num_of_floors,rooms_by_floor,location,destination_id, average_rating,total_rating)
@@ -56,9 +59,9 @@ insert into hotel(id,name,address,description,
 
 ------------------------------------------------------------------------------------------------------------------------
 --rentacar servis 1
-insert into rentacar (id,name,address,promotional_description,rating, total_rating) values (1,'Drive X', 'North Road 7 London','DriveX has been continually growing ever since its foundation in 1989 in London, Great Britain, with branches all over the country.At all our locations we offer customers affordable and trusted rent a car services.',4,1);
+insert into rentacar (id,name,address,promotional_description,rating, total_rating, location) values (1,'Drive X', 'North Road 7 London','DriveX has been continually growing ever since its foundation in 1989 in London, Great Britain, with branches all over the country.At all our locations we offer customers affordable and trusted rent a car services.',4,1, 1);
 --rentacar servis 2
-insert into rentacar (id,name,address,promotional_description, rating, total_rating) values (2,'EcoCar', '2nd Street 63 Paris','With over 60 years of experience in the industry, you can be sure that whether you are looking for a family car, sedan or prestige car for your business or leisure trips, EcoCar has the vehicle to meet every car rental need.Make the most out of our large range of services to make car rental experience a unique experience',4.5,2);
+insert into rentacar (id,name,address,promotional_description, rating, total_rating, location) values (2,'EcoCar', '2nd Street 63 Paris','With over 60 years of experience in the industry, you can be sure that whether you are looking for a family car, sedan or prestige car for your business or leisure trips, EcoCar has the vehicle to meet every car rental need.Make the most out of our large range of services to make car rental experience a unique experience',4.5,2, 1);
 --vozilo 1
 insert into vehicle (id,name,vehicle_manufacturer,vehicle_model,vehicle_type,number_of_passengers,year_of_production,price_per_day,average_rating,total_rating) values (99,'Test vehicle','Audi','A4','Sedan',4,2014,50,4,1);
 --vozilo 1 u servis 1

@@ -3,12 +3,15 @@ package com.project.project.service;
 import com.project.project.dto.RentACarDTO;
 import com.project.project.exceptions.RentACarNotFound;
 import com.project.project.dto.RentACarInfoDTO;
+import com.project.project.model.MapLocation;
 import com.project.project.model.RentACar;
 import com.project.project.model.Vehicle;
+import com.project.project.repository.MapLocationRepository;
 import com.project.project.repository.RentACarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -16,6 +19,9 @@ public class RentACarService {
 
     @Autowired
     private RentACarRepository rentACarRepository;
+
+    @Autowired
+    private MapLocationRepository mapLocationRepository;
 
     public RentACar save(RentACarDTO rentACarDTO) throws RentACarNotFound {
 
@@ -61,6 +67,19 @@ public class RentACarService {
 
     public Set<RentACarDTO> findAllRentACars(){
         return rentACarRepository.findAllRentACars();
+    }
+
+    public RentACarInfoDTO changeLocation(Long id, MapLocation mapLocation) throws RentACarNotFound{
+
+        RentACar rentACar = rentACarRepository.findOneById(id);
+
+        MapLocation ml = mapLocationRepository.save(mapLocation);
+        rentACar.setMapLocation(ml);
+        rentACar = rentACarRepository.save(rentACar);
+
+
+        return new RentACarInfoDTO(rentACar);
+
     }
 
 }

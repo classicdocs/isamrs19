@@ -1,5 +1,6 @@
 package com.project.project.dto;
 
+import com.project.project.model.MapLocation;
 import com.project.project.model.RentACar;
 
 import javax.validation.constraints.NotNull;
@@ -18,6 +19,8 @@ public class RentACarInfoDTO {
 
     private double rating;
 
+    private MapLocation mapLocation;
+
     public RentACarInfoDTO() {
     }
 
@@ -27,6 +30,7 @@ public class RentACarInfoDTO {
         this.address = rentACar.getAddress();
         this.promotionalDescription = rentACar.getPromotionalDescription();
         this.rating = rentACar.getRating();
+        this.mapLocation = rentACar.getMapLocation();
     }
 
     public Long getId() {
@@ -67,5 +71,13 @@ public class RentACarInfoDTO {
 
     public void setRating(double rating) {
         this.rating = rating;
+    }
+
+    public MapLocation getMapLocation() {
+        return mapLocation;
+    }
+
+    public void setMapLocation(MapLocation mapLocation) {
+        this.mapLocation = mapLocation;
     }
 }

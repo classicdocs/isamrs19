@@ -3,6 +3,8 @@ package com.project.project.controller;
 
 import com.project.project.dto.RentACarDTO;
 import com.project.project.dto.RentACarInfoDTO;
+import com.project.project.exceptions.RentACarNotFound;
+import com.project.project.model.MapLocation;
 import com.project.project.model.RentACar;
 import com.project.project.model.RentACarAdmin;
 import com.project.project.model.Vehicle;
@@ -49,5 +51,23 @@ public class RentACarController {
             }
         }
         return new ResponseEntity<Set<RentACarDTO>>(rentACarDTOS,HttpStatus.OK);
+    }
+
+    @PutMapping(
+            value = "/{id}/changeLocation",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity changeLocation(@PathVariable("id") Long rentACarID,
+                                         @RequestBody MapLocation mapLocation) {
+        RentACarInfoDTO rentACarInfoDTO= null;
+        try {
+            rentACarInfoDTO = rentACarService.changeLocation(rentACarID, mapLocation);
+            return new ResponseEntity<RentACarInfoDTO>(rentACarInfoDTO, HttpStatus.OK);
+        }catch (RentACarNotFound notFound){
+            notFound.printStackTrace();
+            return new ResponseEntity<String>(notFound.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
     }
 }
