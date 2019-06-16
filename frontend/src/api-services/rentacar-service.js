@@ -1,7 +1,8 @@
 import Axios from 'axios'
 
 const ENDPOINTS = {
-    RENTACAR_SERVICE: 'rentACars/'
+    RENTACAR_SERVICE: 'rentACars/',
+    CHANGE_LOCATION: '/changeLocation/'
 };
 
 export default {
@@ -18,6 +19,9 @@ export default {
     },
     getAll() {
         return Axios.get(ENDPOINTS.RENTACAR_SERVICE);
+    },
+    changeLocation(rac_id, mapLocation){
+      return Axios.put(ENDPOINTS.RENTACAR_SERVICE + rac_id + ENDPOINTS.CHANGE_LOCATION, mapLocation);
     }
 }
 

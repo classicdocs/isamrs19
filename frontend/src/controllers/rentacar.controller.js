@@ -14,6 +14,9 @@ export default {
     },
     getAll() {
         return RentACarService.getAll();
+    },
+    changeLocation(rac_id, mapLocation){
+      return RentACarService.changeLocation(rac_id, mapLocation);
     }
 }
 
