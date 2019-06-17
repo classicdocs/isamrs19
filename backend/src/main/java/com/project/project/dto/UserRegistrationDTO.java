@@ -1,5 +1,6 @@
 package com.project.project.dto;
 
+import com.project.project.model.Role;
 import com.project.project.model.User;
 
 import javax.validation.constraints.NotNull;
@@ -35,6 +36,8 @@ public class UserRegistrationDTO {
 
     private Set<LuggageDTO> luggages = new HashSet<>();
 
+    private String role;
+
     public UserRegistrationDTO() {
     }
 
@@ -47,6 +50,7 @@ public class UserRegistrationDTO {
         this.email = user.getEmail();
         this.address = user.getAddress();
         this.phone = user.getPhone();
+        this.role = user.getRole().getRole();
     }
 
     public Set<LuggageDTO> getLuggages() {
@@ -127,5 +131,13 @@ public class UserRegistrationDTO {
 
     public void setPassport(String passport) {
         this.passport = passport;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

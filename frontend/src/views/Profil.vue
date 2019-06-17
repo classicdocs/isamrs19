@@ -78,6 +78,8 @@ export default {
         .then((response) => {
           loader.hide();
           this.user = new User(response.data);
+          if (this.user.role !== "User")
+            this.$router.push({name: "flights"});
         })
         .catch((error) => {
           alert(error.response.data);

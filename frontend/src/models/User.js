@@ -1,10 +1,10 @@
 import * as _ from 'lodash';
 
 const USER_ROLES = {
-    SYSADMIN: 'syadmin',
+    SYSADMIN: 'System Admin',
     USER: 'User',
     AIRLINEADMIN: 'Airline Company Admin',
-    HOTELADMIN: 'hoteladmin',
+    HOTELADMIN: 'Hotel Admin',
     RENTACARADMIN: 'RentACar Admin',
 };
 
