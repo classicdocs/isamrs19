@@ -5,7 +5,7 @@ import javax.persistence.*;
 import static javax.persistence.InheritanceType.JOINED;
 
 @Entity
-@Table(name="user")
+@Table(name="users")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 public abstract class User {
 
