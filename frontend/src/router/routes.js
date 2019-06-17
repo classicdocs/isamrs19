@@ -15,34 +15,58 @@ import ChangePassword from "../views/ChangePassword.vue";
 import VehicleReservation from "../components/RentACar/VehicleReservation.vue";
 import MyReservations from "../views/MyReservations.vue";
 
+import store from "@/store";
+
 export const routes = [
     {
       path: "*",
-      redirect: '/flights'
+      redirect() {
+          if (store.getters.isHotelAdmin) {
+              return '/hotel-service/' + store.getters.activeUser.idAdminOf;
+          }
+          if (store.getters.isAirlineAdmin) {
+            return '/airline-company/' + store.getters.activeUser.idAdminOf;
+          }
+          if (store.getters.isRentacarAdmin) {
+            return '/rentacar-service/' + store.getters.activeUser.idAdminOf;
+          }
+          if (store.getters.isSysAdmin) {
+            return "/sys-admin";
+          }
+
+          return "/flights";
+      }
     },
     {
       path: "/airline-company/:id",
       name: "airline-company",
       component: AirlineCompany,
       meta: {
-        airlineadmin: true,
-      }
+        guest: true,
+        user: true,
+        airlineAdmin: true,
+      },
+      props: true,
     },
     {
       path: "/rentacar-service/:id",
       name: "rentacar-service",
       component: () => import("../views/RentACarService.vue"),
       meta: {
-        rentacaradmin: true,
-      }
+        guest: true,
+        user: true,
+        rentacarAdmin: true,
+      },
     },
     {
       path: "/hotel-service/:id",
       name: "hotel-service",
       component: () => import("../views/HotelService.vue"),
       meta: {
-        hoteladmin: true,
-      }
+        guest: true,
+        user: true,
+        hotelAdmin: true,
+      },
     },
     {
       path: "/sys-admin",
@@ -55,7 +79,10 @@ export const routes = [
     {
       path: "/flight-reservation",
       name: "flight-reservation",
-      component: FlightReservation
+      component: FlightReservation,
+      meta: {
+        user: true,
+      }
     },
     {
       path: "/registration",
@@ -71,57 +98,81 @@ export const routes = [
       component: Login,
       meta: {
         guest: true,
-      },
+      }
     },
     {
       path: "/logout",
       name: "logout",
       component: Logout,
+      meta: {
+        logged: true
+      }
     },
     {
       path: "/users/:id/profil",
       name: "user-profil",
       component: Profil,
       meta: {
-        guest: true,
+        logged: true,
       },
     },
     {
       path: "/flights",
       name: "flights",
       component: Flights,
+      meta: {
+        guest: true,
+        user: true,
+      }
     },
     {
       path: "/hotels",
       name: "hotels",
       component: Hotels,
+      meta: {
+        guest: true,
+        user: true,
+      }
     },
     {
       path: "/rent-a-cars",
       name: "rent-a-cars",
       component: RentACars,
+      meta: {
+        guest: true,
+        user: true,
+      }
     },
     {
       path: "/friends",
       name: "friends",
       component: Friends,
+      meta: {
+        user: true,
+      }
     },
     {
       path: "/change-password",
       name: "change-password",
-      component: ChangePassword
+      component: ChangePassword,
+      meta: {
+        admin: true
+      }
     },
     {
       path: "/vehicle-reservation",
       name: "vehicle-reservation",
       component : VehicleReservation,
+      meta: {
+        user: true,
+      }
     },
     {
       path: "/:id/my-reservations/",
       name: "my-reservations",
       component : MyReservations,
       meta: {
-        user: true
+        user:true
       }
     }
   ];

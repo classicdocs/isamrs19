@@ -93,6 +93,9 @@ export default {
                 break;
               }
             }
+            store.commit("loggedFirstTime");
+            console.log("USER: ");
+            console.log(store.getters.activeUser);
             this.$router.push(path);
           })
           .catch()
