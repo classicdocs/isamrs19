@@ -589,7 +589,7 @@ public class HotelService {
     }
 
     private Boolean isDiscountPossible(Room room, RoomDiscount roomDiscount) throws ParseException{
-        DateFormat format = new SimpleDateFormat("YYYY-mm-dd", Locale.ENGLISH);
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
         Date startDate = format.parse(roomDiscount.getStartDate());
         Date endDate = format.parse(roomDiscount.getEndDate());
@@ -597,6 +597,14 @@ public class HotelService {
         for (RoomDiscount rd : room.getRoomDiscounts()) {
             Date existingStart = format.parse(rd.getStartDate());
             Date existingEnd = format.parse(rd.getEndDate());
+
+            if(overlap(startDate, endDate, existingStart, existingEnd)){
+                return false;
+            }
+        }
+        for (RoomTaken roomTaken : room.getRoomTaken()) {
+            Date existingStart = format.parse(roomTaken.getStartDate());
+            Date existingEnd = format.parse(roomTaken.getEndDate());
 
             if(overlap(startDate, endDate, existingStart, existingEnd)){
                 return false;
