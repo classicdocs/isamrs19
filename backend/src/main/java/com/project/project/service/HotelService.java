@@ -63,6 +63,9 @@ public class HotelService {
     @Autowired
     private MapLocationRepository mapLocationRepository;
 
+    @Autowired
+    private RoomDiscountRepository roomDiscountRepository;
+
     public Hotel findOneById(Long id) throws HotelNotFound{
         Optional<Hotel> h = hotelRepository.findOneById(id);
         if(h.isPresent()){
@@ -164,6 +167,8 @@ public class HotelService {
             room.setRoomNumber(roomDTO.getRoomNumber());
             room.setRoomTaken(roomDTO.getRoomTaken());
             room.setSpecialPrices(roomDTO.getSpecialPrices());
+
+            room.setRoomDiscounts(roomDTO.getRoomDiscounts());
 
             room = roomRepository.save(room);
 
@@ -554,6 +559,52 @@ public class HotelService {
         }
     }
 
+    public RoomDiscount addRoomDiscount(Long hotelID, Long roomID, RoomDiscount roomDiscount) throws  UnableToAddDiscount, HotelNotFound, ParseException{
+        Optional<Hotel> hotel = hotelRepository.findOneById(hotelID);
+        if(hotel.isPresent()){
+            for (HotelFloor hf : hotel.get().getFloors()) {
+                for (Room r: hf.getRoomsOnFloor()) {
+                    if(r.getId() == roomID){
+
+                        boolean possible = isDiscountPossible(r, roomDiscount);
+                        if(possible){
+                            roomDiscount = roomDiscountRepository.save(roomDiscount);
+                            Set<RoomDiscount> roomDiscounts = r.getRoomDiscounts();
+                            roomDiscounts.add(roomDiscount);
+                            r.setRoomDiscounts(roomDiscounts);
+                            Hotel h = hotelRepository.save(hotel.get());
+
+
+                            return roomDiscount;
+                        }else {
+                            throw new UnableToAddDiscount();
+                        }
+                    }
+                }
+            }
+            throw new UnableToAddDiscount();
+        }else{
+            throw new HotelNotFound(hotelID);
+        }
+    }
+
+    private Boolean isDiscountPossible(Room room, RoomDiscount roomDiscount) throws ParseException{
+        DateFormat format = new SimpleDateFormat("YYYY-mm-dd", Locale.ENGLISH);
+
+        Date startDate = format.parse(roomDiscount.getStartDate());
+        Date endDate = format.parse(roomDiscount.getEndDate());
+
+        for (RoomDiscount rd : room.getRoomDiscounts()) {
+            Date existingStart = format.parse(rd.getStartDate());
+            Date existingEnd = format.parse(rd.getEndDate());
+
+            if(overlap(startDate, endDate, existingStart, existingEnd)){
+                return false;
+            }
+        }
+        return true;
+
+    }
 
     private boolean checkDate(HotelDTO hotel, String checkIn, String CheckOut, int numOfPeople) throws ParseException {
         int foundPlaces = 0;
