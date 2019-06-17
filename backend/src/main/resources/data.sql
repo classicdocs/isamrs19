@@ -12,9 +12,9 @@ insert into airline_company (id,description, address, name, average_rating,total
 insert into airline_company (id,description, address, name, average_rating,total_rating, location) values (2, 'Air France is a french airline company', 'France/Paris', 'AirFrance', 4.5, 2, 1);
 
 -- lista destinacija u aviokompaniji
-insert into airline_company_destinations(airline_company_id, destinations ) values (1, "New York JFK");
-insert into airline_company_destinations(airline_company_id, destinations ) values (1, "Belgrade BGD");
-insert into airline_company_destinations(airline_company_id, destinations ) values (1, "London LHR");
+insert into airline_company_destinations(airline_company_id, destinations ) values (1, 'New York JFK');
+insert into airline_company_destinations(airline_company_id, destinations ) values (1, 'Belgrade BGD');
+insert into airline_company_destinations(airline_company_id, destinations ) values (1, 'London LHR');
 --
 
 -- hotel
