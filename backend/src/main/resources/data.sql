@@ -76,22 +76,22 @@ insert into role (id,role) values (4,'Hotel Admin');
 insert into role (id,role) values (5,'System Admin');
 
 --obicni korisnici
-insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('RegisteredUser',1,'adresa','email','ime','prezime','user1','12345','5154',1,null,null,null, FALSE);
-insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('RegisteredUser',2,'adresa1','email1','ime1','prezime1','user2','12345','51541',1,null,null,null, FALSE);
-insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('RegisteredUser',7,'adresa6','email6','ime6','prezime6','user3','12345','51546',1,null,null,null, FALSE);
+insert into "user" (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('RegisteredUser',1,'adresa','email','ime','prezime','user1','12345','5154',1,null,null,null, FALSE);
+insert into "user" (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('RegisteredUser',2,'adresa1','email1','ime1','prezime1','user2','12345','51541',1,null,null,null, FALSE);
+insert into "user"(dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('RegisteredUser',7,'adresa6','email6','ime6','prezime6','user3','12345','51546',1,null,null,null, FALSE);
 
 --rentacar admini
-insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('RentACarAdmin',3,'adresa2','email2','ime2','prezime2','rentacaradmin','12345','51542',2,1,null,null, FALSE);
+insert into "user" (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('RentACarAdmin',3,'adresa2','email2','ime2','prezime2','rentacaradmin','12345','51542',2,1,null,null, FALSE);
 
 --airline company admini
-insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('AirlineCompanyAdmin',4,'adresa3','email3','ime3','prezime3','airlineadmin','12345','51543',3,null,1,null, FALSE);
+insert into "user" (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('AirlineCompanyAdmin',4,'adresa3','email3','ime3','prezime3','airlineadmin','12345','51543',3,null,1,null, FALSE);
 
 --hotel admini
-insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('HotelAdmin',5,'adresa4','email4','ime4','prezime4','hoteladmin','12345','51544',4,null,null,1, FALSE);
-insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('HotelAdmin',15,'adresa4','email4','ime4','prezime4','a','12345','51544',4,null,null,4, TRUE);
+insert into "user" (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('HotelAdmin',5,'adresa4','email4','ime4','prezime4','hoteladmin','12345','51544',4,null,null,1, FALSE);
+insert into "user" (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('HotelAdmin',15,'adresa4','email4','ime4','prezime4','a','12345','51544',4,null,null,4, TRUE);
 
 --system admini
-insert into user (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('SystemAdmin',6,'adresa5','email5','ime5','prezime5','systemadmin','12345','51545',5,null,null,null, FALSE);
+insert into "user" (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('SystemAdmin',6,'adresa5','email5','ime5','prezime5','systemadmin','12345','51545',5,null,null,null, FALSE);
 
 --dodavanje filijala
 insert into branch_offices (id, branches) values (1,'Belgrade');
@@ -99,16 +99,16 @@ insert into branch_offices (id, branches) values (1,'Paris');
 insert into branch_offices (id, branches) values (1,'London');
 
 -- spratovi
-insert into hotel_floor(id,level,max_rooms) values (1,1,15);
-insert into hotel_floor(id,level,max_rooms) values (2,2,15);
-insert into hotel_floor(id,level,max_rooms) values (3,3,15);
-insert into hotel_floor(id,level,max_rooms) values (4,4,15);
+insert into hotel_floor(id,"level",max_rooms) values (1,1,15);
+insert into hotel_floor(id,"level",max_rooms) values (2,2,15);
+insert into hotel_floor(id,"level",max_rooms) values (3,3,15);
+insert into hotel_floor(id,"level",max_rooms) values (4,4,15);
 --
-insert into hotel_floor(id,level,max_rooms) values (5,1,15);
-insert into hotel_floor(id,level,max_rooms) values (6,2,15);
+insert into hotel_floor(id,"level",max_rooms) values (5,1,15);
+insert into hotel_floor(id,"level",max_rooms) values (6,2,15);
 
-insert into hotel_floor(id,level,max_rooms) values (7,1,30);
-insert into hotel_floor(id,level,max_rooms) values (8,2,30);
+insert into hotel_floor(id,"level",max_rooms) values (7,1,30);
+insert into hotel_floor(id,"level",max_rooms) values (8,2,30);
 
 -- hoteli_spratovi
 insert into hotel_floors(hotel_id,floors_id) values (1,1);
