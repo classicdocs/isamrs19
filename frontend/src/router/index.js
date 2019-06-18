@@ -62,7 +62,7 @@ router.beforeEach((to, from, next) => {
         }
         return next();
     }
-    
+
     // hotel admin but can't go to that route
     if (store.getters.isHotelAdmin && !to.meta.hotelAdmin && !to.meta.admin && !to.meta.logged) {
         return next({name: "hotel-service", params: {id: store.getters.activeUser.idAdminOf}});
@@ -75,9 +75,12 @@ router.beforeEach((to, from, next) => {
 
     // hotel admin can't go to other user profiles
     if (store.getters.isHotelAdmin && to.meta.logged) {
-        if (to.params.id != store.getters.activeUser.id)
-            return next({name: "hotel-service", params: {id: store.getters.activeUser.idAdminOf}});
+        if (to.params.id) {
+            if (to.params.id != store.getters.activeUser.id)
+                return next({name: "hotel-service", params: {id: store.getters.activeUser.idAdminOf}});
+        }
         return next();
+        
     }
 
     // rentacar admin but can't go to that route
