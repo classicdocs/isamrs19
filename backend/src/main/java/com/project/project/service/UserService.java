@@ -97,7 +97,7 @@ public class UserService {
         msg += "<p>You have successfully signed up as " + firstname + " " + lastname + "</p>";
         msg += "<p>Your username: " + username + "</p>";
         msg += "<p>To complete your registration,please click the link below and verify your registration:</p>";
-        msg += "<p><a href='" + frontend + "/verify-account/" + id + "'>link</a></p>";
+        msg += "<p><a href='" + frontend + "/api/verify-account/" + id + "'>link</a></p>";
         msg += "</body></html>";
 
         emailService.prepareAndSend(subject, msg);
