@@ -253,6 +253,7 @@
 
 
 
+
               <v-stepper-content step="4">
                 <!-- <img src="@/assets/moskva.jpg"> -->
                       <h3 class="headline mb-0">Confirm reservation</h3>
@@ -754,6 +755,17 @@ export default {
                       this.notAvailableRooms.push(room);
                     }
                 }
+              })
+
+              room.roomDiscounts.forEach(rd => {
+                  var startDiscountDate = new Date(rd.startDate);
+                  var endDiscountDate = new Date(rd.endDate);
+
+                  if(!(endDate < startDiscountDate || startDate > endDiscountDate)){
+                      if(this.notAvailableRooms.indexOf(room) == -1){
+                          this.notAvailableRooms.push(room);
+                      }
+                  }
               })
             })
           })

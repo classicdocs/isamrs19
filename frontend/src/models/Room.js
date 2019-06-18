@@ -7,6 +7,7 @@ export default class Room {
         this.numberOfBeds = null,
         this.roomTaken = [],
         this.specialPrices = [],
+        this.roomDiscounts = [],
         this.hotelFloor = new HotelFloor()
     }
   
@@ -16,6 +17,7 @@ export default class Room {
         this.numberOfBeds = null;
         this.roomTaken = [];
         this.specialPrices = [];
+        this.roomDiscounts = [];
         this.hotelFloor.reset();
     }
   }

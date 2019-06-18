@@ -75,8 +75,10 @@ router.beforeEach((to, from, next) => {
 
     // hotel admin can't go to other user profiles
     if (store.getters.isHotelAdmin && to.meta.logged) {
-        if (to.params.id != store.getters.activeUser.id)
-            return next({name: "hotel-service", params: {id: store.getters.activeUser.idAdminOf}});
+        if (to.params.id){
+            if (to.params.id != store.getters.activeUser.id)
+                return next({name: "hotel-service", params: {id: store.getters.activeUser.idAdminOf}});
+        }
         return next();
     }
 

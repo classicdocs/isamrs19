@@ -630,7 +630,8 @@ public class HotelService {
                 // ukoliko ima rezervacija
                 }else{
                     //2019-05-22
-                    DateFormat format = new SimpleDateFormat("YYYY-mm-dd", Locale.ENGLISH);
+                    //DateFormat format = new SimpleDateFormat("YYYY-mm-dd", Locale.ENGLISH);
+                    DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 //                    DateFormat format2 = new SimpleDateFormat("YYYY/mm/dd", Locale.ENGLISH);
 
                     Date checkInDate = format.parse(checkIn);

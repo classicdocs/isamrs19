@@ -36,6 +36,9 @@ export default {
     },
     changeLocation(hotel_id, mapLocation){
       return HotelsService.changeLocation(hotel_id, mapLocation);
+    },
+    addRoomDiscount(hotel_id, room_id, roomDiscount){
+      return HotelsService.addRoomDiscount(hotel_id, room_id, roomDiscount);
     }
 }
 
