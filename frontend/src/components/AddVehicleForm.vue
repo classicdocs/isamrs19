@@ -111,11 +111,91 @@
               Year of production: {{ vehicle.yearOfProduction }} <br/>
               Price per day: {{ vehicle.pricePerDay }} euros <br/>
             </v-flex>
+            <v-flex>
+              <v-btn class="vehicleButtons" color="warning" @click="showEditDialog(vehicle)">Edit vehicle</v-btn>
+              <v-btn class="vehicleButtons" color="error" @click="showRemoveDialog(vehicle)">Remove vehicle</v-btn>
+            </v-flex>
             </v-layout>
         </v-list-tile-content>
         </v-list-tile>
         </v-list>
         </v-card>
+        <v-dialog width="300" v-model="removeDialog">
+            <v-card
+            class="elevation-16 mx-auto"
+            >
+            <v-card-text>
+            <h2 id="yousure">Are you sure?</h2>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-actions class="justify-space-between">
+            <v-btn flat @click="cancelRemoving()">Cancel</v-btn>
+            <v-btn
+                color="error"
+                flat
+                @click="removeVehicle()"
+            >
+                Remove
+            </v-btn>
+            </v-card-actions>
+        </v-card>
+        </v-dialog>
+        <v-dialog v-model="editDialog" persistent max-width="600px">        
+            <v-card>
+                <v-form
+                ref="editForm"
+                v-model="editFormValid"
+                lazy-validation
+                >
+                <v-card-title>
+                <span class="headline">Edit a vehicle</span>
+                </v-card-title>
+                <v-card-text>
+                <v-container grid-list-md>
+                    <v-layout wrap>
+                    <v-flex xs12>
+                        <v-text-field v-model="vehicleToEdit.name" :rules="vehicle_name_rules"  label="Vehicle name*" required></v-text-field>
+                    </v-flex>                    
+                    <v-flex xs12>
+                        <v-select
+                            :items="['Hatchback', 'Sedan', 'Station wagon', 'SUV', 'Coupe']"
+                            v-model="vehicleToEdit.vehicleType"
+                            :rules="vehicle_type_rules"
+                            label="Vehicle type*"
+                            required
+                            @change="setPassengers(carType)"
+                        ></v-select>
+                    </v-flex>
+                    <v-flex xs12 sm6 md4>
+                        <span>Number of passengers:</span>
+                    </v-flex>
+                    <v-flex xs12 sm6 md4>
+                        <span>Year of production:</span>
+                    </v-flex>
+                    <v-flex xs12 sm6 md4>
+                        <span>Price per day (in Euros):</span>
+                    </v-flex>
+                    <v-flex xs12 sm6 md4>
+                        <number-input v-model="vehicleToEdit.numberOfPassengers" :min="1" :max="max_passengers" inline center controls></number-input>
+                    </v-flex>
+                    <v-flex xs12 sm6 md4>
+                        <number-input v-model="vehicleToEdit.yearOfProduction" :min="1990" :max="2019" inline center controls></number-input>
+                    </v-flex>
+                    <v-flex xs12 sm6 md4>
+                        <number-input v-model="vehicleToEdit.pricePerDay" :min="1" :max="1000" inline center controls></number-input>
+                    </v-flex>
+                    </v-layout>
+                </v-container>
+                <small>*indicates required field</small>
+                </v-card-text>
+                <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken" flat @click="cancelEditDialog">Cancel</v-btn>
+                <v-btn :disabled="!editFormValid" color="success" @click="edit">Save changes</v-btn>                
+                </v-card-actions>`
+                </v-form>
+            </v-card>
+      </v-dialog>
   </div>
 </template>
 
@@ -124,6 +204,8 @@
 import Vehicle from "@/models/Vehicle";
 import VehicleController from "@/controllers/vehicle.controller";
 import RentACarController from "@/controllers/rentacar.controller.js"
+import store from '@/store';
+import VehicleDelete from "@/models/VehicleDelete.js"
 
 export default {
     name: "AddVehicleForm",
@@ -155,18 +237,27 @@ export default {
         max_passengers: 10,
         passengers_enabled: false,
         vehicle: null,
-        vehicle_list: []
+        vehicle_list: [],
+        removeDialog:false,
+        VehicleToRemove: null,
+        vehicleDelete: new VehicleDelete(),
+        vehicleToEdit: new Vehicle(),
+        editDialog: false,
+        editFormValid: false,
     }),
     created() {
-        this.vehicle_list = [];
-
-        RentACarController.getVehicles(this.$route.params.id).then((response) => {
-        response.data.forEach(element => {
-          this.vehicle_list.push(element);
-        });
-      })
+        this.getData();
     },
     methods: {
+        getData() {
+            this.vehicle_list = [];
+
+            RentACarController.getVehicles(this.$route.params.id).then((response) => {
+              response.data.forEach(element => {
+                this.vehicle_list.push(element);
+              });
+            })
+        },
         onSubmit() {
             this.vehicle = new Vehicle(this.$route.params.id,this.vehicle_name,this.carManufacturer,this.carModel,this.carType,
             this.passengers,this.production,this.price_per_day);
@@ -174,6 +265,7 @@ export default {
             VehicleController.create(this.vehicle)
                 .then((response) => {
                    this.vehicle_list.push(response.data);
+                   store.commit("setSnack", {msg: "You have successfully added a new vehicle.", color:"success"})
             });
             this.reset();
             this.addVehicle = false;
@@ -235,6 +327,55 @@ export default {
             } else {
                 this.max_passengers = 5;
             }
+        },
+        showRemoveDialog(v) {
+            this.removeDialog = true;
+            this.VehicleToRemove = v;
+        },
+        cancelRemoving() {
+            this.removeDialog = false;
+            this.VehicleToRemove = null;
+        },
+        removeVehicle() {
+            this.vehicleDelete.vehicleId = this.VehicleToRemove.id;
+            this.vehicleDelete.rentACarId = this.$route.params.id;
+            VehicleController.remove(this.vehicleDelete)
+             .then((response) => {
+                store.commit("setSnack", {msg: "You have successfully removed a vehicle.", color:"success"})
+                let idx = this.vehicle_list.indexOf(this.VehicleToRemove);
+                if (idx != -1)
+                    this.vehicle_list.splice(idx,1);
+             })
+             .catch((error) => {
+                store.commit("setSnack", {msg: error.response.data, color:"error"})
+             });
+
+            this.removeDialog = false; 
+        },
+        showEditDialog(vehicle) {
+            this.vehicleToEdit.id = vehicle.id;
+            this.vehicleToEdit.name = vehicle.name;
+            this.vehicleToEdit.vehicleType = vehicle.vehicleType;
+            this.vehicleToEdit.pricePerDay = vehicle.pricePerDay;
+            this.vehicleToEdit.yearOfProduction = vehicle.yearOfProduction;
+            this.vehicleToEdit.numberOfPassengers = vehicle.numberOfPassengers;            
+            this.editDialog = true;
+        },
+        cancelEditDialog() {
+            this.editDialog = false;
+        },
+        edit() {
+            if(this.$refs.editForm.validate()) {
+                VehicleController.edit(this.vehicleToEdit)
+                 .then((response) => {
+                     this.getData();
+                     store.commit("setSnack", {msg: "Vehicle successfully edited.", color:"success"})
+                 })
+                 .catch((error) => {
+                     store.commit("setSnack", {msg: error.response.data, color:"error"})
+                 });
+            }
+            this.editDialog = false;
         }
     }
 }
@@ -250,6 +391,7 @@ export default {
 
 #carinfo {
     padding-left: 10px;
+    min-width: 400px;
 }
 
 #car {
@@ -270,6 +412,14 @@ export default {
 
 #pic {
   max-width: 200px;
+}
+
+.vehicleButtons {
+    margin-top: 30px;
+}
+
+#yousure {
+    text-align: center;
 }
 
 </style>

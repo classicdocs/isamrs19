@@ -14,4 +14,10 @@ export default {
   getSpecific(data) {
     return Axios.post(ENDPOINTS.VEHICLES + 'specific', data);
   },
+  remove(data) {
+    return Axios.post(ENDPOINTS.VEHICLES + 'remove', data);
+  },
+  edit(data) {
+    return Axios.put(ENDPOINTS.VEHICLES + 'edit', data);
+  }
 };
