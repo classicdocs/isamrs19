@@ -5,6 +5,7 @@ import com.project.project.exceptions.*;
 import com.project.project.model.*;
 import com.project.project.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -41,9 +42,21 @@ public class UserService {
     @Autowired
     private FlightWithDiscountRepository flightWithDiscountRepository;
 
-    public User findOne(String username) throws UsernameNotFound {
+    @Autowired
+    private EmailService emailService;
 
-        return userRepository.findOneByUsername(username).orElseThrow(() -> new UsernameNotFound(username));
+    @Value("${frontend}")
+    private String frontend;
+
+    public User findOne(String username) throws UsernameNotFound, UserNotVerified {
+
+        User userToReturn = userRepository.findOneByUsername(username).orElseThrow(() -> new UsernameNotFound(username));
+
+        if(!userToReturn.isVerified()) {
+            throw new UserNotVerified();
+        }
+
+        return userToReturn;
     }
 
     public User save(UserRegistrationDTO userRegistrationDTO) throws UsernameTaken {
@@ -65,11 +78,29 @@ public class UserService {
             newUser.setPhone(userRegistrationDTO.getPhone());
             Role role = roleRepository.findOneById(1L);
             newUser.setRole(role);
+            newUser.setVerified(false);
 
             newUser.setFriends(new HashSet<Friendship>());
 
+            sendRegistrationMail(newUser.getUsername(),newUser.getFirstname(),
+                    newUser.getLastname(), newUser.getId());
+
             return userRepository.save(newUser);
         }
+    }
+
+    private void sendRegistrationMail(String username, String firstname, String lastname, Long id) {
+
+        String subject = "User registration[" + username + "]";
+        String msg = "";
+        msg += "<html><body>";
+        msg += "<p>You have successfully signed up as " + firstname + " " + lastname + "</p>";
+        msg += "<p>Your username: " + username + "</p>";
+        msg += "<p>To complete your registration,please click the link below and verify your registration:</p>";
+        msg += "<p><a href='" + frontend + "/verify-account/" + id + "'>link</a></p>";
+        msg += "</body></html>";
+
+        emailService.prepareAndSend(subject, msg);
     }
 
     public UserRegistrationDTO update(UserRegistrationDTO userDTO, Long id) throws UsernameNotFound, UsernameTaken {
