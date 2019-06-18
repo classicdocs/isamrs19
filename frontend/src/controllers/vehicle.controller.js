@@ -9,5 +9,11 @@ export default {
   },
   getSpecific(data) {
     return VehicleApiService.getSpecific(data);
+  },
+  remove(data) {
+    return VehicleApiService.remove(data);
+  },
+  edit(data) {
+    return VehicleApiService.edit(data);
   }
 };
