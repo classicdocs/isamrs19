@@ -1,5 +1,7 @@
 package com.project.project.model;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.util.Set;
 

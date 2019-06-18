@@ -41,6 +41,9 @@ public abstract class User {
     @Column(name = "logged_first_time", nullable = false)
     private Boolean loggedFirstTime = false;
 
+    @Column(name = "verified", nullable = false)
+    private boolean verified;
+
     public User() {
     }
 
@@ -122,5 +125,13 @@ public abstract class User {
 
     public void setLoggedFirstTime(Boolean loggedFirstTime) {
         this.loggedFirstTime = loggedFirstTime;
+    }
+
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
     }
 }

@@ -5,11 +5,9 @@ import com.project.project.dto.LoginDTO;
 import com.project.project.dto.LoginResponseDTO;
 import com.project.project.exceptions.UserNotFound;
 import com.project.project.exceptions.UserNotLoggedFirstTime;
+import com.project.project.exceptions.UserNotVerified;
 import com.project.project.exceptions.UsernameNotFound;
-import com.project.project.model.AirlineCompanyAdmin;
-import com.project.project.model.HotelAdmin;
-import com.project.project.model.RentACarAdmin;
-import com.project.project.model.User;
+import com.project.project.model.*;
 import com.project.project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,6 +47,7 @@ public class LoginController {
                     break;
                 }
             }
+
             if (user.getPassword().equals(loginDTO.getPassword())){
                 return new ResponseEntity<LoginResponseDTO>(new LoginResponseDTO(user, idAdminOf), HttpStatus.OK);
             } else {
@@ -58,6 +57,8 @@ public class LoginController {
         } catch (UsernameNotFound e){
             e.printStackTrace();
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (UserNotVerified unv) {
+            return new ResponseEntity<String>(unv.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
