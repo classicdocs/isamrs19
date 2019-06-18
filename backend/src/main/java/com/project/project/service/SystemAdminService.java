@@ -166,6 +166,7 @@ public class SystemAdminService {
 
     public HotelAdmin createHotelAdmin(HotelAdmin hotelAdmin) throws AdminAlreadyExists{
 
+        hotelAdmin.setVerified(true);
         Optional<User> admin = userRepository.findOneByUsername(hotelAdmin.getUsername());
 
         if(admin.isPresent()){
@@ -186,6 +187,7 @@ public class SystemAdminService {
 
     public AirlineCompanyAdmin createAirlineAdmin(AirlineCompanyAdmin airlineCompanyAdmin) throws AdminAlreadyExists{
 
+        airlineCompanyAdmin.setVerified(true);
         Optional<User> admin = userRepository.findOneByUsername(airlineCompanyAdmin.getUsername());
 
         if(admin.isPresent()){
@@ -205,6 +207,7 @@ public class SystemAdminService {
 
     public RentACarAdmin createRentACarAdmin(RentACarAdmin rentACarAdmin) throws AdminAlreadyExists{
 
+        rentACarAdmin.setVerified(true);
         Optional<User> admin = userRepository.findOneByUsername(rentACarAdmin.getUsername());
 
         if(admin.isPresent()){
@@ -213,7 +216,6 @@ public class SystemAdminService {
         Role role = roleRepository.findOneById(2L);
         rentACarAdmin.setRole(role);
 
-        // FIXME, rentACar TREBA DA BUDE OPTIONAL ALI IMA PREVISE KONFLIKATA SA LOSMIJEVIM KODOM
         RentACar rentACar = rentACarRepository.findOneById(rentACarAdmin.getRentACar().getId());
         rentACar.getAdmins().add(rentACarAdmin);
         rentACarRepository.save(rentACar);
