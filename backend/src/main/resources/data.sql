@@ -217,3 +217,4 @@ insert into hotel_price_list(hotel_id, price_list_id) values
 (1,7);
 insert into hotel_price_list(hotel_id, price_list_id) values
 (1,8);
+
