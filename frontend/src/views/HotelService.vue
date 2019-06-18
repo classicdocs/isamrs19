@@ -31,6 +31,9 @@
                 <rooms-overview
                 v-bind:hotel="this.hotel">
                 </rooms-overview>
+
+
+                
             </v-layout>
           </v-container>
           

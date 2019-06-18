@@ -91,7 +91,7 @@
                             
                         </v-layout>
                         
-                        <v-subheader><h3>Choose additional services</h3></v-subheader>
+                        <!-- <v-subheader><h3>Choose additional services</h3></v-subheader>
                         <v-data-table v-if="myHotel != null"
                             v-model="selected"
                             :headers="priceListHeaders"
@@ -138,10 +138,10 @@
                             </tr>
                         </template>
                         
-                        </v-data-table>
+                        </v-data-table> -->
 
                         <span><v-subheader>Discount price</v-subheader></span>
-                        <number-input v-model="discountPrice" :min="0" inline center controls  :rules="[v => !!v || 'Discount price is required']"></number-input>
+                        <number-input v-if="myHotel != null" v-model="discountPrice" :min="0" inline center controls  :rules="[v => !!v || 'Discount price is required']"></number-input>
                     
 
                     </v-flex>
@@ -289,33 +289,6 @@ export default {
         myHotel: function(){
             this.hotel = store.getters.newHotel;
             return this.hotel;
-        },
-        price: function(){
-            this.hotel = store.getters.newHotel;
-            if(this.hotel != null && this.pickedRoom.numberOfBeds != null){
-                this.hotel.priceList.forEach(offer => {
-                    if(offer.type == 'OneBed' && this.pickedRoom.numberOfBeds == 1){
-                        alert( offer.price);
-                        return offer.price;
-                    }else if(offer.type == 'TwoBeds' && this.pickedRoom.numberOfBeds == 2){
-                        alert( offer.price);
-
-                        return offer.price;
-                    }else if(offer.type == 'ThreeBeds' && this.pickedRoom.numberOfBeds == 3){
-                        alert( offer.price);
-
-                        return offer.price;
-                    }else if(offer.type == 'FourBeds' && this.pickedRoom.numberOfBeds == 4){
-                        alert( offer.price);
-
-                        return offer.price;
-                    }else if(offer.type == 'FiveBeds' && this.pickedRoom.numberOfBeds == 5){
-                        alert( offer.price);
-
-                        return offer.price;
-                    }
-                })
-            }
         }
     },
     methods: {
@@ -324,6 +297,28 @@ export default {
             roomDiscount.startDate = this.checkInDate;
             roomDiscount.endDate = this.checkOutDate;
             roomDiscount.price = this.discountPrice;
+
+            var pr = 0;
+            this.hotel = store.getters.newHotel;
+            if(this.hotel != null && this.pickedRoom.numberOfBeds != null){
+                this.hotel.priceList.forEach(offer => {
+                    if(offer.type == 'OneBed' && this.pickedRoom.numberOfBeds == 1){
+                        pr =  offer.price;
+                    }else if(offer.type == 'TwoBeds' && this.pickedRoom.numberOfBeds == 2){
+                        pr =  offer.price;
+                    }else if(offer.type == 'ThreeBeds' && this.pickedRoom.numberOfBeds == 3){
+                        pr =  offer.price;
+                    }else if(offer.type == 'FourBeds' && this.pickedRoom.numberOfBeds == 4){
+                        pr =  offer.price;
+                    }else if(offer.type == 'FiveBeds' && this.pickedRoom.numberOfBeds == 5){
+                        pr =  offer.price;
+                    }
+                })
+            }
+            if(pr < roomDiscount.price){
+                this.showSnackbar({msg: "Discount price cant be lower than hotel room price", color: "error"});
+                return;
+            }
 
             HotelController.addRoomDiscount(this.$route.params.id, this.pickedRoom.id, roomDiscount)
             .then(response => {
