@@ -87,7 +87,7 @@ insert into users (dtype,id,address,email,firstname,lastname,username,password,p
 insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('AirlineCompanyAdmin',5,'adresa3','email3','ime3','prezime3','airlineadmin','12345','51543',3,null,1,null, FALSE);
 
 --hotel admini
-insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('HotelAdmin',6,'adresa4','email4','ime4','prezime4','a','12345','51544',4,null,null,4, FALSE);
+insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('HotelAdmin',6,'adresa4','email4','ime4','prezime4','hoteladmin','12345','51544',4,null,null,4, FALSE);
 
 --system admini
 insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time) values ('SystemAdmin',7,'adresa5','email5','ime5','prezime5','systemadmin','12345','51545',5,null,null,null, FALSE);

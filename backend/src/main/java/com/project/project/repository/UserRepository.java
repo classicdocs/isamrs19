@@ -15,7 +15,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findOneById(Long id);
 
-    @Query(value = "select * from user u where u.id != ?1 and u.dtype like 'RegisteredUser' and (u.firstname like ?2 or u.lastname like ?2 or u.username like ?2)", nativeQuery = true)
+    @Query(value = "select * from users u where u.id != ?1 and u.dtype like 'RegisteredUser' and (u.firstname like ?2 or u.lastname like ?2 or u.username like ?2)", nativeQuery = true)
     Set<User> searchFriends(Long id, String name);
 
 
