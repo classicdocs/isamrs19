@@ -30,10 +30,10 @@ Vue.use(VueGoogleMaps, {
 
 import 'vuetify/dist/vuetify.min.css'
 
-// LoginController.initStoreAuth();
+LoginController.initStoreAuth();
 
-// Axios.defaults.baseURL = Config.getApiUrl();
-Axios.defaults.baseURL = 'http://localhost:8088/api';
+Axios.defaults.baseURL = Config.getApiUrl();
+// Axios.defaults.baseURL = 'http://localhost:8088/api';
 Axios.defaults.headers.Accept = 'application/json';
 Axios.defaults.headers['Access-Control-Allow-Origin'] = '*';
 

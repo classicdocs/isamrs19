@@ -13,7 +13,7 @@ public class HotelFloor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "level", nullable = false)
+    @Column(name = "floor_level", nullable = false)
     private int level;
 
     @Column(name = "maxRooms", nullable = false)

@@ -78,7 +78,7 @@ export default {
         .then((response) => {
           loader.hide();
           this.user = new User(response.data);
-          if (this.user.role !== "User")
+          if (this.user.role !== "User" && store.getters.activeUser.isUser())
             this.$router.push({name: "flights"});
         })
         .catch((error) => {
