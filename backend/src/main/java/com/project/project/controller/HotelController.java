@@ -10,10 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sun.security.krb5.internal.crypto.Des;
 
 import java.text.ParseException;
-import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -279,6 +277,26 @@ public class HotelController {
         }
 
     }
+
+    @PutMapping(
+            value = "/{hotelID}/addRoomDiscount/{roomID}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity addRoomDiscount(@PathVariable("hotelID") Long hotelID,
+                                          @PathVariable("roomID") Long roomID,
+                                         @RequestBody RoomDiscount roomDiscount) {
+        RoomDiscount roomDiscount1 = null;
+        try {
+            roomDiscount1 = hotelService.addRoomDiscount(hotelID, roomID, roomDiscount);
+            return new ResponseEntity<RoomDiscount>(roomDiscount1, HttpStatus.OK);
+        }catch ( UnableToAddDiscount| ParseException| HotelNotFound notFound){
+            notFound.printStackTrace();
+            return new ResponseEntity<String>(notFound.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
 
 
 }
