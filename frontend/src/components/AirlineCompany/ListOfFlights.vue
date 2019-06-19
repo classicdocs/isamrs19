@@ -57,6 +57,7 @@ import AirlineCompanyController from "@/controllers/airline-company.controller";
 import store from "@/store";
 import FlightDiscountVue from "./FlightDiscount.vue";
 import ListOfArchivedFlightsVue from "./ListOfArchivedFlights.vue";
+import { mapGetters } from 'vuex';
 
 export default {
   name: "ListOfFlights",
@@ -82,12 +83,27 @@ export default {
     ]
   }),
   computed: {
+    ...mapGetters({
+    reload: 'reload'
+    }),
     isAdmin() {
       return store.getters.isAirlineAdmin;
+      
     }
   },
   mounted() {
     this.getFlights();
+  },
+  watch: {
+    reload(newValue) {
+      if (newValue === true ) {
+        this.flights = [];
+        this.getFlights();
+        this.$nextTick(() => {
+            store.commit("reload", true);
+          })
+      } 
+    }
   },
   methods: {
     getFlights() {
@@ -117,6 +133,7 @@ export default {
             msg: "You have successfully archived flight",
             color: "success"
           });
+          store.commit("reload", true);
         })
         .catch(error => {
           store.commit("setSnack", {

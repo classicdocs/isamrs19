@@ -39,7 +39,7 @@ export default {
   watch: {
     getNewDestination(destination) {
       this.destinations.push(destination.name + " " + destination.zip);
-    }
+    },
   },
   methods: {
     getDestinations() {
