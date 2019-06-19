@@ -35,7 +35,6 @@ public class VehicleReservationDTO {
     @NotNull
     private String user;
 
-
     private String rentACarId;
 
     private RentACarInfoDTO rentACar;

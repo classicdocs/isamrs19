@@ -64,9 +64,12 @@ insert into rentacar (id,name,address,promotional_description,rating, total_rati
 insert into rentacar (id,name,address,promotional_description, rating, total_rating, location) values (2,'EcoCar', '2nd Street 63 Paris','With over 60 years of experience in the industry, you can be sure that whether you are looking for a family car, sedan or prestige car for your business or leisure trips, EcoCar has the vehicle to meet every car rental need.Make the most out of our large range of services to make car rental experience a unique experience',4.5,2, 1);
 --vozilo 1
 insert into vehicle (id,name,vehicle_manufacturer,vehicle_model,vehicle_type,number_of_passengers,year_of_production,price_per_day,average_rating,total_rating) values (99,'Test vehicle','Audi','A4','Sedan',4,2014,50,4,1);
+
+insert into vehicle_quick_reservation (id,child_seat_included,collision_insurance_included,gps_included,pickup_location,reserved_from,reserved_until,return_location,theft_insurance_included,total_price,vehicle_id) values (99,TRUE,TRUE,FALSE,'Belgrade','2019-07-10 14:00','2020-07-14 14:00','Belgrade',FALSE,100,99);
 --vozilo 1 u servis 1
 insert into rentacar_vehicles (rentacar_id, vehicles_id) values (1,99);
 
+insert into rentacar_quick_reservations (rentacar_id,quick_reservations_id) values (1,99);
 
 --tabela uloga
 insert into role (id,role) values (1,'User');

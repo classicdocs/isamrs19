@@ -9,5 +9,8 @@ export default {
   },
   rate(data) {
     return VehicleReservationApiService.rate(data);
+  },
+  quickReserve(data) {
+    return VehicleReservationApiService.quickReserve(data);
   }
 };

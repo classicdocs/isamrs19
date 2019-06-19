@@ -95,7 +95,7 @@
         </v-list-tile>
     </v-list> -->
 
-    <v-card id="listcard">
+        <v-card id="listcard">
         <v-list two-line>
         <v-list-tile id="car" v-for="vehicle in vehicle_list" v-bind:key="vehicle">
         <v-list-tile-content>

@@ -25,6 +25,11 @@
             </v-tab>
 
             <v-tab href="#tab-4" v-if="admin">
+                Quick reservations
+                <i class="material-icons">credit_card</i>
+            </v-tab>
+
+            <v-tab href="#tab-5" v-if="admin">
                 Edit
                 <i class="material-icons">border_color</i>
             </v-tab>
@@ -48,7 +53,13 @@
                 </v-card>
             </v-tab-item>
 
-            <v-tab-item :value="'tab-4'" v-if="admin">
+             <v-tab-item :value="'tab-4'" v-if="admin">
+                <v-card flat>
+                    <VehicleQuickReservations></VehicleQuickReservations>
+                </v-card>
+            </v-tab-item>
+
+            <v-tab-item :value="'tab-5'" v-if="admin">
                 <v-card flat>
                     <EditRentacarForm @update-rentacar="updateRentacar"></EditRentacarForm>
                 </v-card>
@@ -67,6 +78,7 @@ import RentACar from "@/models/RentACar.js"
 import EditRentacarForm from "@/components/EditRentacarForm.vue"
 import VehicleReservation from "@/components/RentACar/VehicleReservation.vue";
 import BranchesList from "@/components/RentACar/BranchesList.vue";
+import VehicleQuickReservations from "@/components/RentACar/VehicleQuickReservations.vue";
 import store from "@/store";
 
 export default {
@@ -75,7 +87,8 @@ export default {
         RentACarAdminOptions,
         EditRentacarForm,
         VehicleReservation,
-        BranchesList
+        BranchesList,
+        VehicleQuickReservations
     },
     data: () => ({
         id: null,

@@ -21,7 +21,15 @@ export default {
         return Axios.get(ENDPOINTS.RENTACAR_SERVICE);
     },
     changeLocation(rac_id, mapLocation){
-      return Axios.put(ENDPOINTS.RENTACAR_SERVICE + rac_id + ENDPOINTS.CHANGE_LOCATION, mapLocation);
-    }
+        return Axios.put(ENDPOINTS.RENTACAR_SERVICE + rac_id + ENDPOINTS.CHANGE_LOCATION, mapLocation);
+    },
+    getQuickReservations(id) {
+        return Axios.get(ENDPOINTS.RENTACAR_SERVICE + id + "/quick-reservations");
+    },
+    createNewQuickReservation(data) {
+        return Axios.post(ENDPOINTS.RENTACAR_SERVICE + "/add-quick-reservation", data);
+    },
+    getQuickReservationsAdmin(id) {
+        return Axios.get(ENDPOINTS.RENTACAR_SERVICE + id + "/quick-reservations-admin");
+    },
 }
-

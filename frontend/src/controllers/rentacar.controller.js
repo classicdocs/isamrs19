@@ -16,7 +16,16 @@ export default {
         return RentACarService.getAll();
     },
     changeLocation(rac_id, mapLocation){
-      return RentACarService.changeLocation(rac_id, mapLocation);
+        return RentACarService.changeLocation(rac_id, mapLocation);
+    },
+    getQuickReservations(id) {
+        return RentACarService.getQuickReservations(id);
+    },
+    createNewQuickReservation(data) {
+        return RentACarService.createNewQuickReservation(data);
+    },
+    getQuickReservationsAdmin(id) {
+        return RentACarService.getQuickReservationsAdmin(id);
     }
 }
 
