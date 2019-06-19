@@ -594,7 +594,7 @@ public class HotelService {
     }
 
 
-    public RoomDTO2 deleteRoom(Long hotelID, Long roomID) throws HotelNotFound, RoomDoesntExist, UnableToDeleteRoom{
+    public RoomDTO deleteRoom(Long hotelID, Long roomID) throws HotelNotFound, RoomDoesntExist, UnableToDeleteRoom{
         Optional<Hotel> hotel = hotelRepository.findOneById(hotelID);
 
         if(hotel.isPresent()){
@@ -610,9 +610,33 @@ public class HotelService {
             }
             if(roomToDelete != null){
                 if(roomToDelete.getRoomTaken().size() == 0){
+
                     floorWithRoomToDelete.getRoomsOnFloor().remove(roomToDelete);
+
+                    Set<RoomDiscount> discountsToRemove = new HashSet<>();
+
+                    for (RoomDiscount discount : roomToDelete.getRoomDiscounts()) {
+                        discountsToRemove.add(discount);
+                    }
+                    roomToDelete.getRoomDiscounts().removeAll(discountsToRemove);
+
                     roomRepository.delete(roomToDelete);
-                    return new RoomDTO2(roomToDelete);
+
+                    for (RoomDiscount discount : discountsToRemove) {
+                        RoomDiscount discountToRemove = roomDiscountRepository.getOne(discount.getId());
+
+                        Set<HotelsOffer> hotelsOffers = new HashSet<>();
+                        for(HotelsOffer offer: discountToRemove.getAdditionalServices()){
+                            hotelsOffers.add(offer);
+                        }
+                        discountToRemove.getAdditionalServices().removeAll(hotelsOffers);
+
+                        roomDiscountRepository.delete(discountToRemove);
+                    }
+
+
+
+                    return new RoomDTO(roomToDelete);
                 }else{
                     throw new UnableToDeleteRoom(roomID);
                 }
