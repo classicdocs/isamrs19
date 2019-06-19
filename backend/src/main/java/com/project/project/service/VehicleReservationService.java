@@ -80,12 +80,33 @@ public class VehicleReservationService {
         }
 
         int numberOfDays = daysBetween(vr.getReservedFrom(),vr.getReservedUntil());
+        double price = 0;
 
         if (numberOfDays == 0){
-            vr.setTotalPrice(vehicle.getPricePerDay());
+            price = vehicle.getPricePerDay();
         } else {
-            vr.setTotalPrice(vehicle.getPricePerDay()*(numberOfDays+1));
+            price = vehicle.getPricePerDay()*(numberOfDays+1);
         }
+
+        if(vehicleReservationDTO.isGpsIncluded()){
+            price += 50;
+        }
+        if(vehicleReservationDTO.isChildSeatIncluded()){
+            price += 20;
+        }
+        if(vehicleReservationDTO.isCollisionInsuranceIncluded()){
+            price += 100;
+        }
+        if(vehicleReservationDTO.isTheftInsuranceIncluded()){
+            price += 100;
+        }
+
+        vr.setTotalPrice(price);
+
+        vr.setGpsIncluded(vehicleReservationDTO.isGpsIncluded());
+        vr.setChildSeatIncluded(vehicleReservationDTO.isChildSeatIncluded());
+        vr.setCollisionInsuranceIncluded(vehicleReservationDTO.isCollisionInsuranceIncluded());
+        vr.setTheftInsuranceIncluded(vehicleReservationDTO.isTheftInsuranceIncluded());
 
         VehicleTaken vt = new VehicleTaken();
 

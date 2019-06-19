@@ -42,6 +42,14 @@ public class VehicleReservationDTO {
 
     private boolean completed;
 
+    private boolean gpsIncluded;
+
+    private boolean childSeatIncluded;
+
+    private boolean collisionInsuranceIncluded;
+
+    private boolean theftInsuranceIncluded;
+
     public VehicleReservationDTO() {
     }
 
@@ -64,6 +72,14 @@ public class VehicleReservationDTO {
         this.totalPrice = String.valueOf(vr.getTotalPrice());
 
         this.completed = isCompleted;
+
+        this.gpsIncluded = vr.isGpsIncluded();
+
+        this.childSeatIncluded = vr.isChildSeatIncluded();
+
+        this.collisionInsuranceIncluded = vr.isCollisionInsuranceIncluded();
+
+        this.theftInsuranceIncluded = vr.isTheftInsuranceIncluded();
     }
 
     public String getPickupDate() {
@@ -192,5 +208,37 @@ public class VehicleReservationDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public boolean isGpsIncluded() {
+        return gpsIncluded;
+    }
+
+    public void setGpsIncluded(boolean gpsIncluded) {
+        this.gpsIncluded = gpsIncluded;
+    }
+
+    public boolean isChildSeatIncluded() {
+        return childSeatIncluded;
+    }
+
+    public void setChildSeatIncluded(boolean childSeatIncluded) {
+        this.childSeatIncluded = childSeatIncluded;
+    }
+
+    public boolean isCollisionInsuranceIncluded() {
+        return collisionInsuranceIncluded;
+    }
+
+    public void setCollisionInsuranceIncluded(boolean collisionInsuranceIncluded) {
+        this.collisionInsuranceIncluded = collisionInsuranceIncluded;
+    }
+
+    public boolean isTheftInsuranceIncluded() {
+        return theftInsuranceIncluded;
+    }
+
+    public void setTheftInsuranceIncluded(boolean theftInsuranceIncluded) {
+        this.theftInsuranceIncluded = theftInsuranceIncluded;
     }
 }

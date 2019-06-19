@@ -221,7 +221,7 @@
             <v-flex>
               <img id="pic" src="../../assets/car.jpg">
             </v-flex>
-            <v-flex id="carinfo">
+            <v-flex id="carresultinfo">
               Vehicle name: {{ vehicle.name }} <br/>
               Vehicle type: {{ vehicle.vehicleType }} <br/>
               Number of passengers: {{ vehicle.numberOfPassengers }} <br/>
@@ -232,7 +232,7 @@
               <v-rating :readonly="true" v-model="vehicle.averageRating" large half-increments></v-rating>
             </v-flex>
             <v-flex id="reserve">
-              <v-btn  color="primary" @click="reserveVehicle(vehicle.id)"> Rent </v-btn>
+              <v-btn  color="primary" @click="showAdditionalServicesDialog(vehicle.id, vehicle.pricePerDay)"> Rent </v-btn>
             </v-flex>
             </v-layout>
         </v-list-tile-content>
@@ -260,6 +260,43 @@
       </v-btn>
     </v-snackbar>
     <!--</v-expansion-panel>-->
+    <v-dialog width="400" persistent v-model="additionalServicesDialog">
+            <v-card
+            class="elevation-16 mx-auto"
+            >
+            <v-card-text>
+            <h2>Choose additional services</h2>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-layout>
+            <v-flex>
+            <v-checkbox class="additionalServiceItem" @change="calculateTotal" v-model="gps" :label="'GPS navigation'"></v-checkbox>
+            <v-checkbox class="additionalServiceItem" @change="calculateTotal" v-model="childSeat" :label="'Child seat'">Child seat</v-checkbox>
+            <v-checkbox class="additionalServiceItem" @change="calculateTotal" v-model="collision" :label="'Collision damage insurace'">Collision damage insurace</v-checkbox>
+            <v-checkbox class="additionalServiceItem" @change="calculateTotal" v-model="theft" :label="'Theft insurance'">Theft insurance</v-checkbox>
+            </v-flex>
+            <v-flex>
+              <h4 class="priceTag">50 &euro; </h4>
+              <h4 class="priceTag">20 &euro; </h4>
+              <h4 class="priceTag">100 &euro; </h4>
+              <h4 class="priceTag">100 &euro; </h4>
+            </v-flex>
+            </v-layout>
+            <v-divider></v-divider>
+            <p id="allDaysPriceLabel">Car price for all days: {{days*pricePerDay}} &euro; </p>          
+            <p id="allServicesPriceLabel">Price for all aditional services: {{total}} &euro;</p>               
+            <h2 id="totalLabel">Total: {{total+days*pricePerDay}} &euro; </h2>            
+            <v-card-actions class="justify-space-between">
+            <v-btn flat @click="stopReservation()">Cancel</v-btn>
+            <v-btn
+                color="primary"
+                @click="reserve()"
+            >
+                Rent
+            </v-btn>
+            </v-card-actions>
+        </v-card>
+        </v-dialog>
     </v-card>
 </template>
 
@@ -294,6 +331,14 @@ export default {
           color: "",
           msg: "",
         },
+        additionalServicesDialog : false,
+        gps : false,
+        childSeat : false,
+        collision : false,
+        theft : false,
+        total : 0,
+        days : 0,
+        pricePerDay : 0,
     }),
     created() {
       this.vehicle_list = [];
@@ -335,7 +380,7 @@ export default {
         this.snackbar.msg = message;
         this.snackbar.show = true;
       },
-      reserveVehicle(id) {
+      showAdditionalServicesDialog(id, daysPrice) {
         if(!store.getters.isLogged){
           router.push({ name: "login"});
         }
@@ -349,7 +394,37 @@ export default {
         this.vr.carId = id;
         this.vr.user = store.getters.activeUser.username;
         this.vr.rentACarId = this.$route.params.id;
+
+        const startDate = new Date(this.vr.pickupDate);
+        const endDate = new Date(this.vr.returnDate);
+
+        var pickupTimeString = this.vr.pickupTime;
+        var pickupTimeArray = pickupTimeString.split(":");
+        var pickupTimeHours = parseInt(pickupTimeArray[0]);
+        var pickupTimeMinutes = parseInt(pickupTimeArray[1]);
+        var pickupTimeAllToMinutes = pickupTimeHours*60 + pickupTimeMinutes;
         
+        var returnTimeString = this.vr.returnTime;
+        var returnTimeArray = returnTimeString.split(":");
+        var returnTimeHours = parseInt(returnTimeArray[0]);
+        var returnTimeMinutes = parseInt(returnTimeArray[1]);
+        var returnTimeAllToMinutes = returnTimeHours*60 + returnTimeMinutes;      
+
+        this.days = (endDate - startDate)/(60*60*24*1000);
+        this.pricePerDay = daysPrice;
+        
+        if(pickupTimeAllToMinutes < returnTimeAllToMinutes) {
+          this.days += 1;
+        }
+
+        this.additionalServicesDialog = true;
+      },
+      reserve(){
+        this.vr.gpsIncluded = this.gps;
+        this.vr.childSeatIncluded = this.childSeat;
+        this.vr.collisionInsuranceIncluded = this.collision;
+        this.vr.theftInsuranceIncluded = this.theft;
+
         VehicleReservationController.reserve(this.vr)
          .then((response) => {
           store.commit('setSnack', {msg: "You have successfully reserved a vehicle!", color: "success"});
@@ -359,9 +434,31 @@ export default {
          });
 
         this.vehicle_list = [];
-        
-        //this.$router.push({name: "my-reservations"});
+        this.additionalServicesDialog = false;
       },
+      calculateTotal() {
+        this.total = 0;
+        if(this.gps) {
+          this.total += 50;
+        }
+        if(this.childSeat) {
+          this.total += 20;
+        }
+        if(this.collision) {
+          this.total += 100;
+        }
+        if(this.theft) {
+          this.total += 100;
+        }
+      },
+      stopReservation() {
+        this.additionalServicesDialog = false;
+        this.total = 0;
+        this.gps = false;
+        this.childSeat = false;
+        this.collision = false;
+        this.theft = false;
+      }
     }
 }
 </script>
@@ -387,7 +484,7 @@ export default {
     margin-top: 20px;
 }
 
-#carinfo {
+#carresultinfo {
     padding-left: 10px;
     min-width: 250px;
 }
@@ -426,6 +523,27 @@ export default {
 
 #rating {
   padding-right: 50px;
+}
+
+.additionalServiceItem {
+  padding-left: 20px;
+}
+
+#totalLabel {
+  margin-left: 250px;
+}
+
+.priceTag {
+  padding-top: 23px;
+  padding-bottom: 23px; 
+}
+
+#allDaysPriceLabel {
+  padding-left: 15px;
+}
+
+#allServicesPriceLabel {
+  padding-left: 15px;
 }
 
 </style>

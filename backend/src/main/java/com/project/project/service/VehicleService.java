@@ -1,9 +1,12 @@
 package com.project.project.service;
 
 import com.project.project.dto.VehicleDTO;
+import com.project.project.dto.VehicleDeleteDTO;
+import com.project.project.dto.VehicleEditDTO;
 import com.project.project.dto.VehicleSearchDTO;
 import com.project.project.exceptions.DateInPast;
 import com.project.project.exceptions.ReturnDateBeforePickupDate;
+import com.project.project.exceptions.VehicleIsReserved;
 import com.project.project.model.RentACar;
 import com.project.project.model.Vehicle;
 import com.project.project.model.VehicleTaken;
@@ -48,6 +51,8 @@ public class VehicleService {
         vehicle.setPricePerDay(vehicleDTO.getPricePerDay());
         vehicle.setAverageRating(0);
         vehicle.setTotalRating(0);
+
+        vehicleRepository.save(vehicle);
 
         RentACar rentACar = rentACarService.findOneById(vehicleDTO.getRentACar());
         Set<Vehicle> vehicles = rentACar.getVehicles();
@@ -122,5 +127,51 @@ public class VehicleService {
             }
         }
         return vehiclesToReturn;
+    }
+
+    public Vehicle remove(VehicleDeleteDTO vehicleDeleteDTO) throws VehicleIsReserved {
+        Vehicle v = vehicleRepository.findOneById(Long.parseLong(vehicleDeleteDTO.getVehicleId()));
+        RentACar r = rentACarService.findOneById(Long.parseLong(vehicleDeleteDTO.getRentACarId()));
+
+        boolean canBeDeleted = true;
+        for (VehicleTaken vt : v.getReservations()) {
+            if(vt.getTakenUntil().after(new Date())){
+                canBeDeleted = false;
+            }
+        }
+
+        if(!canBeDeleted) {
+            throw new VehicleIsReserved();
+        }
+
+        r.getVehicles().remove(v);
+        rentACarService.save(r);
+        vehicleRepository.delete(v);
+        return v;
+    }
+
+    public Vehicle edit(VehicleEditDTO vehicleEditDTO) throws VehicleIsReserved {
+        Vehicle v = vehicleRepository.findOneById(Long.parseLong(vehicleEditDTO.getId()));
+
+        boolean canBeEdited = true;
+        for (VehicleTaken vt : v.getReservations()) {
+            if(vt.getTakenUntil().after(new Date())){
+                canBeEdited = false;
+            }
+        }
+
+        if(!canBeEdited) {
+            throw new VehicleIsReserved();
+        }
+
+        v.setName(vehicleEditDTO.getName());
+        v.setVehicleType(vehicleEditDTO.getVehicleType());
+        v.setNumberOfPassengers(vehicleEditDTO.getNumberOfPassengers());
+        v.setYearOfProduction(vehicleEditDTO.getYearOfProduction());
+        v.setPricePerDay(vehicleEditDTO.getPricePerDay());
+
+        vehicleRepository.save(v);
+
+        return v;
     }
 }

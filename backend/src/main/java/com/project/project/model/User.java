@@ -5,7 +5,7 @@ import javax.persistence.*;
 import static javax.persistence.InheritanceType.JOINED;
 
 @Entity
-@Table(name="user")
+@Table(name="users")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 public abstract class User {
 
@@ -40,6 +40,9 @@ public abstract class User {
 
     @Column(name = "logged_first_time", nullable = false)
     private Boolean loggedFirstTime = false;
+
+    @Column(name = "verified", nullable = false)
+    private boolean verified;
 
     public User() {
     }
@@ -122,5 +125,13 @@ public abstract class User {
 
     public void setLoggedFirstTime(Boolean loggedFirstTime) {
         this.loggedFirstTime = loggedFirstTime;
+    }
+
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
     }
 }

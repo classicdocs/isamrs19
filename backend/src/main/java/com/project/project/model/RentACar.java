@@ -1,5 +1,7 @@
 package com.project.project.model;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -16,8 +18,9 @@ public class RentACar {
     @Column(name = "address", nullable = false)
     private String address;
 
-    @Lob
-    @Column(name = "promotional_description", length=512)
+//    @Lob
+//    @Column(name = "promotional_description", length=512)
+    @Column(name = "promotional_description", length = 512)
     private String promotionalDescription;
 
     @Column(name = "rating", nullable = false)
