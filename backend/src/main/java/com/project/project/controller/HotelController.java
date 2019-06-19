@@ -297,6 +297,21 @@ public class HotelController {
 
     }
 
+    @DeleteMapping(
+            value = "/{hotelID}/deleteRoom/{roomID}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity deleteRoom(@PathVariable("hotelID") Long hotelID, @PathVariable("roomID") Long roomID) {
+
+        try {
+            RoomDTO2 result = hotelService.deleteRoom(hotelID, roomID);
+            return new ResponseEntity<RoomDTO2>(result, HttpStatus.OK);
+        } catch (HotelNotFound  | RoomDoesntExist | UnableToDeleteRoom exc) {
+            exc.printStackTrace();
+            return new ResponseEntity<String>(exc.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
 
 }

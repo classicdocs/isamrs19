@@ -593,6 +593,38 @@ public class HotelService {
         }
     }
 
+
+    public RoomDTO2 deleteRoom(Long hotelID, Long roomID) throws HotelNotFound, RoomDoesntExist, UnableToDeleteRoom{
+        Optional<Hotel> hotel = hotelRepository.findOneById(hotelID);
+
+        if(hotel.isPresent()){
+            Room roomToDelete = null;
+            HotelFloor floorWithRoomToDelete = null;
+            for (HotelFloor floor : hotel.get().getFloors()) {
+                for (Room room : floor.getRoomsOnFloor()) {
+                    if(room.getId() == roomID){
+                        floorWithRoomToDelete = floor;
+                        roomToDelete = room;
+                    }
+                }
+            }
+            if(roomToDelete != null){
+                if(roomToDelete.getRoomTaken().size() == 0){
+                    floorWithRoomToDelete.getRoomsOnFloor().remove(roomToDelete);
+                    roomRepository.delete(roomToDelete);
+                    return new RoomDTO2(roomToDelete);
+                }else{
+                    throw new UnableToDeleteRoom(roomID);
+                }
+            }else{
+                throw new RoomDoesntExist(roomID);
+            }
+        }else{
+            throw new HotelNotFound(hotelID);
+        }
+    }
+
+
     private Boolean isDiscountPossible(Room room, RoomDiscount roomDiscount) throws ParseException{
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
