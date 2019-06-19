@@ -212,7 +212,7 @@ export default {
             })
         },
         findAvailableDiscounts(room){
-
+            console.log("trazim discounte")
             var listOfDiscounts = [];
             room.roomDiscounts.forEach(discount => {
                 var startDiscountDate = new Date(discount.startDate);
@@ -220,12 +220,17 @@ export default {
 
                 var discountAvailable = true;
                 room.roomTaken.forEach(taken => {
-                    
                     var startTakenDate = new Date(taken.startDate);
                     var endTakenDate = new Date(taken.endDate);
 
+                    if((endDiscountDate.getTime() < startTakenDate.getTime() || 
+                            startDiscountDate.getTime() > endTakenDate.getTime())){
 
-                    if((endDiscountDate < startTakenDate || startDiscountDate > endTakenDate)){
+                        discountAvailable = false;
+                    }
+                    if(endDiscountDate.getTime() === endTakenDate.getTime() ||
+                            startDiscountDate.getTime() === startTakenDate.getTime()){
+
                         discountAvailable = false;
                     }
                 })

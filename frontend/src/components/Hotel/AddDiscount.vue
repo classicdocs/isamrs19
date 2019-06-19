@@ -276,7 +276,6 @@ export default {
         },
 
         notAvailableRooms: [],
-        pickedRooms: [],
         pickedRoom: new Room(),
         
         snackbar: {
@@ -288,8 +287,6 @@ export default {
     computed: {
         myHotel: function(){
             this.hotel = store.getters.newHotel;
-            console.log("hotel from store")
-            console.log(this.hotel)
             return this.hotel;
         }
     },
@@ -337,21 +334,22 @@ export default {
             .then(response => {
                 this.hotel = this.myHotel
                 
-                console.log("hotel iz this.myHotel, pre dodavanja response data")
-                console.log(this.hotel)
                 this.hotel.floors.forEach(floor => {
                     floor.roomsOnFloor.forEach(room => {
-                        if(room.id = this.pickedRoom.id){
-
-                            room.roomDiscounts.push(response.data);
+                        if(room.id == this.pickedRoom.id){
+                            var newRoomDiscount = new RoomDiscount();
+                            newRoomDiscount.id = response.data.id;
+                            newRoomDiscount.startDate = response.data.startDate;
+                            newRoomDiscount.endDate = response.data.endDate;
+                            newRoomDiscount.price = response.data.price;
+                            newRoomDiscount.additionalServices = response.data.additionalServices;
+                            room.roomDiscounts.push(newRoomDiscount);
                             this.AddDiscountForm = false;
                             this.showSnackbar({msg: "Discount successfully defined", color: "success"});
 
                         }
                     })
                 })
-                console.log("hotel for push")
-                console.log(this.hotel)
                 store.commit('newHotel', this.hotel);
                 this.reset();
             })
@@ -374,8 +372,8 @@ export default {
             this.discountPrice = 0;
             this.selected = [];
             this.notAvailableRooms = [];
-            this.pickedRooms = [];
             this.pickedRoom = new Room();
+            
             this.step = 1;
 
         },
@@ -400,36 +398,29 @@ export default {
             }
         },
         pickRoom(room, floor){
-            var found = false;
-            this.pickedRooms.forEach(pickRoom => {
-                if(pickRoom.id == room.id){
-                    found = true;
-                    this.alreadyPicked = true;
-                }
-            })
-
-            if(!found){
-                this.alreadyPicked = false;
-            }
-
-            this.pickedRoom = new Room();
+            // this.pickedRoom = new Room();
             this.pickedRoom.id = room.id;
             this.pickedRoom.roomNumber = room.roomNumber;
             this.pickedRoom.numberOfBeds = room.numberOfBeds;
             this.pickedRoom.hotelFloor = new HotelFloor();
-            this.pickedRoom.hotelFloor.level = room.hotelFloor.level;  
-            console.log("picked room")
-            console.log(this.pickedRoom);
+            this.pickedRoom.hotelFloor.level = floor.level;  
+
         },
         getRooms(floor){
             var availableRooms = [];
-            floor.roomsOnFloor.forEach(room => {
-            if(this.notAvailableRooms.indexOf(room) == -1){
-                availableRooms.push(room);
+
+            if(store.getters.newHotel != null){
+                store.getters.newHotel.floors.forEach(hotelFloor => {
+                    if(hotelFloor.level == floor.level){
+                        hotelFloor.roomsOnFloor.forEach(room => {
+                            if(this.notAvailableRooms.indexOf(room) == -1){
+                                availableRooms.push(room);
+                            }
+                        })
+                    }
+                })
             }
-            })
-            console.log("available rooms");
-            console.log(availableRooms);
+
             return availableRooms;
         },
         checkDates(){
@@ -466,8 +457,6 @@ export default {
                 })
             }
 
-            console.log("Theese rooms are not available");
-            console.log(this.notAvailableRooms);
         },
         toggleAll () {
             if (this.selected.length) this.selected = []

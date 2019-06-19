@@ -192,8 +192,8 @@ insert into hotels_offer(id, description, price, type) values
 (2,'Room with two beds', 250, 1);
 --insert into hotels_offer(id, description, price, type) values
 --(3,'Room with three beds', 350, 2);
---insert into hotels_offer(id, description, price, type) values
---(4,'Room with four beds', 450, 3);
+insert into hotels_offer(id, description, price, type) values
+(4,'Room with four beds', 450, 3);
 insert into hotels_offer(id, description, price, type) values
 (5,'Room with five beds', 550, 4);
 insert into hotels_offer(id, description, price, type) values
@@ -209,8 +209,8 @@ insert into hotel_price_list(hotel_id, price_list_id) values
 (1,2);
 --insert into hotel_price_list(hotel_id, price_list_id) values
 --(1,3);
---insert into hotel_price_list(hotel_id, price_list_id) values
---(1,4);
+insert into hotel_price_list(hotel_id, price_list_id) values
+(1,4);
 insert into hotel_price_list(hotel_id, price_list_id) values
 (1,5);
 insert into hotel_price_list(hotel_id, price_list_id) values
