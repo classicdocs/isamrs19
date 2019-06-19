@@ -1,9 +1,6 @@
 package com.project.project.dto.Hotel_DTOs;
 
-import com.project.project.model.Hotel_Model.HotelFloor;
-import com.project.project.model.Hotel_Model.Room;
-import com.project.project.model.Hotel_Model.RoomTaken;
-import com.project.project.model.Hotel_Model.SpecialPrice;
+import com.project.project.model.Hotel_Model.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.Set;
@@ -27,6 +24,8 @@ public class RoomDTO {
 
     private Set<SpecialPrice> specialPrices;
 
+    private Set<RoomDiscount> roomDiscounts;
+
     @NotNull
     private double average_rating;
 
@@ -39,6 +38,7 @@ public class RoomDTO {
         this.id = room.getId();
         this.average_rating = room.getAverage_rating();
         this.total_rating = room.getTotal_rating();
+        this.roomDiscounts = room.getRoomDiscounts();
     }
 
     public RoomDTO(){}
@@ -105,5 +105,13 @@ public class RoomDTO {
 
     public void setTotal_rating(double total_rating) {
         this.total_rating = total_rating;
+    }
+
+    public Set<RoomDiscount> getRoomDiscounts() {
+        return roomDiscounts;
+    }
+
+    public void setRoomDiscounts(Set<RoomDiscount> roomDiscounts) {
+        this.roomDiscounts = roomDiscounts;
     }
 }
