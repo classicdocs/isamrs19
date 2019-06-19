@@ -26,4 +26,12 @@ export default {
       mapLocation
     );
   }
-};
+    getQuickReservations(id) {
+        return Axios.get(ENDPOINTS.RENTACAR_SERVICE + id + "/quick-reservations");
+    },
+    createNewQuickReservation(data) {
+        return Axios.post(ENDPOINTS.RENTACAR_SERVICE + "/add-quick-reservation", data);
+    },
+    getQuickReservationsAdmin(id) {
+        return Axios.get(ENDPOINTS.RENTACAR_SERVICE + id + "/quick-reservations-admin");
+    },

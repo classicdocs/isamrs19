@@ -1,5 +1,6 @@
 package com.project.project.service;
 
+import com.project.project.dto.QuickVehicleReservationDTO;
 import com.project.project.dto.RatingDTO;
 import com.project.project.dto.VehicleReservationDTO;
 import com.project.project.exceptions.AlreadyRated;
@@ -41,6 +42,9 @@ public class VehicleReservationService {
 
     @Autowired
     private EntityManager entityManager;
+
+    @Autowired
+    private VehicleQuickReservationRepository vehicleQuickReservationRepository;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public VehicleReservationDTO reserve(VehicleReservationDTO vehicleReservationDTO) throws ParseException, UserNotFound, VehicleAlreadyReserved {
@@ -206,5 +210,73 @@ public class VehicleReservationService {
         }
 
         return overlap;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public QuickVehicleReservationDTO quickReserve(QuickVehicleReservationDTO quickVehicleReservationDTO) throws VehicleAlreadyReserved, UserNotFound {
+
+        VehicleQuickReservation vehicleQuickReservation = vehicleQuickReservationRepository.
+                findOneById(quickVehicleReservationDTO.getQuickReservationId());
+
+        VehicleReservation vr = new VehicleReservation();
+
+        Optional<User> user = userRepository.findOneByUsername(quickVehicleReservationDTO.getUser());
+
+        if (user.isPresent()) {
+            vr.setUser(user.get());
+        } else throw new UserNotFound(Long.parseLong(quickVehicleReservationDTO.getUser()));
+
+        vr.setReservedFrom(vehicleQuickReservation.getReservedFrom());
+        vr.setReservedUntil(vehicleQuickReservation.getReservedUntil());
+        vr.setPickupLocation(vehicleQuickReservation.getPickupLocation());
+        vr.setReturnLocation(vehicleQuickReservation.getReturnLocation());
+
+        RentACar rentACar = rentACarRepository.findOneById(quickVehicleReservationDTO.getRentACarId());
+
+        vr.setRentACar(rentACar);
+
+        Vehicle vehicle = entityManager.find(Vehicle.class, vehicleQuickReservation.getVehicle().getId(), LockModeType.PESSIMISTIC_WRITE );
+        entityManager.lock(vehicle, LockModeType.PESSIMISTIC_WRITE);
+
+        for(VehicleTaken vt : vehicle.getReservations()) {
+            Date vtStart = vt.getTakenFrom();
+            Date vtEnd = vt.getTakenUntil();
+            if(overlap(vtStart, vtEnd, vehicleQuickReservation.getReservedFrom(), vehicleQuickReservation.getReservedUntil())){
+                throw new VehicleAlreadyReserved();
+            }
+        }
+
+
+        vr.setTotalPrice(vehicleQuickReservation.getTotalPrice());
+
+        vr.setGpsIncluded(vehicleQuickReservation.isGpsIncluded());
+        vr.setChildSeatIncluded(vehicleQuickReservation.isChildSeatIncluded());
+        vr.setCollisionInsuranceIncluded(vehicleQuickReservation.isCollisionInsuranceIncluded());
+        vr.setTheftInsuranceIncluded(vehicleQuickReservation.isTheftInsuranceIncluded());
+
+        VehicleTaken vt = new VehicleTaken();
+
+        vt.setTakenFrom(vr.getReservedFrom());
+        vt.setTakenUntil(vr.getReservedUntil());
+
+        vehicleTakenRepository.save(vt);
+
+        vehicle.getReservations().add(vt);
+
+        vr.setVehicle(vehicle);
+
+        vr.setRated(false);
+
+        rentACar.getQuickReservations().remove(vehicleQuickReservation);
+
+        rentACarRepository.save(rentACar);
+
+        vehicleQuickReservationRepository.delete(vehicleQuickReservation);
+
+        vehicleRepository.save(vehicle);
+
+        vehicleReservationRepository.save(vr);
+
+        return quickVehicleReservationDTO;
     }
 }
