@@ -88,6 +88,7 @@ export default {
     }),
     isAdmin() {
       return store.getters.isAirlineAdmin;
+      
     }
   },
   mounted() {
