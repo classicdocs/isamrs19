@@ -212,7 +212,6 @@ export default {
             })
         },
         findAvailableDiscounts(room){
-            console.log("trazim discounte")
             var listOfDiscounts = [];
             room.roomDiscounts.forEach(discount => {
                 var startDiscountDate = new Date(discount.startDate);
