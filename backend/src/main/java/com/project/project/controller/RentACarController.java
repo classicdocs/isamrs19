@@ -1,13 +1,13 @@
 package com.project.project.controller;
 
 
+import com.project.project.dto.NewVehicleQuickReservationDTO;
 import com.project.project.dto.RentACarDTO;
 import com.project.project.dto.RentACarInfoDTO;
+import com.project.project.exceptions.DateInPast;
 import com.project.project.exceptions.RentACarNotFound;
-import com.project.project.model.MapLocation;
-import com.project.project.model.RentACar;
-import com.project.project.model.RentACarAdmin;
-import com.project.project.model.Vehicle;
+import com.project.project.exceptions.ReturnDateBeforePickupDate;
+import com.project.project.model.*;
 import com.project.project.service.RentACarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.MediaType;
 
+import java.text.ParseException;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -34,6 +36,18 @@ public class RentACarController {
     public ResponseEntity getVehicles(@PathVariable("id") Long id){
         Set<Vehicle> vehicles = rentACarService.getVehicles(id);
         return new ResponseEntity<Set<Vehicle>>(vehicles,HttpStatus.OK);
+    }
+
+    @GetMapping(value="/{id}/quick-reservations",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getQuickReservations(@PathVariable("id") Long id) {
+        Set<VehicleQuickReservation> quickReservations = rentACarService.getQuickReservations(id);
+        return new ResponseEntity<Set<VehicleQuickReservation>>(quickReservations, HttpStatus.OK);
+    }
+
+    @GetMapping(value="/{id}/quick-reservations-admin",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getQuickReservationsAdmin(@PathVariable("id") Long id) {
+        Set<VehicleQuickReservation> quickReservations = rentACarService.getQuickReservationsAdmin(id);
+        return new ResponseEntity<Set<VehicleQuickReservation>>(quickReservations, HttpStatus.OK);
     }
 
     @PutMapping(value="/{id}",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -69,5 +83,15 @@ public class RentACarController {
             return new ResponseEntity<String>(notFound.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
+    }
+
+    @PostMapping(value="/add-quick-reservation",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity createNewQuickReservation(@RequestBody NewVehicleQuickReservationDTO newVehicleQuickReservationDTO) throws ParseException {
+        try {
+            NewVehicleQuickReservationDTO newVehicleQuickReservation = rentACarService.createNewQuickReservation(newVehicleQuickReservationDTO);
+            return new ResponseEntity<NewVehicleQuickReservationDTO>(newVehicleQuickReservation, HttpStatus.OK);
+        } catch(DateInPast | ReturnDateBeforePickupDate e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

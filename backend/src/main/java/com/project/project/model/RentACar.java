@@ -44,6 +44,9 @@ public class RentACar {
     @JoinColumn(name = "location")
     private MapLocation mapLocation;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<VehicleQuickReservation> quickReservations;
+
     public RentACar() {}
 
     public Long getId() {
@@ -124,5 +127,13 @@ public class RentACar {
 
     public void setMapLocation(MapLocation mapLocation) {
         this.mapLocation = mapLocation;
+    }
+
+    public Set<VehicleQuickReservation> getQuickReservations() {
+        return quickReservations;
+    }
+
+    public void setQuickReservations(Set<VehicleQuickReservation> quickReservations) {
+        this.quickReservations = quickReservations;
     }
 }

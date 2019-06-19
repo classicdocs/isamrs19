@@ -1,5 +1,6 @@
 package com.project.project.controller;
 
+import com.project.project.dto.QuickVehicleReservationDTO;
 import com.project.project.dto.RatingDTO;
 import com.project.project.dto.VehicleReservationDTO;
 import com.project.project.exceptions.AlreadyRated;
@@ -49,6 +50,16 @@ public class VehicleReservationController {
             return new ResponseEntity<VehicleReservationDTO>(vr, HttpStatus.OK);
         } catch(AlreadyRated ar) {
             return new ResponseEntity<String>(ar.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(value="/quick", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity quickReserve(@RequestBody QuickVehicleReservationDTO quickVehicleReservationDTO) throws ParseException, UserNotFound {
+        try {
+            QuickVehicleReservationDTO quickVehicleReservation = vehicleReservationService.quickReserve(quickVehicleReservationDTO);
+            return new ResponseEntity<QuickVehicleReservationDTO>(quickVehicleReservation, HttpStatus.CREATED);
+        } catch (VehicleAlreadyReserved var) {
+            return new ResponseEntity<String>(var.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }

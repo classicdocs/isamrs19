@@ -13,5 +13,8 @@ export default {
   },
   rate(data) {
     return Axios.put(ENDPOINTS.RESERVE, data);
+  },
+  quickReserve(data) {
+    return Axios.post(ENDPOINTS.RESERVE + '/quick', data);
   }
 };
