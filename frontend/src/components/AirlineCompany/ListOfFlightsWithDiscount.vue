@@ -61,6 +61,7 @@ import store from "@/store";
 import FlightDiscountVue from "./FlightDiscount.vue";
 import Friend from "@/models/Friend.js";
 import ReserveFlightWithDiscountVue from "./ReserveFlightWithDiscount.vue";
+import { mapGetters } from "vuex";
 
 export default {
   name: "ListOfFlightsWithDiscount",
@@ -86,8 +87,22 @@ export default {
     ]
   }),
   computed: {
+    ...mapGetters({
+    reload: 'reload'
+    }),
     isUser() {
       return store.getters.isUser;
+    }
+  },
+  watch: {
+    reload(newValue) {
+      if (newValue === true ) {
+        this.flights = [];
+        this.getFlights();
+        this.$nextTick(() => {
+            store.commit("reload", true);
+          })
+      } 
     }
   },
   beforeMount() {
@@ -100,6 +115,10 @@ export default {
           response.data.forEach(element => {
             this.flights.push(element);
           });
+          store.commit("reload", true);
+          this.$nextTick(() => {
+            store.commit("reload", false);
+          })
         })
         .catch(error => {
           alert(error.response.data);

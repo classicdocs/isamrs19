@@ -1,14 +1,19 @@
 const state = {
-  allAirlines: null
+  allAirlines: null,
+  reload: true
 };
 
 const getters = {
-  allAirlines: state => state.allAirlines
+  allAirlines: state => state.allAirlines,
+  reload: state => state.reload,
 };
 
 const mutations = {
   allAirlines(state, nh) {
     state.allAirlines = nh;
+  },
+  reload(state, data) {
+    state.reload = data;
   }
 };
 

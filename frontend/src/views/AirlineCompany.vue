@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-container>
+    <v-container >
       <v-layout row wrap>
         <v-flex lg4 md6 sm6 xs12>
           <airline-company-info v-bind:airlineCompany="airlineCompany" />
@@ -105,6 +105,7 @@ export default {
       AirlineCompanyController.get(this.id)
         .then(response => {
           this.airlineCompany = response.data;
+          console.log(this.airlineCompany);
         })
         .catch(() => {
           alert(error.response.data);
@@ -119,10 +120,14 @@ export default {
       this.airlineCompany = obj;
     },
     showSnackbar(obj) {
+      store.commit("reload", true);
+      this.$nextTick(() => {
+        store.commit("reload", false);
+      })
       this.snackbar.color = obj.color;
       this.snackbar.msg = obj.msg;
       this.snackbar.show = true;
-    }
+    },
   }
 };
 </script>

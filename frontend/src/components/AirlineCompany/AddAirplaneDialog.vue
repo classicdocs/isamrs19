@@ -72,6 +72,7 @@
 <script>
 import Airplane from "@/models/Airplane";
 import AirlineCompanyContoller from "@/controllers/airline-company.controller";
+import store from "@/store";
 
 export default {
   name: "AddAirplaneDialog",
@@ -98,7 +99,7 @@ export default {
           this.airlineCompany.id,
           this.airplane
         )
-          .then(response => {
+          .then((response) => {
             this.dialog = false;
             this.$emit("snack", {
               color: "success",
