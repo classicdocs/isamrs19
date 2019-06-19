@@ -1,7 +1,7 @@
 import BranchesApiService from "@/api-services/branches.service";
 
 export default {
-  get(id){
+  get(id) {
     return BranchesApiService.get(id);
   }
 };

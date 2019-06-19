@@ -25,5 +25,5 @@ export {
   rooms,
   searchHotelParams,
   hotelReservations,
-  discount,
+  discount
 };

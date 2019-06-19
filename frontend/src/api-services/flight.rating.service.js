@@ -1,7 +1,7 @@
-import Axios from 'axios';
+import Axios from "axios";
 
 const ENDPOINTS = {
-  RATE: 'rate-flight/',
+  RATE: "rate-flight/"
 };
 
 export default {
@@ -9,9 +9,9 @@ export default {
     return Axios.put(ENDPOINTS.RATE, data);
   },
   rateWithReturn(data) {
-    return Axios.put(ENDPOINTS.RATE + '1/', data);
+    return Axios.put(ENDPOINTS.RATE + "1/", data);
   },
   rateDifferentCompanies(data) {
-    return Axios.put(ENDPOINTS.RATE + '2/', data);
+    return Axios.put(ENDPOINTS.RATE + "2/", data);
   }
 };

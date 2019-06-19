@@ -1,32 +1,18 @@
 <template>
-  <v-dialog
-    v-model="dialog"
-    persistent
-    width="350px"
-  >
-  <template v-slot:activator="{ on }">
-    <v-btn
-    v-on="on"
-          dark
-          fab
-          color="success"
-          style="float:right"
-        >
-          <v-icon>add</v-icon>
-        </v-btn>  
-  </template>
+  <v-dialog v-model="dialog" persistent width="350px">
+    <template v-slot:activator="{ on }">
+      <v-btn v-on="on" dark fab color="success" style="float:right">
+        <v-icon>add</v-icon>
+      </v-btn>
+    </template>
     <v-card>
-      <v-form
-        ref="form"
-        v-model="formValid"
-        lazy-validation
-      >   
+      <v-form ref="form" v-model="formValid" lazy-validation>
         <v-card-title primary-title>
           <span class="headline">Add new luggage</span>
         </v-card-title>
         <v-card-text>
-          <v-text-field 
-            label="Name:" 
+          <v-text-field
+            label="Name:"
             v-model="name"
             required
             :rules="nameRules"
@@ -62,65 +48,70 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken" flat @click="closeDialog">Close</v-btn> 
-          <v-btn :disabled="!formValid" color="success" @click="submit">Submit</v-btn>  
+          <v-btn color="blue darken" flat @click="closeDialog">Close</v-btn>
+          <v-btn :disabled="!formValid" color="success" @click="submit"
+            >Submit</v-btn
+          >
         </v-card-actions>
       </v-form>
     </v-card>
-    
   </v-dialog>
 </template>
 
 <script>
-
 import store from "@/store";
 import AirlineCompanyController from "@/controllers/airline-company.controller";
 
 export default {
   name: "AddNewLuggage",
-  data:() => ({
+  data: () => ({
     dialog: false,
     formValid: false,
-    nameRules:[
-            v => !!v || 'Name is required',
+    nameRules: [v => !!v || "Name is required"],
+    dimensionsRules: [
+      v => !!v || "Dimensions are required",
+      v =>
+        /^[1-9]{1}[0-9]{0,2}x[1-9]{1}[0-9]{0,2}x[1-9]{1}[0-9]{0,2}$/.test(v) ||
+        "Example: 10x10x10"
     ],
-    dimensionsRules:[
-        v => !!v || 'Dimensions are required',
-        v => /^[1-9]{1}[0-9]{0,2}x[1-9]{1}[0-9]{0,2}x[1-9]{1}[0-9]{0,2}$/.test(v) || 'Example: 10x10x10'
+    priceRules: [
+      v => !!v || "Price is required",
+      v => /^[0-9]*$/.test(v) || "Price must be a positive number"
     ],
-    priceRules:[
-        v => !!v || 'Price is required',
-        v => /^[0-9]*$/.test(v) || 'Price must be a positive number'
-    ],
-    weightRules:[
-        v => !!v || 'Weight is required',
-        v => /^[1-9]{1}[0-9]*$/.test(v) || 'Weight must be a positive number'
+    weightRules: [
+      v => !!v || "Weight is required",
+      v => /^[1-9]{1}[0-9]*$/.test(v) || "Weight must be a positive number"
     ],
     name: "",
     price: "",
     dimensions: "",
-    weight: "",
+    weight: ""
   }),
   methods: {
     submit() {
       if (this.$refs.form.validate()) {
-
         let data = {
-          "name" : this.name,
-          "dimensions" : this.dimensions,
-          "weight": this.weight,
-          "price": this.price
-        }
+          name: this.name,
+          dimensions: this.dimensions,
+          weight: this.weight,
+          price: this.price
+        };
         AirlineCompanyController.addLuggage(this.$route.params.id, data)
-          .then((response) => {
-            this.$emit("newLuggage",response.data);
+          .then(response => {
+            this.$emit("newLuggage", response.data);
             this.closeDialog();
-            store.commit("setSnack", {msg: "You have successfully added a new luggage", color: "success"})
+            store.commit("setSnack", {
+              msg: "You have successfully added a new luggage",
+              color: "success"
+            });
           })
-          .catch((error) => {
+          .catch(error => {
             this.closeDialog();
-            store.commit("setSnack", {msg: error.response.data, color: "error"})
-          })
+            store.commit("setSnack", {
+              msg: error.response.data,
+              color: "error"
+            });
+          });
       }
     },
     closeDialog() {
@@ -132,9 +123,7 @@ export default {
       this.dialog = false;
     }
   }
-}
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

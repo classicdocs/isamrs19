@@ -1,110 +1,119 @@
 <template>
   <!-- <v-app id="app" v-bind:style="{'backgroundImage': image}"> -->
   <v-app id="app">
-    <v-toolbar
-     color="primary"
-    >
+    <v-toolbar color="primary">
       <v-toolbar-items>
-        <v-btn 
-          v-for="(item,index) in getNavBarLinksLeft"
+        <v-btn
+          v-for="(item, index) in getNavBarLinksLeft"
           :key="index"
           @click="$router.push(item.computed ? item.path() : item.path)"
           color="primary"
-        >{{item.name}}</v-btn>
+          >{{ item.name }}</v-btn
+        >
       </v-toolbar-items>
       <v-spacer></v-spacer>
       <v-toolbar-items>
-        <v-btn 
-          v-for="(item,index) in getNavBarLinksRight"
+        <v-btn
+          v-for="(item, index) in getNavBarLinksRight"
           :key="index"
-          @click="$router.push(item.computed ?  item.path() : item.path)"
+          @click="$router.push(item.computed ? item.path() : item.path)"
           color="primary"
-        >{{item.name}}</v-btn>
+          >{{ item.name }}</v-btn
+        >
       </v-toolbar-items>
     </v-toolbar>
-    <snackbar/>
-    <router-view/>
-
+    <snackbar />
+    <router-view />
   </v-app>
 </template>
 
 <script>
-
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 import Snackbar from "@/components/Snackbar.vue";
 import store from "@/store";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    'snackbar': Snackbar
+    snackbar: Snackbar
   },
-  data:() => ({
-    role: 'guest',
-    navbar : null,
-    image: "url('@/assets/wallpaper.jpg')",
+  data: () => ({
+    role: "guest",
+    navbar: null,
+    image: "url('@/assets/wallpaper.jpg')"
   }),
   created() {
     let user = store.getters.activeUser;
-    this.navbar =  {
+    this.navbar = {
       guest: {
-        right : [
-          {name:'Log in', path:'/login'},
-          {name:'Sign up', path:'/registration'}
+        right: [
+          { name: "Log in", path: "/login" },
+          { name: "Sign up", path: "/registration" }
         ],
-        left : [
-          {name: 'Flights', path:'/flights'},
-          {name: 'Hotels', path: '/hotels'},
-          {name: 'Rent-a-cars', path: '/rent-a-cars'},
+        left: [
+          { name: "Flights", path: "/flights" },
+          { name: "Hotels", path: "/hotels" },
+          { name: "Rent-a-cars", path: "/rent-a-cars" }
         ]
       },
-      'User': { 
+      User: {
         right: [
-        {name:'My Reservations', path:() => this.getReservationsPath , computed: true},
-        {name:'Friends', path:'/friends'},
-        {name:'Profile', path:() => this.getProfilPath , computed: true},
-        {name:'Log out', path:'/logout'},
+          {
+            name: "My Reservations",
+            path: () => this.getReservationsPath,
+            computed: true
+          },
+          { name: "Friends", path: "/friends" },
+          { name: "Profile", path: () => this.getProfilPath, computed: true },
+          { name: "Log out", path: "/logout" }
         ],
-        left : [
-          {name: 'Flights', path:'/flights'},
-          {name: 'Hotels', path: '/hotels'},
-          {name: 'Rent-a-cars', path: '/rent-a-cars'},]
+        left: [
+          { name: "Flights", path: "/flights" },
+          { name: "Hotels", path: "/hotels" },
+          { name: "Rent-a-cars", path: "/rent-a-cars" }
+        ]
       },
-      'System Admin': { 
+      "System Admin": {
         right: [
-        {name:'Profile', path:() => this.getProfilPath , computed: true},
-        {name:'Log out', path:'/logout'},
+          { name: "Profile", path: () => this.getProfilPath, computed: true },
+          { name: "Log out", path: "/logout" }
         ],
-        left : [
-        {name: 'System admin panel', path: '/sys-admin'}
-          ]
+        left: [{ name: "System admin panel", path: "/sys-admin" }]
       },
-      'Airline Company Admin': { 
+      "Airline Company Admin": {
         right: [
-        {name:'Profile', path:() => this.getProfilPath , computed: true},
-        {name:'Log out', path:'/logout'},
+          { name: "Profile", path: () => this.getProfilPath, computed: true },
+          { name: "Log out", path: "/logout" }
         ],
-        left : [
-        {name: 'My Airline company', path:() => this.getIdAdminOf, computed:true}
-          ]
+        left: [
+          {
+            name: "My Airline company",
+            path: () => this.getIdAdminOf,
+            computed: true
+          }
+        ]
       },
-      'RentACar Admin': { 
+      "RentACar Admin": {
         right: [
-        {name:'Profile', path:() => this.getProfilPath , computed: true},
-        {name:'Log out', path:'/logout'},
+          { name: "Profile", path: () => this.getProfilPath, computed: true },
+          { name: "Log out", path: "/logout" }
         ],
-        left : [
-        {name: 'My Rent-A-Car Service', path:() => this.getIdAdminOf, computed:true}
-          ]
+        left: [
+          {
+            name: "My Rent-A-Car Service",
+            path: () => this.getIdAdminOf,
+            computed: true
+          }
+        ]
       },
-      'Hotel Admin': { 
+      "Hotel Admin": {
         right: [
-        {name:'Profile', path:() => this.getProfilPath , computed: true},
-        {name:'Log out', path:'/logout'},
+          { name: "Profile", path: () => this.getProfilPath, computed: true },
+          { name: "Log out", path: "/logout" }
         ],
-        left : [
-        {name: 'My Hotel', path:() => this.getIdAdminOf, computed:true}
-          ]
+        left: [
+          { name: "My Hotel", path: () => this.getIdAdminOf, computed: true }
+        ]
       }
     };
   },
@@ -120,53 +129,55 @@ export default {
       return this.navbar[role].left;
     },
     ...mapGetters([
-      'activeUser',
-      'isSysAdmin',
-      'isAirlineAdmin',
-      'isHotelAdmin',
-      'isRentacarAdmin',
-      'isLogged',
-      'activeUserRole',
+      "activeUser",
+      "isSysAdmin",
+      "isAirlineAdmin",
+      "isHotelAdmin",
+      "isRentacarAdmin",
+      "isLogged",
+      "activeUserRole"
     ]),
     getProfilPath() {
-      return '/users/' + (this.activeUser ? this.activeUser.id : -1) +  '/profil';
+      return (
+        "/users/" + (this.activeUser ? this.activeUser.id : -1) + "/profil"
+      );
     },
     getReservationsPath() {
-      console.log("RESERVATIONPATH")
-      let path = "/" + (this.activeUser ? this.activeUser.id : -1) +'/my-reservations';  
+      console.log("RESERVATIONPATH");
+      let path =
+        "/" + (this.activeUser ? this.activeUser.id : -1) + "/my-reservations";
       console.log(path);
       return path;
     },
     getIdAdminOf() {
-      let path = '';
-      switch(this.activeUserRole) {
-        case 'Airline Company Admin': {
-          path = '/airline-company/';
+      let path = "";
+      switch (this.activeUserRole) {
+        case "Airline Company Admin": {
+          path = "/airline-company/";
           break;
         }
-        case 'Hotel Admin': {
-          path = '/hotel-service/'
+        case "Hotel Admin": {
+          path = "/hotel-service/";
           break;
         }
-        case 'RentACar Admin': {
-          path = '/rentacar-service/';
+        case "RentACar Admin": {
+          path = "/rentacar-service/";
           break;
         }
       }
       console.log(path);
       return path + (this.activeUser ? this.activeUser.idAdminOf : -1);
     }
-  },
-}
+  }
+};
 </script>
 
 <style>
 #app {
   /* background-image: url("http://citaonica.com/wp-content/uploads/2018/11/travel-health.jpg"); */
   /* background-size: 100% ; */
-  background-image: url('~@/assets/wallpaper.jpg');
-  background-size: 100%  100%;
+  background-image: url("~@/assets/wallpaper.jpg");
+  background-size: 100% 100%;
   background-color: lavender;
 }
 </style>
-

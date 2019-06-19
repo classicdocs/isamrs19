@@ -1,6 +1,5 @@
 export default class SearchParams {
   constructor() {
-    this.seatClass = null,
-    this.passengersNumber = null
+    (this.seatClass = null), (this.passengersNumber = null);
   }
 }

@@ -1,46 +1,57 @@
 <template>
   <div>
     <v-card class="card">
-      <v-form
-          ref="form"
-          v-model="form"
-        >
+      <v-form ref="form" v-model="form">
         <v-toolbar flat color="white">
           <v-toolbar-title>List of rent-a-car companies</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-btn color="primary" dark @click="expand = !expand">
-            {{ expand ? 'Close' : 'Keep' }} other rows
+            {{ expand ? "Close" : "Keep" }} other rows
           </v-btn>
-           <v-spacer></v-spacer>
+          <v-spacer></v-spacer>
           <v-text-field
             v-model="search"
             append-icon="search"
-            label="Search rent a car companies" 
+            label="Search rent a car companies"
             single-line
             hide-details
           ></v-text-field>
         </v-toolbar>
-        <v-data-table :headers="headers" :items="rentACars" :search="search"
-          class="elevation-1" :expand="expand" item-key="name"
+        <v-data-table
+          :headers="headers"
+          :items="rentACars"
+          :search="search"
+          class="elevation-1"
+          :expand="expand"
+          item-key="name"
         >
           <template v-slot:items="props">
-          <!-- <tr @click="props.expanded = !props.expanded"> -->
-          <tr>
-            <td class="text-xs-center">{{ props.item.name }}</td>
-            <td class="text-xs-center">{{ props.item.address }}</td>
-            <!-- <td class="text-xs-right">{{ props.item.promotionalDescription }}</td> -->
-            <td class="text-xs-center"> <v-rating :readonly="true" v-model="props.item.rating" half-increments></v-rating></td>
-            <td class="text-xs-center">
-              <v-btn @click="goToService(props.item.id)">
-              {{props.item.name}} page
-              <v-icon right>local_taxi</v-icon>
-              </v-btn>
-            </td>
-          </tr>
+            <!-- <tr @click="props.expanded = !props.expanded"> -->
+            <tr>
+              <td class="text-xs-center">{{ props.item.name }}</td>
+              <td class="text-xs-center">{{ props.item.address }}</td>
+              <!-- <td class="text-xs-right">{{ props.item.promotionalDescription }}</td> -->
+              <td class="text-xs-center">
+                <v-rating
+                  :readonly="true"
+                  v-model="props.item.rating"
+                  half-increments
+                ></v-rating>
+              </td>
+              <td class="text-xs-center">
+                <v-btn @click="goToService(props.item.id)">
+                  {{ props.item.name }} page
+                  <v-icon right>local_taxi</v-icon>
+                </v-btn>
+              </td>
+            </tr>
           </template>
           <template v-slot:expand="props">
             <v-card flat>
-              <v-card-text>Rent-a-car company description: {{props.item.promotionalDescription}}</v-card-text>
+              <v-card-text
+                >Rent-a-car company description:
+                {{ props.item.promotionalDescription }}</v-card-text
+              >
             </v-card>
           </template>
           <template v-slot:no-data>
@@ -48,65 +59,59 @@
               Sorry, nothing to display here :(
             </v-alert>
           </template>
-          
         </v-data-table>
-        <v-card-text>
-        </v-card-text>
+        <v-card-text> </v-card-text>
       </v-form>
     </v-card>
   </div>
 </template>
 
 <script>
-import RentACarController from "@/controllers/rentacar.controller.js"
-import router from '../router'
+import RentACarController from "@/controllers/rentacar.controller.js";
+import router from "../router";
 
 export default {
   name: "RentACarOverviewForm",
-  components: {
-    
-  },
-  data:() => ({
-    search: '',
+  components: {},
+  data: () => ({
+    search: "",
     expand: false,
     headers: [
-          {
-            text: 'Rent a car company name',
-            align: 'center',
-            value: 'name'
-          },
-          { text: 'Address', value: 'address' , align: 'center'},
-          // { text: 'Description', value: 'description' , align: 'center', sortable: false},
-          { text: 'Average rating', value: 'avgRate' , align: 'center'},
-          { text: ' ', value: 'button' , align: 'center'}
-        ],
+      {
+        text: "Rent a car company name",
+        align: "center",
+        value: "name"
+      },
+      { text: "Address", value: "address", align: "center" },
+      // { text: 'Description', value: 'description' , align: 'center', sortable: false},
+      { text: "Average rating", value: "avgRate", align: "center" },
+      { text: " ", value: "button", align: "center" }
+    ],
     rentACars: [],
-    form : true,
-    
+    form: true,
+
     snackbar: {
       show: false,
       color: "",
-      msg: "",
-    },
+      msg: ""
+    }
   }),
   created() {
-    RentACarController.getAll()
-      .then((response) => {
-        response.data.forEach(element => {
-          this.rentACars.push(element);
-        });
+    RentACarController.getAll().then(response => {
+      response.data.forEach(element => {
+        this.rentACars.push(element);
       });
+    });
   },
   methods: {
     goToService(id) {
-      router.push({ path: "rentacar-service/" + id});
-  },
+      router.push({ path: "rentacar-service/" + id });
+    }
   }
-}
+};
 </script>
 <style>
-.text-xs-center{
+.text-xs-center {
   font-size: xx-large;
 }
 </style>
-

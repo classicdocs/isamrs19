@@ -1,19 +1,15 @@
 const state = {
-    allAirlines: null,
+  allAirlines: null
 };
-  
+
 const getters = {
-    allAirlines:(state) => state.allAirlines,
+  allAirlines: state => state.allAirlines
 };
 
 const mutations = {
-    allAirlines(state, nh) {
-        state.allAirlines = nh;
-    },
+  allAirlines(state, nh) {
+    state.allAirlines = nh;
+  }
 };
 
-export {
-    state,
-    getters,
-    mutations
-};
+export { state, getters, mutations };

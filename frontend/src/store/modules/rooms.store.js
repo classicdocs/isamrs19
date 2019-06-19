@@ -1,19 +1,15 @@
 const state = {
-    allRooms: null,
+  allRooms: null
 };
-  
+
 const getters = {
-    allRooms:(state) => state.allRooms,
+  allRooms: state => state.allRooms
 };
 
 const mutations = {
-    allRooms(state, nh) {
-        state.allRooms = nh;
-    },
+  allRooms(state, nh) {
+    state.allRooms = nh;
+  }
 };
 
-export {
-    state,
-    getters,
-    mutations
-};
+export { state, getters, mutations };

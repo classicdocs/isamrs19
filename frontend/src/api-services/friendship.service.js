@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import Axios from "axios";
 
 const ENDPOINTS = {
   FRIENDSHIP: "/friendship",
@@ -11,13 +11,15 @@ const ENDPOINTS = {
 
 export default {
   acceptFriendRequest(data) {
-    return Axios.post(ENDPOINTS.FRIENDSHIP + ENDPOINTS.ACCEPT, data );
+    return Axios.post(ENDPOINTS.FRIENDSHIP + ENDPOINTS.ACCEPT, data);
   },
   addFriend(data) {
     return Axios.post(ENDPOINTS.FRIENDSHIP, data);
   },
   isRequestAlreadySent(data) {
-    return Axios.get(ENDPOINTS.FRIENDSHIP + ENDPOINTS.CHECK_REQUEST, {params: data});
+    return Axios.get(ENDPOINTS.FRIENDSHIP + ENDPOINTS.CHECK_REQUEST, {
+      params: data
+    });
   },
   cancelFriendRequest(data) {
     return Axios.post(ENDPOINTS.FRIENDSHIP + ENDPOINTS.CANCEL, data);
@@ -26,7 +28,8 @@ export default {
     return Axios.post(ENDPOINTS.FRIENDSHIP + ENDPOINTS.REMOVE, data);
   },
   isFriend(data) {
-    return Axios.get(ENDPOINTS.FRIENDSHIP + ENDPOINTS.CHECK_FRIEND, {params: data});
+    return Axios.get(ENDPOINTS.FRIENDSHIP + ENDPOINTS.CHECK_FRIEND, {
+      params: data
+    });
   }
-
 };

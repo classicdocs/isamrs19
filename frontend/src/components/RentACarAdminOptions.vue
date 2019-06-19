@@ -1,18 +1,16 @@
 <template>
-    <div>
-        <AddVehicleForm></AddVehicleForm>
-    </div>
+  <div>
+    <AddVehicleForm></AddVehicleForm>
+  </div>
 </template>
 
 <script>
-
-import AddVehicleForm from "@/components/AddVehicleForm.vue"
+import AddVehicleForm from "@/components/AddVehicleForm.vue";
 
 export default {
-    name: "RentACarAdminOptions",
-    components: {
-        AddVehicleForm
-    }
-}
+  name: "RentACarAdminOptions",
+  components: {
+    AddVehicleForm
+  }
+};
 </script>
-

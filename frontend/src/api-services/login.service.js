@@ -1,10 +1,10 @@
-import Axios from 'axios';
+import Axios from "axios";
 
 const ENDPOINTS = {
-  LOGIN: 'login/',
-  CHANGE_PASSWORD: 'change-password/',
-  LOGOUT: 'logout/',
-  ACTIVE_USER: 'me/',
+  LOGIN: "login/",
+  CHANGE_PASSWORD: "change-password/",
+  LOGOUT: "logout/",
+  ACTIVE_USER: "me/"
 };
 
 export default {

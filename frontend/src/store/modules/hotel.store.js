@@ -1,19 +1,15 @@
 const state = {
-    newHotel: null,
+  newHotel: null
 };
-  
+
 const getters = {
-    newHotel:(state) => state.newHotel,
+  newHotel: state => state.newHotel
 };
 
 const mutations = {
-    newHotel(state, nh) {
-        state.newHotel = nh;
-    },
+  newHotel(state, nh) {
+    state.newHotel = nh;
+  }
 };
 
-export {
-    state,
-    getters,
-    mutations
-};
+export { state, getters, mutations };

@@ -1,7 +1,7 @@
-import Axios from 'axios';
+import Axios from "axios";
 
 const ENDPOINTS = {
-  BRANCHES: 'branches/'
+  BRANCHES: "branches/"
 };
 
 export default {

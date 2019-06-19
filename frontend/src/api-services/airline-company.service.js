@@ -1,9 +1,9 @@
-import Axios from 'axios';
+import Axios from "axios";
 
 const ENDPOINTS = {
-  AIRLINE_COMPANY: 'airline-companies/',
-  AIRPLANES: '/airplanes/',
-  AIRLINE_COMPANIES: 'airline-companies',
+  AIRLINE_COMPANY: "airline-companies/",
+  AIRPLANES: "/airplanes/",
+  AIRLINE_COMPANIES: "airline-companies",
   DESTINATIONS: "/destinations",
   FLIGHTS: "/flights",
   DISCOUNT: "/discount",
@@ -11,7 +11,7 @@ const ENDPOINTS = {
   SOLD_TICKETS: "/sold-tickets",
   LUGGAGE: "/luggage/",
   ARCHIVED: "/archived",
-  CHANGE_LOCATION: '/changeLocation/'
+  CHANGE_LOCATION: "/changeLocation/"
 };
 
 export default {
@@ -28,28 +28,46 @@ export default {
     return Axios.get(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.AIRPLANES);
   },
   addAirplane(id, data) {
-    return Axios.post(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.AIRPLANES, data)
+    return Axios.post(
+      ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.AIRPLANES,
+      data
+    );
   },
   updateAirplane(airlineCompany, airplane, data) {
-    return Axios.put(ENDPOINTS.AIRLINE_COMPANY + airlineCompany + ENDPOINTS.AIRPLANES + airplane, data);
+    return Axios.put(
+      ENDPOINTS.AIRLINE_COMPANY +
+        airlineCompany +
+        ENDPOINTS.AIRPLANES +
+        airplane,
+      data
+    );
   },
-  findAllAirlines(){
+  findAllAirlines() {
     return Axios.get(ENDPOINTS.AIRLINE_COMPANIES);
   },
-  addDestination(id,data) {
-    return Axios.post(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.DESTINATIONS, data);
+  addDestination(id, data) {
+    return Axios.post(
+      ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.DESTINATIONS,
+      data
+    );
   },
   getFlights(id) {
     return Axios.get(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.FLIGHTS);
   },
   getArchivedFlights(id) {
-    return Axios.get(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.FLIGHTS + ENDPOINTS.ARCHIVED);
+    return Axios.get(
+      ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.FLIGHTS + ENDPOINTS.ARCHIVED
+    );
   },
   getFlightsDiscount(id) {
-    return Axios.get(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.FLIGHTS + ENDPOINTS.DISCOUNT);
+    return Axios.get(
+      ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.FLIGHTS + ENDPOINTS.DISCOUNT
+    );
   },
   getReports(id, data) {
-    return Axios.get(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.REPORTS, {params: data});
+    return Axios.get(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.REPORTS, {
+      params: data
+    });
   },
   getLuggage(id) {
     return Axios.get(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.LUGGAGE);
@@ -58,9 +76,14 @@ export default {
     return Axios.post(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.LUGGAGE, data);
   },
   deleteLuggage(id, luggageId) {
-    return Axios.delete(ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.LUGGAGE + luggageId);
+    return Axios.delete(
+      ENDPOINTS.AIRLINE_COMPANY + id + ENDPOINTS.LUGGAGE + luggageId
+    );
   },
-  changeLocation(airline_id, mapLocation){
-    return Axios.put(ENDPOINTS.AIRLINE_COMPANY + airline_id + ENDPOINTS.CHANGE_LOCATION, mapLocation);
+  changeLocation(airline_id, mapLocation) {
+    return Axios.put(
+      ENDPOINTS.AIRLINE_COMPANY + airline_id + ENDPOINTS.CHANGE_LOCATION,
+      mapLocation
+    );
   }
 };

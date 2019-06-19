@@ -1,7 +1,7 @@
-import Axios from 'axios';
+import Axios from "axios";
 
 const ENDPOINTS = {
-  DESTINATIONS: 'hotelDestinations/'
+  DESTINATIONS: "hotelDestinations/"
 };
 
 export default {

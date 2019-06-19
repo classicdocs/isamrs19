@@ -1,8 +1,7 @@
 const state = {
-  message: '',
-  color: '',
+  message: "",
+  color: ""
 };
-
 
 const mutations = {
   setSnack(state, data) {
@@ -11,7 +10,4 @@ const mutations = {
   }
 };
 
-export {
-  state,
-  mutations
-};
+export { state, mutations };

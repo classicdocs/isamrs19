@@ -1,7 +1,5 @@
-
 export default class RoomDiscountBean {
-    constructor() {
-        this.room = null,
-        this.roomDiscount = null
-    }
+  constructor() {
+    (this.room = null), (this.roomDiscount = null);
+  }
 }
