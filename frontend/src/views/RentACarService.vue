@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <v-app id="inspire"> -->
     <v-tabs centered color="#2b77f2" dark icons-and-text>
       <v-tabs-slider color="yellow"></v-tabs-slider>
 
@@ -8,22 +7,7 @@
         Home
         <v-icon>home</v-icon>
       </v-tab>
-            <v-tab href="#tab-4" v-if="admin">
-                Quick reservations
-                <i class="material-icons">credit_card</i>
-            </v-tab>
-
-            <v-tab href="#tab-5" v-if="admin">
-                Edit
-                <i class="material-icons">border_color</i>
-            </v-tab>
-        
-            <v-tab-item :value="'tab-1'" >
-                <v-card flat>
-                    <RentACarInfo :rentacar="rentacar"></RentACarInfo>
-                </v-card>
-            </v-tab-item>
-
+    
       <v-tab href="#tab-2">
         Vehicles
         <i class="material-icons">directions_car</i>
@@ -35,6 +19,11 @@
       </v-tab>
 
       <v-tab href="#tab-4" v-if="admin">
+        Quick reservations
+        <i class="material-icons">credit_card</i>
+      </v-tab>
+
+      <v-tab href="#tab-5" v-if="admin">
         Edit
         <i class="material-icons">border_color</i>
       </v-tab>
@@ -63,28 +52,21 @@
 
       <v-tab-item :value="'tab-4'" v-if="admin">
         <v-card flat>
-          <EditRentacarForm
+          <VehicleQuickReservations
+            @update-rentacar="updateRentacar"
+          ></VehicleQuickReservations>
+        </v-card>
+      </v-tab-item>
+
+      <v-tab-item :value="'tab-5'" v-if="admin">
+        <v-card flat>
+           <EditRentacarForm
             @update-rentacar="updateRentacar"
           ></EditRentacarForm>
         </v-card>
       </v-tab-item>
     </v-tabs>
-    <!-- </v-app> -->
-  </div>
-             <v-tab-item :value="'tab-4'" v-if="admin">
-                <v-card flat>
-                    <VehicleQuickReservations></VehicleQuickReservations>
-                </v-card>
-            </v-tab-item>
-
-            <v-tab-item :value="'tab-5'" v-if="admin">
-                <v-card flat>
-                    <EditRentacarForm @update-rentacar="updateRentacar"></EditRentacarForm>
-                </v-card>
-            </v-tab-item>
-            </v-tabs>
-        <!-- </v-app> -->
-    </div>
+  </div>        
 </template>
 
 <script>
@@ -104,7 +86,8 @@ export default {
     RentACarAdminOptions,
     EditRentacarForm,
     VehicleReservation,
-    BranchesList
+    BranchesList,
+    VehicleQuickReservations
   },
   data: () => ({
     id: null,

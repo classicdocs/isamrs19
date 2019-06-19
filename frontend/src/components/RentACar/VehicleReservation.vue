@@ -444,7 +444,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-card>
+  </div>
 </template>
 
 <script>
@@ -461,192 +461,192 @@ import QuickReservation from "@/models/QuickReservation.js";
 
 
 export default {
-    name: 'VehicleReservation',
-    data: () => ({
-        expansion: [true],
-        pickupDateMenu : false,
-        pickupTimeMenu : false,
-        returnDateMenu : false,
-        returnTimeMenu : false,
-        vehicleSearch : new VehicleSearch(),
-        vr : new VehicleReservation(),
-        vehicle_list : [],
-        branches: [],
-        noResults: false, 
-        formValid: false,
-        snackbar: {
-          show: false,
-          color: "",
-          msg: "",
-        },
-        additionalServicesDialog : false,
-        gps : false,
-        childSeat : false,
-        collision : false,
-        theft : false,
-        total : 0,
-        days : 0,
-        pricePerDay : 0,
-        quickReservations: [],
-        qr : new QuickReservation(),
-    }),
-    created() {
-      this.vehicle_list = [];
+  name: 'VehicleReservation',
+  data: () => ({
+      expansion: [true],
+      pickupDateMenu : false,
+      pickupTimeMenu : false,
+      returnDateMenu : false,
+      returnTimeMenu : false,
+      vehicleSearch : new VehicleSearch(),
+      vr : new VehicleReservation(),
+      vehicle_list : [],
+      branches: [],
+      noResults: false, 
+      formValid: false,
+      snackbar: {
+        show: false,
+        color: "",
+        msg: "",
+      },
+      additionalServicesDialog : false,
+      gps : false,
+      childSeat : false,
+      collision : false,
+      theft : false,
+      total : 0,
+      days : 0,
+      pricePerDay : 0,
+      quickReservations: [],
+      qr : new QuickReservation(),
+  }),
+  created() {
+    this.vehicle_list = [];
 
-      this.getBranches();
-      this.getQuickReservations();
-      
+    this.getBranches();
+    this.getQuickReservations();
+    
+  },
+  methods: {
+    validateSearch() {
+      if(this.$refs.form.validate()) {
+        this.onSubmit();
+      }
     },
-    methods: {
-      validateSearch() {
-        if(this.$refs.form.validate()) {
-          this.onSubmit();
-        }
-      },
-      getQuickReservations() {
-        RentACarController.getQuickReservations(this.$route.params.id)
-         .then((response) => {
-           response.data.forEach(element => {
-             this.quickReservations.push(element);
-           })
-         })
-      },
-      getBranches() {
-        BranchesController.get(this.$route.params.id)
+    getQuickReservations() {
+      RentACarController.getQuickReservations(this.$route.params.id)
         .then((response) => {
           response.data.forEach(element => {
-            this.branches.push(element);
-          });
-        });
-      },
-      onSubmit() {
-        this.vehicle_list = [];
-
-      this.vehicleSearch.rentACar = this.$route.params.id;
-
-      VehicleController.getSpecific(this.vehicleSearch)
-        .then(response => {
-          response.data.forEach(element => {
-            this.vehicle_list.push(element);
-          });
+            this.quickReservations.push(element);
+          })
         })
-        .catch(error => {
-          this.showSnackbar(error.response.data, "error");
+    },
+    getBranches() {
+      BranchesController.get(this.$route.params.id)
+      .then((response) => {
+        response.data.forEach(element => {
+          this.branches.push(element);
         });
-
-      if (this.vehicle_list.length === 0) {
-        this.noResults = true;
-      }
+      });
     },
-    showSnackbar(message, color) {
-      this.snackbar.color = color;
-      this.snackbar.msg = message;
-      this.snackbar.show = true;
-    },
-    showAdditionalServicesDialog(id, daysPrice) {
-      if (!store.getters.isLogged) {
-        router.push({ name: "login" });
-      }
+    onSubmit() {
+      this.vehicle_list = [];
 
-      this.vr.pickupDate = this.vehicleSearch.pickupDate;
-      this.vr.pickupTime = this.vehicleSearch.pickupTime;
-      this.vr.returnDate = this.vehicleSearch.returnDate;
-      this.vr.returnTime = this.vehicleSearch.returnTime;
-      this.vr.pickupLocation = this.vehicleSearch.pickupPlace;
-      this.vr.returnLocation = this.vehicleSearch.returnPlace;
-      this.vr.carId = id;
-      this.vr.user = store.getters.activeUser.username;
-      this.vr.rentACarId = this.$route.params.id;
+    this.vehicleSearch.rentACar = this.$route.params.id;
 
-      const startDate = new Date(this.vr.pickupDate);
-      const endDate = new Date(this.vr.returnDate);
-
-      var pickupTimeString = this.vr.pickupTime;
-      var pickupTimeArray = pickupTimeString.split(":");
-      var pickupTimeHours = parseInt(pickupTimeArray[0]);
-      var pickupTimeMinutes = parseInt(pickupTimeArray[1]);
-      var pickupTimeAllToMinutes = pickupTimeHours * 60 + pickupTimeMinutes;
-
-      var returnTimeString = this.vr.returnTime;
-      var returnTimeArray = returnTimeString.split(":");
-      var returnTimeHours = parseInt(returnTimeArray[0]);
-      var returnTimeMinutes = parseInt(returnTimeArray[1]);
-      var returnTimeAllToMinutes = returnTimeHours * 60 + returnTimeMinutes;
-
-      this.days = (endDate - startDate) / (60 * 60 * 24 * 1000);
-      this.pricePerDay = daysPrice;
-
-      if (pickupTimeAllToMinutes < returnTimeAllToMinutes) {
-        this.days += 1;
-      }
-
-      this.additionalServicesDialog = true;
-    },
-    reserve() {
-      this.vr.gpsIncluded = this.gps;
-      this.vr.childSeatIncluded = this.childSeat;
-      this.vr.collisionInsuranceIncluded = this.collision;
-      this.vr.theftInsuranceIncluded = this.theft;
-
-      VehicleReservationController.reserve(this.vr)
-        .then(response => {
-          store.commit("setSnack", {
-            msg: "You have successfully reserved a vehicle!",
-            color: "success"
-          });
-        })
-        .catch(error => {
-          store.commit("setSnack", {
-            msg: error.response.data,
-            color: "error"
-          });
+    VehicleController.getSpecific(this.vehicleSearch)
+      .then(response => {
+        response.data.forEach(element => {
+          this.vehicle_list.push(element);
         });
+      })
+      .catch(error => {
+        this.showSnackbar(error.response.data, "error");
+      });
 
-        this.vehicle_list = [];
-        this.additionalServicesDialog = false;
-      },
-      calculateTotal() {
-        this.total = 0;
-        if(this.gps) {
-          this.total += 50;
-        }
-        if(this.childSeat) {
-          this.total += 20;
-        }
-        if(this.collision) {
-          this.total += 100;
-        }
-        if(this.theft) {
-          this.total += 100;
-        }
-      },
-      stopReservation() {
-        this.additionalServicesDialog = false;
-        this.total = 0;
-        this.gps = false;
-        this.childSeat = false;
-        this.collision = false;
-        this.theft = false;
-      },
-      quickReserve(quickReservation) {
-        this.qr.quickReservationId = quickReservation.id;
-        this.qr.rentACarId = this.$route.params.id;
-        this.qr.user = store.getters.activeUser.username;
-
-        VehicleReservationController.quickReserve(this.qr)
-         .then((response) => {
-           store.commit("setSnack", {msg: "You have successfully rented a vehicle.", color:"success"})
-           let idx = this.quickReservations.indexOf(quickReservation);
-           if (idx != -1)
-            this.quickReservations.splice(idx,1);
-           })
-         .catch((error) => {
-            store.commit("setSnack", {msg: error.response.data, color:"error"})
-         });       
-      },
+    if (this.vehicle_list.length === 0) {
+      this.noResults = true;
     }
+  },
+  showSnackbar(message, color) {
+    this.snackbar.color = color;
+    this.snackbar.msg = message;
+    this.snackbar.show = true;
+  },
+  showAdditionalServicesDialog(id, daysPrice) {
+    if (!store.getters.isLogged) {
+      router.push({ name: "login" });
+    }
+
+    this.vr.pickupDate = this.vehicleSearch.pickupDate;
+    this.vr.pickupTime = this.vehicleSearch.pickupTime;
+    this.vr.returnDate = this.vehicleSearch.returnDate;
+    this.vr.returnTime = this.vehicleSearch.returnTime;
+    this.vr.pickupLocation = this.vehicleSearch.pickupPlace;
+    this.vr.returnLocation = this.vehicleSearch.returnPlace;
+    this.vr.carId = id;
+    this.vr.user = store.getters.activeUser.username;
+    this.vr.rentACarId = this.$route.params.id;
+
+    const startDate = new Date(this.vr.pickupDate);
+    const endDate = new Date(this.vr.returnDate);
+
+    var pickupTimeString = this.vr.pickupTime;
+    var pickupTimeArray = pickupTimeString.split(":");
+    var pickupTimeHours = parseInt(pickupTimeArray[0]);
+    var pickupTimeMinutes = parseInt(pickupTimeArray[1]);
+    var pickupTimeAllToMinutes = pickupTimeHours * 60 + pickupTimeMinutes;
+
+    var returnTimeString = this.vr.returnTime;
+    var returnTimeArray = returnTimeString.split(":");
+    var returnTimeHours = parseInt(returnTimeArray[0]);
+    var returnTimeMinutes = parseInt(returnTimeArray[1]);
+    var returnTimeAllToMinutes = returnTimeHours * 60 + returnTimeMinutes;
+
+    this.days = (endDate - startDate) / (60 * 60 * 24 * 1000);
+    this.pricePerDay = daysPrice;
+
+    if (pickupTimeAllToMinutes < returnTimeAllToMinutes) {
+      this.days += 1;
+    }
+
+    this.additionalServicesDialog = true;
+  },
+  reserve() {
+    this.vr.gpsIncluded = this.gps;
+    this.vr.childSeatIncluded = this.childSeat;
+    this.vr.collisionInsuranceIncluded = this.collision;
+    this.vr.theftInsuranceIncluded = this.theft;
+
+    VehicleReservationController.reserve(this.vr)
+      .then(response => {
+        store.commit("setSnack", {
+          msg: "You have successfully reserved a vehicle!",
+          color: "success"
+        });
+      })
+      .catch(error => {
+        store.commit("setSnack", {
+          msg: error.response.data,
+          color: "error"
+        });
+      });
+
+      this.vehicle_list = [];
+      this.additionalServicesDialog = false;
+    },
+    calculateTotal() {
+      this.total = 0;
+      if(this.gps) {
+        this.total += 50;
+      }
+      if(this.childSeat) {
+        this.total += 20;
+      }
+      if(this.collision) {
+        this.total += 100;
+      }
+      if(this.theft) {
+        this.total += 100;
+      }
+    },
+    stopReservation() {
+      this.additionalServicesDialog = false;
+      this.total = 0;
+      this.gps = false;
+      this.childSeat = false;
+      this.collision = false;
+      this.theft = false;
+    },
+    quickReserve(quickReservation) {
+      this.qr.quickReservationId = quickReservation.id;
+      this.qr.rentACarId = this.$route.params.id;
+      this.qr.user = store.getters.activeUser.username;
+
+      VehicleReservationController.quickReserve(this.qr)
+        .then((response) => {
+          store.commit("setSnack", {msg: "You have successfully rented a vehicle.", color:"success"})
+          let idx = this.quickReservations.indexOf(quickReservation);
+          if (idx != -1)
+          this.quickReservations.splice(idx,1);
+          })
+        .catch((error) => {
+          store.commit("setSnack", {msg: error.response.data, color:"error"})
+        });       
+    },
   }
-};
+}
+
 </script>
 
 <style>
