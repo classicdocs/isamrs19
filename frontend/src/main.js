@@ -6,7 +6,6 @@ import Vuetify from 'vuetify';
 import Axios from 'axios';
 import Config from './config';
 Vue.config.productionTip = false;
-Vie.config.silent = true;
 
 import LoginController from './controllers/login.controller';
 
@@ -38,7 +37,7 @@ Axios.defaults.baseURL = Config.getApiUrl();
 Axios.defaults.headers.Accept = 'application/json';
 Axios.defaults.headers['Access-Control-Allow-Origin'] = '*';
 
-
+/* eslint-disable */
 new Vue({
   router,
   store,
