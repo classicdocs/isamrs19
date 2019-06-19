@@ -6,6 +6,7 @@ import Vuetify from 'vuetify';
 import Axios from 'axios';
 import Config from './config';
 Vue.config.productionTip = false;
+Vie.config.silent = true;
 
 import LoginController from './controllers/login.controller';
 
