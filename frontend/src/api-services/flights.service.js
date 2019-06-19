@@ -1,11 +1,11 @@
-import Axios from 'axios';
+import Axios from "axios";
 
 const ENDPOINTS = {
-  FLIGHTS: 'flights/',
-  SEARCH: 'search',
+  FLIGHTS: "flights/",
+  SEARCH: "search",
   RESERVE: "reserve",
   DISCOUNT: "discount",
-  ARCHIVE: "archive",
+  ARCHIVE: "archive"
 };
 
 export default {
@@ -13,7 +13,7 @@ export default {
     return Axios.post(ENDPOINTS.FLIGHTS, data);
   },
   search(data) {
-    return Axios.get(ENDPOINTS.FLIGHTS + ENDPOINTS.SEARCH, {params: data});
+    return Axios.get(ENDPOINTS.FLIGHTS + ENDPOINTS.SEARCH, { params: data });
   },
   reserve(data) {
     return Axios.post(ENDPOINTS.FLIGHTS + ENDPOINTS.RESERVE, data);

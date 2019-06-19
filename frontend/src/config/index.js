@@ -1,4 +1,4 @@
-import {ENVIRONMENTS, BACKEND_HOSTNAMES, API_ROUTE} from "@/constants";
+import { ENVIRONMENTS, BACKEND_HOSTNAMES, API_ROUTE } from "@/constants";
 
 export default {
   getEnv() {

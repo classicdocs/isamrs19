@@ -1,32 +1,34 @@
 <template>
   <div>
-    <v-container >
+    <v-container>
       <v-layout row wrap>
         <v-flex lg4 md6 sm6 xs12>
-          <airline-company-info v-bind:airlineCompany="airlineCompany"/>
-          <list-of-destinations ></list-of-destinations>
+          <airline-company-info v-bind:airlineCompany="airlineCompany" />
+          <list-of-destinations></list-of-destinations>
         </v-flex>
         <v-flex lg8 md6 sm6 xs12>
-          <v-container  v-if="admin">
-            <v-layout row wrap >
-              <add-flight-dialog 
+          <v-container v-if="admin">
+            <v-layout row wrap>
+              <add-flight-dialog
                 v-on:snack="showSnackbar($event)"
               ></add-flight-dialog>
-              <edit-airline-company-dialog 
+              <edit-airline-company-dialog
                 v-bind:airlineCompany="airlineCompany"
                 v-on:info-update="infoUpdate($event)"
                 v-on:snack="showSnackbar($event)"
               ></edit-airline-company-dialog>
-              <add-airplane-dialog 
+              <add-airplane-dialog
                 v-bind:airlineCompany="airlineCompany"
                 v-on:snack="showSnackbar($event)"
               ></add-airplane-dialog>
               <manage-seats-dialog
                 v-on:snack="showSnackbar($event)"
               ></manage-seats-dialog>
-              <add-destination v-bind:airlineCompany="airlineCompany"></add-destination>
-              <reports/>
-              <luggage-info/>
+              <add-destination
+                v-bind:airlineCompany="airlineCompany"
+              ></add-destination>
+              <reports />
+              <luggage-info />
             </v-layout>
           </v-container>
           <flights-discount></flights-discount>
@@ -35,25 +37,20 @@
       </v-layout>
     </v-container>
     <v-snackbar
-        v-model="snackbar.show"
-        :timeout="5000"
-        :color="snackbar.color"
-        :top="true"
+      v-model="snackbar.show"
+      :timeout="5000"
+      :color="snackbar.color"
+      :top="true"
     >
-      {{snackbar.msg}}
-      <v-btn
-          dark
-          flat
-          @click="snackbar.show = false"
-      >
-      Close
+      {{ snackbar.msg }}
+      <v-btn dark flat @click="snackbar.show = false">
+        Close
       </v-btn>
     </v-snackbar>
   </div>
 </template>
 
 <script>
-
 import AirlineCompanyInfo from "@/components/AirlineCompany/AirlineCompanyInfo.vue";
 import AddFlightDialog from "@/components/AirlineCompany/AddFlightDialog.vue";
 import AirlineCompanyController from "@/controllers/airline-company.controller";
@@ -64,33 +61,33 @@ import ManageSeatsDialog from "@/components/AirlineCompany/ManageSeatsDialog.vue
 import AddDestination from "@/components/AirlineCompany/AddDestination.vue";
 import ListOfDestinations from "@/components/AirlineCompany/ListOfDestinations.vue";
 import store from "@/store";
-import ListOfFlightsVue from '../components/AirlineCompany/ListOfFlights.vue';
-import ListOfFlightsWithDiscountVue from '../components/AirlineCompany/ListOfFlightsWithDiscount.vue';
-import ReportsVue from '../components/AirlineCompany/Reports.vue';
-import LuggageInfoVue from '../components/AirlineCompany/LuggageInfo.vue';
+import ListOfFlightsVue from "../components/AirlineCompany/ListOfFlights.vue";
+import ListOfFlightsWithDiscountVue from "../components/AirlineCompany/ListOfFlightsWithDiscount.vue";
+import ReportsVue from "../components/AirlineCompany/Reports.vue";
+import LuggageInfoVue from "../components/AirlineCompany/LuggageInfo.vue";
 
 export default {
   name: "AirlineCompany",
   components: {
-    'airline-company-info': AirlineCompanyInfo,
-    'add-flight-dialog':AddFlightDialog,
-    'edit-airline-company-dialog': EditAirlineCompanyDialog,
-    'add-airplane-dialog': AddAirplaneDialog,
-    'manage-seats-dialog': ManageSeatsDialog,
-    'add-destination': AddDestination,
-    'list-of-destinations': ListOfDestinations,
-    'list-of-flights': ListOfFlightsVue,
-    'flights-discount' : ListOfFlightsWithDiscountVue,
-    'reports': ReportsVue,
-    'luggage-info': LuggageInfoVue
-},
+    "airline-company-info": AirlineCompanyInfo,
+    "add-flight-dialog": AddFlightDialog,
+    "edit-airline-company-dialog": EditAirlineCompanyDialog,
+    "add-airplane-dialog": AddAirplaneDialog,
+    "manage-seats-dialog": ManageSeatsDialog,
+    "add-destination": AddDestination,
+    "list-of-destinations": ListOfDestinations,
+    "list-of-flights": ListOfFlightsVue,
+    "flights-discount": ListOfFlightsWithDiscountVue,
+    reports: ReportsVue,
+    "luggage-info": LuggageInfoVue
+  },
   data: () => ({
     admin: false,
     id: null,
     snackbar: {
       show: false,
       color: "",
-      msg: "",
+      msg: ""
     },
 
     airlineCompany: new AirlineCompany()
@@ -99,27 +96,24 @@ export default {
     this.fetchData();
   },
   watch: {
-    '$route': 'fetchData'
+    $route: "fetchData"
   },
   methods: {
     fetchData() {
       this.id = this.$route.params.id;
 
       AirlineCompanyController.get(this.id)
-        .then((response) => {
+        .then(response => {
           this.airlineCompany = response.data;
         })
         .catch(() => {
           alert(error.response.data);
-          this.$router.push({name: "home"});
+          this.$router.push({ name: "home" });
         });
-      
-      if (store.getters.activeUserRole === 'Airline Company Admin')
-        if (this.id == store.getters.activeUser.idAdminOf)
-          this.admin = true;
-      else
-        this.admin = false;
 
+      if (store.getters.activeUserRole === "Airline Company Admin")
+        if (this.id == store.getters.activeUser.idAdminOf) this.admin = true;
+        else this.admin = false;
     },
     infoUpdate(obj) {
       this.airlineCompany = obj;
@@ -133,7 +127,4 @@ export default {
 };
 </script>
 
-<style>
-
-</style>
-
+<style></style>

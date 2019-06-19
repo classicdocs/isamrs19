@@ -1,8 +1,8 @@
-import Axios from 'axios';
+import Axios from "axios";
 
 const ENDPOINTS = {
-  USERS: 'users/',
-  FRIENDS: '/friends',
+  USERS: "users/",
+  FRIENDS: "/friends",
   SEARCH: "/search",
   REQUESTS: "/requests",
   FRIENDSHIP: "/friendship",
@@ -12,7 +12,7 @@ const ENDPOINTS = {
   ACCEPT: "/accept",
   DECLINE: "/decline",
   CANCEL: "/cancel",
-  HISTORY: "/history",
+  HISTORY: "/history"
 };
 
 export default {
@@ -25,41 +25,89 @@ export default {
   getUser(id) {
     return Axios.get(ENDPOINTS.USERS + id);
   },
-  update(id,data) {
+  update(id, data) {
     return Axios.put(ENDPOINTS.USERS + id, data);
   },
   searchFriends(id, data) {
-    return Axios.get(ENDPOINTS.USERS + id + ENDPOINTS.FRIENDS + ENDPOINTS.SEARCH, {params: data});
+    return Axios.get(
+      ENDPOINTS.USERS + id + ENDPOINTS.FRIENDS + ENDPOINTS.SEARCH,
+      { params: data }
+    );
   },
-  getFriends(id) {  
+  getFriends(id) {
     return Axios.get(ENDPOINTS.USERS + id + ENDPOINTS.FRIENDS);
   },
   getFriendRequests(id) {
-    return Axios.get(ENDPOINTS.USERS + id + ENDPOINTS.FRIENDS + ENDPOINTS.REQUESTS );
+    return Axios.get(
+      ENDPOINTS.USERS + id + ENDPOINTS.FRIENDS + ENDPOINTS.REQUESTS
+    );
   },
   getFlightReservations(id) {
-    return Axios.get(ENDPOINTS.USERS + id + ENDPOINTS.FLIGHTS + ENDPOINTS.RESERVATIONS);
+    return Axios.get(
+      ENDPOINTS.USERS + id + ENDPOINTS.FLIGHTS + ENDPOINTS.RESERVATIONS
+    );
   },
   getFlightReservationsHistory(id) {
-    return Axios.get(ENDPOINTS.USERS + id + ENDPOINTS.FLIGHTS + ENDPOINTS.RESERVATIONS + ENDPOINTS.HISTORY);
+    return Axios.get(
+      ENDPOINTS.USERS +
+        id +
+        ENDPOINTS.FLIGHTS +
+        ENDPOINTS.RESERVATIONS +
+        ENDPOINTS.HISTORY
+    );
   },
   getFlightInvitations(id) {
-    return Axios.get(ENDPOINTS.USERS + id + ENDPOINTS.FLIGHTS + ENDPOINTS.INVITATIONS);
+    return Axios.get(
+      ENDPOINTS.USERS + id + ENDPOINTS.FLIGHTS + ENDPOINTS.INVITATIONS
+    );
   },
   getFlightInvitationsHistory(id) {
-    return Axios.get(ENDPOINTS.USERS + id + ENDPOINTS.FLIGHTS + ENDPOINTS.INVITATIONS + ENDPOINTS.HISTORY);
+    return Axios.get(
+      ENDPOINTS.USERS +
+        id +
+        ENDPOINTS.FLIGHTS +
+        ENDPOINTS.INVITATIONS +
+        ENDPOINTS.HISTORY
+    );
   },
   acceptInvitation(id, data) {
-    return Axios.post(ENDPOINTS.USERS + id + ENDPOINTS.FLIGHTS + ENDPOINTS.INVITATIONS + ENDPOINTS.ACCEPT, data);
+    return Axios.post(
+      ENDPOINTS.USERS +
+        id +
+        ENDPOINTS.FLIGHTS +
+        ENDPOINTS.INVITATIONS +
+        ENDPOINTS.ACCEPT,
+      data
+    );
   },
   declineInvitation(id, data) {
-    return Axios.post(ENDPOINTS.USERS + id + ENDPOINTS.FLIGHTS + ENDPOINTS.INVITATIONS + ENDPOINTS.DECLINE, data);
+    return Axios.post(
+      ENDPOINTS.USERS +
+        id +
+        ENDPOINTS.FLIGHTS +
+        ENDPOINTS.INVITATIONS +
+        ENDPOINTS.DECLINE,
+      data
+    );
   },
   cancelReservation(id, reservationId) {
-    return Axios.post(ENDPOINTS.USERS + id + ENDPOINTS.FLIGHTS + ENDPOINTS.RESERVATIONS + ENDPOINTS.CANCEL, reservationId);
+    return Axios.post(
+      ENDPOINTS.USERS +
+        id +
+        ENDPOINTS.FLIGHTS +
+        ENDPOINTS.RESERVATIONS +
+        ENDPOINTS.CANCEL,
+      reservationId
+    );
   },
   cancelInvitation(id, invitationId) {
-    return Axios.post(ENDPOINTS.USERS + id + ENDPOINTS.FLIGHTS + ENDPOINTS.INVITATIONS + ENDPOINTS.CANCEL, invitationId);
+    return Axios.post(
+      ENDPOINTS.USERS +
+        id +
+        ENDPOINTS.FLIGHTS +
+        ENDPOINTS.INVITATIONS +
+        ENDPOINTS.CANCEL,
+      invitationId
+    );
   }
-
 };

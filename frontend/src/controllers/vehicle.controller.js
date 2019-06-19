@@ -4,7 +4,7 @@ export default {
   create(data) {
     return VehicleApiService.create(data);
   },
-  get(){
+  get() {
     return VehicleApiService.get();
   },
   getSpecific(data) {

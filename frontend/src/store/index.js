@@ -1,10 +1,10 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import Vue from "vue";
+import Vuex from "vuex";
 
 import { reservation } from "./modules";
-import { auth } from './modules';
-import { snackbar} from "./modules";
-import { friendship} from "./modules";
+import { auth } from "./modules";
+import { snackbar } from "./modules";
+import { friendship } from "./modules";
 import { destination } from "./modules";
 import { hotel } from "./modules";
 import { hotels } from "./modules";
@@ -31,8 +31,8 @@ const storeData = {
     rooms,
     searchHotelParams,
     hotelReservations,
-    discount,
+    discount
   }
-}
+};
 
 export default new Vuex.Store(storeData);

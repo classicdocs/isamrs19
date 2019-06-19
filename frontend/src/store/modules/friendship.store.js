@@ -1,11 +1,11 @@
 const state = {
   newFriend: null,
-  newRequest: null,
+  newRequest: null
 };
 
 const getters = {
-  newFriend:(state) => state.newFriend,
-  newRequest: (state) => state.newRequest, 
+  newFriend: state => state.newFriend,
+  newRequest: state => state.newRequest
 };
 
 const mutations = {
@@ -17,8 +17,4 @@ const mutations = {
   }
 };
 
-export {
-  state,
-  getters,
-  mutations
-};
+export { state, getters, mutations };

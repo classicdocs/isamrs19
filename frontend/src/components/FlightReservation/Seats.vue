@@ -1,30 +1,38 @@
 <template>
-  <div >
-    <v-card
-    >
+  <div>
+    <v-card>
       <v-card-text>
         <h1>Departure flight</h1>
-        <v-container >
+        <v-container>
           <v-layout row wrap>
             <v-flex lg10 md10 sm12 xs12>
               <v-layout row wrap>
-                <v-flex lg12 md12 sm12 xs12 v-for="(row, index)  in seatsDeparture" :key="index">
-                  <v-btn flat>Row {{index + 1}} </v-btn>
-                  <v-btn small 
-                  v-for="(seat,index2) in seatsDeparture[index].seats" :key="index2" 
-                  :color="seat.color"
-                  :disabled="isDisabled(seat)"
-                  @click="pickSeatDeparture(seat)"
-                  >{{seat.colNum}}</v-btn>
+                <v-flex
+                  lg12
+                  md12
+                  sm12
+                  xs12
+                  v-for="(row, index) in seatsDeparture"
+                  :key="index"
+                >
+                  <v-btn flat>Row {{ index + 1 }} </v-btn>
+                  <v-btn
+                    small
+                    v-for="(seat, index2) in seatsDeparture[index].seats"
+                    :key="index2"
+                    :color="seat.color"
+                    :disabled="isDisabled(seat)"
+                    @click="pickSeatDeparture(seat)"
+                    >{{ seat.colNum }}</v-btn
+                  >
                 </v-flex>
               </v-layout>
             </v-flex>
             <v-flex lg2 md2 sm12 xs12>
               <h2>Seats picked:</h2>
               <ul>
-                <li
-                  v-for="(seat,ind) in seatsPickedDeparture" :key="ind"
-                > <h3> Row: {{seat.rowNum}}, Column: {{seat.colNum}} </h3>
+                <li v-for="(seat, ind) in seatsPickedDeparture" :key="ind">
+                  <h3>Row: {{ seat.rowNum }}, Column: {{ seat.colNum }}</h3>
                 </li>
               </ul>
             </v-flex>
@@ -35,23 +43,32 @@
           <v-layout row wrap>
             <v-flex lg10 md10 sm12 xs12>
               <v-layout row wrap>
-                <v-flex  lg12 md12 sm12 xs12 v-for="(row, index)  in seatsReturn" :key="index">
-                  <v-btn flat>Row {{index + 1}} </v-btn>
-                  <v-btn small 
-                  v-for="(seat,index2) in seatsReturn[index].seats" :key="index2" 
-                  :color="seat.color"
-                  :disabled="isDisabled(seat)"
-                  @click="pickSeatReturn(seat)"
-                  >{{seat.colNum}}</v-btn>
+                <v-flex
+                  lg12
+                  md12
+                  sm12
+                  xs12
+                  v-for="(row, index) in seatsReturn"
+                  :key="index"
+                >
+                  <v-btn flat>Row {{ index + 1 }} </v-btn>
+                  <v-btn
+                    small
+                    v-for="(seat, index2) in seatsReturn[index].seats"
+                    :key="index2"
+                    :color="seat.color"
+                    :disabled="isDisabled(seat)"
+                    @click="pickSeatReturn(seat)"
+                    >{{ seat.colNum }}</v-btn
+                  >
                 </v-flex>
               </v-layout>
             </v-flex>
             <v-flex lg2 md2 sm12 xs12>
               <h2>Seats picked:</h2>
               <ul>
-                <li
-                  v-for="(seat,ind) in seatsPickedReturn" :key="ind"
-                > <h3> Row: {{seat.rowNum}}, Column: {{seat.colNum}} </h3>
+                <li v-for="(seat, ind) in seatsPickedReturn" :key="ind">
+                  <h3>Row: {{ seat.rowNum }}, Column: {{ seat.colNum }}</h3>
                 </li>
               </ul>
             </v-flex>
@@ -63,16 +80,15 @@
 </template>
 
 <script>
-
-import store from '@/store';
+import store from "@/store";
 
 export default {
   name: "Seats",
-  props: ['seatsDeparture', 'seatsReturn', 'passengersNumber', 'discount'],
-  data:() => ({
+  props: ["seatsDeparture", "seatsReturn", "passengersNumber", "discount"],
+  data: () => ({
     seatsPickedDeparture: [],
     seatsPickedReturn: [],
-    btnColor: "success",
+    btnColor: "success"
   }),
   created() {
     this.setColor();
@@ -80,43 +96,32 @@ export default {
   computed: {
     getColor() {
       return this.btnColor;
-    },
-    
+    }
   },
   methods: {
     isDisabled(seat) {
-      
       if (store.getters.isAirlineAdmin) {
-        if (seat.taken === true)
-          return true;
+        if (seat.taken === true) return true;
         return false;
       } else {
-        if (seat.taken === true || seat.discount != 0)
-          return true;
+        if (seat.taken === true || seat.discount != 0) return true;
       }
     },
     setColor() {
       this.seatsDeparture.forEach(row => {
         row.seats.forEach(seat => {
-          if (seat.taken === false){
+          if (seat.taken === false) {
             seat["color"] = "success";
-            if (seat.discount != 0)
-              seat["color"] = "yellow";
-          }
-          else
-            seat["color"] = "error"; 
+            if (seat.discount != 0) seat["color"] = "yellow";
+          } else seat["color"] = "error";
         });
       });
-      if (this.seatsReturn === null)
-        return;
+      if (this.seatsReturn === null) return;
       this.seatsReturn.forEach(row => {
         row.seats.forEach(seat => {
-          if (seat.taken === false)
-            seat["color"] = "success";
-            if (seat.discount != 0)
-              seat["color"] = "yellow";
-          else
-            seat["color"] = "error"; 
+          if (seat.taken === false) seat["color"] = "success";
+          if (seat.discount != 0) seat["color"] = "yellow";
+          else seat["color"] = "error";
         });
       });
     },
@@ -128,46 +133,53 @@ export default {
           this.seatsPickedDeparture.push(seat);
           store.commit("seats", this.seatsPickedDeparture);
         } else {
-          if (seat.discount != 0)
-            seat.color = "yellow";
-          else
-            seat.color = "success";
-          this.seatsPickedDeparture.splice(ind,1);
+          if (seat.discount != 0) seat.color = "yellow";
+          else seat.color = "success";
+          this.seatsPickedDeparture.splice(ind, 1);
         }
         return;
       }
       let ind = this.seatsPickedDeparture.indexOf(seat);
       if (ind === -1) {
         if (this.seatsPickedDeparture.length >= this.passengersNumber) {
-        this.$emit('snack', {msg: "Maximal number of seats you can pick is " + this.passengersNumber, color:"error"});
-        return;
+          this.$emit("snack", {
+            msg:
+              "Maximal number of seats you can pick is " +
+              this.passengersNumber,
+            color: "error"
+          });
+          return;
         }
         seat.color = "primary";
         this.seatsPickedDeparture.push(seat);
-        store.commit('seatsPickedDeparture', this.seatsPickedDeparture);
+        store.commit("seatsPickedDeparture", this.seatsPickedDeparture);
       } else {
         seat.color = "success";
-        this.seatsPickedDeparture.splice(ind,1);
+        this.seatsPickedDeparture.splice(ind, 1);
       }
     },
     pickSeatReturn(seat) {
       let ind = this.seatsPickedReturn.indexOf(seat);
       if (ind === -1) {
         if (this.seatsPickedReturn.length >= this.passengersNumber) {
-        this.$emit('snack', {msg: "Maximal number of seats you can pick is " + this.passengersNumber, color:"error"});
-        return;
+          this.$emit("snack", {
+            msg:
+              "Maximal number of seats you can pick is " +
+              this.passengersNumber,
+            color: "error"
+          });
+          return;
         }
         seat.color = "primary";
         this.seatsPickedReturn.push(seat);
-        store.commit('seatsPickedReturn', this.seatsPickedReturn);
+        store.commit("seatsPickedReturn", this.seatsPickedReturn);
       } else {
         seat.color = "success";
-        this.seatsPickedReturn.splice(ind,1);
+        this.seatsPickedReturn.splice(ind, 1);
       }
-    },
+    }
   }
-}
+};
 </script>
 
-<style>
-</style>
+<style></style>

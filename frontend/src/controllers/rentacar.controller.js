@@ -1,22 +1,21 @@
 import RentACarService from "@/api-services/rentacar-service.js";
 
 export default {
-    get(id) {
-        return RentACarService.get(id);
-    },
+  get(id) {
+    return RentACarService.get(id);
+  },
 
-    getVehicles(id){
-        return RentACarService.getVehicles(id);
-    },
+  getVehicles(id) {
+    return RentACarService.getVehicles(id);
+  },
 
-    update(id, data){
-        return RentACarService.update(id, data);
-    },
-    getAll() {
-        return RentACarService.getAll();
-    },
-    changeLocation(rac_id, mapLocation){
-      return RentACarService.changeLocation(rac_id, mapLocation);
-    }
-}
-
+  update(id, data) {
+    return RentACarService.update(id, data);
+  },
+  getAll() {
+    return RentACarService.getAll();
+  },
+  changeLocation(rac_id, mapLocation) {
+    return RentACarService.changeLocation(rac_id, mapLocation);
+  }
+};

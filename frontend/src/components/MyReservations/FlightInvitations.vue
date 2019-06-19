@@ -2,48 +2,77 @@
   <div>
     <v-card>
       <v-card-text>
-        <v-expansion-panel 
-			  >
+        <v-expansion-panel>
           <v-expansion-panel-content
-            v-for="(invitation,index) in invitations" :key="index">
-            <div slot='header'><h3>Invitation {{index + 1}} - {{getTitle(invitation.flightReservation, invitation.invitationFrom.username)}}</h3></div>
+            v-for="(invitation, index) in invitations"
+            :key="index"
+          >
+            <div slot="header">
+              <h3>
+                Invitation {{ index + 1 }} -
+                {{
+                  getTitle(
+                    invitation.flightReservation,
+                    invitation.invitationFrom.username
+                  )
+                }}
+              </h3>
+            </div>
             <v-container>
               <v-layout row wrap>
                 <v-flex lg12 md12 sm12 xs12>
-                  <p>You have invitation from the user <b> {{invitation.invitationFrom.username}} </b>[{{invitation.invitationFrom.firstname}}
-                    {{invitation.invitationFrom.lastname}}] 
+                  <p>
+                    You have invitation from the user
+                    <b> {{ invitation.invitationFrom.username }} </b>[{{
+                      invitation.invitationFrom.firstname
+                    }}
+                    {{ invitation.invitationFrom.lastname }}]
                   </p>
                   <div v-if="invitation.accepted === false">
-                    <v-btn color="success" @click="accept(invitation)">Accept</v-btn>
-                    <v-btn color="error" @click="decline(invitation)">Decline</v-btn>
+                    <v-btn color="success" @click="accept(invitation)"
+                      >Accept</v-btn
+                    >
+                    <v-btn color="error" @click="decline(invitation)"
+                      >Decline</v-btn
+                    >
                   </div>
                   <div v-else>
                     <p>Invitation is ACCEPTED!</p>
-                    <p>You can cancel your reservation minimum three hours before flight!</p>
+                    <p>
+                      You can cancel your reservation minimum three hours before
+                      flight!
+                    </p>
                     <v-btn @click="cancel(invitation)">Cancel</v-btn>
                   </div>
                 </v-flex>
               </v-layout>
               <v-layout row wrap>
-                <v-flex lg6 md6 >
-                  <v-layout row wrap style="margin:5px" > 
+                <v-flex lg6 md6>
+                  <v-layout row wrap style="margin:5px">
                     <v-flex lg12 md12>
                       <h3>Departure flight</h3>
                     </v-flex>
                     <v-flex lg12 md12 sm12 xs12>
                       <flight
-                        v-bind:data="invitation.flightReservation.departureFlight"
+                        v-bind:data="
+                          invitation.flightReservation.departureFlight
+                        "
                         v-bind:searchParams="getParams(invitation)"
                       ></flight>
                     </v-flex>
                   </v-layout>
                 </v-flex>
                 <v-flex lg6 md6>
-                  <v-layout row wrap style="margin:5px" v-if="invitation.flightReservation.returnFlight !== null">
-                    <v-flex  lg12 md12>
+                  <v-layout
+                    row
+                    wrap
+                    style="margin:5px"
+                    v-if="invitation.flightReservation.returnFlight !== null"
+                  >
+                    <v-flex lg12 md12>
                       <h3>Return flight</h3>
                     </v-flex>
-                    <v-flex lg12 md12 sm12 xs12 >
+                    <v-flex lg12 md12 sm12 xs12>
                       <flight
                         v-bind:data="invitation.flightReservation.returnFlight"
                         v-bind:searchParams="getParams(invitation)"
@@ -53,107 +82,119 @@
                 </v-flex>
               </v-layout>
             </v-container>
-           
           </v-expansion-panel-content>
         </v-expansion-panel>
-        <history/>
+        <history />
       </v-card-text>
     </v-card>
   </div>
 </template>
 
 <script>
-
 import store from "@/store";
 import UserController from "@/controllers/user.controller.js";
-import FlightInfoVue from '../Flights/FlightInfo.vue';
-import FlightInvitationsHistoryVue from './FlightInvitationsHistory.vue';
+import FlightInfoVue from "../Flights/FlightInfo.vue";
+import FlightInvitationsHistoryVue from "./FlightInvitationsHistory.vue";
 
 export default {
   name: "FlightInvitations",
   components: {
-    'flight' : FlightInfoVue,
-    'history': FlightInvitationsHistoryVue
+    flight: FlightInfoVue,
+    history: FlightInvitationsHistoryVue
   },
-  data:() => ({
-    invitations: [],
+  data: () => ({
+    invitations: []
   }),
   beforeMount() {
     let id = store.getters.activeUser.id;
     UserController.getFlightInvitations(id)
-      .then((response) => {
+      .then(response => {
         this.invitations = response.data;
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error.response.data);
-      })
+      });
   },
   methods: {
-    getTitle(reservation, user){
+    getTitle(reservation, user) {
       let title = "";
-      title += reservation.departureFlight.startDestination.name + " - " + reservation.departureFlight.finalDestination.name;
+      title +=
+        reservation.departureFlight.startDestination.name +
+        " - " +
+        reservation.departureFlight.finalDestination.name;
       if (reservation.returnFlight != null) {
-        title += " - "  + reservation.returnFlight.startDestination.name + " - " + reservation.returnFlight.finalDestination.name;
+        title +=
+          " - " +
+          reservation.returnFlight.startDestination.name +
+          " - " +
+          reservation.returnFlight.finalDestination.name;
       }
       title += " [" + user + "] ";
       return title;
     },
     getParams(invitation) {
       let params = {
-        'seatClass' : invitation.seatClass,
-        'passengerNumber' : null,
-      }
+        seatClass: invitation.seatClass,
+        passengerNumber: null
+      };
       return params;
     },
     accept(invitation) {
       let data = {
-        "id" : invitation.id
-      }
+        id: invitation.id
+      };
       UserController.acceptInvitation(store.getters.activeUser.id, data)
-        .then((response) => {
-          store.commit("setSnack", {msg: "You have successfully accepted invitation", color:"success"})
+        .then(response => {
+          store.commit("setSnack", {
+            msg: "You have successfully accepted invitation",
+            color: "success"
+          });
           invitation.accepted = true;
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error.response.data);
-        })
+        });
     },
     decline(invitation) {
       let data = {
-        "id" : invitation.id
-      }
+        id: invitation.id
+      };
       UserController.declineInvitation(store.getters.activeUser.id, data)
-        .then((response) => {
-          store.commit("setSnack", {msg: "You have successfully declined invitation", color:"success"})
+        .then(response => {
+          store.commit("setSnack", {
+            msg: "You have successfully declined invitation",
+            color: "success"
+          });
           let idx = this.invitations.indexOf(invitation);
-          if (idx != -1)
-            this.invitations.splice(idx,1);
+          if (idx != -1) this.invitations.splice(idx, 1);
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error.response.data);
-        })
+        });
     },
     cancel(invitation) {
-
       let data = {
-        "id" : invitation.id
-      }
+        id: invitation.id
+      };
 
-       UserController.cancelInvitation(store.getters.activeUser.id, data)
-        .then((response) => {
-          store.commit("setSnack", {msg: "You have successfully canceled invitation", color:"success"})
+      UserController.cancelInvitation(store.getters.activeUser.id, data)
+        .then(response => {
+          store.commit("setSnack", {
+            msg: "You have successfully canceled invitation",
+            color: "success"
+          });
           let idx = this.invitations.indexOf(invitation);
-          if (idx != -1)
-            this.invitations.splice(idx,1);
+          if (idx != -1) this.invitations.splice(idx, 1);
         })
-        .catch((error) => {
-          store.commit("setSnack", {msg: error.response.data, color:"error"})
-        })
+        .catch(error => {
+          store.commit("setSnack", {
+            msg: error.response.data,
+            color: "error"
+          });
+        });
     }
   }
-}
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

@@ -1,7 +1,7 @@
-import Axios from 'axios';
+import Axios from "axios";
 
 const ENDPOINTS = {
-  RESERVE: 'rent-vehicle/',
+  RESERVE: "rent-vehicle/"
 };
 
 export default {

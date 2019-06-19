@@ -1,19 +1,15 @@
 const state = {
-    hotelReservations: null,
+  hotelReservations: null
 };
-  
+
 const getters = {
-    hotelReservations:(state) => state.hotelReservations,
+  hotelReservations: state => state.hotelReservations
 };
 
 const mutations = {
-    hotelReservations(state, hr) {
-        state.hotelReservations = hr;
-    },
+  hotelReservations(state, hr) {
+    state.hotelReservations = hr;
+  }
 };
 
-export {
-    state,
-    getters,
-    mutations
-};
+export { state, getters, mutations };

@@ -1,19 +1,15 @@
 const state = {
-    allRentACars: null,
+  allRentACars: null
 };
-  
+
 const getters = {
-    allRentACars:(state) => state.allRentACars,
+  allRentACars: state => state.allRentACars
 };
 
 const mutations = {
-    allRentACars(state, nh) {
-        state.allRentACars = nh;
-    },
+  allRentACars(state, nh) {
+    state.allRentACars = nh;
+  }
 };
 
-export {
-    state,
-    getters,
-    mutations
-};
+export { state, getters, mutations };

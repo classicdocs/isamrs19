@@ -1,7 +1,7 @@
-import Axios from 'axios';
+import Axios from "axios";
 
 const ENDPOINTS = {
-  VEHICLE_CANCEL: 'cancel-vehicle-reservations/'
+  VEHICLE_CANCEL: "cancel-vehicle-reservations/"
 };
 
 export default {

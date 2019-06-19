@@ -1,7 +1,7 @@
-import Axios from 'axios';
+import Axios from "axios";
 
 const ENDPOINTS = {
-  RATE: 'rate-hotel/',
+  RATE: "rate-hotel/"
 };
 
 export default {
