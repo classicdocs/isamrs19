@@ -10,6 +10,10 @@ export default class VehicleReservation {
         this.carId = null,
         this.user = null,
         this.rentACarId = null,
-        this.completed = false
+        this.completed = false,
+        this.gpsIncluded = false,
+        this.childSeatIncluded = false,
+        this.collisionInsuranceIncluded = false,
+        this.theftInsuranceIncluded = false
     }
 }
