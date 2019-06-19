@@ -31,8 +31,6 @@
                 <rooms-overview
                 v-bind:hotel="this.hotel">
                 </rooms-overview>
-
-
                 
             </v-layout>
           </v-container>
@@ -41,6 +39,9 @@
         <v-flex></v-flex>
         <v-flex lg8 md6 sm6 xs12 v-if="user"> 
             <reservation-form/>
+
+            <fast-reservation-form></fast-reservation-form>
+
         </v-flex>
       </v-layout>
     </v-container>
@@ -73,6 +74,8 @@ import PriceListOverview from "@/components/Hotel/PriceListOverview.vue";
 import AddSpecialPrice from "@/components/Hotel/AddSpecialPrice.vue";
 import AddDiscount from "@/components/Hotel/AddDiscount.vue";
 
+import FastReservationForm from "@/components/HotelReservation/FastReservationForm.vue";
+
 import HotelController from "@/controllers/hotels.controller"; 
 import Hotel from "@/models/Hotel"; 
 import store from "@/store";
@@ -90,7 +93,8 @@ export default {
     'priceList-overview': PriceListOverview,
     'reservation-form':ReservationForm,
     'add-special-price': AddSpecialPrice,
-    'add-discount' : AddDiscount
+    'add-discount' : AddDiscount,
+    'fast-reservation-form' : FastReservationForm
 },
   data: () => ({
 
@@ -98,6 +102,7 @@ export default {
     ChangeRoomDialog: false,
     ReservationForm: false,
     AddDiscount: false,
+    FastReservationForm: false,
 
     admin: false,
     user: false,
@@ -135,6 +140,8 @@ export default {
       HotelController.getHotel(this.id)
         .then((response) => {
           this.hotel = response.data;
+          console.log("guram u hotel service");
+          console.log(this.hotel);
           store.commit('newHotel', this.hotel);
         })
         .catch((error) => {

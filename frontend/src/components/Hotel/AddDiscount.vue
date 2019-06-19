@@ -288,6 +288,8 @@ export default {
     computed: {
         myHotel: function(){
             this.hotel = store.getters.newHotel;
+            console.log("hotel from store")
+            console.log(this.hotel)
             return this.hotel;
         }
     },
@@ -297,6 +299,7 @@ export default {
             roomDiscount.startDate = this.checkInDate;
             roomDiscount.endDate = this.checkOutDate;
             roomDiscount.price = this.discountPrice;
+            roomDiscount.additionalServices = this.selected;
 
             var pr = 0;
             this.hotel = store.getters.newHotel;
@@ -315,25 +318,53 @@ export default {
                     }
                 })
             }
+
             if(pr < roomDiscount.price){
-                this.showSnackbar({msg: "Discount price cant be lower than hotel room price", color: "error"});
+                this.showSnackbar({msg: "Discount price cant be higher than hotel room price", color: "error"});
                 return;
             }
 
-            HotelController.addRoomDiscount(this.$route.params.id, this.pickedRoom.id, roomDiscount)
+
+
+            var id = 0;
+            if(typeof this.pickedRoom.id == 'undefined'){
+                id = this.checkID();
+            }else{
+                id = this.pickedRoom.id ;
+            }
+
+            HotelController.addRoomDiscount(this.$route.params.id, id, roomDiscount)
             .then(response => {
-                var h = this.myHotel
-                h.floors.forEach(floor => {
+                this.hotel = this.myHotel
+                
+                console.log("hotel iz this.myHotel, pre dodavanja response data")
+                console.log(this.hotel)
+                this.hotel.floors.forEach(floor => {
                     floor.roomsOnFloor.forEach(room => {
                         if(room.id = this.pickedRoom.id){
+
                             room.roomDiscounts.push(response.data);
-                            this.reset();
                             this.AddDiscountForm = false;
-                            this.showSnackbar({msg: "Discount successfully defined", color: "success"})
+                            this.showSnackbar({msg: "Discount successfully defined", color: "success"});
+
                         }
                     })
                 })
-                store.commit('newHotel', h);
+                console.log("hotel for push")
+                console.log(this.hotel)
+                store.commit('newHotel', this.hotel);
+                this.reset();
+            })
+        },
+        checkID(){
+            this.myHotel.floors.forEach(floor => {
+            if(floor.level == this.pickedRoom.hotelFloor.level){
+                floor.roomsOnFloor.forEach(room => {
+                    if(room.roomNumber == this.pickedRoom.roomNumber){
+                        return room.id;
+                    }
+                })
+            }
             })
         },
         reset(){
@@ -387,6 +418,8 @@ export default {
             this.pickedRoom.numberOfBeds = room.numberOfBeds;
             this.pickedRoom.hotelFloor = new HotelFloor();
             this.pickedRoom.hotelFloor.level = room.hotelFloor.level;  
+            console.log("picked room")
+            console.log(this.pickedRoom);
         },
         getRooms(floor){
             var availableRooms = [];
@@ -395,6 +428,8 @@ export default {
                 availableRooms.push(room);
             }
             })
+            console.log("available rooms");
+            console.log(availableRooms);
             return availableRooms;
         },
         checkDates(){
@@ -430,6 +465,9 @@ export default {
                     })
                 })
             }
+
+            console.log("Theese rooms are not available");
+            console.log(this.notAvailableRooms);
         },
         toggleAll () {
             if (this.selected.length) this.selected = []

@@ -161,14 +161,14 @@ insert into hotel_admins(hotel_id, admins_id) values(4,15);
 
 insert into rentacar_admins(rentacar_id,admins_id) values (1,3);
 
-insert into room_taken(id,end_date,start_date) values
-(1,'2020-05-19','2020-05-15');
-
-insert into room_taken(id,end_date,start_date) values
-(2,'2020-05-29','2020-05-25');
-
-insert into room_booked(room_id,room_taken_id) values(1,1);
-insert into room_booked(room_id,room_taken_id) values(1,2);
+--insert into room_taken(id,end_date,start_date) values
+--(1,'2020-05-19','2020-05-15');
+--
+--insert into room_taken(id,end_date,start_date) values
+--(2,'2020-05-29','2020-05-25');
+--
+--insert into room_booked(room_id,room_taken_id) values(1,1);
+--insert into room_booked(room_id,room_taken_id) values(1,2);
 
 
 insert into special_price(id,end_date,price,start_date) values

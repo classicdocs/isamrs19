@@ -1,6 +1,7 @@
 package com.project.project.model.Hotel_Model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class RoomDiscount {
@@ -17,6 +18,9 @@ public class RoomDiscount {
 
     @Column(name = "endDate", nullable = false)
     private String endDate;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<HotelsOffer> additionalServices;
 
     public RoomDiscount() {}
 
@@ -50,5 +54,13 @@ public class RoomDiscount {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+    public Set<HotelsOffer> getAdditionalServices() {
+        return additionalServices;
+    }
+
+    public void setAdditionalServices(Set<HotelsOffer> additionalServices) {
+        this.additionalServices = additionalServices;
     }
 }

@@ -568,6 +568,11 @@ public class HotelService {
 
                         boolean possible = isDiscountPossible(r, roomDiscount);
                         if(possible){
+                            Set<HotelsOffer> offers = new HashSet<>();
+                            for (HotelsOffer offer: roomDiscount.getAdditionalServices()) {
+                                offers.add(hotelsOfferRepository.save(offer));
+                            }
+                            roomDiscount.setAdditionalServices(offers);
                             roomDiscount = roomDiscountRepository.save(roomDiscount);
                             Set<RoomDiscount> roomDiscounts = r.getRoomDiscounts();
                             roomDiscounts.add(roomDiscount);
