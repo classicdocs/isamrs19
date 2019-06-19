@@ -37,6 +37,18 @@ public class VehicleReservation {
     @Column
     private boolean rated;
 
+    @Column
+    private boolean gpsIncluded;
+
+    @Column
+    private boolean childSeatIncluded;
+
+    @Column
+    private boolean collisionInsuranceIncluded;
+
+    @Column
+    private boolean theftInsuranceIncluded;
+
     public VehicleReservation() {
     }
 
@@ -118,5 +130,37 @@ public class VehicleReservation {
 
     public void setRated(boolean rated) {
         this.rated = rated;
+    }
+
+    public boolean isGpsIncluded() {
+        return gpsIncluded;
+    }
+
+    public void setGpsIncluded(boolean gpsIncluded) {
+        this.gpsIncluded = gpsIncluded;
+    }
+
+    public boolean isChildSeatIncluded() {
+        return childSeatIncluded;
+    }
+
+    public void setChildSeatIncluded(boolean childSeatIncluded) {
+        this.childSeatIncluded = childSeatIncluded;
+    }
+
+    public boolean isCollisionInsuranceIncluded() {
+        return collisionInsuranceIncluded;
+    }
+
+    public void setCollisionInsuranceIncluded(boolean collisionInsuranceIncluded) {
+        this.collisionInsuranceIncluded = collisionInsuranceIncluded;
+    }
+
+    public boolean isTheftInsuranceIncluded() {
+        return theftInsuranceIncluded;
+    }
+
+    public void setTheftInsuranceIncluded(boolean theftInsuranceIncluded) {
+        this.theftInsuranceIncluded = theftInsuranceIncluded;
     }
 }
