@@ -409,12 +409,13 @@ export default {
 
           console.log(this.flight);
           FlightsController.create(this.flight)
-            .then(response => {
+            .then((response) => {
               this.addFormDialog = false;
               this.$emit("snack", {
                 msg: "Flight successfully added",
                 color: "success"
               });
+              store.commit("newFlight", response.data);
             })
             .catch(error => {
               this.addFormDialog = false;
