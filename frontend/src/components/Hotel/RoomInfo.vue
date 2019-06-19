@@ -100,6 +100,9 @@
                 </v-list-tile>
               </v-list>
             </v-flex>
+            <v-flex xs6>
+              <v-btn v-if="room.roomTaken.length == 0" @click="removeRoom">delete room <v-icon>clear</v-icon></v-btn>
+            </v-flex>
           </v-layout>
         </v-card-text>
       </v-form>
@@ -122,6 +125,9 @@ export default {
   methods: {
     getDates(roomTaken) {
       return roomTaken.startDate + "-" + roomTaken.endDate + "\n";
+    },
+    removeRoom(){
+      alert("Delete room " + this.room.id);
     }
   },
   watch: {

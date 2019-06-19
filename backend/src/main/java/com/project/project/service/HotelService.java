@@ -620,6 +620,12 @@ public class HotelService {
                     }
                     roomToDelete.getRoomDiscounts().removeAll(discountsToRemove);
 
+                    Set<SpecialPrice> specialPrices = new HashSet<>();
+                    for (SpecialPrice sp : roomToDelete.getSpecialPrices()) {
+                        specialPrices.add(sp);
+                    }
+                    roomToDelete.getSpecialPrices().removeAll(specialPrices);
+
                     roomRepository.delete(roomToDelete);
 
                     for (RoomDiscount discount : discountsToRemove) {
@@ -634,6 +640,11 @@ public class HotelService {
                         roomDiscountRepository.delete(discountToRemove);
                     }
 
+                    for(SpecialPrice specialPrice : specialPrices){
+                        SpecialPrice price = specialPriceRepository.getOne(specialPrice.getId());
+
+                        specialPriceRepository.delete(price);
+                    }
 
 
                     return new RoomDTO(roomToDelete);

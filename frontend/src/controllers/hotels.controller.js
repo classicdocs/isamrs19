@@ -39,5 +39,8 @@ export default {
   },
   addRoomDiscount(hotel_id, room_id, roomDiscount) {
     return HotelsService.addRoomDiscount(hotel_id, room_id, roomDiscount);
+  },
+  deleteRoom(hotel_id, room_id){
+    return HotelsService.deleteRoom(hotel_id, room_id);
   }
 };
