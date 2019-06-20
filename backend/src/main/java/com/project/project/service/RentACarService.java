@@ -2,20 +2,19 @@ package com.project.project.service;
 
 import com.project.project.dto.NewVehicleQuickReservationDTO;
 import com.project.project.dto.RentACarDTO;
+import com.project.project.dto.ReportsDTO;
 import com.project.project.exceptions.DateInPast;
 import com.project.project.exceptions.RentACarNotFound;
 import com.project.project.dto.RentACarInfoDTO;
 import com.project.project.exceptions.ReturnDateBeforePickupDate;
 import com.project.project.model.*;
-import com.project.project.repository.MapLocationRepository;
-import com.project.project.repository.RentACarRepository;
-import com.project.project.repository.VehicleQuickReservationRepository;
-import com.project.project.repository.VehicleRepository;
+import com.project.project.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.YearMonth;
 import java.util.*;
 
 @Service
@@ -29,6 +28,9 @@ public class RentACarService {
 
     @Autowired
     private MapLocationRepository mapLocationRepository;
+
+    @Autowired
+    private VehicleReservationRepository vehicleReservationRepository;
 
     @Autowired
     private VehicleQuickReservationRepository vehicleQuickReservationRepository;
@@ -159,6 +161,124 @@ public class RentACarService {
         rentACarRepository.save(rentACar);
 
         return newVehicleQuickReservationDTO;
+    }
+
+    public ReportsDTO getReports(Long rentACarId, String year, String month) throws ParseException {
+        RentACar rac = rentACarRepository.findOneById(rentACarId);
+        ReportsDTO result = new ReportsDTO();
+        Map<String, Integer> soldTickets = new LinkedHashMap<>();
+        Map<String, Double> income = new LinkedHashMap<>();
+
+        if (month.equals("")) {
+            String[] months = new String[] {"January", "February", "March", "April", "May", "Jun", "July", "August", "September", "October", "November", "December"};
+            for (String m: months) {
+                soldTickets.put(m,0);
+                income.put(m,0.0);
+            }
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdfYear = new SimpleDateFormat("yyyy");
+            SimpleDateFormat sdfMonth = new SimpleDateFormat("MM");
+            Date pickedYear = sdfYear.parse(year);
+
+            for (VehicleReservation vehicleReservation: vehicleReservationRepository.findReservationsOfRentACar(rentACarId)) {
+                Date date = sdfYear.parse(vehicleReservation.getDateOfReservation().toString());
+                if (pickedYear.equals(date)){
+                    Date date1 = sdf.parse(vehicleReservation.getDateOfReservation().toString());
+                    String m = String.valueOf(sdfMonth.format(date1));
+                    String s = "";
+                    switch (m) {
+                        case "01": {
+                            s = "January"; break;
+                        }
+                        case "02": {
+                            s = "February"; break;
+                        }
+                        case "03": {
+                            s = "March"; break;
+                        }
+                        case "04": {
+                            s = "April"; break;
+                        }
+                        case "05": {
+                            s = "May"; break;
+                        }
+                        case "06": {
+                            s = "Jun"; break;
+                        }
+                        case "07": {
+                            s = "July"; break;
+                        }
+                        case "08": {
+                            s = "August"; break;
+                        }
+                        case "09": {
+                            s = "September"; break;
+                        }
+                        case "10": {
+                            s = "October"; break;
+                        }
+                        case "11": {
+                            s = "November"; break;
+                        }
+                        case "12": {
+                            s = "December"; break;
+                        }
+                    }
+                    int count = soldTickets.getOrDefault(s,0);
+                    soldTickets.put(s, count + 1);
+
+                    double price = vehicleReservation.getTotalPrice();
+                    double count1 = income.getOrDefault(s,0.0);
+                    income.put(s, count1 + price);
+                }
+            }
+
+            result.setSoldTickets(soldTickets);
+            result.setIncome(income);
+            return result;
+        } else {
+            SimpleDateFormat sdfMonth = new SimpleDateFormat("MMMM");
+            SimpleDateFormat sdfMonthFromDate = new SimpleDateFormat("MM");
+            Date dateMonth = sdfMonth.parse(month);
+            Integer m = Integer.parseInt(sdfMonthFromDate.format(dateMonth));
+            YearMonth yearMonthObject = YearMonth.of(Integer.parseInt(year), m);
+            int daysInMonth = yearMonthObject.lengthOfMonth();
+
+            for(int i = 1; i <= daysInMonth; i++) {
+                if (i < 10) {
+                    soldTickets.put("0" + i,0);
+                    income.put("0" + i, 0.0);
+                }
+                else {
+                    soldTickets.put(String.valueOf(i), 0);
+                    income.put(String.valueOf(i), 0.0);
+                }
+            }
+            SimpleDateFormat sdfYearMonth = new SimpleDateFormat("yyyy-MM");
+            SimpleDateFormat sdfYearMonthDay = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdfDay = new SimpleDateFormat("dd");
+            Date pickedDate = sdfYearMonth.parse(year + "-" + m);
+
+            for (VehicleReservation vehicleReservation: vehicleReservationRepository.findReservationsOfRentACar(rentACarId)) {
+                Date date = sdfYearMonth.parse(vehicleReservation.getDateOfReservation().toString());
+                if (pickedDate.equals(date)) {
+                    Date date1 = sdfYearMonthDay.parse(vehicleReservation.getDateOfReservation().toString());
+                    String d = String.valueOf(sdfDay.format(date1));
+
+                    int count = soldTickets.getOrDefault(d, 0);
+                    soldTickets.put(d, count + 1);
+
+                    double price = vehicleReservation.getTotalPrice();
+                    double count1 = income.getOrDefault(d,0.0);
+                    income.put(d, count1 + price);
+                }
+            }
+
+            result.setSoldTickets(soldTickets);
+            result.setIncome(income);
+            return result;
+        }
     }
 
     private boolean overlap(Date start1, Date end1, Date start2, Date end2){

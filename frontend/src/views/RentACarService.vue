@@ -24,6 +24,11 @@
       </v-tab>
 
       <v-tab href="#tab-5" v-if="admin">
+        Reports
+        <i class="material-icons">assessment</i>
+      </v-tab>
+
+      <v-tab href="#tab-6" v-if="admin">
         Edit
         <i class="material-icons">border_color</i>
       </v-tab>
@@ -52,13 +57,17 @@
 
       <v-tab-item :value="'tab-4'" v-if="admin">
         <v-card flat>
-          <VehicleQuickReservations
-            @update-rentacar="updateRentacar"
-          ></VehicleQuickReservations>
+          <VehicleQuickReservations></VehicleQuickReservations>
         </v-card>
       </v-tab-item>
 
       <v-tab-item :value="'tab-5'" v-if="admin">
+        <v-card flat>
+           <Reports></Reports>
+        </v-card>
+      </v-tab-item>
+
+      <v-tab-item :value="'tab-6'" v-if="admin">
         <v-card flat>
            <EditRentacarForm
             @update-rentacar="updateRentacar"
@@ -78,6 +87,7 @@ import EditRentacarForm from "@/components/EditRentacarForm.vue";
 import VehicleReservation from "@/components/RentACar/VehicleReservation.vue";
 import BranchesList from "@/components/RentACar/BranchesList.vue";
 import VehicleQuickReservations from "@/components/RentACar/VehicleQuickReservations.vue";
+import Reports from "@/components/RentACar/Reports.vue"
 import store from "@/store";
 
 export default {
@@ -87,7 +97,8 @@ export default {
     EditRentacarForm,
     VehicleReservation,
     BranchesList,
-    VehicleQuickReservations
+    VehicleQuickReservations,
+    Reports
   },
   data: () => ({
     id: null,
