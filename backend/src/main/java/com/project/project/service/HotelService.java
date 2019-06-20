@@ -605,25 +605,26 @@ public class HotelService {
                     if(room.getId().equals(roomID)){
                         floorWithRoomToDelete = floor;
                         roomToDelete = room;
+                        break;
                     }
                 }
             }
             if(roomToDelete != null){
-                if(roomToDelete.getRoomTaken().size() == 0){
+                if(roomToDelete.getRoomTaken().isEmpty()){
 
                     floorWithRoomToDelete.getRoomsOnFloor().remove(roomToDelete);
 
-                    Set<RoomDiscount> discountsToRemove = new HashSet<>();
+                    Set<RoomDiscount> discountsToRemove = new HashSet<>(roomToDelete.getRoomDiscounts());
 
-                    for (RoomDiscount discount : roomToDelete.getRoomDiscounts()) {
-                        discountsToRemove.add(discount);
-                    }
+//                    for (RoomDiscount discount : roomToDelete.getRoomDiscounts()) {
+//                        discountsToRemove.add(discount);
+//                    }
                     roomToDelete.getRoomDiscounts().removeAll(discountsToRemove);
 
-                    Set<SpecialPrice> specialPrices = new HashSet<>();
-                    for (SpecialPrice sp : roomToDelete.getSpecialPrices()) {
-                        specialPrices.add(sp);
-                    }
+                    Set<SpecialPrice> specialPrices = new HashSet<>(roomToDelete.getSpecialPrices());
+//                    for (SpecialPrice sp : roomToDelete.getSpecialPrices()) {
+//                        specialPrices.add(sp);
+//                    }
                     roomToDelete.getSpecialPrices().removeAll(specialPrices);
 
                     roomRepository.delete(roomToDelete);
@@ -631,10 +632,10 @@ public class HotelService {
                     for (RoomDiscount discount : discountsToRemove) {
                         RoomDiscount discountToRemove = roomDiscountRepository.getOne(discount.getId());
 
-                        Set<HotelsOffer> hotelsOffers = new HashSet<>();
-                        for(HotelsOffer offer: discountToRemove.getAdditionalServices()){
-                            hotelsOffers.add(offer);
-                        }
+                        Set<HotelsOffer> hotelsOffers = new HashSet<>(discountToRemove.getAdditionalServices());
+//                        for(HotelsOffer offer: discountToRemove.getAdditionalServices()){
+//                            hotelsOffers.add(offer);
+//                        }
                         discountToRemove.getAdditionalServices().removeAll(hotelsOffers);
 
                         roomDiscountRepository.delete(discountToRemove);
