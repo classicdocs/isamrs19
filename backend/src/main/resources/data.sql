@@ -336,21 +336,19 @@ insert into hotel_price_list(hotel_id, price_list_id) values
 (1,8);
 ------------------------------------------------------------------------------------------------------------------------
 
-
-
-
---rentacar servis 1
+--rentacar service 1
 insert into rentacar (id,name,address,promotional_description,rating, total_rating, location) values (1,'Drive X', 'North Road 7 London','DriveX has been continually growing ever since its foundation in 1989 in London, Great Britain, with branches all over the country.At all our locations we offer customers affordable and trusted rent a car services.',4,1, 3);
---rentacar servis 2
+--rentacar service 2
 insert into rentacar (id,name,address,promotional_description, rating, total_rating, location) values (2,'EcoCar', '2nd Street 63 Paris','With over 60 years of experience in the industry, you can be sure that whether you are looking for a family car, sedan or prestige car for your business or leisure trips, EcoCar has the vehicle to meet every car rental need.Make the most out of our large range of services to make car rental experience a unique experience',4.5,2, 9);
---rentacar servis 3
+--rentacar service 3
 insert into rentacar (id,name,address,promotional_description, rating, total_rating, location) values (3,'GoRent', 'Old Square Berlin','The most reliable rent-a-car company in Berlin.',3,1, 5);
---rentacar servis 4
+--rentacar service 4
 insert into rentacar (id,name,address,promotional_description, rating, total_rating, location) values (4,'VehiclesToTake', 'Wilshire Boulevard New York','We provides cheap vehicles to many satisfied customers.',5,1, 1);
---rentacar servis 5
+--rentacar service 5
 insert into rentacar (id,name,address,promotional_description, rating, total_rating, location) values (5,'CarsForYou', '5th Avenue Rio de Janeiro','We are known for good customer service.',2.5,1, 10);
+------------------------------------------------------------------------------------------------------------------------
 
---dodavanje vozila
+-- vehicles
 insert into vehicle (id,name,vehicle_manufacturer,vehicle_model,vehicle_type,number_of_passengers,year_of_production,price_per_day,average_rating,total_rating) values (1,'vehicle1','Audi','A4','Sedan',5,2017,100,3,1);
 insert into vehicle (id,name,vehicle_manufacturer,vehicle_model,vehicle_type,number_of_passengers,year_of_production,price_per_day,average_rating,total_rating) values (2,'vehicle2','BMW','520','Station wagon',5,2013,80,3,1);
 insert into vehicle (id,name,vehicle_manufacturer,vehicle_model,vehicle_type,number_of_passengers,year_of_production,price_per_day,average_rating,total_rating) values (3,'vehicle3','Ford','Mustang','Coupe',4,2010,120,3,1);
@@ -375,8 +373,9 @@ insert into vehicle (id,name,vehicle_manufacturer,vehicle_model,vehicle_type,num
 insert into vehicle (id,name,vehicle_manufacturer,vehicle_model,vehicle_type,number_of_passengers,year_of_production,price_per_day,average_rating,total_rating) values (18,'vehicle18','Ford','Mondeo','Station wagon',5,2013,80,3,1);
 insert into vehicle (id,name,vehicle_manufacturer,vehicle_model,vehicle_type,number_of_passengers,year_of_production,price_per_day,average_rating,total_rating) values (19,'vehicle19','Opel','Corsa','Hatchback',4,2010,120,3,1);
 insert into vehicle (id,name,vehicle_manufacturer,vehicle_model,vehicle_type,number_of_passengers,year_of_production,price_per_day,average_rating,total_rating) values (20,'vehicle20','Renault','Kadjar','SUV',7,2016,170,3,1);
+------------------------------------------------------------------------------------------------------------------------
 
-
+-- rentacar vehicles
 insert into rentacar_vehicles (rentacar_id, vehicles_id) values (1,1);
 insert into rentacar_vehicles (rentacar_id, vehicles_id) values (1,2);
 insert into rentacar_vehicles (rentacar_id, vehicles_id) values (1,3);
@@ -401,11 +400,17 @@ insert into rentacar_vehicles (rentacar_id, vehicles_id) values (5,17);
 insert into rentacar_vehicles (rentacar_id, vehicles_id) values (5,18);
 insert into rentacar_vehicles (rentacar_id, vehicles_id) values (5,19);
 insert into rentacar_vehicles (rentacar_id, vehicles_id) values (5,20);
+------------------------------------------------------------------------------------------------------------------------
 
+-- quick reservation
 insert into vehicle_quick_reservation (id,child_seat_included,collision_insurance_included,gps_included,pickup_location,reserved_from,reserved_until,return_location,theft_insurance_included,total_price,vehicle_id) values (1,TRUE,TRUE,FALSE,'Belgrade','2019-07-10 14:00','2019-07-14 14:00','Belgrade',FALSE,100,1);
+------------------------------------------------------------------------------------------------------------------------
 
+-- rentacar quick reservations
 insert into rentacar_quick_reservations (rentacar_id,quick_reservations_id) values (1,1);
---dodavanje filijala
+------------------------------------------------------------------------------------------------------------------------
+
+-- branch_offices
 insert into branch_offices (id, branches) values (1,'London');
 insert into branch_offices (id, branches) values (1,'Liverpool');
 insert into branch_offices (id, branches) values (1,'Manchester');
@@ -421,6 +426,7 @@ insert into branch_offices (id, branches) values (4,'Dortmund');
 insert into branch_offices (id, branches) values (5,'Rio de Janeiro');
 insert into branch_offices (id, branches) values (5,'Brasilia');
 insert into branch_offices (id, branches) values (5,'Sao Paulo');
+------------------------------------------------------------------------------------------------------------------------
 
 --roles
 insert into role (id,role) values (1,'User');
@@ -457,43 +463,5 @@ insert into users (dtype,id,address,email,firstname,lastname,username,password,p
 insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time, verified) values ('HotelAdmin',12,'address12','email12@gmail.com','name12','lastname12','hoteladmin5','12345','55555',4,null,null,5, FALSE, TRUE);
 
 --System admin
-insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time, verified) values ('SystemAdmin',13,'adresa5','email5','ime5','prezime5','systemadmin','12345','51545',5,null,null,null, FALSE, TRUE);
+insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time, verified) values ('SystemAdmin',13,'address13','email13@gmail.com','name13','lastname13','systemadmin','12345','51545',5,null,null,null, FALSE, TRUE);
 ------------------------------------------------------------------------------------------------------------------------
-
-
---roles
-insert into role (id,role) values (1,'User');
-insert into role (id,role) values (2,'RentACar Admin');
-insert into role (id,role) values (3,'Airline Company Admin');
-insert into role (id,role) values (4,'Hotel Admin');
-insert into role (id,role) values (5,'System Admin');
-------------------------------------------------------------------------------------------------------------------------
-
--- users
-
--- Registered users
-insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time, verified) values ('RegisteredUser',1,'address1','email1@gmail.com','name1','lastname1','user1','12345','51542',1,null,null,null, FALSE, TRUE);
-insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time, verified) values ('RegisteredUser',2,'address2','email2@gmail.com','name2','lastname2','user2','12345','51541',1,null,null,null, FALSE, TRUE);
-insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time, verified) values ('RegisteredUser',3,'address3','email3@gmail.com','name3','lastname3','user3','12345','51546',1,null,null,null, FALSE, TRUE);
-
---Rentacar admins
-insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time, verified) values ('RentACarAdmin',4,'address4','email4@gmail.com','name4','lastname4','rentacaradmin','12345','51542',2,1,null,null, FALSE, TRUE);
-
---Airline-Company admins
-insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time, verified) values ('AirlineCompanyAdmin',5,'address5','email5@gmail.com','name5','lastname5','airlineadmin1','12345','51543',3,null,1,null, FALSE, TRUE);
-insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time, verified) values ('AirlineCompanyAdmin',6,'address6','email6@gmail.com','name6','lastname6','airlineadmin2','12345','51543',3,null,2,null, FALSE, TRUE);
-insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time, verified) values ('AirlineCompanyAdmin',7,'address7','email7@gmail.com','name7','lastname7','airlineadmin3','12345','51543',3,null,3,null, FALSE, TRUE);
-
---Hotel admins
-insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time, verified) values ('HotelAdmin',8,'address8','email8@gmail.com','name8','lastname8','hoteladmin1','12345','11111',4,null,null,1, FALSE, TRUE);
-insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time, verified) values ('HotelAdmin',9,'address9','email9@gmail.com','name9','lastname9','hoteladmin2','12345','22222',4,null,null,2, FALSE, TRUE);
-insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time, verified) values ('HotelAdmin',10,'address10','email10@gmail.com','name10','lastname10','hoteladmin3','12345','33333',4,null,null,3, FALSE, TRUE);
-insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time, verified) values ('HotelAdmin',11,'address11','email11@gmail.com','name11','lastname11','hoteladmin4','12345','44444',4,null,null,4, FALSE, TRUE);
-insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time, verified) values ('HotelAdmin',12,'address12','email12@gmail.com','name12','lastname12','hoteladmin5','12345','55555',4,null,null,5, FALSE, TRUE);
-
---System admin
-insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time, verified) values ('SystemAdmin',13,'adresa5','email5','ime5','prezime5','systemadmin','12345','51545',5,null,null,null, FALSE, TRUE);
-------------------------------------------------------------------------------------------------------------------------
-
-
-
