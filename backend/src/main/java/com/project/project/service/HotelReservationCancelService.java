@@ -2,6 +2,7 @@ package com.project.project.service;
 
 import com.project.project.exceptions.HotelNotFound;
 import com.project.project.exceptions.TooLateToCancelHotelReservation;
+import com.project.project.model.HotelAdmin;
 import com.project.project.model.Hotel_Model.*;
 import com.project.project.repository.HotelRepository;
 import com.project.project.repository.HotelReservationRepository;
@@ -42,6 +43,7 @@ public class HotelReservationCancelService {
 
             reservation = hotelReservationRepository.findOneById(reservation_id);
             hotelReservationRepository.delete(reservation);
+            reservation.getHotel().setAdmins(new HashSet<HotelAdmin>());
             return reservation;
         }else{
             throw new HotelNotFound(hotel_id);
