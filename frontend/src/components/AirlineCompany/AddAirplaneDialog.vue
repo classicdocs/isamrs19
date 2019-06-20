@@ -92,6 +92,15 @@ export default {
       !val && this.reset();
     }
   },
+  mouted() {
+    this.airplane.model = "AirplaneModel";
+    this.airplane.seatsFirstRows = 4;
+    this.airplane.seatsFirstCols = 4;
+    this.airplane.seatsBusinessRows = 4;
+    this.airplane.seatsBusinessCols = 4;
+    this.airplane.seatsEconomyRows = 4;
+    this.airplane.seatsEconomyCols = 4;
+  },
   methods: {
     validate() {
       if (this.$refs.form.validate()) {

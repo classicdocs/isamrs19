@@ -327,6 +327,21 @@ export default {
     flight: new Flight()
   }),
   mounted() {
+
+    this.startDestination = "London LHR";
+    this.finalDestination = "Belgrade BGD";
+    this.flight.airplane = "Id: 1, Model: Boing 747";
+    this.flight.departureDate = "2019-06-29";
+    this.flight.departureTime = "22:00";
+    this.flight.landingDate = "2019-06-30";
+    this.flight.landingTime = "01:00";
+    this.flight.ticketPriceFirst = 250;
+    this.flight.ticketPriceBusiness = 160;
+    this.flight.ticketPriceEconomy = 110;
+    this.flight.distance = 2000;
+    this.flight.flightTimeHours = 3;
+    this.flight.flightTimeMinutes = 30;
+
     this.getData();
   },
   computed: {
@@ -407,7 +422,7 @@ export default {
             this.finalDestination.length
           );
 
-          console.log(this.flight);
+          
           FlightsController.create(this.flight)
             .then((response) => {
               this.addFormDialog = false;
