@@ -311,6 +311,21 @@ public class HotelController {
         }
     }
 
+    @GetMapping(
+            value = "/{id}/reports",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity getReports(@PathVariable("id") Long hotel_id,
+                                     @RequestParam("year") String year, @RequestParam("month") String month) {
+
+        try {
+            HotelReportDTO result = hotelService.getReports(hotel_id, year, month);
+            return new ResponseEntity<HotelReportDTO>(result, HttpStatus.OK);
+        } catch (ParseException | HotelNotFound e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 
 
 }

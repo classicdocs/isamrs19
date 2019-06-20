@@ -3,6 +3,7 @@ package com.project.project.service;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.YearMonth;
 import java.util.*;
 
 import com.project.project.dto.Hotel_DTOs.*;
@@ -495,7 +496,7 @@ public class HotelService {
                 } else {
                     reservation.setCompleted(false);
                 }
-
+                reservation.getHotel().setAdmins(new HashSet<HotelAdmin>());
                 result.add(reservation);
             }
         }
@@ -593,6 +594,149 @@ public class HotelService {
             throw new HotelNotFound(hotelID);
         }
     }
+
+
+    public HotelReportDTO getReports(Long hotel_id, String year, String month) throws HotelNotFound, ParseException {
+        Optional<Hotel> hotel = hotelRepository.findOneById(hotel_id);
+        if (hotel.isPresent()) {
+
+            HotelReportDTO result = new HotelReportDTO();
+            Map<String, Integer> attendance = new LinkedHashMap<>();
+            Map<String, Double> income = new LinkedHashMap<>();
+
+
+            if (month.equals("")) {
+                String[] months = new String[] {"January", "February", "March", "April", "May", "Jun", "July", "August", "September", "October", "November", "December"};
+                for (String m: months) {
+                    attendance.put(m,0);
+                    income.put(m,0.0);
+                }
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat sdfYear = new SimpleDateFormat("yyyy");
+                SimpleDateFormat sdfMonth = new SimpleDateFormat("MM");
+                Date pickedYear = sdfYear.parse(year);
+
+                List<HotelReservation> reservations = hotelReservationRepository.findAll();
+
+                for (HotelReservation reservation : reservations) {
+                    if(reservation.getHotel().getId().equals(hotel_id)){
+                        Date date = sdfYear.parse(reservation.getCheckInDate());
+                        if (pickedYear.equals(date)) {
+                            Date date1 = sdf.parse(reservation.getCheckInDate());
+
+                            String m = String.valueOf(sdfMonth.format(date1));
+                            String s = "";
+                            switch (m) {
+                                case "01": {
+                                    s = "January"; break;
+                                }
+                                case "02": {
+                                    s = "February"; break;
+                                }
+                                case "03": {
+                                    s = "March"; break;
+                                }
+                                case "04": {
+                                    s = "April"; break;
+                                }
+                                case "05": {
+                                    s = "May"; break;
+                                }
+                                case "06": {
+                                    s = "Jun"; break;
+                                }
+                                case "07": {
+                                    s = "July"; break;
+                                }
+                                case "08": {
+                                    s = "August"; break;
+                                }
+                                case "09": {
+                                    s = "September"; break;
+                                }
+                                case "10": {
+                                    s = "October"; break;
+                                }
+                                case "11": {
+                                    s = "November"; break;
+                                }
+                                case "12": {
+                                    s = "December"; break;
+                                }
+                            }
+
+                            int count = attendance.getOrDefault(s,0);
+                            attendance.put(s, count + reservation.getNumberOfPeople());
+
+                            double price = reservation.getTotalPrice();
+                            double count1 = income.getOrDefault(s,0.0);
+                            income.put(s, count1 + price);
+                        }
+                    }
+                }
+
+
+                result.setAttendance(attendance);
+                result.setIncome(income);
+                return result;
+
+            } else {
+                SimpleDateFormat sdfMonth = new SimpleDateFormat("MMMM");
+                SimpleDateFormat sdfMonthFromDate = new SimpleDateFormat("MM");
+                Date dateMonth = sdfMonth.parse(month);
+                Integer m = Integer.parseInt(sdfMonthFromDate.format(dateMonth));
+                YearMonth yearMonthObject = YearMonth.of(Integer.parseInt(year), m);
+                int daysInMonth = yearMonthObject.lengthOfMonth();
+
+                for(int i = 1; i <= daysInMonth; i++) {
+                    if (i < 10) {
+                        attendance.put("0" + i,0);
+                        income.put("0" + i, 0.0);
+                    }
+                    else {
+                        attendance.put(String.valueOf(i), 0);
+                        income.put(String.valueOf(i), 0.0);
+                    }
+                }
+                SimpleDateFormat sdfYearMonth = new SimpleDateFormat("yyyy-MM");
+                SimpleDateFormat sdfYearMonthDay = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat sdfDay = new SimpleDateFormat("dd");
+                Date pickedDate = sdfYearMonth.parse(year + "-" + m);
+
+
+                List<HotelReservation> reservations = hotelReservationRepository.findAll();
+
+                for (HotelReservation reservation : reservations) {
+                    if(reservation.getHotel().getId().equals(hotel_id)){
+                        Date date = sdfYearMonth.parse(reservation.getCheckInDate());
+
+                        if (pickedDate.equals(date)) {
+
+                            Date date1 = sdfYearMonthDay.parse(reservation.getCheckInDate());
+                            String d = String.valueOf(sdfDay.format(date1));
+
+                            int count = attendance.getOrDefault(d, 0);
+                            attendance.put(d, count + reservation.getNumberOfPeople());
+
+                            double price = reservation.getTotalPrice();
+                            double count1 = income.getOrDefault(d,0.0);
+                            income.put(d, count1 + price);
+                        }
+                    }
+                }
+
+                result.setAttendance(attendance);
+                result.setIncome(income);
+                return result;
+            }
+
+        } else {
+            throw new HotelNotFound(hotel_id);
+        }
+    }
+
+
 
 
     public RoomDTO deleteRoom(Long hotelID, Long roomID) throws HotelNotFound, RoomDoesntExist, UnableToDeleteRoom{

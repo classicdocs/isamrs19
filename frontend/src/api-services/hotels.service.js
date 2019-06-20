@@ -12,7 +12,8 @@ const ENDPOINTS = {
   ADDPRICE: "/addRoomPrice/",
   CHANGE_LOCATION: "/changeLocation/",
   ADD_DISCOUNT: "/addRoomDiscount/",
-  DELETE_ROOM: "/deleteRoom/"
+  DELETE_ROOM: "/deleteRoom/",
+  REPORTS: "/reports",
 };
 
 export default {
@@ -76,5 +77,10 @@ export default {
     return Axios.delete(
       ENDPOINTS.HOTELS + hotel_id + ENDPOINTS.DELETE_ROOM + room_id
     );
-  }
+  },
+  getReports(id, data) {
+    return Axios.get(ENDPOINTS.HOTELS + id + ENDPOINTS.REPORTS, {
+      params: data
+    });
+  },
 };
