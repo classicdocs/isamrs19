@@ -25,6 +25,8 @@
               <add-special-price></add-special-price>
 
               <add-discount></add-discount>
+
+              <hotel-reports></hotel-reports>
             </v-layout>
             <v-layout col wrap>
               <rooms-overview v-bind:hotel="this.hotel"> </rooms-overview>
@@ -62,6 +64,7 @@ import ReservationForm from "@/components/HotelReservation/ReservationForm.vue";
 import PriceListOverview from "@/components/Hotel/PriceListOverview.vue";
 import AddSpecialPrice from "@/components/Hotel/AddSpecialPrice.vue";
 import AddDiscount from "@/components/Hotel/AddDiscount.vue";
+import HotelReports from "@/components/Hotel/HotelReports.vue";
 
 import FastReservationForm from "@/components/HotelReservation/FastReservationForm.vue";
 
@@ -82,7 +85,8 @@ export default {
     "reservation-form": ReservationForm,
     "add-special-price": AddSpecialPrice,
     "add-discount": AddDiscount,
-    "fast-reservation-form": FastReservationForm
+    "fast-reservation-form": FastReservationForm,
+    'hotel-reports' : HotelReports
   },
   data: () => ({
     AddRoomDialog: false,
@@ -90,6 +94,7 @@ export default {
     ReservationForm: false,
     AddDiscount: false,
     FastReservationForm: false,
+    HotelReports: false,
 
     admin: false,
     user: false,
@@ -124,8 +129,6 @@ export default {
       HotelController.getHotel(this.id)
         .then(response => {
           this.hotel = response.data;
-          console.log("guram u hotel service");
-          console.log(this.hotel);
           store.commit("newHotel", this.hotel);
         })
         .catch(error => {

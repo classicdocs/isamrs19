@@ -42,5 +42,8 @@ export default {
   },
   deleteRoom(hotel_id, room_id){
     return HotelsService.deleteRoom(hotel_id, room_id);
-  }
+  },
+  getReports(id, data) {
+    return HotelsService.getReports(id, data);
+  },
 };
