@@ -56,10 +56,11 @@
                 HAS RESERVATIONS
               </td>
               <td class="text-xs-center">
-                <v-btn color="info" @click="showRoom(props.item.id)">
+                <!-- <v-btn color="info" @click="showRoom(props.item.id)">
                   <v-icon left>more_horiz</v-icon>
                   details
-                </v-btn>
+                </v-btn> -->
+                <room-info v-bind:room="props.item"> </room-info>
               </td>
             </tr>
           </template>
@@ -72,9 +73,9 @@
         </v-data-table>
         <v-card-text> </v-card-text>
 
-        <v-dialog v-model="roomInfo" max-width="500px">
-          <room-info v-bind:room="this.room"> </room-info>
-        </v-dialog>
+        <!-- <v-dialog v-model="roomInfo" max-width="500px"> -->
+          <!-- <room-info v-bind:room="this.room"> </room-info> -->
+        <!-- </v-dialog> -->
       </v-form>
     </v-card>
   </div>
@@ -115,22 +116,10 @@ export default {
     room: new Room(),
     form: true,
 
-    snackbar: {
-      show: false,
-      color: "",
-      msg: ""
-    }
   }),
   computed: {
     myRooms: function() {
       var hotel = store.getters.newHotel;
-      // console.log("newHotel")
-      // console.log(hotel);
-      // var allRooms = store.getters.allRooms;
-      // if(allRooms == null){
-      //   allRooms = []
-      // }
-      // return allRooms;
 
       this.rooms = [];
 
