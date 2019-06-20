@@ -32,7 +32,7 @@ public class RentACar {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Vehicle> vehicles;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "rentACar", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<RentACarAdmin> admins;
 
     @ElementCollection
