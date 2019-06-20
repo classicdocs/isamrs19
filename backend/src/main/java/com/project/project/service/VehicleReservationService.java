@@ -125,6 +125,8 @@ public class VehicleReservationService {
 
         vr.setRated(false);
 
+        vr.setDateOfReservation(new Date());
+
         rentACarRepository.save(rentACar);
 
         vehicleRepository.save(vehicle);
@@ -266,6 +268,8 @@ public class VehicleReservationService {
         vr.setVehicle(vehicle);
 
         vr.setRated(false);
+
+        vr.setDateOfReservation(new Date());
 
         rentACar.getQuickReservations().remove(vehicleQuickReservation);
 

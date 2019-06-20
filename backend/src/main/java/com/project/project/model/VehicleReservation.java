@@ -49,6 +49,9 @@ public class VehicleReservation {
     @Column
     private boolean theftInsuranceIncluded;
 
+    @Column
+    private Date dateOfReservation;
+
     public VehicleReservation() {
     }
 
@@ -162,5 +165,13 @@ public class VehicleReservation {
 
     public void setTheftInsuranceIncluded(boolean theftInsuranceIncluded) {
         this.theftInsuranceIncluded = theftInsuranceIncluded;
+    }
+
+    public Date getDateOfReservation() {
+        return dateOfReservation;
+    }
+
+    public void setDateOfReservation(Date dateOfReservation) {
+        this.dateOfReservation = dateOfReservation;
     }
 }

@@ -4,6 +4,7 @@ package com.project.project.controller;
 import com.project.project.dto.NewVehicleQuickReservationDTO;
 import com.project.project.dto.RentACarDTO;
 import com.project.project.dto.RentACarInfoDTO;
+import com.project.project.dto.ReportsDTO;
 import com.project.project.exceptions.DateInPast;
 import com.project.project.exceptions.RentACarNotFound;
 import com.project.project.exceptions.ReturnDateBeforePickupDate;
@@ -91,6 +92,21 @@ public class RentACarController {
             NewVehicleQuickReservationDTO newVehicleQuickReservation = rentACarService.createNewQuickReservation(newVehicleQuickReservationDTO);
             return new ResponseEntity<NewVehicleQuickReservationDTO>(newVehicleQuickReservation, HttpStatus.OK);
         } catch(DateInPast | ReturnDateBeforePickupDate e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(
+            value = "/{id}/reports",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity getReports(@PathVariable("id") Long rentACarId,
+                                     @RequestParam("year") String year, @RequestParam("month") String month) {
+
+        try {
+            ReportsDTO result = rentACarService.getReports(rentACarId, year, month);
+            return new ResponseEntity<ReportsDTO>(result, HttpStatus.OK);
+        } catch (ParseException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
