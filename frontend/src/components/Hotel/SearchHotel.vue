@@ -39,7 +39,7 @@
                   <v-list-tile>
                     <v-list-tile-content>Description:</v-list-tile-content>
                     <v-list-tile-content class="align-end">{{
-                      props.item.description
+                      getDescription(props.item.description)
                     }}</v-list-tile-content>
                   </v-list-tile>
                   <v-list-tile>
@@ -111,6 +111,10 @@ export default {
     store.commit("searchHotelParams", new SearchHotelParameters());
   },
   methods: {
+    getDescription(description){
+      description = description.replace(/(.{45})..+/, "$1…");
+      return description;
+    },
     showSearchResult(result) {
       this.listOfHotels = result.data;
       this.searchParams = result.searchHotelParams;
