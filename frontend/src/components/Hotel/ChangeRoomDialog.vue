@@ -28,6 +28,7 @@
                         small
                         v-for="(room, roomNUM) in floor.roomsOnFloor"
                         :key="roomNUM"
+                        :disabled="room.roomTaken.length != 0"
                         @click="pickRoom(room, floor)"
                       >
                         {{ room.roomNumber }}</v-btn

@@ -371,7 +371,8 @@ public class HotelService {
         for (HotelDTO hotel: hotels) {
             // destination check
             List<HotelDestination> destinations = hotelDestinationsRepository.findAll();
-            HotelDestination hotelDestination = getDestinationByHotel(destinations, hotel);
+//            HotelDestination hotelDestination = getDestinationByHotel(destinations, hotel);
+            HotelDestination hotelDestination = hotel.getDestination();
             if (hotelDestination.getName().equals(destination)){
                 // date check
                 if(checkDate(hotel, checkInDate, checkOutDate, numOfPeople)){

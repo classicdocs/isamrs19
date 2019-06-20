@@ -97,7 +97,10 @@
         <div>
           <span class="grey--text"
             ><h1>Total price {{ reservation.totalPrice }} EUR.</h1></span
-          ><br />
+          ><br/>
+        </div>
+        <div>
+          <v-btn color="red" @click="removeReservation(reservation)">cancel this reservation <v-icon>clear</v-icon></v-btn>
         </div>
       </div>
     </div>
@@ -136,12 +139,57 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="deleteReservationForm" 
+    v-if="reservationToDelete.checkInDate != null"
+    width="500" 
+    v-bind:reservationToDelete="reservationToDelete">
+      <v-card>
+        <v-card-title
+          class="headline grey lighten-2"
+          primary-title
+        >
+          Canceling reservation
+        </v-card-title>
+
+        <v-card-text>
+          <h2>Canceling this reservation will cause no costs. You will not be able to undo this operation.</h2><br>
+          Reservation data: <br> 
+          Hotel: {{reservationToDelete.hotel.name}} <br>
+          Check in date: {{reservationToDelete.checkInDate}}<br>
+          Check out Date: {{reservationToDelete.checkOutDate}}<br>
+          <h2>Are you sure you want to cancel this reservation?</h2>
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-btn
+            color="primary"
+            flat
+            @click="deleteReservationForm = false"
+          >
+            Cancel
+          </v-btn>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="error"
+            @click="deleteReservation"
+          >
+            Delete
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+
   </div>
 </template>
 
 <script>
 import HotelRatingController from "@/controllers/hotel.rating.controller.js";
 import HotelController from "@/controllers/hotels.controller";
+import HotelReservationCancelController from "@/controllers/hotel-reservation-cancel.controller";
 import HotelReservation from "@/models/HotelReservation";
 import Rating from "@/models/Rating.js";
 
@@ -160,9 +208,53 @@ export default {
     hotelRating: 0,
     roomRating: 0,
     id: -1,
-    rating: new Rating()
+    rating: new Rating(),
+    reservationToDelete: new HotelReservation(),
+    deleteReservationForm: false,
+
   }),
   methods: {
+    removeReservation(reservation){
+      this.reservationToDelete = reservation;
+      this.deleteReservationForm = true;
+    },
+    deleteReservation(){
+      HotelReservationCancelController.cancel(this.$route.params.id, this.reservationToDelete.id)
+      .then(response => {
+        var reservations = store.getters.hotelReservations;
+        var idx = -1;
+        if(reservations != null){
+          reservations.forEach(res => {
+            if(res.id == this.reservationToDelete.id){
+              idx = reservations.indexOf(res);
+            }
+          })
+          if(idx != -1){
+            reservations.splice(idx, 1);
+          }
+          store.commit('hotelReservations', reservations);
+        }
+
+        idx = -1;
+        this.hotelReservations.forEach(res => {
+          if(res.id == this.reservationToDelete.id){
+            idx = this.hotelReservations.indexOf(res);
+          }
+        })
+        if(idx != -1){
+          this.hotelReservations.splice(idx, 1);
+        }
+        this.deleteReservationForm = false;
+        store.commit("setSnack", {
+            msg: "You have successfully canceled reservation",
+            color: "success"
+          });
+        
+      })
+      .catch(error => {
+        alert(error);
+      })
+    },
     room_price(reservation, type) {
       if (!(typeof reservation.hotel === "undefined")) {
         reservation.hotel.priceList.forEach(service => {
