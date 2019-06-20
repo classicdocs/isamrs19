@@ -217,14 +217,6 @@
                                     props.item.roomNumber
                                   }}</v-list-tile-content>
                                 </v-list-tile>
-                                <v-list-tile>
-                                  <v-list-tile-content
-                                    >Room price:</v-list-tile-content
-                                  >
-                                  <v-list-tile-content class="align-end"
-                                    >Price</v-list-tile-content
-                                  >
-                                </v-list-tile>
                               </v-list>
                               <v-card-actions>
                                 <v-spacer></v-spacer>

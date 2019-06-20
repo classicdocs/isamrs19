@@ -160,7 +160,8 @@ export default {
     hotelRating: 0,
     roomRating: 0,
     id: -1,
-    rating: new Rating()
+    rating: new Rating(),
+
   }),
   methods: {
     room_price(reservation, type) {
