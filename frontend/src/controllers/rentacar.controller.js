@@ -26,5 +26,8 @@ export default {
     },
     getQuickReservationsAdmin(id) {
         return RentACarService.getQuickReservationsAdmin(id);
+    },
+    getReports(id, data) {
+        return RentACarService.getReports(id, data);
     }
 }

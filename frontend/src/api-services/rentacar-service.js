@@ -34,5 +34,10 @@ export default {
   },
   getQuickReservationsAdmin(id) {
       return Axios.get(ENDPOINTS.RENTACAR_SERVICE + id + "/quick-reservations-admin");
+  },
+  getReports(id, data) {
+    return Axios.get(ENDPOINTS.RENTACAR_SERVICE + id + "/reports", {
+      params: data
+    });
   }
 }
