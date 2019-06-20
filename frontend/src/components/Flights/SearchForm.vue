@@ -190,8 +190,8 @@ export default {
   created() {
     (this.search.startDestination = "London"),
       (this.search.finalDestination = "Belgrade"),
-      (this.search.departureDate = "2019-06-22"),
-      (this.search.returnDate = "2019-06-25"),
+      (this.search.departureDate = "2019-06-29"),
+      (this.search.returnDate = "2019-06-30"),
       (this.search.seatClass = "First"),
       (this.search.passengersNumber = 1);
 

@@ -87,6 +87,12 @@ export default {
     dimensions: "",
     weight: ""
   }),
+  mounted() {
+    this.name = "TestBag";
+    this.price = 20;
+    this.dimensions = "20x20x20";
+    this.weight = 20;
+  },
   methods: {
     submit() {
       if (this.$refs.form.validate()) {
