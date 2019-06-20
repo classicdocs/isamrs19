@@ -602,7 +602,7 @@ public class HotelService {
             HotelFloor floorWithRoomToDelete = null;
             for (HotelFloor floor : hotel.get().getFloors()) {
                 for (Room room : floor.getRoomsOnFloor()) {
-                    if(room.getId() == roomID){
+                    if(room.getId().equals(roomID)){
                         floorWithRoomToDelete = floor;
                         roomToDelete = room;
                     }
