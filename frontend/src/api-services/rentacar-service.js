@@ -39,5 +39,15 @@ export default {
     return Axios.get(ENDPOINTS.RENTACAR_SERVICE + id + "/reports", {
       params: data
     });
+  },
+  addBranch(id, data) {
+    return Axios.get(ENDPOINTS.RENTACAR_SERVICE + id + "/addBranch", {
+      params: data
+    });
+  },
+  removeBranch(id, data) {
+    return Axios.delete(ENDPOINTS.RENTACAR_SERVICE + id + "/removeBranch", {
+      params: data
+    });
   }
 }

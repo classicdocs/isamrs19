@@ -300,4 +300,18 @@ public class RentACarService {
 
         return overlap;
     }
+
+    public String addBranch(Long rentACarId, String branchName) {
+        RentACar rentACar = rentACarRepository.findOneById(rentACarId);
+        rentACar.getBranches().add(branchName);
+        rentACarRepository.save(rentACar);
+        return branchName;
+    }
+
+    public String removeBranch(Long rentACarId, String branchName) {
+        RentACar rentACar = rentACarRepository.findOneById(rentACarId);
+        rentACar.getBranches().remove(branchName);
+        rentACarRepository.save(rentACar);
+        return branchName;
+    }
 }
