@@ -605,7 +605,7 @@ public class HotelService {
             floorWithRoomToDelete = this.getFloorWithRoomToDelete(hotel.get(), roomID);
 
 
-            if(roomToDelete != null){
+            if(roomToDelete != null && floorWithRoomToDelete != null){
                 if(roomToDelete.getRoomTaken().isEmpty()){
 
                     floorWithRoomToDelete.getRoomsOnFloor().remove(roomToDelete);
