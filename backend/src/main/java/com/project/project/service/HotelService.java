@@ -600,15 +600,11 @@ public class HotelService {
         if(hotel.isPresent()){
             Room roomToDelete = null;
             HotelFloor floorWithRoomToDelete = null;
-            for (HotelFloor floor : hotel.get().getFloors()) {
-                for (Room room : floor.getRoomsOnFloor()) {
-                    if(room.getId().equals(roomID)){
-                        floorWithRoomToDelete = floor;
-                        roomToDelete = room;
-                        break;
-                    }
-                }
-            }
+
+            roomToDelete = this.getRoomToDelete(hotel.get(), roomID);
+            floorWithRoomToDelete = this.getFloorWithRoomToDelete(hotel.get(), roomID);
+
+
             if(roomToDelete != null){
                 if(roomToDelete.getRoomTaken().isEmpty()){
 
@@ -636,6 +632,27 @@ public class HotelService {
         }else{
             throw new HotelNotFound(hotelID);
         }
+    }
+
+    private Room getRoomToDelete(Hotel hotel, Long roomID){
+        for (HotelFloor floor : hotel.getFloors()) {
+            for (Room room : floor.getRoomsOnFloor()) {
+                if(room.getId().equals(roomID)){
+                    return room;
+                }
+            }
+        }
+        return null;
+    }
+    private HotelFloor getFloorWithRoomToDelete(Hotel hotel, Long roomID){
+        for (HotelFloor floor : hotel.getFloors()) {
+            for (Room room : floor.getRoomsOnFloor()) {
+                if(room.getId().equals(roomID)){
+                    return floor;
+                }
+            }
+        }
+        return null;
     }
 
     private void removeSpecialPrices(Set<SpecialPrice> specialPrices){
