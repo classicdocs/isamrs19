@@ -593,6 +593,84 @@ public class HotelService {
         }
     }
 
+
+    public RoomDTO deleteRoom(Long hotelID, Long roomID) throws HotelNotFound, RoomDoesntExist, UnableToDeleteRoom{
+        Optional<Hotel> hotel = hotelRepository.findOneById(hotelID);
+
+        if(hotel.isPresent()){
+            Room roomToDelete = null;
+            HotelFloor floorWithRoomToDelete = null;
+
+            roomToDelete = this.getRoomToDelete(hotel.get(), roomID);
+            floorWithRoomToDelete = this.getFloorWithRoomToDelete(hotel.get(), roomID);
+
+
+            if(roomToDelete != null && floorWithRoomToDelete != null){
+                if(roomToDelete.getRoomTaken().isEmpty()){
+
+                    floorWithRoomToDelete.getRoomsOnFloor().remove(roomToDelete);
+
+                    Set<RoomDiscount> discountsToRemove = new HashSet<>(roomToDelete.getRoomDiscounts());
+                    roomToDelete.getRoomDiscounts().removeAll(discountsToRemove);
+
+                    Set<SpecialPrice> specialPrices = new HashSet<>(roomToDelete.getSpecialPrices());
+                    roomToDelete.getSpecialPrices().removeAll(specialPrices);
+
+                    roomRepository.delete(roomToDelete);
+
+                    this.removeDiscounts(discountsToRemove);
+                    this.removeSpecialPrices(specialPrices);
+
+
+                    return new RoomDTO(roomToDelete);
+                }else{
+                    throw new UnableToDeleteRoom(roomID);
+                }
+            }else{
+                throw new RoomDoesntExist(roomID);
+            }
+        }else{
+            throw new HotelNotFound(hotelID);
+        }
+    }
+
+    private Room getRoomToDelete(Hotel hotel, Long roomID){
+        for (HotelFloor floor : hotel.getFloors()) {
+            for (Room room : floor.getRoomsOnFloor()) {
+                if(room.getId().equals(roomID)){
+                    return room;
+                }
+            }
+        }
+        return null;
+    }
+    private HotelFloor getFloorWithRoomToDelete(Hotel hotel, Long roomID){
+        for (HotelFloor floor : hotel.getFloors()) {
+            for (Room room : floor.getRoomsOnFloor()) {
+                if(room.getId().equals(roomID)){
+                    return floor;
+                }
+            }
+        }
+        return null;
+    }
+
+    private void removeSpecialPrices(Set<SpecialPrice> specialPrices){
+        for(SpecialPrice specialPrice : specialPrices){
+            SpecialPrice price = specialPriceRepository.getOne(specialPrice.getId());
+            specialPriceRepository.delete(price);
+        }
+    }
+
+    private void removeDiscounts(Set<RoomDiscount> discounts){
+        for (RoomDiscount discount : discounts) {
+            RoomDiscount discountToRemove = roomDiscountRepository.getOne(discount.getId());
+            Set<HotelsOffer> hotelsOffers = new HashSet<>(discountToRemove.getAdditionalServices());
+            discountToRemove.getAdditionalServices().removeAll(hotelsOffers);
+            roomDiscountRepository.delete(discountToRemove);
+        }
+    }
+
     private Boolean isDiscountPossible(Room room, RoomDiscount roomDiscount) throws ParseException{
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
