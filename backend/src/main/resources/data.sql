@@ -1,6 +1,14 @@
 -- map location
 insert into map_location(id, latitude, longitude) values
-(1, 11.11, 22.22);
+(1, 44.8130315, 20.4582418);
+insert into map_location(id, latitude, longitude) values
+(2, 45.4317416, 12.332616);
+insert into map_location(id, latitude, longitude) values
+(3, 41.3916124, 2.1697384);
+insert into map_location(id, latitude, longitude) values
+(4, 59.3454907, 18.0655879);
+insert into map_location(id, latitude, longitude) values
+(5, 55.7570628, 37.6143229);
 
 -- destinacije
 insert into destination (id,airport,country,name,zip) values (1,'John F. Kennedy', 'USA', 'New York', 'JFK');
@@ -38,22 +46,56 @@ insert into hotel_destination(id, country, name, zip) values
 (9, 'Japan', 'Tokio', 'TOK');
 insert into hotel_destination(id, country, name, zip) values
 (10, 'Italia', 'Barri', 'BAR');
-
-
+insert into hotel_destination(id, country, name, zip) values
+(11, 'Italia', 'Rome', 'ROM');
+insert into hotel_destination(id, country, name, zip) values
+(12, 'Italia', 'Venice', 'VEN');
+insert into hotel_destination(id, country, name, zip) values
+(13, 'Italia', 'Torino', 'TOR');
+insert into hotel_destination(id, country, name, zip) values
+(14, 'Italia', 'Milano', 'MIL');
+insert into hotel_destination(id, country, name, zip) values
+(15, 'Italia', 'Genova', 'GEN');
+insert into hotel_destination(id, country, name, zip) values
+(16, 'Russia', 'Moscow', 'MOS');
+insert into hotel_destination(id, country, name, zip) values
+(17, 'Russia', 'Saint Petersburg', 'SNP');
+insert into hotel_destination(id, country, name, zip) values
+(18, 'Russia', 'Tymen', 'TYM');
+insert into hotel_destination(id, country, name, zip) values
+(19, 'Russia', 'Novosibirsk', 'NOV');
+insert into hotel_destination(id, country, name, zip) values
+(20, 'Russia', 'Krasnodar', 'KRA');
+insert into hotel_destination(id, country, name, zip) values
+(21, 'Spain', 'Barcelona', 'BAR');
+insert into hotel_destination(id, country, name, zip) values
+(22, 'Sweden', 'Stockholm', 'STO');
 
 
 insert into hotel(id,name,address,description,
     num_of_floors,rooms_by_floor,location,destination_id, average_rating,total_rating)
-    values (1,'Moscow','Terazije 20','Nice view from hotel',4,15,1,1,4,1);
+    values (1,'Moscow','Terazije 20','A landmark of Belgrade, one of the most important architectural gems of the Serbian capital, built in the style of the Russian secession which has been under state protection since the second half of the previous century.'
+    ,4,15,1,2,4,1);
+
 insert into hotel(id,name,address,description,
     num_of_floors,rooms_by_floor,location,destination_id, average_rating,total_rating)
-    values (3,'Kasina','Terazije 25','Hotel with rich history',2,15,1,1,3,1);
+    values (2,'The Gritti Palace','Campo S.Maria Del Giglio 2467','This 15th-century palazzo occupies one of the loveliest spots on the Grand Canal, looking across to the magnificent Salute church, and has equally sumptuous interiors to match, with priceless antiques and frescoes, and a small but exquisite spa.'
+    ,3,8,2,12,5,1);
+
 insert into hotel(id,name,address,description,
     num_of_floors,rooms_by_floor,location,destination_id, average_rating,total_rating)
-    values (4,'Parisjen','Old square 52','Best in Paris',4,30,1,3,2,1);
+    values (3,'Cotton House','Gran Vía de les Corts Catalanes, 670','Housed in the former headquarters of the city’s cotton guild, this hotel has honoured its origins.'
+    ,2,15,3,21,3,1);
+
 insert into hotel(id,name,address,description,
     num_of_floors,rooms_by_floor,location,destination_id, average_rating,total_rating)
-    values (2,'Sheraton','Futoski put 76','Known for good services',3,8,1,2,5,1);
+    values (4,'Ett Hem','Skoldungagatan 2, SE-114 27','Ett Hem has redefined the notion of a luxury hotel in Stockholm. The homely atmosphere is designed for guests to move around, and to relax in the living room, kitchen or conservatory. '
+    ,4,30,4,22,2,1);
+
+insert into hotel(id,name,address,description,
+    num_of_floors,rooms_by_floor,location,destination_id, average_rating,total_rating)
+    values (5,'Four Seasons Hotel Moscow','Okhotny Ryad, 2','A former Soviet-era hotel reimagined for the 21st century with an East-meets-West design aesthetic, a cool cocktail bar and top-notch spa.'
+    ,4,18,5,16,2,1);
 
 
 
@@ -90,7 +132,11 @@ insert into users (dtype,id,address,email,firstname,lastname,username,password,p
 insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time, verified) values ('AirlineCompanyAdmin',5,'adresa3','email3','ime3','prezime3','airlineadmin','12345','51543',3,null,1,null, FALSE, TRUE);
 
 --hotel admini
-insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time, verified) values ('HotelAdmin',6,'adresa4','email4','ime4','prezime4','hoteladmin','12345','51544',4,null,null,4, FALSE, TRUE);
+insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time, verified) values ('HotelAdmin',6,'adresa1','email1','ime1','prezime1','hoteladmin1','12345','11111',4,null,null,1, FALSE, TRUE);
+insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time, verified) values ('HotelAdmin',8,'adresa2','email2','ime2','prezime2','hoteladmin2','12345','22222',4,null,null,2, FALSE, TRUE);
+insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time, verified) values ('HotelAdmin',9,'adresa3','email3','ime3','prezime3','hoteladmin3','12345','33333',4,null,null,3, FALSE, TRUE);
+insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time, verified) values ('HotelAdmin',10,'adresa4','email4','ime4','prezime4','hoteladmin4','12345','44444',4,null,null,4, FALSE, TRUE);
+insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time, verified) values ('HotelAdmin',11,'adresa5','email45','ime5','prezime5','hoteladmin5','12345','55555',4,null,null,5, FALSE, TRUE);
 
 --system admini
 insert into users (dtype,id,address,email,firstname,lastname,username,password,phone,role_id,rentacar_id,airline_company_id,hotel_id, logged_first_time, verified) values ('SystemAdmin',7,'adresa5','email5','ime5','prezime5','systemadmin','12345','51545',5,null,null,null, FALSE, TRUE);
@@ -101,16 +147,28 @@ insert into branch_offices (id, branches) values (1,'Paris');
 insert into branch_offices (id, branches) values (1,'London');
 
 -- spratovi
+-- spratovi hotela 1
 insert into hotel_floor(id,floor_level,max_rooms) values (1,1,15);
 insert into hotel_floor(id,floor_level,max_rooms) values (2,2,15);
 insert into hotel_floor(id,floor_level,max_rooms) values (3,3,15);
 insert into hotel_floor(id,floor_level,max_rooms) values (4,4,15);
---
-insert into hotel_floor(id,floor_level,max_rooms) values (5,1,15);
-insert into hotel_floor(id,floor_level,max_rooms) values (6,2,15);
-
-insert into hotel_floor(id,floor_level,max_rooms) values (7,1,30);
-insert into hotel_floor(id,floor_level,max_rooms) values (8,2,30);
+-- spratovi hotela 2
+insert into hotel_floor(id,floor_level,max_rooms) values (5,1,8);
+insert into hotel_floor(id,floor_level,max_rooms) values (6,2,8);
+insert into hotel_floor(id,floor_level,max_rooms) values (7,3,8);
+-- spratovi hotela 3
+insert into hotel_floor(id,floor_level,max_rooms) values (8,1,15);
+insert into hotel_floor(id,floor_level,max_rooms) values (9,2,15);
+-- spratovi hotela 4
+insert into hotel_floor(id,floor_level,max_rooms) values (10,1,30);
+insert into hotel_floor(id,floor_level,max_rooms) values (11,2,30);
+insert into hotel_floor(id,floor_level,max_rooms) values (12,3,30);
+insert into hotel_floor(id,floor_level,max_rooms) values (13,4,30);
+-- spratovi hotela 5
+insert into hotel_floor(id,floor_level,max_rooms) values (14,1,18);
+insert into hotel_floor(id,floor_level,max_rooms) values (15,2,18);
+insert into hotel_floor(id,floor_level,max_rooms) values (16,3,18);
+insert into hotel_floor(id,floor_level,max_rooms) values (17,4,18);
 
 -- hoteli_spratovi
 insert into hotel_floors(hotel_id,floors_id) values (1,1);
@@ -120,26 +178,39 @@ insert into hotel_floors(hotel_id,floors_id) values (1,4);
 
 insert into hotel_floors(hotel_id,floors_id) values (2,5);
 insert into hotel_floors(hotel_id,floors_id) values (2,6);
+insert into hotel_floors(hotel_id,floors_id) values (2,7);
 
-insert into hotel_floors(hotel_id,floors_id) values (3,7);
+
 insert into hotel_floors(hotel_id,floors_id) values (3,8);
+insert into hotel_floors(hotel_id,floors_id) values (3,9);
+
+insert into hotel_floors(hotel_id,floors_id) values (4,10);
+insert into hotel_floors(hotel_id,floors_id) values (4,11);
+insert into hotel_floors(hotel_id,floors_id) values (4,12);
+insert into hotel_floors(hotel_id,floors_id) values (4,13);
+
+insert into hotel_floors(hotel_id,floors_id) values (5,14);
+insert into hotel_floors(hotel_id,floors_id) values (5,15);
+insert into hotel_floors(hotel_id,floors_id) values (5,16);
+insert into hotel_floors(hotel_id,floors_id) values (5,17);
 
 -- sobe
--- PRVI SPRAT
+-- PRVI SPRAT HOTELA 1
 insert into room(id,number_of_beds,room_number,average_rating,total_rating) values (1, 2, 1, 3, 1);
 insert into room(id,number_of_beds,room_number,average_rating,total_rating) values (2, 2, 2, 3, 1);
 insert into room(id,number_of_beds,room_number,average_rating,total_rating) values (3, 3, 3, 3, 1);
 insert into room(id,number_of_beds,room_number,average_rating,total_rating) values (4, 4, 4, 3, 1);
--- DRUGI SPRAT
+-- DRUGI SPRAT HOTELA 1
 insert into room(id,number_of_beds,room_number,average_rating,total_rating) values (5, 1, 1, 3, 1);
 insert into room(id,number_of_beds,room_number,average_rating,total_rating) values (6, 4, 2, 3, 1);
 insert into room(id,number_of_beds,room_number,average_rating,total_rating) values (7, 3, 5, 3, 1);
 insert into room(id,number_of_beds,room_number,average_rating,total_rating) values (8, 4, 10, 3, 1);
-
+-- PRVI SPRAT HOTELA 2
 insert into room(id,number_of_beds,room_number,average_rating,total_rating) values (9, 1, 1, 3, 1);
 insert into room(id,number_of_beds,room_number,average_rating,total_rating) values (10, 4, 2, 3, 1);
 insert into room(id,number_of_beds,room_number,average_rating,total_rating) values (11, 1, 3, 3, 1);
-insert into room(id,number_of_beds,room_number,average_rating,total_rating) values (12, 4, 9, 3, 1);
+insert into room(id,number_of_beds,room_number,average_rating,total_rating) values (12, 4, 8, 3, 1);
+
 
 --spratovi sobe
 insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values (1,1);
@@ -159,17 +230,12 @@ insert into hotel_floor_rooms_on_floor(hotel_floor_id,rooms_on_floor_id) values 
 
 --veza izmedju servisa i admina
 insert into hotel_admins(hotel_id, admins_id) values(1,6);
+insert into hotel_admins(hotel_id, admins_id) values(2,8);
+insert into hotel_admins(hotel_id, admins_id) values(3,9);
+insert into hotel_admins(hotel_id, admins_id) values(4,10);
+insert into hotel_admins(hotel_id, admins_id) values(5,11);
 
 insert into rentacar_admins(rentacar_id,admins_id) values (1,4);
-
---insert into room_taken(id,end_date,start_date) values
---(1,'2020-05-19','2020-05-15');
---
---insert into room_taken(id,end_date,start_date) values
---(2,'2020-05-29','2020-05-25');
---
---insert into room_booked(room_id,room_taken_id) values(1,1);
---insert into room_booked(room_id,room_taken_id) values(1,2);
 
 
 insert into special_price(id,end_date,price,start_date) values
@@ -191,8 +257,8 @@ insert into hotels_offer(id, description, price, type) values
 (1,'Room with one bed', 150, 0);
 insert into hotels_offer(id, description, price, type) values
 (2,'Room with two beds', 250, 1);
---insert into hotels_offer(id, description, price, type) values
---(3,'Room with three beds', 350, 2);
+insert into hotels_offer(id, description, price, type) values
+(3,'Room with three beds', 350, 2);
 insert into hotels_offer(id, description, price, type) values
 (4,'Room with four beds', 450, 3);
 insert into hotels_offer(id, description, price, type) values
@@ -208,8 +274,8 @@ insert into hotel_price_list(hotel_id, price_list_id) values
 (1,1);
 insert into hotel_price_list(hotel_id, price_list_id) values
 (1,2);
---insert into hotel_price_list(hotel_id, price_list_id) values
---(1,3);
+insert into hotel_price_list(hotel_id, price_list_id) values
+(1,3);
 insert into hotel_price_list(hotel_id, price_list_id) values
 (1,4);
 insert into hotel_price_list(hotel_id, price_list_id) values
