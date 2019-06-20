@@ -123,6 +123,10 @@ export default {
             msg: "You have successfully add discount",
             color: "success"
           });
+          store.commit("reload", true);
+          this.$nextTick(() => {
+            store.commit("reload", false);
+          })
         })
         .catch(error => {
           console.log(error.response.data);

@@ -288,6 +288,9 @@ import Flight from "@/models/Flight";
 import FlightsController from "@/controllers/flights.controller";
 import DestinationsController from "@/controllers/destinations.controller";
 import AirlineCompanyController from "@/controllers/airline-company.controller";
+import store from "@/store";
+
+import { mapGetters } from 'vuex';
 
 export default {
   name: "AddFlightDialog",
@@ -323,44 +326,55 @@ export default {
 
     flight: new Flight()
   }),
-  created() {
-    this.flight.airlineCompany.id = this.$route.params.id;
-
-    AirlineCompanyController.getDestinations(this.flight.airlineCompany.id)
-      .then(response => {
-        response.data.forEach(element => {
-          this.destinations.push(element);
-        });
-      })
-      .catch(error => {
-        alert(error.response.data);
-      });
-
-    AirlineCompanyController.getAirplanes(this.flight.airlineCompany.id)
-      .then(response => {
-        response.data.forEach(element => {
-          this.airplanes.push(element);
-        });
-      })
-      .catch(error => {
-        alert(error.response.data);
-      });
+  mounted() {
+    this.getData();
   },
   computed: {
+    ...mapGetters({
+      reload: 'reload'
+    }),
     getAirplanes() {
       let result = [];
       this.airplanes.forEach(element => {
         result.push("Id: " + element.id + ", Model: " + element.model);
       });
       return result;
-    }
+    },
   },
   watch: {
     addFormDialog(val) {
       !val && this.reset();
+    },
+    reload(newValue, oldValue) {
+      if (newValue === true) {
+        this.getData();
+      }
     }
   },
   methods: {
+    getData() {
+      this.flight.airlineCompany.id = this.$route.params.id;
+
+      AirlineCompanyController.getDestinations(this.flight.airlineCompany.id)
+        .then(response => {
+          response.data.forEach(element => {
+            this.destinations.push(element);
+          });
+        })
+        .catch(error => {
+          alert(error.response.data);
+        });
+
+      AirlineCompanyController.getAirplanes(this.flight.airlineCompany.id)
+        .then(response => {
+          response.data.forEach(element => {
+            this.airplanes.push(element);
+          });
+        })
+        .catch(error => {
+          alert(error.response.data);
+        });
+    },
     validate() {
       if (this.$refs.form.validate()) {
         if (this.validateDestinations()) {
@@ -395,12 +409,13 @@ export default {
 
           console.log(this.flight);
           FlightsController.create(this.flight)
-            .then(response => {
+            .then((response) => {
               this.addFormDialog = false;
               this.$emit("snack", {
                 msg: "Flight successfully added",
                 color: "success"
               });
+              store.commit("newFlight", response.data);
             })
             .catch(error => {
               this.addFormDialog = false;
@@ -431,7 +446,7 @@ export default {
       });
 
       return retVal;
-    }
+    },
   }
 };
 </script>
