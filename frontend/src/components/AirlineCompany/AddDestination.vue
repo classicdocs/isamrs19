@@ -71,6 +71,12 @@ export default {
       !val && this.reset();
     }
   },
+  mounted() {
+    this.destination.name = "DestName";
+    this.destination.country = "DestCountry";
+    this.destination.zip = "DDD";
+    this.destination.airport = "DestAirport";
+  },
   methods: {
     validate() {
       if (this.$refs.form.validate()) {
