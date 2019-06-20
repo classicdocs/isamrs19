@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.util.Set;
-import java.util.logging.Level;
 
 @RestController
 @RequestMapping(value = "api/hotels")
@@ -308,7 +307,6 @@ public class HotelController {
             RoomDTO result = hotelService.deleteRoom(hotelID, roomID);
             return new ResponseEntity<RoomDTO>(result, HttpStatus.OK);
         } catch (HotelNotFound  | RoomDoesntExist | UnableToDeleteRoom exc) {
-//            exc.printStackTrace();
             return new ResponseEntity<String>(exc.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }

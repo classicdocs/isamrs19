@@ -615,37 +615,15 @@ public class HotelService {
                     floorWithRoomToDelete.getRoomsOnFloor().remove(roomToDelete);
 
                     Set<RoomDiscount> discountsToRemove = new HashSet<>(roomToDelete.getRoomDiscounts());
-
-//                    for (RoomDiscount discount : roomToDelete.getRoomDiscounts()) {
-//                        discountsToRemove.add(discount);
-//                    }
                     roomToDelete.getRoomDiscounts().removeAll(discountsToRemove);
 
                     Set<SpecialPrice> specialPrices = new HashSet<>(roomToDelete.getSpecialPrices());
-//                    for (SpecialPrice sp : roomToDelete.getSpecialPrices()) {
-//                        specialPrices.add(sp);
-//                    }
                     roomToDelete.getSpecialPrices().removeAll(specialPrices);
 
                     roomRepository.delete(roomToDelete);
 
-                    for (RoomDiscount discount : discountsToRemove) {
-                        RoomDiscount discountToRemove = roomDiscountRepository.getOne(discount.getId());
-
-                        Set<HotelsOffer> hotelsOffers = new HashSet<>(discountToRemove.getAdditionalServices());
-//                        for(HotelsOffer offer: discountToRemove.getAdditionalServices()){
-//                            hotelsOffers.add(offer);
-//                        }
-                        discountToRemove.getAdditionalServices().removeAll(hotelsOffers);
-
-                        roomDiscountRepository.delete(discountToRemove);
-                    }
-
-                    for(SpecialPrice specialPrice : specialPrices){
-                        SpecialPrice price = specialPriceRepository.getOne(specialPrice.getId());
-
-                        specialPriceRepository.delete(price);
-                    }
+                    this.removeDiscounts(discountsToRemove);
+                    this.removeSpecialPrices(specialPrices);
 
 
                     return new RoomDTO(roomToDelete);
@@ -660,6 +638,21 @@ public class HotelService {
         }
     }
 
+    private void removeSpecialPrices(Set<SpecialPrice> specialPrices){
+        for(SpecialPrice specialPrice : specialPrices){
+            SpecialPrice price = specialPriceRepository.getOne(specialPrice.getId());
+            specialPriceRepository.delete(price);
+        }
+    }
+
+    private void removeDiscounts(Set<RoomDiscount> discounts){
+        for (RoomDiscount discount : discounts) {
+            RoomDiscount discountToRemove = roomDiscountRepository.getOne(discount.getId());
+            Set<HotelsOffer> hotelsOffers = new HashSet<>(discountToRemove.getAdditionalServices());
+            discountToRemove.getAdditionalServices().removeAll(hotelsOffers);
+            roomDiscountRepository.delete(discountToRemove);
+        }
+    }
 
     private Boolean isDiscountPossible(Room room, RoomDiscount roomDiscount) throws ParseException{
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
