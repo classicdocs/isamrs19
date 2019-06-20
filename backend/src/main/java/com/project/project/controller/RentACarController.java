@@ -110,4 +110,26 @@ public class RentACarController {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping(
+            value = "/{id}/addBranch",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity addBranch(@PathVariable("id") Long rentACarId,
+                                     @RequestParam("branchName") String branchName) {
+        String newBranch = rentACarService.addBranch(rentACarId, branchName);
+        return new ResponseEntity<String>(newBranch, HttpStatus.OK);
+    }
+
+    @DeleteMapping(
+            value = "/{id}/removeBranch",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity removeBranch(@PathVariable("id") Long rentACarId,
+                                    @RequestParam("branchName") String branchName) {
+
+        String deletedBranch = rentACarService.removeBranch(rentACarId, branchName);
+        return new ResponseEntity<String>(deletedBranch, HttpStatus.OK);
+
+    }
 }

@@ -29,5 +29,11 @@ export default {
     },
     getReports(id, data) {
         return RentACarService.getReports(id, data);
+    },
+    addBranch(id, data) {
+        return RentACarService.addBranch(id,data);
+    },
+    removeBranch(id, data) {
+        return RentACarService.removeBranch(id,data);
     }
 }
